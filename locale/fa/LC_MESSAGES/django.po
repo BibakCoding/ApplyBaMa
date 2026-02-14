@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-24 00:25+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: .\core\models.py:7
+msgid "Name"
+msgstr "نام"
+
+#: .\core\models.py:9
+msgid "Enter the official university name"
+msgstr "نام دانشگاه را وارد نمایید"
+
+#: .\core\models.py:13
+msgid "University"
+msgstr "دانشگاه"
+
+#: .\core\models.py:14
+msgid "Universities"
+msgstr "دانشگاه ها"
+
+
+msgid "Welcome to our multilingual site!"
+msgstr "به سایت چند زبانه ما خوش آمدید!"
+
+msgid "Current language"
+msgstr "زبان فعلی"
+
+msgid "This is a test sentence to demonstrate translation."
+msgstr "این یک جمله آزمایشی برای نمایش ترجمه است."
+
+msgid "Today is %(current_date)s."
+msgstr "امروز %(current_date)s است."
+
+msgid "Scholarship Registration"
+msgstr "بورس تحصیلی"
+
+msgid "Test page"
+msgstr "صفحه آزمایش"  # For Farsi

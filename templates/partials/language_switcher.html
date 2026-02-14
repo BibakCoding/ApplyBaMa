@@ -1,0 +1,23 @@
+{# templates/partials/language_switcher.html #}
+{% load i18n static custom_filters %}
+{% get_current_language as CURRENT_LANGUAGE %}
+<div class="mt-4 flex justify-center">
+  <div class="language-switcher flex space-x-2">
+    <a href="{{ request.path|translate_path:'en' }}" title="English"
+       class="p-1 rounded {% if CURRENT_LANGUAGE == 'en' %}bg-gray-200{% endif %}">
+      <img src="{% static 'images/flag-en.png' %}" alt="English" class="w-6 h-4">
+    </a>
+    <a href="{{ request.path|translate_path:'fa' }}" title="Persian"
+       class="p-1 rounded {% if CURRENT_LANGUAGE == 'fa' %}bg-gray-200{% endif %}">
+      <img src="{% static 'images/flag-fa.png' %}" alt="Persian" class="w-6 h-4">
+    </a>
+    <a href="{{ request.path|translate_path:'tr' }}" title="Turkish"
+       class="p-1 rounded {% if CURRENT_LANGUAGE == 'tr' %}bg-gray-200{% endif %}">
+      <img src="{% static 'images/flag-tr.png' %}" alt="Turkish" class="w-6 h-4">
+    </a>
+    <a href="{{ request.path|translate_path:'ar' }}" title="Arabic"
+       class="p-1 rounded {% if CURRENT_LANGUAGE == 'ar' %}bg-gray-200{% endif %}">
+      <img src="{% static 'images/flag-ar.png' %}" alt="Arabic" class="w-6 h-4">
+    </a>
+  </div>
+</div>

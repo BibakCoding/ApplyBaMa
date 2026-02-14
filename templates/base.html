@@ -1,0 +1,117 @@
+{% load i18n %}
+{% load static %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% trans "Scholarship Registration" %}{% endblock %}</title>
+
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <!-- <link href="{% static 'css/output.css' %}" rel="stylesheet"> -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+        @font-face {
+            font-family: 'Noto Sans';
+            src: url("{% static 'fonts/NotoSans-Regular.ttf' %}") format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Noto Sans';
+            src: url("{% static 'fonts/NotoSans-Bold.ttf' %}") format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Noto Sans Arabic';
+            src: url("{% static 'fonts/NotoSansArabic-Regular.ttf' %}") format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Noto Sans Arabic';
+            src: url("{% static 'fonts/NotoSansArabic-Bold.ttf' %}") format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        html[lang="en"],
+        html[lang="tr"] {
+            font-family: 'Noto Sans', Arial, sans-serif;
+        }
+
+        html[lang="fa"],
+        html[lang="ar"] {
+            font-family: 'Noto Sans Arabic', Arial, sans-serif;
+        }
+    </style>
+
+    {% block css %}
+    {% endblock %}
+    <link rel="stylesheet" href="{% static 'vendor/notyf/notyf.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script>
+        window.CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
+
+    <script>
+        document.documentElement.setAttribute('dir', '{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}');
+    </script>
+
+
+    <script src="{% static 'vendor/notyf/notyf.min.js' %}" defer></script>
+</head>
+
+<body class="bg-gray-50">
+{% block header %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+
+<script src="{% static 'vendor/notyf/notyf.min.js' %}" defer></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const notyf = new Notyf({
+            duration: 5000,
+            dismissible: true,
+            position: {x: 'right', y: 'top'}
+        });
+        const levelMap = {
+            'debug': 'info',
+            'info': 'info',
+            'success': 'success',
+            'warning': 'warning',
+            'error': 'error'
+        };
+
+        {% for message in messages %}
+            notyf.open({
+                type: levelMap["{{ message.tags }}"] || 'info',
+                message: "{{ message|escapejs }}"
+            });
+        {% endfor %}
+    });
+</script>
+
+{% block js %}
+{% endblock %}
+
+</body>
+
+</html>
