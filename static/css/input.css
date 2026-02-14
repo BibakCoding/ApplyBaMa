@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@theme {
+    --color-TrustBlue: #1D4ED8;
+    --color-AlpineOat: #F5F3E7;
+    --color-ButterYellow: #F9DC5C;
+    --color-CherryRed: #E0245E;
+    --color-SlateGray: #374151;
+}

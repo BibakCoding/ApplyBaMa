@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load i18n static custom_filters %}
+
+{% block title %}{% trans "Confirm Your Code" %}{% endblock %}
+
+{% block content %}
+<section class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+  <div class="p-8 rounded-lg shadow-lg w-full max-w-md md:bg-white bg-transparent text-gray-800">
+    <div class="text-center mb-8">
+      <a href="{% url 'main' %}"><img src="{% static 'images/logo.png' %}" alt="ApplyBaMa Logo"
+          class="mx-auto h-12 w-12"></a>
+      <h2 class="text-2xl font-bold mt-4 md:text-gray-800 text-white">{% trans "Enter Confirmation Code" %}</h2>
+      <p class="mt-2 text-sm md:text-gray-600 text-white/90">{% trans "We’ve sent a 6-digit code to your email. Enter it
+        below." %}</p>
+    </div>
+
+    <form id="confirmForm" action="{% url 'confirm_code' pk=user_id %}" method="post" novalidate>
+      {% csrf_token %}
+      <div id="confirmNonFieldErrors"></div>
+
+      <div class="flex justify-between space-x-2 mb-6">
+        {% for _ in "123456" %}
+        <input type="text" maxlength="1" inputmode="numeric" pattern="\d" class="w-12 h-12 text-center text-xl tracking-widest
+                      bg-white/20 md:bg-white border border-white/50 md:border-gray-300
+                      rounded md:rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300
+                      text-white md:text-gray-800" id="code{{ forloop.counter }}">
+        {% endfor %}
+      </div>
+      <input type="hidden" name="code" id="fullCode">
+
+      <button type="submit" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2
+                     bg-white/25 hover:bg-white/30 md:bg-blue-500 md:text-white
+                     text-white font-semibold md:hover:bg-blue-600 transition-all">
+        {% trans "Verify Code" %}
+      </button>
+    </form>
+
+    <div class="flex items-center justify-between mt-6 text-sm">
+      <a href="{% url 'resend_code' pk=user_id %}" class="underline md:text-blue-500 text-white hover:text-gray-200">
+        {% trans "Resend Code" %}
+      </a>
+      <a href="{% url 'login' %}" class="underline md:text-gray-800 text-white hover:text-gray-200">
+        {% trans "Back to Login" %}
+      </a>
+    </div>
+    {% include 'partials/language_switcher.html' %}
+  </div>
+</section>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('confirmForm');
+    const notyf = new Notyf({ duration: 4000, dismissible: true, position: { x: 'right', y: 'top' } });  // Notyf usage :contentReference[oaicite:5]{index=5}
+    const nonField = document.getElementById('confirmNonFieldErrors');
+    const inputs = Array.from({ length: 6 }, (_, i) => document.getElementById(`code${i + 1}`));
+
+    // Auto-focus & collect code
+    inputs.forEach((inp, idx) => {
+      inp.addEventListener('input', () => { if (/\d/.test(inp.value) && idx < 5) inputs[idx + 1].focus(); });
+      inp.addEventListener('keydown', e => { if (e.key === 'Backspace' && !inp.value && idx > 0) inputs[idx - 1].focus(); });
+    });
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      // Clear old errors
+      nonField.innerHTML = '';
+      document.querySelectorAll('.error-msg').forEach(el => el.remove());
+
+      // Build full code
+      document.getElementById('fullCode').value = inputs.map(i => i.value).join('');
+      const data = new FormData(form);
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          body: data
+        });
+        if (!res.ok) throw res;
+        const json = await res.json();
+        // Redirect on success
+        window.location = json.redirect;
+      } catch (resp) {
+        const { errors = {} } = await resp.json();  // structured errors :contentReference[oaicite:6]{index=6}
+        // Non-field errors (__all__)
+        (errors.__all__ || []).forEach(obj => {
+          const p = document.createElement('p');
+          p.className = 'mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded error-msg';
+          p.innerText = obj.message;
+          nonField.appendChild(p);
+          notyf.error(obj.message);
+        });
+        // Field errors
+        Object.entries(errors).forEach(([field, arr]) => {
+          if (field === '__all__') return;
+          const inp = document.getElementById(`code1`).form.querySelector(`[name=code]`); // code is single hidden
+          arr.forEach(obj => {
+            const p = document.createElement('p');
+            p.className = 'mt-1 text-sm text-red-500 error-msg';
+            p.innerText = obj.message;
+            nonField.appendChild(p);
+            notyf.error(obj.message);
+          });
+        });
+      }
+    });
+  });
+</script>
+{% endblock %}

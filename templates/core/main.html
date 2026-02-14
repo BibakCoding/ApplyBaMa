@@ -1,0 +1,502 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}{% trans "Apply Ba Ma - Find Your Scholarship" %}{% endblock %}
+
+{% block css %}
+    <style>
+        .hero-bg {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+        }
+
+        /* Logo Styling */
+        .logo-header {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #fff;
+            padding: 5px;
+        }
+
+        .logo-footer {
+            width: 30px;
+            height: 30px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .logo-text-footer {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .logo-header {
+                width: 35px;
+                height: 35px;
+            }
+
+            .logo-footer {
+                width: 25px;
+                height: 25px;
+            }
+
+            .logo-text {
+                font-size: 1.25rem;
+            }
+
+            .logo-text-footer {
+                font-size: 1rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block header %}
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo with Company Name -->
+                <a href="{% url 'main' %}" class="flex items-center space-x-2">
+                    <img src="{% static 'images/logo.png' %}" alt="ApplyBaMa Logo" class="logo-header">
+                    <span class="logo-text">ApplyBaMa</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="desktop-nav hidden md:flex items-center space-x-6">
+                    <a href="{% url 'main' %}" class="text-gray-600 hover:text-blue-600 transition-colors">
+                        {% trans "Home" %}
+                    </a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">
+                        {% trans "Scholarships" %}
+                    </a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">
+                        {% trans "Be our agent" %}
+                    </a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="text-gray-600 hover:text-blue-600 transition-colors">
+                            {% trans "Profile" %}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-gray-600 hover:text-blue-600 transition-colors">
+                            {% trans "Login" %}
+                        </a>
+                    {% endif %}
+                </nav>
+
+                <!-- Language Switcher -->
+                <div class="flex items-center space-x-3">
+                    <div class="hidden md:flex items-center space-x-2">
+                        {% get_current_language as CURRENT_LANGUAGE %}
+                        <div class="language-switcher flex space-x-2">
+                            <a href="{{ request.path|translate_path:'en' }}" title="English"
+                               class="p-1 {% if CURRENT_LANGUAGE == 'en' %}bg-gray-200 rounded{% endif %}">
+                                <img src="{% static 'images/flag-en.png' %}" alt="English" class="w-6 h-4">
+                            </a>
+                            <a href="{{ request.path|translate_path:'fa' }}" title="Persian"
+                               class="p-1 {% if CURRENT_LANGUAGE == 'fa' %}bg-gray-200 rounded{% endif %}">
+                                <img src="{% static 'images/flag-fa.png' %}" alt="Persian" class="w-6 h-4">
+                            </a>
+                            <a href="{{ request.path|translate_path:'tr' }}" title="Turkish"
+                               class="p-1 {% if CURRENT_LANGUAGE == 'tr' %}bg-gray-200 rounded{% endif %}">
+                                <img src="{% static 'images/flag-tr.png' %}" alt="Turkish" class="w-6 h-4">
+                            </a>
+                            <a href="{{ request.path|translate_path:'ar' }}" title="Arabic"
+                               class="p-1 {% if CURRENT_LANGUAGE == 'ar' %}bg-gray-200 rounded{% endif %}">
+                                <img src="{% static 'images/flag-ar.png' %}" alt="Arabic" class="w-6 h-4">
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <button class="mobile-menu md:hidden text-gray-600" id="menuBtn">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M4 6h16M4 12h16m-16 6h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu (Hidden by default) -->
+            <div class="mobile-nav hidden md:hidden mt-4 space-y-2" id="mobileNav">
+                <a href="{% url 'main' %}" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">
+                    {% trans "Home" %}
+                </a>
+                <a href="#" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">
+                    {% trans "Scholarships" %}
+                </a>
+                <a href="#" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">
+                    {% trans "Be our agent" %}
+                </a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        {% trans "Profile" %}
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        {% trans "Login" %}
+                    </a>
+
+                {% endif %}
+                <!-- Mobile Language Switcher -->
+                <div class="language-switcher flex flex-col space-y-2 px-4 py-2">
+                    <a href="{{ request.path|translate_path:'en' }}" title="English"
+                       class="flex items-center space-x-2 {% if CURRENT_LANGUAGE == 'en' %}bg-gray-200 rounded{% endif %}">
+                        <img src="{% static 'images/flag-en.png' %}" alt="English" class="w-6 h-4">
+                        <span>{% trans "English" %}</span>
+                    </a>
+                    <a href="{{ request.path|translate_path:'fa' }}" title="Persian"
+                       class="flex items-center space-x-2 {% if CURRENT_LANGUAGE == 'fa' %}bg-gray-200 rounded{% endif %}">
+                        <img src="{% static 'images/flag-fa.png' %}" alt="Persian" class="w-6 h-4">
+                        <span>{% trans "Persian" %}</span>
+                    </a>
+                    <a href="{{ request.path|translate_path:'tr' }}" title="Turkish"
+                       class="flex items-center space-x-2 {% if CURRENT_LANGUAGE == 'tr' %}bg-gray-200 rounded{% endif %}">
+                        <img src="{% static 'images/flag-tr.png' %}" alt="Turkish" class="w-6 h-4">
+                        <span>{% trans "Turkish" %}</span>
+                    </a>
+                    <a href="{{ request.path|translate_path:'ar' }}" title="Arabic"
+                       class="flex items-center space-x-2 {% if CURRENT_LANGUAGE == 'ar' %}bg-gray-200 rounded{% endif %}">
+                        <img src="{% static 'images/flag-ar.png' %}" alt="Arabic" class="w-6 h-4">
+                        <span>{% trans "Arabic" %}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block content %}
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-bg text-white min-h-screen flex items-center justify-center">
+            <div class="container mx-auto px-4 py-20 md:py-32">
+                <div class="max-w-3xl mx-auto text-center">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
+                        {% trans "Unlock Your Academic Future" %}
+                    </h1>
+                    <p class="text-xl md:text-2xl mb-8 opacity-90">
+                        {% trans "Discover personalized scholarship opportunities across 500+ universities worldwide" %}
+                    </p>
+                    <!-- Search Form -->
+                    <form class="flex flex-col md:flex-row gap-4 max-w-xl mx-auto">
+                        <input type="text" placeholder="{% trans 'Search scholarships...' %}"
+                               class="flex-1 px-6 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button type="submit"
+                                class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all">
+                            {% trans "Search" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Scholarships -->
+        <section class="py-16 bg-gray-50 min-h-screen flex items-center justify-center">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
+                    {% trans "Featured Scholarships" %}
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Scholarship Card 1 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                    🌍
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">{% trans "Global Excellence Award" %}</h3>
+                            </div>
+                            <p class="text-gray-600 mb-6">
+                                {% trans "Full tuition coverage for international students in STEM fields" %}
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-blue-600 font-bold">$10,000+</span>
+                                <a href="#"
+                                   class="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors">
+                                    {% trans "Apply" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Scholarship Card 2 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                    🔬
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">{% trans "STEM Future Fund" %}</h3>
+                            </div>
+                            <p class="text-gray-600 mb-6">
+                                {% trans "Support for science and tech students pursuing innovative research" %}
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-blue-600 font-bold">$8,000+</span>
+                                <a href="#"
+                                   class="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors">
+                                    {% trans "Apply" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Scholarship Card 3 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                    🎨
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">{% trans "Arts Scholarship" %}</h3>
+                            </div>
+                            <p class="text-gray-600 mb-6">
+                                {% trans "Funding for creative talents in visual and performing arts" %}
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-blue-600 font-bold">$5,000+</span>
+                                <a href="#"
+                                   class="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors">
+                                    {% trans "Apply" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block footer %}
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div class="space-y-4">
+                    <a href="{% url 'main' %}" class="flex items-center space-x-2">
+                        <img src="{% static 'images/logo.png' %}" alt="ApplyBaMa Logo" class="logo-footer">
+                        <span class="logo-text-footer">ApplyBaMa</span>
+                    </a>
+                    <p class="text-sm">
+                        {% trans "Your gateway to global education opportunities" %}
+                    </p>
+                </div>
+                <!-- Quick Links -->
+                <div class="space-y-4">
+                    <h4 class="text-white font-bold text-lg">{% trans "Quick Links" %}</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition-colors">{% trans "About Us" %}</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">{% trans "Scholarships" %}</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">{% trans "Success Stories" %}</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Legal -->
+                <div class="space-y-4">
+                    <h4 class="text-white font-bold text-lg">{% trans "Legal" %}</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition-colors">{% trans "Privacy Policy" %}</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">{% trans "Terms of Service" %}</a>
+                        </li>
+                        <li><a href="#" class="hover:text-white transition-colors">{% trans "Cookie Policy" %}</a></li>
+                    </ul>
+                </div>
+                <!-- Contact -->
+                <div class="space-y-4">
+                    <h4 class="text-white font-bold text-lg">{% trans "Contact" %}</h4>
+                    <p class="text-sm">support@applybama.com</p>
+                    <p class="text-sm">+1 (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p>© 2025 ApplyBaMa. {% trans "All rights reserved" %}.</p>
+            </div>
+        </div>
+    </footer>
+{% endblock %}
+
+{% block js %}
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Mobile menu toggle
+            const menuBtn = document.getElementById('menuBtn');
+            const mobileNav = document.getElementById('mobileNav');
+            if (menuBtn && mobileNav) {
+                menuBtn.addEventListener('click', () => {
+                    mobileNav.classList.toggle('hidden');
+                });
+            }
+
+            // Profile form handling
+            function setupProfileForm() {
+                // Toggle between view and edit modes
+                const editToggle = document.getElementById('edit-toggle');
+                const cancelEdit = document.getElementById('cancel-edit');
+                const viewMode = document.getElementById('view-mode');
+                const editMode = document.getElementById('edit-mode');
+                
+                if (editToggle) {
+                    editToggle.addEventListener('click', function() {
+                        viewMode.classList.add('hidden');
+                        editMode.classList.remove('hidden');
+                        this.classList.add('hidden');
+                    });
+                }
+                
+                if (cancelEdit) {
+                    cancelEdit.addEventListener('click', function() {
+                        viewMode.classList.remove('hidden');
+                        editMode.classList.add('hidden');
+                        if (editToggle) editToggle.classList.remove('hidden');
+                    });
+                }
+                
+                // Handle country-city dependency
+                const countrySelect = document.getElementById('id_country');
+                const citySelect = document.getElementById('id_city');
+                
+                if (countrySelect && citySelect) {
+                    countrySelect.addEventListener('change', function() {
+                        const countryId = this.value;
+                        if (countryId) {
+                            fetch(`/api/cities/?country_id=${countryId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    citySelect.innerHTML = '';
+                                    
+                                    // Add default option
+                                    const defaultOption = document.createElement('option');
+                                    defaultOption.value = '';
+                                    defaultOption.textContent = '---------';
+                                    citySelect.appendChild(defaultOption);
+                                    
+                                    // Add new options
+                                    data.forEach(city => {
+                                        const option = document.createElement('option');
+                                        option.value = city.id;
+                                        option.textContent = city.name;
+                                        citySelect.appendChild(option);
+                                    });
+                                });
+                        } else {
+                            citySelect.innerHTML = '<option value="">---------</option>';
+                        }
+                    });
+                    
+                    // Trigger change event if country is pre-selected
+                    if (countrySelect.value) {
+                        countrySelect.dispatchEvent(new Event('change'));
+                    }
+                }
+                
+                // Handle form submission
+                const profileForm = document.getElementById('profile-form');
+                if (profileForm) {
+                    profileForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        
+                        const formData = new FormData(this);
+                        
+                        fetch("{% url 'profile_view' %}", {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Success - reload profile content
+                                loadDashboardContent('profile');
+                                // Show success notification
+                                showNotification(data.message, 'success');
+                            } else if (data.form_html) {
+                                // Update form with errors
+                                const contentArea = document.getElementById('dashboard-content');
+                                contentArea.innerHTML = data.form_html;
+                                // Re-setup the form listeners
+                                setupProfileForm();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showNotification('{% trans "An error occurred. Please try again." %}', 'error');
+                        });
+                    });
+                }
+            }
+            
+            // Initialize profile form when loaded
+            function initProfilePage() {
+                if (document.getElementById('profile-form')) {
+                    setupProfileForm();
+                }
+            }
+            
+            // Show notification function
+            function showNotification(message, type = 'success') {
+                // Use your existing notification system (Notyf)
+                const notyf = new Notyf({
+                    duration: 5000,
+                    dismissible: true,
+                    position: {x: 'right', y: 'top'}
+                });
+                
+                if (type === 'success') {
+                    notyf.success(message);
+                } else {
+                    notyf.error(message);
+                }
+            }
+            
+            // Dashboard content loading code
+            function loadDashboardContent(page) {
+                const contentArea = document.getElementById('dashboard-content');
+                if (!contentArea) return;
+                
+                // Show loading indicator
+                contentArea.innerHTML = '<div class="text-center py-8">Loading...</div>';
+                
+                fetch(`/dashboard/${page}/`)
+                    .then(response => response.text())
+                    .then(html => {
+                        if (html) {
+                            contentArea.innerHTML = html;
+                            
+                            // Initialize profile page if needed
+                            if (page === 'profile') {
+                                initProfilePage();
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading content:', error);
+                        contentArea.innerHTML = '<div class="text-red-500 text-center py-8">Error loading content</div>';
+                    });
+            }
+        });
+    </script>
+{% endblock %}

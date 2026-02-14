@@ -1,0 +1,6 @@
+# Include base packages
+-r base.txt
+
+# Debug & Development Tools
+# (در صورت نیاز می‌تونی اضافه کنی:
+# django-debug-toolbar==...)

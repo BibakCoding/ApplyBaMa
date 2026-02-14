@@ -1,0 +1,264 @@
+{% load i18n %}
+
+<div class="bg-white rounded-lg shadow-md p-6 max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">{% trans "Profile" %}</h2>
+        <button id="edit-toggle" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            {% trans "Edit Profile" %}
+        </button>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" id="profile-form">
+        {% csrf_token %}
+        
+        <div id="view-mode">
+            <!-- Profile Header -->
+            <div class="flex items-center mb-6">
+                <div class="mr-4">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="Profile Image" 
+                             class="w-32 h-32 rounded-full object-cover border-2 border-gray-300">
+                    {% else %}
+                        <div class="bg-gray-200 border-2 border-dashed rounded-full w-32 h-32 flex items-center justify-center text-gray-500">
+                            <i class="fas fa-user fa-3x"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold">{{ user.get_full_name }}</h3>
+                    <p class="text-gray-600">{{ user.email }}</p>
+                    <p class="text-gray-600 text-sm">{% trans "Username" %}: {{ user.username }}</p>
+                </div>
+            </div>
+            
+            <!-- Personal Info -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Gender" %}</h4>
+                        <p>{{ user.get_gender_display|default:"-" }}</p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Date of Birth" %}</h4>
+                        <p>{{ user.date_of_birth|date:"Y-m-d"|default:"-" }}</p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Mobile" %}</h4>
+                        <p>{{ user.mobile|default:"-" }}</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Country" %}</h4>
+                        <p>{{ user.country.name|default:"-" }}</p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "City" %}</h4>
+                        <p>{{ user.city.name|default:"-" }}</p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Citizenship" %}</h4>
+                        <p>{{ user.citizenship.name|default:"-" }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Family Info -->
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Father's Name" %}</h4>
+                    <p>{{ user.father_name|default:"-" }}</p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Mother's Name" %}</h4>
+                    <p>{{ user.mother_name|default:"-" }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="edit-mode" class="hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <!-- Left Column -->
+                <div>
+                    <!-- Profile Image -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_profile_image">
+                            {% trans "Profile Image" %}
+                        </label>
+                        <div class="flex items-center">
+                            {% if user.profile_image %}
+                                <img src="{{ user.profile_image.url }}" alt="Profile Image" 
+                                     class="w-32 h-32 rounded-full object-cover border-2 border-gray-300">
+                            {% else %}
+                                <div class="bg-gray-200 border-2 border-dashed rounded-full w-32 h-32 flex items-center justify-center text-gray-500">
+                                    <i class="fas fa-user fa-3x"></i>
+                                </div>
+                            {% endif %}
+                            <div class="ml-4">
+                                {{ form.profile_image }}
+                                <p class="text-sm text-gray-500 mt-2">{% trans "JPG, PNG, GIF. Max 2MB" %}</p>
+                            </div>
+                        </div>
+                        {% if form.profile_image.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.profile_image.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Account Info -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_username">
+                            {% trans "Username" %}
+                        </label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.username.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_email">
+                            {% trans "Email" %}
+                            <input>
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.email.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Right Column -->
+                <div>
+                    <!-- Personal Info -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_first_name">
+                            {% trans "First Name" %}
+                        </label>
+                        {{ form.first_name }}
+                        {% if form.first_name.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.first_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_last_name">
+                            {% trans "Last Name" %}
+                        </label>
+                        {{ form.last_name }}
+                        {% if form.last_name.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.last_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_gender">
+                            {% trans "Gender" %}
+                        </label>
+                        {{ form.gender }}
+                        {% if form.gender.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.gender.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_date_of_birth">
+                            {% trans "Date of Birth" %}
+                        </label>
+                        {{ form.date_of_birth }}
+                        {% if form.date_of_birth.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.date_of_birth.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Location Info -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_country">
+                            {% trans "Country" %}
+                        </label>
+                        {{ form.country }}
+                        {% if form.country.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.country.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_city">
+                            {% trans "City" %}
+                        </label>
+                        {{ form.city }}
+                        {% if form.city.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.city.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_citizenship">
+                            {% trans "Citizenship" %}
+                        </label>
+                        {{ form.citizenship }}
+                        {% if form.citizenship.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.citizenship.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_mobile">
+                            {% trans "Mobile Number" %}
+                        </label>
+                        {{ form.mobile }}
+                        {% if form.mobile.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.mobile.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Family Info -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_father_name">
+                            {% trans "Father's Name" %}
+                        </label>
+                        {{ form.father_name }}
+                        {% if form.father_name.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.father_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_mother_name">
+                            {% trans "Mother's Name" %}
+                        </label>
+                        {{ form.mother_name }}
+                        {% if form.mother_name.errors %}
+                            <p class="text-red-500 text-xs italic mt-2">{{ form.mother_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-end space-x-2">
+                <button type="button" id="cancel-edit" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                    {% trans "Cancel" %}
+                </button>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    {% trans "Save Changes" %}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

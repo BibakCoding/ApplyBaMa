@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load i18n static custom_filters %}
+
+{% block title %}{% trans "Login" %}{% endblock %}
+
+{% block content %}
+    <section
+            class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 text-white p-8">
+        <div class="p-8 rounded-lg shadow-lg w-full max-w-md text-gray-800 md:bg-white bg-transparent">
+            <div class="text-center mb-8">
+                <a href="{% url 'main' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="ApplyBaMa Logo" class="mx-auto h-12 w-12">
+                </a>
+                <h2 class="text-2xl font-bold mt-4 md:text-gray-800 text-white md:text-gray-800">
+                    {% trans "Login" %}
+                </h2>
+            </div>
+
+            <form id="loginForm" action="{% url 'login' %}" method="post" novalidate>
+                {% csrf_token %}
+
+                {# Non-field errors container #}
+                <div id="loginNonFieldErrors"></div>
+
+                {# Email field #}
+                <div class="mb-4">
+                    <label for="id_username" class="block mb-2 md:text-gray-800 text-white">
+                        {% trans "Email" %}
+                    </label>
+                    <input type="email" name="username" id="id_username" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
+                 bg-white/20 md:bg-white border border-white/50 md:border-gray-300
+                 placeholder-white/70 md:placeholder-gray-500 text-white md:text-gray-800"
+                           placeholder="you@example.com" value="{{ form.username.value|default_if_none:'' }}">
+                </div>
+
+                {# Password field #}
+                <div class="mb-6">
+                    <label for="id_password" class="block mb-2 md:text-gray-800 text-white">
+                        {% trans "Password" %}
+                    </label>
+                    <input type="password" name="password" id="id_password" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
+                 bg-white/20 md:bg-white border border-white/50 md:border-gray-300
+                 placeholder-white/70 md:placeholder-gray-500 text-white md:text-gray-800" placeholder="********"
+                           value="{{ form.password.value|default_if_none:'' }}">
+                </div>
+
+                <div class="flex items-center mb-6">
+                    <input type="checkbox" id="remember_me" name="remember_me"
+                           class="mr-2 focus:ring-2 focus:ring-blue-300">
+                    <label for="remember_me" class="md:text-gray-800 text-white">
+                        {% trans "Remember Me" %}
+                    </label>
+                    <a href="{% url 'forget_password' %}" class="ml-auto md:text-blue-500 text-white hover:underline">
+                        {% trans "Forgot Password?" %}
+                    </a>
+                </div>
+
+                <button type="submit" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2
+                     bg-white/25 hover:bg-white/30 md:bg-blue-500 md:text-white
+                     text-white font-semibold md:hover:bg-blue-600 transition-all">
+                    {% trans "Login" %}
+                </button>
+            </form>
+
+            <div class="text-center mt-6 md:text-gray-800 text-white">
+                <p>
+                    {% trans "Don't have an account?" %}
+                    <a href="{% url 'register' %}" class="underline md:text-blue-500 text-white hover:text-gray-200">
+                        {% trans "Register here" %}
+                    </a>
+                </p>
+            </div>
+
+            {% include 'partials/language_switcher.html' %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("loginForm");
+            const notyf = new Notyf({
+                duration: 4000,
+                dismissible: true,
+                position: {x: 'right', y: 'top'}
+            });
+            const nonFieldEl = document.getElementById("loginNonFieldErrors");
+
+            form.addEventListener("submit", async e => {
+                e.preventDefault();
+                nonFieldEl.innerHTML = "";
+                document.querySelectorAll(".error-msg").forEach(el => el.remove());
+
+                const data = new FormData(form);
+                try {
+                    const res = await fetch(form.action, {
+                        method: "POST",
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                        },
+                        body: data
+                    });
+
+                    if (!res.ok) throw res;
+                    const json = await res.json();
+                    notyf.success(json.message);
+                    setTimeout(() => window.location = json.redirect, 500);
+                } catch (errResp) {
+                    // attempt JSON parse, else fallback
+                    let json;
+                    try {
+                        json = await errResp.json();
+                    } catch {
+                        notyf.error("{{ _('Unexpected server response.')|escapejs }}");
+                        console.error("Non-JSON response:", errResp);
+                        return;
+                    }
+
+                    const errs = json.errors || {};
+
+                    // Non-field errors
+                    if (errs.__all__) {
+                        errs.__all__.forEach(item => {
+                            const p = document.createElement("p");
+                            p.className = "mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded error-msg";
+                            p.innerText = item.message;
+                            nonFieldEl.appendChild(p);
+                            notyf.error(item.message);
+                        });
+                    }
+
+                    // Field errors
+                    Object.entries(errs).forEach(([field, fieldErrs]) => {
+                        if (field === "__all__") return;
+                        const input = document.getElementById(`id_${field}`);
+                        fieldErrs.forEach(item => {
+                            const p = document.createElement("p");
+                            p.className = "mt-1 text-sm text-red-500 error-msg";
+                            p.innerText = item.message;
+                            input.insertAdjacentElement("afterend", p);
+                            const labelText = form.elements[field].labels[0].innerText;
+                            notyf.error(`${labelText}: ${item.message}`);
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
