@@ -32,16 +32,33 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'slxe vwdr kxjp fibo')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@yourdomain.com')
 
 # Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+#         "LOCATION": os.getenv('CACHE_LOCATION', '127.0.0.1:11211'),
+#     }
+# }
+
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": os.getenv('CACHE_LOCATION', '127.0.0.1:11211'),
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",  # ساده‌تر و بدون نیاز به سرویس خارجی
+        "LOCATION": "applybama-cache",
     }
 }
 
 # Celery
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
-CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
+# CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+# CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
+
+
+# Celery settings
+CELERY_BROKER_URL = 'filesystem://'
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'data_folder_in': 'E:/programing/Projects/ApplyBaMa/ApplyBaMa/celery/queue',
+    'data_folder_out': 'E:/programing/Projects/ApplyBaMa/ApplyBaMa/celery/queue',
+    'data_folder_processed': 'E:/programing/Projects/ApplyBaMa/ApplyBaMa/celery/processed'
+}
+CELERY_RESULT_BACKEND = 'rpc://'
 
 # Logging
 LOGGING = {

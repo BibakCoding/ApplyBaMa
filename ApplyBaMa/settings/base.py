@@ -18,7 +18,8 @@ INSTALLED_APPS = [
     "authentication",
     "dashboard.apps.DashboardConfig",
     "data_fetch.apps.DataFetchConfig",
-    "api.apps.ApiConfig"
+    "api.apps.ApiConfig",
+    "django_celery_beat"
 ]
 
 MIDDLEWARE = [
