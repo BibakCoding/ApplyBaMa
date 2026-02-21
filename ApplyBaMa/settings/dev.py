@@ -29,7 +29,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'djangokar.test@gmail.com')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'slxe vwdr kxjp fibo')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@yourdomain.com')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@applybama.com')
 
 # Cache
 # CACHES = {
@@ -52,13 +52,21 @@ CACHES = {
 
 
 # Celery settings
-CELERY_BROKER_URL = 'filesystem://'
-CELERY_BROKER_TRANSPORT_OPTIONS = {
-    'data_folder_in': 'E:/programing/Projects/ApplyBaMa/ApplyBaMa/celery/queue',
-    'data_folder_out': 'E:/programing/Projects/ApplyBaMa/ApplyBaMa/celery/queue',
-    'data_folder_processed': 'E:/programing/Projects/ApplyBaMa/ApplyBaMa/celery/processed'
-}
-CELERY_RESULT_BACKEND = 'rpc://'
+# CELERY_BROKER_URL = 'filesystem://'
+# CELERY_BROKER_TRANSPORT_OPTIONS = {
+#     'data_folder_in': 'E:/programing/Projects/ApplyBaMa/ApplyBaMa/celery/queue',
+#     'data_folder_out': 'E:/programing/Projects/ApplyBaMa/ApplyBaMa/celery/queue',
+#     'data_folder_processed': 'E:/programing/Projects/ApplyBaMa/ApplyBaMa/celery/processed'
+# }
+# CELERY_RESULT_BACKEND = 'rpc://'
+
+# Temporary Celery settings for development (without Redis)
+CELERY_BROKER_URL = 'memory://'
+CELERY_RESULT_BACKEND = 'cache+memory://'
+
+# Run tasks synchronously during development
+CELERY_TASK_ALWAYS_EAGER = True
+CELERY_TASK_EAGER_PROPAGATES = True
 
 # Logging
 LOGGING = {
