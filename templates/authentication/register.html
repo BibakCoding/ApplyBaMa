@@ -4,135 +4,87 @@
 
 {% block title %}{% trans "Register" %}{% endblock %}
 
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/pages/register.css' %}">
+{% endblock %}
+
 {% block content %}
-<section class="min-h-screen flex items-center justify-center 
+    <section class="min-h-screen flex items-center justify-center
                 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-    <div class="p-8 rounded-lg shadow-lg w-full max-w-md 
+        <div class="p-8 rounded-lg shadow-lg w-full max-w-md
               text-gray-800 md:bg-white bg-transparent">
-        <div class="text-center mb-8">
-            <a href="{% url 'main' %}">
-                <img src="{% static 'images/logo.png' %}" alt="ApplyBaMa Logo" class="mx-auto h-12 w-12">
-            </a>
-            <h2 class="text-2xl font-bold mt-4 md:text-gray-800 text-white">
-                {% trans "Register" %}
-            </h2>
-        </div>
+            <div class="text-center mb-8">
+                <a href="{% url 'main' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="ApplyBaMa Logo" class="mx-auto h-12 w-12">
+                </a>
+                <h2 class="text-2xl font-bold mt-4 md:text-gray-800 text-white">
+                    {% trans "Register" %}
+                </h2>
+            </div>
 
-        <form id="registerForm" action="{% url 'register' %}" method="post" novalidate>
-            {% csrf_token %}
+            <form id="registerForm" action="{% url 'register' %}" method="post" novalidate>
+                {% csrf_token %}
 
-            {# Non-field errors (password mismatch) #}
-            <div id="nonFieldErrors"></div>
+                {# Non-field errors (password mismatch) #}
+                <div id="nonFieldErrors"></div>
 
-            {# Email #}
-            <div class="mb-4">
-                <label for="id_email" class="block mb-2 md:text-gray-800 text-white">
-                    {% trans "Email" %}
-                </label>
-                <input type="email" name="email" id="id_email" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
+                {# Email #}
+                <div class="mb-4">
+                    <label for="id_email" class="block mb-2 md:text-gray-800 text-white">
+                        {% trans "Email" %}
+                    </label>
+                    <input type="email" name="email" id="id_email" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
                       bg-white/20 md:bg-white border border-white/50 md:border-gray-300
                       placeholder-white/70 md:placeholder-gray-500 text-white md:text-gray-800"
-                    placeholder="{% trans 'you@example.com' %}" value="{{ form.email.value|default_if_none:'' }}">
-            </div>
+                           placeholder="{% trans 'you@example.com' %}"
+                           value="{{ form.email.value|default_if_none:'' }}">
+                </div>
 
-            {# Password #}
-            <div class="mb-4">
-                <label for="id_password1" class="block mb-2 md:text-gray-800 text-white">
-                    {% trans "Password" %}
-                </label>
-                <input type="password" name="password1" id="id_password1" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
+                {# Password #}
+                <div class="mb-4">
+                    <label for="id_password1" class="block mb-2 md:text-gray-800 text-white">
+                        {% trans "Password" %}
+                    </label>
+                    <input type="password" name="password1" id="id_password1" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
                       bg-white/20 md:bg-white border border-white/50 md:border-gray-300
                       placeholder-white/70 md:placeholder-gray-500 text-white md:text-gray-800" placeholder="********"
-                    value="{{ form.password1.value|default_if_none:'' }}">
-            </div>
+                           value="{{ form.password1.value|default_if_none:'' }}">
+                </div>
 
-            {# Confirm Password #}
-            <div class="mb-6">
-                <label for="id_password2" class="block mb-2 md:text-gray-800 text-white">
-                    {% trans "Confirm Password" %}
-                </label>
-                <input type="password" name="password2" id="id_password2" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
+                {# Confirm Password #}
+                <div class="mb-6">
+                    <label for="id_password2" class="block mb-2 md:text-gray-800 text-white">
+                        {% trans "Confirm Password" %}
+                    </label>
+                    <input type="password" name="password2" id="id_password2" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
                       bg-white/20 md:bg-white border border-white/50 md:border-gray-300
                       placeholder-white/70 md:placeholder-gray-500 text-white md:text-gray-800" placeholder="********"
-                    value="{{ form.password2.value|default_if_none:'' }}">
-            </div>
+                           value="{{ form.password2.value|default_if_none:'' }}">
+                </div>
 
-            <button type="submit" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2
+                <button type="submit" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2
                      bg-white/25 hover:bg-white/30 md:bg-blue-500 md:text-white
                      text-white font-semibold md:hover:bg-blue-600 transition-all">
-                {% trans "Register" %}
-            </button>
-        </form>
+                    {% trans "Register" %}
+                </button>
+            </form>
 
-        <div class="text-center mt-6 md:text-gray-800 text-white">
-            <p>
-                {% trans "Already have an account?" %}
-                <a href="{% url 'login' %}" class="underline md:text-blue-500 text-white hover:text-gray-200">
-                    {% trans "Login here" %}
-                </a>
-            </p>
+            <div class="text-center mt-6 md:text-gray-800 text-white">
+                <p>
+                    {% trans "Already have an account?" %}
+                    <a href="{% url 'login' %}" class="underline md:text-blue-500 text-white hover:text-gray-200">
+                        {% trans "Login here" %}
+                    </a>
+                </p>
+            </div>
+
+            {% include 'partials/language_switcher.html' %}
         </div>
-
-        {% include 'partials/language_switcher.html' %}
-    </div>
-</section>
+    </section>
 {% endblock %}
 
 {% block js %}
-{{ block.super }}
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const form = document.getElementById("registerForm");
-        const notyf = new Notyf({
-            duration: 10000, dismissible: true, position: { x: 'right', y: 'top' }
-        });
-        const nonFieldDiv = document.getElementById("nonFieldErrors");
-
-        form.addEventListener("submit", async e => {
-            e.preventDefault();
-            // Clear previous inline errors
-            document.querySelectorAll(".error-msg").forEach(el => el.remove());
-            nonFieldDiv.innerHTML = "";
-
-            const data = new FormData(form);
-            try {
-                const res = await fetch(form.action, {
-                    method: "POST",
-                    headers: { "X-Requested-With": "XMLHttpRequest" },
-                    body: data
-                });
-                if (!res.ok) throw res;
-                const json = await res.json();
-                window.location.href = json.redirect;
-            } catch (errResponse) {
-                const json = await errResponse.json();
-                const errs = json.errors || {};
-
-                // Handle non-field errors (__all__)
-                if (errs.__all__) {
-                    errs.__all__.forEach(item => {
-                        const p = document.createElement("p");
-                        p.className = "mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded error-msg";
-                        p.innerText = item.message;
-                        nonFieldDiv.appendChild(p);
-                        notyf.error(item.message);
-                    });
-                }
-
-                // Field errors
-                for (const [field, fieldErrs] of Object.entries(errs)) {
-                    if (field === "__all__") continue;
-                    const input = document.getElementById(`id_${field}`);
-                    fieldErrs.forEach(item => {
-                        const p = document.createElement("p");
-                        p.className = "mt-1 text-sm text-red-500 error-msg";
-                        p.innerText = item.message;
-                        input.insertAdjacentElement("afterend", p);
-                        notyf.error(`${form.elements[field].labels[0].innerText}: ${item.message}`);
-                    });
-                }
-            }
-        });
-    });
-</script>
+    {{ block.super }}
+    <script src="{% static 'js/pages/register.js' %}" defer></script>
 {% endblock %}

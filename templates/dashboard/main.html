@@ -3,6 +3,11 @@
 
 {% block title %}{% trans "Dashboard" %}{% endblock %}
 
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}">
+{% endblock %}
+
 {% block header %}
     <!-- Mobile top bar with hamburger -->
     <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md md:hidden">
@@ -159,195 +164,22 @@
 {% endblock %}
 
 {% block js %}
+    {{ block.super }}
+
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // Show notification function
-            function showNotification(message, type = 'success') {
-                // Use your existing notification system (Notyf)
-                const notyf = new Notyf({
-                    duration: 5000,
-                    dismissible: true,
-                    position: {x: 'right', y: 'top'}
-                });
-
-                if (type === 'success') {
-                    notyf.success(message);
-                } else {
-                    notyf.error(message);
-                }
+        window.AppConfig = {
+            urls: {
+                // This generates the URL with a dummy placeholder
+                dashboardContent: "{% url 'dashboard_content' 'PAGE_PLACEHOLDER' %}"
+            },
+            translations: {
+                loadingContent: "{% trans 'Loading content...' %}",
+                loadingError: "{% trans 'Loading Error' %}",
+                errorSupport: "{% trans 'Please try again or contact support' %}",
+                reloadPage: "{% trans 'Reload Page' %}"
             }
-
-            // Sidebar toggle elements
-            const sidebar = document.getElementById("sidebar");
-            const overlay = document.getElementById("overlay");
-            const toggleBtn = document.getElementById("sidebarToggle");
-            const sidebarClose = document.getElementById("sidebarClose");
-
-            // Mobile detection
-            const isMobile = () => window.innerWidth < 768;
-
-            // Sidebar toggle functions
-            const openSidebar = () => {
-                sidebar.classList.remove("-translate-x-full");
-                overlay.classList.remove("hidden");
-            };
-
-            const closeSidebar = () => {
-                sidebar.classList.add("-translate-x-full");
-                overlay.classList.add("hidden");
-            };
-
-            // Initialize sidebar state
-            if (isMobile()) closeSidebar();
-
-            // Event listeners for sidebar
-            if (toggleBtn) toggleBtn.addEventListener("click", openSidebar);
-            if (sidebarClose) sidebarClose.addEventListener("click", closeSidebar);
-            if (overlay) overlay.addEventListener("click", closeSidebar);
-
-            // Resize handler
-            window.addEventListener("resize", () => {
-                if (!isMobile()) {
-                    sidebar.classList.remove("-translate-x-full");
-                    overlay.classList.add("hidden");
-                }
-            });
-
-            // Dashboard content loading
-            const loadDashboardContent = (page) => {
-                const contentArea = document.getElementById('dashboard-content');
-                contentArea.innerHTML = `
-                    <div class="text-center py-16">
-                        <div class="inline-flex items-center justify-center bg-gray-200 rounded-full w-16 h-16 mb-4">
-                            <i class="fas fa-spinner fa-spin text-2xl text-blue-500"></i>
-                        </div>
-                        <p class="text-lg font-medium text-gray-700">{% trans "Loading content..." %}</p>
-                    </div>
-                `;
-
-                fetch(`{% url 'dashboard_content' 'page' %}`.replace('page', page))
-                    .then(response => {
-                        if (response.redirected) {
-                            window.location.href = response.url;
-                            return;
-                        }
-                        return response.text();
-                    })
-                    .then(html => {
-                        if (html) {
-                            contentArea.innerHTML = html;
-                            history.pushState({page}, '', `?page=${page}`);
-
-                            if (page === 'profile') {
-                                initProfilePage();
-                            }
-
-                            // Set active link
-                            document.querySelectorAll('.dashboard-link').forEach(link => {
-                                link.classList.remove('bg-blue-50', 'text-blue-700');
-                            });
-                            const activeLink = document.querySelector(`.dashboard-link[data-page="${page}"]`);
-                            if (activeLink) {
-                                activeLink.classList.add('bg-blue-50', 'text-blue-700');
-                            }
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error loading content:', error);
-                        contentArea.innerHTML = `
-                            <div class="text-center py-16">
-                                <div class="inline-flex items-center justify-center bg-red-100 rounded-full w-16 h-16 mb-4">
-                                    <i class="fas fa-exclamation-triangle text-2xl text-red-500"></i>
-                                </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-1">{% trans "Loading Error" %}</h3>
-                                <p class="text-gray-500">{% trans "Please try again or contact support" %}</p>
-                                <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                                    {% trans "Reload Page" %}
-                                </button>
-                            </div>
-                        `;
-                    });
-            };
-
-            // Add click handlers to dashboard links
-            document.querySelectorAll('.dashboard-link').forEach(link => {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    loadDashboardContent(this.dataset.page);
-                    if (isMobile()) closeSidebar();
-                });
-            });
-
-            // Handle browser history
-            window.addEventListener('popstate', (event) => {
-                if (event.state?.page) loadDashboardContent(event.state.page);
-            });
-
-            // Load initial content
-            const urlParams = new URLSearchParams(window.location.search);
-            loadDashboardContent(urlParams.get('page') || 'welcome');
-        });
-
-        // ------------------------------------------------------------
-        // Define initProfilePage() to wire up “Profile” fragment events
-        // ------------------------------------------------------------
-        function initProfilePage() {
-            // 1) Toggle between view‐mode and edit‐mode
-            const editBtn = document.getElementById("edit-toggle");
-            const cancelBtn = document.getElementById("cancel-edit");
-            const viewMode = document.getElementById("view-mode");
-            const editMode = document.getElementById("edit-mode");
-
-            if (editBtn) {
-                editBtn.addEventListener("click", () => {
-                    viewMode.classList.add("hidden");
-                    editMode.classList.remove("hidden");
-                });
-            }
-            if (cancelBtn) {
-                cancelBtn.addEventListener("click", () => {
-                    editMode.classList.add("hidden");
-                    viewMode.classList.remove("hidden");
-                });
-            }
-
-            // 2) Country → City AJAX
-            const countrySelect = document.getElementById("id_country");
-            const citySelect = document.getElementById("id_city");
-
-            if (countrySelect && citySelect) {
-                countrySelect.addEventListener("change", function () {
-                    const countryId = this.value;
-                    if (!countryId) {
-                        citySelect.innerHTML = '<option value="">— Select Country First —</option>';
-                        citySelect.disabled = true;
-                        return;
-                    }
-                    fetch(`/api/cities/?country_id=${countryId}`)
-                        .then((response) => {
-                            if (!response.ok) throw new Error("Network response was not OK");
-                            return response.json();
-                        })
-                        .then((data) => {
-                            citySelect.disabled = false;
-                            citySelect.innerHTML = '<option value="">— Select City —</option>';
-                            data.forEach((item) => {
-                                const opt = document.createElement("option");
-                                opt.value = item.id;
-                                opt.textContent = item.name;
-                                citySelect.appendChild(opt);
-                            });
-                        })
-                        .catch((error) => {
-                            console.error("Error fetching cities:", error);
-                        });
-                });
-
-                // If editing and a country is already selected, populate cities immediately
-                if (countrySelect.value) {
-                    countrySelect.dispatchEvent(new Event("change"));
-                }
-            }
-        }
+        };
     </script>
+
+    <script src="{% static 'js/pages/dashboard.js' %}" defer></script>
 {% endblock %}

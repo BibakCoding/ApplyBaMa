@@ -1,5 +1,4 @@
-{% load i18n %}
-{% load static %}
+{% load i18n static %}
 {% get_current_language as LANGUAGE_CODE %}
 {% get_current_language_bidi as LANGUAGE_BIDI %}
 
@@ -57,7 +56,9 @@
     </style>
 
     {% block css %}
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
+
     <link rel="stylesheet" href="{% static 'vendor/notyf/notyf.min.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -84,32 +85,32 @@
 {% endblock %}
 
 
-<script src="{% static 'vendor/notyf/notyf.min.js' %}" defer></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const notyf = new Notyf({
-            duration: 5000,
-            dismissible: true,
-            position: {x: 'right', y: 'top'}
-        });
-        const levelMap = {
-            'debug': 'info',
-            'info': 'info',
-            'success': 'success',
-            'warning': 'warning',
-            'error': 'error'
-        };
-
-        {% for message in messages %}
-            notyf.open({
-                type: levelMap["{{ message.tags }}"] || 'info',
-                message: "{{ message|escapejs }}"
-            });
-        {% endfor %}
-    });
-</script>
-
 {% block js %}
+    <script src="{% static 'vendor/notyf/notyf.min.js' %}" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const notyf = new Notyf({
+                duration: 20000,
+                dismissible: true,
+                position: {x: 'right', y: 'top'}
+            });
+            const levelMap = {
+                'debug': 'info',
+                'info': 'info',
+                'success': 'success',
+                'warning': 'warning',
+                'error': 'error'
+            };
+
+            {% for message in messages %}
+                notyf.open({
+                    type: levelMap["{{ message.tags }}"] || 'info',
+                    message: "{{ message|escapejs }}"
+                });
+            {% endfor %}
+        });
+    </script>
+    <script src="{% static 'js/base.js' %}" defer></script>
 {% endblock %}
 
 </body>

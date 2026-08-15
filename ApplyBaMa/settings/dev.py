@@ -8,8 +8,7 @@ DEBUG = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv(
-    'SECRET_KEY',
-    'django-insecure-y&tdw7m3*1t$qm0w(jjmq5&xxf!%t+fdyf-+0@s9a_s3dong%h'
+    'SECRET_KEY'
 )
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
