@@ -10,6 +10,7 @@ from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
+
 # -----------------------------------------------------------------------------
 # TimestampedModel (abstract base for created/updated timestamps)
 # -----------------------------------------------------------------------------
@@ -20,6 +21,7 @@ class TimeStampedModel(models.Model):
     class Meta:
         abstract = True
 
+
 # -----------------------------------------------------------------------------
 # File validation functions
 # -----------------------------------------------------------------------------
@@ -29,11 +31,13 @@ def validate_image_file_extension(value):
     if ext not in valid_extensions:
         raise ValidationError(_('Unsupported file extension. Allowed: .jpg, .jpeg, .png, .gif, .webp'))
 
+
 def validate_document_file_extension(value):
     valid_extensions = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png']
     ext = os.path.splitext(value.name)[1].lower()
     if ext not in valid_extensions:
         raise ValidationError(_('Unsupported file extension. Allowed: .pdf, .doc, .docx, .jpg, .jpeg, .png'))
+
 
 # -----------------------------------------------------------------------------
 # File path generators
@@ -44,11 +48,13 @@ def user_profile_image_path(instance, filename):
     ext = os.path.splitext(filename)[1]
     return f"profile_images/{instance.username}/{random_name}{ext}"
 
+
 def application_document_upload_to(instance, filename):
     """Generate path for application documents"""
     random_name = get_random_string(length=16)
     ext = os.path.splitext(filename)[1]
     return f"application_documents/{instance.application_name}/{random_name}{ext}"
+
 
 # -----------------------------------------------------------------------------
 # Lookup tables
@@ -86,6 +92,7 @@ class Country(TimeStampedModel):
     def __str__(self):
         return self.name or ""
 
+
 # ---------------------------------------------------------------------------
 # City (now with external_id)
 # ---------------------------------------------------------------------------
@@ -107,11 +114,13 @@ class City(TimeStampedModel):
     def __str__(self):
         return f"{self.name}, {self.country.name}"
 
+
 class TermOption(TimeStampedModel):
     label = models.CharField(max_length=50)
 
     def __str__(self):
         return self.label
+
 
 class YearOption(TimeStampedModel):
     VALUE_CHOICES = [
@@ -132,6 +141,7 @@ class YearOption(TimeStampedModel):
     def __str__(self):
         return self.get_value_display()
 
+
 class Faculty(TimeStampedModel):
     name = models.CharField(max_length=200)
     year_options = models.ManyToManyField(
@@ -143,6 +153,7 @@ class Faculty(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
 
 class University(TimeStampedModel):
     SECTOR_CHOICES = [
@@ -210,6 +221,7 @@ class University(TimeStampedModel):
     def __str__(self):
         return self.name
 
+
 class Program(TimeStampedModel):
     class StatusChoices(models.TextChoices):
         AVAILABLE = 'available', _("Available")
@@ -275,6 +287,7 @@ class Program(TimeStampedModel):
     def __str__(self):
         return f"{self.name} @ {self.university.name}"
 
+
 # -----------------------------------------------------------------------------
 # Custom User + Profiles
 # -----------------------------------------------------------------------------
@@ -336,6 +349,7 @@ class User(AbstractUser):
         if self.is_representative and self.user_type != User.UserType.DEFAULT:
             raise ValidationError(_("Only student users can be representatives"))
 
+
 class CompanyProfile(TimeStampedModel):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name='company_profile'
@@ -349,6 +363,7 @@ class CompanyProfile(TimeStampedModel):
     def __str__(self):
         return self.company_name
 
+
 class AgentProfile(TimeStampedModel):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name='agent_profile'
@@ -359,6 +374,7 @@ class AgentProfile(TimeStampedModel):
 
     def __str__(self):
         return f"{self.user.get_full_name()} (Agent of {self.agency.company_name})"
+
 
 class StudentProfile(TimeStampedModel):
     STAGE_CHOICES = [
@@ -380,6 +396,7 @@ class StudentProfile(TimeStampedModel):
 
     def __str__(self):
         return f"{self.user.get_full_name()} – {self.stage}"
+
 
 # -----------------------------------------------------------------------------
 # Application

@@ -1,0 +1,64 @@
+/* home.css */
+.hero-bg {
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+}
+
+.mobile-menu {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .desktop-nav {
+        display: none;
+    }
+
+    .mobile-menu {
+        display: flex;
+    }
+}
+
+/* Logo Styling */
+.logo-header {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #fff;
+    padding: 5px;
+}
+
+.logo-footer {
+    width: 30px;
+    height: 30px;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+.logo-text-footer {
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .logo-header {
+        width: 35px;
+        height: 35px;
+    }
+
+    .logo-footer {
+        width: 25px;
+        height: 25px;
+    }
+
+    .logo-text {
+        font-size: 1.25rem;
+    }
+
+    .logo-text-footer {
+        font-size: 1rem;
+    }
+}
