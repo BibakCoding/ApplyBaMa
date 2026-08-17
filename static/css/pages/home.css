@@ -1,64 +1,357 @@
-/* home.css */
-.hero-bg {
-    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+/* ==========================================================================
+   HOME PAGE — /static/css/pages/home.css
+========================================================================== */
+
+/* ---------- HERO ---------- */
+.home-hero {
+    padding-block: 5.5rem 4.5rem;
 }
 
-.mobile-menu {
-    display: none;
+.home-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    border-radius: var(--ab-radius-pill);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: var(--ab-accent-soft);
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
 }
 
-@media (max-width: 768px) {
-    .desktop-nav {
-        display: none;
+.home-hero-badge i {
+    color: var(--ab-accent);
+}
+
+.home-hero-sub {
+    max-width: 46rem;
+    margin-inline: auto;
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+}
+
+/* Search bar */
+.home-search-bar {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+    background: var(--ab-surface);
+    border-radius: var(--ab-radius-xl);
+    padding: 1.1rem;
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35);
+    text-align: start;
+}
+
+@media (min-width: 768px) {
+    .home-search-bar {
+        grid-template-columns: 1fr 1fr auto;
+        align-items: center;
+    }
+}
+
+/* Stats */
+.home-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+@media (min-width: 768px) {
+    .home-stats {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.home-stat-number {
+    display: block;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.home-stat-label {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* ---------- TRUST BANNER ---------- */
+.home-trust {
+    background: var(--ab-surface);
+    border-bottom: 1px solid var(--ab-border);
+    padding-block: 2.75rem;
+}
+
+.home-trust-label {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--ab-muted);
+    margin-bottom: 1.5rem;
+}
+
+.home-trust-logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.25rem 2.75rem;
+}
+
+.home-trust-logos li {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ab-muted);
+    opacity: 0.65;
+    transition: opacity var(--ab-transition), color var(--ab-transition);
+}
+
+.home-trust-logos li:hover {
+    opacity: 1;
+    color: var(--ab-primary);
+}
+
+/* ---------- SECTION HEADINGS ---------- */
+.home-section-head {
+    text-align: center;
+    max-width: 44rem;
+    margin-inline: auto;
+    margin-bottom: 3rem;
+}
+
+.home-section-head h2 {
+    font-size: clamp(1.75rem, 3vw, 2.6rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+}
+
+.home-section-head p {
+    color: var(--ab-muted);
+    font-size: 1.05rem;
+}
+
+/* ---------- WHY US ---------- */
+.home-feature {
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+}
+
+.home-feature-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-inline: auto;
+    margin-bottom: 1.1rem;
+    border-radius: var(--ab-radius-md);
+    background: var(--ab-primary-soft);
+    color: var(--ab-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.home-feature h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+}
+
+.home-feature p {
+    color: var(--ab-muted);
+    font-size: 0.925rem;
+}
+
+/* ---------- TIMELINE ---------- */
+.home-timeline {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+}
+
+@media (min-width: 900px) {
+    .home-timeline {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1.5rem;
     }
 
-    .mobile-menu {
-        display: flex;
+    .home-step {
+        position: relative;
+    }
+
+    .home-step:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 1.5rem;
+        inset-inline-start: calc(50% + 2rem);
+        width: calc(100% - 4rem);
+        height: 2px;
+        background: var(--ab-border);
     }
 }
 
-/* Logo Styling */
-.logo-header {
-    width: 60px;
-    height: 60px;
+.home-step {
+    text-align: center;
+}
+
+.home-step-number {
+    width: 3rem;
+    height: 3rem;
+    margin-inline: auto;
+    margin-bottom: 1rem;
     border-radius: 50%;
-    background-color: #fff;
-    padding: 5px;
+    background: var(--ab-primary);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 0 6px var(--ab-primary-soft);
 }
 
-.logo-footer {
-    width: 30px;
-    height: 30px;
+.home-step-number-accent {
+    background: var(--ab-accent);
+    box-shadow: 0 0 0 6px var(--ab-accent-soft);
 }
 
-.logo-text {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #2563eb;
+.home-step h4 {
+    margin-bottom: 0.4rem;
 }
 
-.logo-text-footer {
-    font-size: 1.125rem;
-    font-weight: bold;
-    color: #fff;
+.home-step p {
+    color: var(--ab-muted);
+    font-size: 0.875rem;
+    max-width: 14rem;
+    margin-inline: auto;
 }
 
-@media (max-width: 768px) {
-    .logo-header {
-        width: 35px;
-        height: 35px;
-    }
+/* ---------- DOCUMENTS ---------- */
+.home-doc-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
 
-    .logo-footer {
-        width: 25px;
-        height: 25px;
-    }
+.home-doc-head i {
+    color: var(--ab-accent);
+    font-size: 1.25rem;
+}
 
-    .logo-text {
-        font-size: 1.25rem;
-    }
+.home-doc-list {
+    padding: 1.25rem;
+    display: grid;
+    gap: 0.7rem;
+}
 
-    .logo-text-footer {
-        font-size: 1rem;
-    }
+.home-doc-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    color: var(--ab-muted);
+    font-size: 0.925rem;
+}
+
+.home-doc-list i {
+    color: var(--ab-success);
+    margin-top: 0.25rem;
+}
+
+.home-doc-note {
+    margin-top: 1.75rem;
+    text-align: center;
+    color: var(--ab-warning);
+    font-weight: 700;
+    font-size: 0.925rem;
+}
+
+.home-doc-note i {
+    margin-inline-end: 0.4rem;
+}
+
+/* ---------- SUCCESS STORIES ---------- */
+.home-story {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    align-items: flex-start;
+}
+
+.home-story-top {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    width: 100%;
+}
+
+.home-story-top h4 {
+    font-size: 1rem;
+}
+
+.home-story-top p {
+    color: var(--ab-muted);
+    font-size: 0.825rem;
+}
+
+.home-story-top .ab-badge {
+    margin-inline-start: auto;
+}
+
+.home-story-avatar {
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--ab-gradient-primary, var(--ab-primary));
+    background: linear-gradient(135deg, var(--ab-primary), var(--ab-primary-active));
+    color: #ffffff;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-story-quote {
+    color: var(--ab-muted);
+    font-size: 0.95rem;
+    flex: 1;
+}
+
+/* ---------- WHATSAPP BAND ---------- */
+.home-whatsapp {
+    background: linear-gradient(135deg, var(--ab-primary), var(--ab-primary-active));
+    padding-block: 3.5rem;
+}
+
+.home-whatsapp-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.75rem;
+}
+
+.home-whatsapp h2 {
+    color: #ffffff;
+    font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+    margin-bottom: 0.4rem;
+}
+
+.home-whatsapp p {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.home-whatsapp-btn {
+    background: #ffffff;
+    color: var(--ab-primary);
+    border-color: #ffffff;
+}
+
+.home-whatsapp-btn:hover {
+    background: var(--ab-accent-soft);
+    color: var(--ab-primary-active);
 }

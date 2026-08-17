@@ -1,7 +1,7 @@
 {# templates/partials/language_switcher.html #}
 {% load i18n static custom_filters %}
 {% get_current_language as CURRENT_LANGUAGE %}
-<div class="mt-4 flex justify-center">
+<div class="flex justify-center">
   <div class="language-switcher flex space-x-2">
     <a href="{{ request.path|translate_path:'en' }}" title="English"
        class="p-1 rounded {% if CURRENT_LANGUAGE == 'en' %}bg-gray-200{% endif %}">
