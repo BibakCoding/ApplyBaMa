@@ -355,3 +355,149 @@
     background: var(--ab-accent-soft);
     color: var(--ab-primary-active);
 }
+
+/* ==========================================================================
+   SCROLL ANIMATIONS
+========================================================================== */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   HERO BACKGROUND IMAGE
+========================================================================== */
+.home-hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.home-hero-bg-wrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.home-hero-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.25;
+}
+
+/* ==========================================================================
+   TRUST LOGOS WITH IMAGES
+========================================================================== */
+.home-trust-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.home-trust-logo img {
+    height: 45px;
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(100%);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.home-trust-logo:hover img {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.home-trust-logo:hover span {
+    color: var(--ab-primary);
+    opacity: 1;
+}
+
+/* ==========================================================================
+   WHY US FEATURE IMAGES
+========================================================================== */
+.home-feature-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 3px solid var(--ab-accent);
+}
+
+.home-feature-body {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+/* ==========================================================================
+   JOURNEY STEPS (INTERACTIVE HOVER)
+========================================================================== */
+.home-step {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border-radius: var(--ab-radius-lg);
+    border: 1px solid transparent;
+    background: var(--ab-surface);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy transition */
+    cursor: default;
+    position: relative;
+}
+
+.home-step:hover {
+    background-color: var(--ab-primary-soft);
+    border-color: var(--ab-primary);
+    transform: translateY(-12px);
+    box-shadow: var(--ab-shadow-lg);
+}
+
+.home-step:hover .home-step-number {
+    background: var(--ab-accent);
+    color: #ffffff;
+    box-shadow: 0 0 0 8px var(--ab-accent-soft);
+    transform: scale(1.1);
+}
+
+.home-step:hover h4 {
+    color: var(--ab-primary-active);
+}
+
+.home-step-icon {
+    font-size: 1.5rem;
+    color: var(--ab-primary);
+    margin-bottom: 1rem;
+    transition: color 0.3s ease;
+}
+
+.home-step:hover .home-step-icon {
+    color: var(--ab-accent);
+}
+
+/* ==========================================================================
+   DOCUMENTS SECTION BACKGROUND
+========================================================================== */
+.home-doc-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.home-doc-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.home-doc-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.92), rgba(23, 37, 84, 0.95)); /* Blue overlay */
+}

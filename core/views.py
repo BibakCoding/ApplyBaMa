@@ -3,18 +3,19 @@ from django.shortcuts import render
 from django.urls import translate_url
 from django.utils import timezone
 
-from .models import City
+from .models import *
 
 
 def main(request):
+    settings = SiteSettings.objects.first()  # Assuming singleton
     context = {
-        "current_date": timezone.now().date(),
-        "en_url": translate_url(request.path, "en"),
-        "fa_url": translate_url(request.path, "fa"),
-        "tr_url": translate_url(request.path, "tr"),
-        "ar_url": translate_url(request.path, "ar"),
+        'settings': settings,
+        'homepage_universities': University.objects.filter(show_on_homepage=True),
+        'steps': HowItWorksStep.objects.filter(is_active=True),
+        'documents': DocumentRequirement.objects.all(),
+        'stories': SuccessStory.objects.filter(is_published=True),
     }
-    return render(request, "core/main.html", context)
+    return render(request, 'core/main.html', context)
 
 
 def get_cities(request):
