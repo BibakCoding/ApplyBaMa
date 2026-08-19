@@ -6,7 +6,24 @@
     const urls = config.urls || {};
     const t = config.translations || {};
 
-    /* ---------- Animated stat counters ---------- */
+    /* ---------- 1. Scroll Animations (Intersection Observer) ---------- */
+    function initScrollAnimations() {
+        const elements = document.querySelectorAll('.fade-in-up');
+        if (!elements.length) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {threshold: 0.15, rootMargin: '0px 0px -50px 0px'});
+
+        elements.forEach((el) => observer.observe(el));
+    }
+
+    /* ---------- 2. Animated Stat Counters (If you kept the stats section) ---------- */
     function initCounters() {
         const numbers = document.querySelectorAll(".home-stat-number");
         if (!numbers.length) return;
@@ -27,7 +44,7 @@
 
             const tick = (now) => {
                 const progress = Math.min((now - start) / duration, 1);
-                const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                const eased = 1 - Math.pow(1 - progress, 3);
                 el.textContent = Math.round(target * eased) + suffix;
                 if (progress < 1) requestAnimationFrame(tick);
             };
@@ -42,39 +59,44 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.5 });
+        }, {threshold: 0.5});
 
         numbers.forEach((el) => observer.observe(el));
     }
 
-    /* ---------- Hero search → guide to registration ---------- */
+    /* ---------- 3. Hero Search Button ---------- */
     function initSearch() {
         const btn = document.getElementById("home-search-btn");
         if (!btn) return;
 
         btn.addEventListener("click", () => {
-            const notyf = new Notyf({ duration: 4000, position: { x: "right", y: "top" } });
-            notyf.open({ type: "info", message: t.searchInfo || "Create your free account to see programs." });
-
+            if (typeof Notyf !== 'undefined') {
+                const notyf = new Notyf({duration: 4000, position: {x: "right", y: "top"}});
+                notyf.open({type: "info", message: t.searchInfo || "Create your free account to see programs."});
+            }
             setTimeout(() => {
                 window.location.href = urls.register || "/accounts/register/";
             }, 1200);
         });
     }
 
-    /* ---------- Newsletter (decorative for now) ---------- */
+    /* ---------- 4. Newsletter Form (Located in the Footer) ---------- */
     function initNewsletter() {
         document.querySelectorAll("[data-newsletter]").forEach((form) => {
             form.addEventListener("submit", (e) => {
                 e.preventDefault();
-                const notyf = new Notyf({ duration: 4000, position: { x: "right", y: "top" } });
-                notyf.success(t.newsletterSuccess || "Thank you!");
+                if (typeof Notyf !== 'undefined') {
+                    const notyf = new Notyf({duration: 4000, position: {x: "right", y: "top"}});
+                    notyf.success(t.newsletterSuccess || "Thank you! You are on the list.");
+                }
                 form.reset();
             });
         });
     }
 
+    /* ---------- Initialize Everything on Page Load ---------- */
     window.ApplyBaMa.ready(() => {
+        initScrollAnimations();
         initCounters();
         initSearch();
         initNewsletter();

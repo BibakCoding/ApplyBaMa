@@ -19,7 +19,9 @@ INSTALLED_APPS = [
     "dashboard.apps.DashboardConfig",
     "data_fetch.apps.DataFetchConfig",
     "api.apps.ApiConfig",
-    "django_celery_beat"
+    "django_celery_beat",
+    # "modeltranslation",
+    # "solo"
 ]
 
 MIDDLEWARE = [

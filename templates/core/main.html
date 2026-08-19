@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n static %}
 
-{% block title %}{% trans "Apply BM — Your Bridge to Fully Funded Education Abroad" %}{% endblock %}
+{% block title %}{{ settings.hero_title|default:_("Apply BM") }}{% endblock %}
 
 {% block css %}
     {{ block.super }}
@@ -9,297 +9,231 @@
 {% endblock %}
 
 {% block header %}
-<header class="ab-header">
-    <div class="ab-container ab-header-inner">
-        <a href="{% url 'main' %}" class="ab-brand">
-            <img src="{% static 'images/logo.png' %}" alt="Apply BM">
-            <span>Apply BM</span>
-        </a>
-
-        <nav class="ab-navbar hidden lg:flex">
-            <a href="#why" class="ab-nav-link">{% trans "Why Us" %}</a>
-            <a href="#how" class="ab-nav-link">{% trans "How It Works" %}</a>
-            <a href="#documents" class="ab-nav-link">{% trans "Documents" %}</a>
-            <a href="#stories" class="ab-nav-link">{% trans "Success Stories" %}</a>
-        </nav>
-
-        <div class="flex items-center gap-3">
-            {% include "partials/language_switcher.html" %}
-            <a href="{% url 'login' %}" class="ab-btn ab-btn-ghost ab-btn-sm hidden sm:inline-flex">{% trans "Login" %}</a>
-            <a href="{% url 'register' %}" class="ab-btn ab-btn-primary ab-btn-sm">{% trans "Get Started" %}</a>
+    <header class="ab-header">
+        <div class="ab-container ab-header-inner">
+            <a href="{% url 'main' %}" class="ab-brand">
+                <img src="{% static 'images/logo.png' %}" alt="Apply BM">
+                <span>Apply BM</span>
+            </a>
+            <nav class="ab-navbar hidden lg:flex">
+                <a href="#why" class="ab-nav-link">{% trans "Why Us" %}</a>
+                <a href="#how" class="ab-nav-link">{% trans "How It Works" %}</a>
+                <a href="#documents" class="ab-nav-link">{% trans "Documents" %}</a>
+                {% if stories %}<a href="#stories" class="ab-nav-link">{% trans "Success Stories" %}</a>{% endif %}
+            </nav>
+            <div class="flex items-center gap-3">
+                {% include "partials/language_switcher.html" %}
+                <a href="{% url 'login' %}"
+                   class="ab-btn ab-btn-ghost ab-btn-sm hidden sm:inline-flex">{% trans "Login" %}</a>
+                <a href="{% url 'register' %}" class="ab-btn ab-btn-primary ab-btn-sm">{% trans "Get Started" %}</a>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
 {% endblock %}
 
 {% block content %}
 
-<!-- ================= HERO (SEARCH-FIRST) ================= -->
-<section class="ab-hero home-hero">
-    <div class="ab-container">
-        <div class="max-w-4xl mx-auto text-center">
+    <!-- ================= HERO ================= -->
+    <section class="ab-hero home-hero">
+        <div class="home-hero-bg-wrapper">
+            <img src="{% static settings.hero_background_image|default:'images/home/hero.jpg' %}" alt="" class="home-hero-bg">
+        </div>
+        <div class="ab-container relative z-10">
+            <div class="max-w-4xl mx-auto text-center fade-in-up">
             <span class="home-hero-badge">
                 <i class="fas fa-star"></i> {% trans "Trusted by 1000+ students worldwide" %}
             </span>
-            <h1 class="ab-hero-title font-serif">{% trans "Unlock Your Fully Funded Future." %}</h1>
-            <p class="ab-hero-text home-hero-sub">
-                {% trans "Your trusted bridge to education abroad. Search verified programs in Turkey, Germany, Georgia & Northern Cyprus — with certified agents guiding you on WhatsApp." %}
-            </p>
+                <h1 class="ab-hero-title font-serif">{{ settings.hero_title|default:_("Unlock Your Fully Funded Future.") }}</h1>
+                <p class="ab-hero-text home-hero-sub">
+                    {{ settings.hero_subtitle|default:_("Your trusted bridge to education abroad.") }}
+                </p>
 
-            <!-- Search bar: country + degree only -->
-            <div class="home-search-bar">
-                <select id="home-country" class="ab-select" aria-label="{% trans 'Destination Country' %}">
-                    <option value="">{% trans "Destination Country" %}</option>
-                    <option value="tr">{% trans "Turkey" %}</option>
-                    <option value="de">{% trans "Germany" %}</option>
-                    <option value="ge">{% trans "Georgia" %}</option>
-                    <option value="nc">{% trans "Northern Cyprus" %}</option>
-                </select>
-                <select id="home-level" class="ab-select" aria-label="{% trans 'Degree Level' %}">
-                    <option value="">{% trans "Degree Level" %}</option>
-                    <option value="associate">{% trans "Associate" %}</option>
-                    <option value="bachelor">{% trans "Bachelor" %}</option>
-                    <option value="master">{% trans "Master" %}</option>
-                    <option value="phd">{% trans "PhD" %}</option>
-                </select>
-                <button id="home-search-btn" class="ab-btn ab-btn-accent">
-                    <i class="fas fa-search"></i> {% trans "Search Programs" %}
-                </button>
-            </div>
-
-            <!-- Stats -->
-            <div class="home-stats">
-                <div class="home-stat">
-                    <span class="home-stat-number font-serif" data-count="1000" data-suffix="+">0</span>
-                    <span class="home-stat-label">{% trans "Students Guided" %}</span>
-                </div>
-                <div class="home-stat">
-                    <span class="home-stat-number font-serif" data-count="100" data-suffix="+">0</span>
-                    <span class="home-stat-label">{% trans "Certified Agents" %}</span>
-                </div>
-                <div class="home-stat">
-                    <span class="home-stat-number font-serif" data-count="4" data-suffix="">0</span>
-                    <span class="home-stat-label">{% trans "Destination Countries" %}</span>
-                </div>
-                <div class="home-stat">
-                    <span class="home-stat-number font-serif" data-count="3" data-suffix="+">0</span>
-                    <span class="home-stat-label">{% trans "Years of Experience" %}</span>
+                <div class="home-search-bar">
+                    <select id="home-country" class="ab-select" aria-label="{% trans 'Destination Country' %}">
+                        <option value="">{% trans "Destination Country" %}</option>
+                        <option value="tr">{% trans "Turkey" %}</option>
+                        <option value="de">{% trans "Germany" %}</option>
+                        <option value="ge">{% trans "Georgia" %}</option>
+                        <option value="nc">{% trans "Northern Cyprus" %}</option>
+                    </select>
+                    <select id="home-level" class="ab-select" aria-label="{% trans 'Degree Level' %}">
+                        <option value="">{% trans "Degree Level" %}</option>
+                        <option value="associate">{% trans "Associate" %}</option>
+                        <option value="bachelor">{% trans "Bachelor" %}</option>
+                        <option value="master">{% trans "Master" %}</option>
+                        <option value="phd">{% trans "PhD" %}</option>
+                    </select>
+                    <button id="home-search-btn" class="ab-btn ab-btn-accent">
+                        <i class="fas fa-search"></i> {% trans "Search Programs" %}
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ================= TRUST BANNER (admin-managed later) ================= -->
-<section class="home-trust">
-    <div class="ab-container text-center">
-        <p class="home-trust-label">{% trans "Our students study at" %}</p>
-        <ul class="home-trust-logos">
-            <li class="font-serif">Aydın</li>
-            <li class="font-serif">Bahçeşehir</li>
-            <li class="font-serif">Medipol</li>
-            <li class="font-serif">Yeni Yüzyıl</li>
-            <li class="font-serif">Biruni</li>
-            <li class="font-serif">Kent</li>
-            <li class="font-serif">Üsküdar</li>
-            <li class="font-serif">Nişantaşı</li>
-        </ul>
-    </div>
-</section>
-
-<!-- ================= WHY CHOOSE US ================= -->
-<section id="why" class="ab-section">
-    <div class="ab-container">
-        <div class="home-section-head">
-            <h2 class="font-serif">{% trans "Why Students Choose Apply BM" %}</h2>
-            <p>{% trans "More than a platform — a personal team that walks with you from first message to first day of class." %}</p>
-        </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="ab-card home-feature">
-                <div class="home-feature-icon"><i class="fas fa-shield-alt"></i></div>
-                <h3>{% trans "Verified Programs" %}</h3>
-                <p>{% trans "Every university, program and deadline is manually verified by our academic team." %}</p>
-            </div>
-            <div class="ab-card home-feature">
-                <div class="home-feature-icon"><i class="fas fa-user-tie"></i></div>
-                <h3>{% trans "Certified Agents" %}</h3>
-                <p>{% trans "Vetted representatives and company managers handle your file from start to finish." %}</p>
-            </div>
-            <div class="ab-card home-feature">
-                <div class="home-feature-icon"><i class="fab fa-whatsapp"></i></div>
-                <h3>{% trans "WhatsApp Guidance" %}</h3>
-                <p>{% trans "One tap opens a ready-made WhatsApp message to our manager — no waiting, no confusion." %}</p>
-            </div>
-            <div class="ab-card home-feature">
-                <div class="home-feature-icon"><i class="fas fa-folder-open"></i></div>
-                <h3>{% trans "One Dashboard" %}</h3>
-                <p>{% trans "Documents, application steps and your acceptance letter — tracked in one place." %}</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ================= HOW IT WORKS (your exact flow) ================= -->
-<section id="how" class="ab-section ab-bg">
-    <div class="ab-container">
-        <div class="home-section-head">
-            <h2 class="font-serif">{% trans "Your Journey to Acceptance" %}</h2>
-            <p>{% trans "A clear five-step path — you are never alone in the process." %}</p>
-        </div>
-        <div class="home-timeline">
-            <div class="home-step">
-                <span class="home-step-number">1</span>
-                <h4>{% trans "Register" %}</h4>
-                <p>{% trans "Create your free account in under a minute." %}</p>
-            </div>
-            <div class="home-step">
-                <span class="home-step-number">2</span>
-                <h4>{% trans "Browse & Choose" %}</h4>
-                <p>{% trans "Explore countries, fields and degree levels on your dashboard." %}</p>
-            </div>
-            <div class="home-step">
-                <span class="home-step-number">3</span>
-                <h4>{% trans "Apply via WhatsApp" %}</h4>
-                <p>{% trans "Tap apply — a ready-made WhatsApp message reaches our manager, who replies with your plan and price." %}</p>
-            </div>
-            <div class="home-step">
-                <span class="home-step-number">4</span>
-                <h4>{% trans "Complete Documents" %}</h4>
-                <p>{% trans "Upload your documents; we check and process everything for you." %}</p>
-            </div>
-            <div class="home-step">
-                <span class="home-step-number home-step-number-accent">5</span>
-                <h4>{% trans "Get Accepted" %}</h4>
-                <p>{% trans "We handle the university process until your acceptance letter arrives." %}</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ================= REQUIRED DOCUMENTS ================= -->
-<section id="documents" class="ab-section">
-    <div class="ab-container">
-        <div class="home-section-head">
-            <h2 class="font-serif">{% trans "Prepare Your Documents" %}</h2>
-            <p>{% trans "Know exactly what you need before you start — no surprises." %}</p>
-        </div>
-        <div class="grid md:grid-cols-3 gap-6">
-            <div class="ab-card home-doc-card">
-                <div class="ab-card-header home-doc-head">
-                    <i class="fas fa-graduation-cap"></i>
-                    <h3>{% trans "Associate & Bachelor" %}</h3>
-                </div>
-                <ul class="home-doc-list">
-                    <li><i class="fas fa-check-circle"></i> {% trans "Passport" %}</li>
-                    <li><i class="fas fa-check-circle"></i> {% trans "Diploma and transcripts, with official translation" %}</li>
-                    <li><i class="fas fa-check-circle"></i> {% trans "Pre-university certificate (for the old education system)" %}</li>
+    <!-- ================= TRUST BANNER (Dynamic Universities) ================= -->
+    {% if homepage_universities %}
+        <section class="home-trust fade-in-up">
+            <div class="ab-container text-center">
+                <p class="home-trust-label">{% trans "Our students study at" %}</p>
+                <ul class="home-trust-logos">
+                    {% for uni in homepage_universities %}
+                        <li class="home-trust-logo">
+                            {% if uni.logo %}
+                                <img src="{{ uni.logo.url }}" alt="{{ uni.name }}">
+                            {% endif %}
+                            <span class="font-serif">{{ uni.name }}</span>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
-            <div class="ab-card home-doc-card">
-                <div class="ab-card-header home-doc-head">
-                    <i class="fas fa-user-graduate"></i>
-                    <h3>{% trans "Master" %}</h3>
-                </div>
-                <ul class="home-doc-list">
-                    <li><i class="fas fa-check-circle"></i> {% trans "Passport" %}</li>
-                    <li><i class="fas fa-check-circle"></i> {% trans "Bachelor's degree with transcripts, with official translation" %}</li>
-                </ul>
-            </div>
-            <div class="ab-card home-doc-card">
-                <div class="ab-card-header home-doc-head">
-                    <i class="fas fa-award"></i>
-                    <h3>{% trans "PhD" %}</h3>
-                </div>
-                <ul class="home-doc-list">
-                    <li><i class="fas fa-check-circle"></i> {% trans "Passport" %}</li>
-                    <li><i class="fas fa-check-circle"></i> {% trans "Bachelor's degree and transcripts" %}</li>
-                    <li><i class="fas fa-check-circle"></i> {% trans "Master's degree and transcripts, with official translation" %}</li>
-                    <li><i class="fas fa-check-circle"></i> {% trans "Motivation letter" %}</li>
-                    <li><i class="fas fa-check-circle"></i> {% trans "CV" %}</li>
-                    <li><i class="fas fa-check-circle"></i> {% trans "Master's thesis" %}</li>
-                </ul>
-            </div>
-        </div>
-        <p class="home-doc-note">
-            <i class="fas fa-language"></i> {% trans "All academic documents must include an official translation." %}
-        </p>
-    </div>
-</section>
+        </section>
+    {% endif %}
 
-<!-- ================= SUCCESS STORIES (Instagram-linked, privacy-safe) ================= -->
-<section id="stories" class="ab-section ab-bg">
-    <div class="ab-container">
-        <div class="home-section-head">
-            <h2 class="font-serif">{% trans "Real Students. Real Acceptances." %}</h2>
-            <p>{% trans "Watch their own words on our Instagram — unedited and honest." %}</p>
-        </div>
-        <div class="grid md:grid-cols-3 gap-6">
-            <div class="ab-card home-story">
-                <div class="home-story-top">
-                    <span class="home-story-avatar">S</span>
-                    <div>
-                        <h4>Sara M.</h4>
-                        <p>{% trans "Iran" %} → {% trans "Bahçeşehir University" %}</p>
-                    </div>
-                    <span class="ab-badge ab-badge-primary">{% trans "Master" %}</span>
-                </div>
-                <p class="home-story-quote">“{% trans "From my first WhatsApp message to my acceptance letter, everything took less than two months." %}”</p>
-                {# TODO: link to the exact Instagram video #}
-                <a href="#" target="_blank" rel="noopener" class="ab-btn ab-btn-outline ab-btn-sm">
-                    <i class="fab fa-instagram"></i> {% trans "Watch Story" %}
-                </a>
+    <!-- ================= WHY CHOOSE US ================= -->
+    <section id="why" class="ab-section">
+        <div class="ab-container">
+            <div class="home-section-head fade-in-up">
+                <h2 class="font-serif">{% trans "Why Students Choose Apply BM" %}</h2>
+                <p>{% trans "More than a platform — a personal team that walks with you from first message to first day of class." %}</p>
             </div>
-            <div class="ab-card home-story">
-                <div class="home-story-top">
-                    <span class="home-story-avatar">A</span>
-                    <div>
-                        <h4>Ahmed K.</h4>
-                        <p>{% trans "Iraq" %} → {% trans "Üsküdar University" %}</p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Feature 1 -->
+                <div class="ab-card home-feature fade-in-up">
+                    <img src="{% static 'images/home/why-us.jpg' %}" alt="" class="home-feature-img">
+                    <div class="home-feature-body">
+                        <div class="home-feature-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>{% trans "Verified Programs" %}</h3>
+                        <p>{% trans "Every university, program and deadline is manually verified by our academic team." %}</p>
                     </div>
-                    <span class="ab-badge ab-badge-primary">{% trans "Bachelor" %}</span>
                 </div>
-                <p class="home-story-quote">“{% trans "The team prepared my documents and kept me updated on WhatsApp at every single step." %}”</p>
-                <a href="#" target="_blank" rel="noopener" class="ab-btn ab-btn-outline ab-btn-sm">
-                    <i class="fab fa-instagram"></i> {% trans "Watch Story" %}
-                </a>
-            </div>
-            <div class="ab-card home-story">
-                <div class="home-story-top">
-                    <span class="home-story-avatar">F</span>
-                    <div>
-                        <h4>Fatima R.</h4>
-                        <p>{% trans "Afghanistan" %} → {% trans "Medipol University" %}</p>
-                    </div>
-                    <span class="ab-badge ab-badge-primary">{% trans "Master" %}</span>
+                <!-- Feature 2 -->
+                <div class="ab-card home-feature fade-in-up">
+                    <div class="home-feature-icon"><i class="fas fa-user-tie"></i></div>
+                    <h3>{% trans "Certified Agents" %}</h3>
+                    <p>{% trans "Vetted representatives and company managers handle your file from start to finish." %}</p>
                 </div>
-                <p class="home-story-quote">“{% trans "I never thought studying in Turkey would be this smooth. Fully guided, fully honest." %}”</p>
-                <a href="#" target="_blank" rel="noopener" class="ab-btn ab-btn-outline ab-btn-sm">
-                    <i class="fab fa-instagram"></i> {% trans "Watch Story" %}
-                </a>
+                <!-- Feature 3 -->
+                <div class="ab-card home-feature fade-in-up">
+                    <div class="home-feature-icon"><i class="fab fa-whatsapp"></i></div>
+                    <h3>{% trans "WhatsApp Guidance" %}</h3>
+                    <p>{% trans "One tap opens a ready-made WhatsApp message to our manager — no waiting, no confusion." %}</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="ab-card home-feature fade-in-up">
+                    <div class="home-feature-icon"><i class="fas fa-folder-open"></i></div>
+                    <h3>{% trans "One Dashboard" %}</h3>
+                    <p>{% trans "Documents, application steps and your acceptance letter — tracked in one place." %}</p>
+                </div>
             </div>
         </div>
-        <div class="text-center mt-10">
-            {# TODO: your Instagram page URL #}
-            <a href="#" target="_blank" rel="noopener" class="ab-btn ab-btn-primary ab-btn-lg">
-                <i class="fab fa-instagram"></i> {% trans "See More Stories on Instagram" %}
+    </section>
+
+    <!-- ================= HOW IT WORKS (Dynamic & Interactive) ================= -->
+    {% if steps %}
+        <section id="how" class="ab-section ab-bg">
+            <div class="ab-container">
+                <div class="home-section-head fade-in-up">
+                    <h2 class="font-serif">{% trans "Your Journey to Acceptance" %}</h2>
+                    <p>{% trans "Hover over the steps to see how we guide you." %}</p>
+                </div>
+                <div class="home-timeline">
+                    {% for step in steps %}
+                        <div class="home-step fade-in-up">
+                            <span class="home-step-number">{{ forloop.counter }}</span>
+                            <div class="home-step-icon"><i class="{{ step.icon_class }}"></i></div>
+                            <h4>{{ step.title }}</h4>
+                            <p>{{ step.description }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+    <!-- ================= REQUIRED DOCUMENTS (Dynamic) ================= -->
+    {% if documents %}
+        <section id="documents" class="ab-section relative overflow-hidden">
+            <div class="home-doc-bg">
+                <img src="{% static 'images/home/documents-bg.jpg' %}" alt="">
+            </div>
+            <div class="ab-container relative z-10">
+                <div class="home-section-head fade-in-up">
+                    <h2 class="font-serif text-white">{% trans "Prepare Your Documents" %}</h2>
+                    <p class="text-blue-100">{% trans "Know exactly what you need before you start — no surprises." %}</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    {% regroup documents by level as level_list %}
+                    {% for level in level_list %}
+                        <div class="ab-card home-doc-card fade-in-up">
+                            <div class="ab-card-header home-doc-head">
+                                <i class="fas fa-graduation-cap"></i>
+                                <h3>{{ level.grouper|title }}</h3>
+                            </div>
+                            <ul class="home-doc-list">
+                                {% for doc in level.list %}
+                                    <li><i class="fas fa-check-circle"></i> {{ doc.title }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+    <!-- ================= SUCCESS STORIES (Conditional) ================= -->
+    {% if stories and settings.instagram_url %}
+        <section id="stories" class="ab-section ab-bg">
+            <div class="ab-container">
+                <div class="home-section-head fade-in-up">
+                    <h2 class="font-serif">{% trans "Real Students. Real Acceptances." %}</h2>
+                    <p>{% trans "Watch their own words on our Instagram — unedited and honest." %}</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    {% for story in stories %}
+                        <div class="ab-card home-story fade-in-up">
+                            <div class="home-story-top">
+                                <span class="home-story-avatar">{{ story.name|first }}</span>
+                                <div>
+                                    <h4>{{ story.name }}</h4>
+                                    <p>{{ story.origin_country }} → {{ story.destination_university.name }}</p>
+                                </div>
+                                <span class="ab-badge ab-badge-primary">{{ story.degree_level }}</span>
+                            </div>
+                            <p class="home-story-quote">“{{ story.quote }}”</p>
+                            {% if story.instagram_video_url %}
+                                <a href="{{ story.instagram_video_url }}" target="_blank" rel="noopener"
+                                   class="ab-btn ab-btn-outline ab-btn-sm">
+                                    <i class="fab fa-instagram"></i> {% trans "Watch Story" %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="text-center mt-10 fade-in-up">
+                    <a href="{{ settings.instagram_url }}" target="_blank" rel="noopener"
+                       class="ab-btn ab-btn-primary ab-btn-lg">
+                        <i class="fab fa-instagram"></i> {% trans "See More Stories on Instagram" %}
+                    </a>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+    <!-- ================= WHATSAPP CTA BAND ================= -->
+    <section class="home-whatsapp">
+        <div class="ab-container home-whatsapp-inner fade-in-up">
+            <div>
+                <h2 class="font-serif">{% trans "Still have questions?" %}</h2>
+                <p>{% trans "Our managers reply within minutes on WhatsApp — in your language." %}</p>
+            </div>
+            <a href="https://wa.me/{{ settings.whatsapp_number|cut:'+' }}?text=Hello%20Apply%20BM!%20I%20want%20to%20know%20more%20about%20scholarship%20programs."
+               target="_blank" rel="noopener" class="ab-btn home-whatsapp-btn ab-btn-lg">
+                <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
             </a>
         </div>
-    </div>
-</section>
-
-<!-- ================= WHATSAPP CTA BAND ================= -->
-<section class="home-whatsapp">
-    <div class="ab-container home-whatsapp-inner">
-        <div>
-            <h2 class="font-serif">{% trans "Still have questions?" %}</h2>
-            <p>{% trans "Our managers reply within minutes on WhatsApp — in your language." %}</p>
-        </div>
-        <a href="https://wa.me/905344615317?text=Hello%20Apply%20BM!%20I%20want%20to%20know%20more%20about%20scholarship%20programs."
-           target="_blank" rel="noopener" class="ab-btn home-whatsapp-btn ab-btn-lg">
-            <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
-        </a>
-    </div>
-</section>
+    </section>
 
 {% endblock %}
 
@@ -307,9 +241,7 @@
     {{ block.super }}
     <script>
         window.AppConfig = {
-            urls: {
-                register: "{% url 'register' %}"
-            },
+            urls: {register: "{% url 'register' %}"},
             translations: {
                 searchInfo: "{% trans 'Create your free account to see programs matching your search.' %}",
                 newsletterSuccess: "{% trans 'Thank you! You are on the scholarship alerts list.' %}"

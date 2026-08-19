@@ -162,6 +162,9 @@ class University(TimeStampedModel):
         ('other', 'Other'),
     ]
 
+    logo = models.ImageField(upload_to='universities/', blank=True, null=True)
+    show_on_homepage = models.BooleanField(default=False, help_text="Display in the trust banner?")
+
     external_id = models.IntegerField(
         unique=True,
         null=True,
@@ -484,3 +487,76 @@ class Application(TimeStampedModel):
 
     def get_absolute_url(self):
         return reverse('application_detail', args=[self.pk])
+
+
+# 1. Global Site Settings (Singleton - managed by admin)
+class SiteSettings(models.Model):
+    whatsapp_number = models.CharField(max_length=20, default="+905344615317")
+    email = models.EmailField(default="Matinf1060@gmail.com")
+    address = models.CharField(max_length=255, blank=True)  # Translatable
+    instagram_url = models.URLField(blank=True, null=True)
+    telegram_url = models.URLField(blank=True, null=True)
+
+    # Hero Section
+    hero_title = models.CharField(max_length=200, default="Unlock Your Fully Funded Future.")  # Translatable
+    hero_subtitle = models.CharField(max_length=500, blank=True)  # Translatable
+    hero_background_image = models.ImageField(upload_to='home/', default='home/hero.jpg')
+
+    class Meta:
+        verbose_name = "Site Settings"
+        verbose_name_plural = "Site Settings"
+
+    def __str__(self):
+        return "Global Site Settings"
+
+
+# 2. How It Works Steps (Dynamic number of steps)
+class HowItWorksStep(models.Model):
+    order = models.PositiveIntegerField(default=0, help_text="Display order (1, 2, 3...)")
+    icon_class = models.CharField(max_length=50, default="fas fa-star", help_text="FontAwesome class")
+    title = models.CharField(max_length=100)  # Translatable
+    description = models.TextField()  # Translatable
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = "Journey Step"
+
+    def __str__(self):
+        return f"Step {self.order}: {self.title}"
+
+
+# 3. Document Requirements
+class DocumentRequirement(models.Model):
+    LEVEL_CHOICES = [
+        ('associate_bachelor', _('Associate & Bachelor')),
+        ('master', _('Master')),
+        ('phd', _('PhD')),
+    ]
+    level = models.CharField(max_length=20, choices=LEVEL_CHOICES)
+    title = models.CharField(max_length=200)  # Translatable
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['level', 'order']
+        verbose_name = "Document Requirement"
+
+    def __str__(self):
+        return f"{self.get_level_display()} - {self.title}"
+
+
+# 4. Success Stories
+class SuccessStory(models.Model):
+    name = models.CharField(max_length=100)
+    origin_country = models.CharField(max_length=50)  # Translatable
+    destination_university = models.ForeignKey('University', on_delete=models.CASCADE)
+    degree_level = models.CharField(max_length=50)  # Translatable
+    quote = models.TextField()  # Translatable
+    instagram_video_url = models.URLField(blank=True, null=True, help_text="Link to the Instagram video")
+    is_published = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Success Story"
+
+    def __str__(self):
+        return self.name
