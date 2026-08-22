@@ -143,3 +143,67 @@ html[dir="rtl"] .auth-lang-switch { right: auto; left: 1.5rem; }
 /* Error styling for JS validation */
 .auth-error-msg { color: var(--ab-danger); font-size: 0.8rem; margin-top: 0.35rem; display: none; }
 .auth-error-msg.visible { display: block; }
+
+/* ==========================================================================
+   AUTH ANIMATIONS
+========================================================================== */
+@keyframes auth-fade-in-up {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes auth-slide-in-left {
+    0% { opacity: 0; transform: translateX(-40px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes auth-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes auth-shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+
+/* 1. Slide in the left branding panel */
+.auth-brand-panel {
+    animation: auth-slide-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 2. Fade up the right form panel */
+.auth-form-container {
+    animation: auth-fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+    opacity: 0; /* Start hidden */
+}
+
+/* 3. Subtle floating effect for the stats */
+.auth-brand-stats {
+    animation: auth-float 6s ease-in-out infinite;
+}
+
+/* 4. Beautiful focus transition for inputs */
+.auth-form .ab-input {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.auth-form .ab-input:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -5px rgba(var(--ab-primary-rgb), 0.15), 0 0 0 3px rgba(var(--ab-primary-rgb), 0.1) !important;
+}
+
+/* 5. Shake effect for error messages */
+.auth-error-msg.visible,
+#loginNonFieldErrors .errorlist,
+#nonFieldErrors .errorlist {
+    animation: auth-shake 0.4s ease-in-out;
+    background: var(--ab-danger-soft);
+    color: var(--ab-danger);
+    padding: 0.75rem 1rem;
+    border-radius: var(--ab-radius-md);
+    border: 1px solid var(--ab-danger-border);
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
