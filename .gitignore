@@ -1,66 +1,51 @@
-# Python
-*.pyc
+# Python & Bytecode
 __pycache__/
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
 .Python
 env/
 venv/
-ENV/
 .venv/
+ENV/
 env.bak/
 venv.bak/
 
-# Django
+# Django Specific
 *.log
 db.sqlite3
 db.sqlite3-journal
 media/
-staticfiles/  # فایل‌های collectstatic
+staticfiles/
+*.pot
 
 # Environment variables
 .env
 .env.local
-.env.production
-.env.dev
 .env.*.local
 
-# IDE
+# IDEs & OS
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-
-# OS
 .DS_Store
 Thumbs.db
 
-# Celery
+# Celery & Redis
 celerybeat-schedule
 celerybeat.pid
-
-# Cache
-*.cache
-*.tmp
-
-# Backup files
-*~
-\#*\#
-
-# Redis
 dump.rdb
 
-# Node
+# Node (Tailwind)
 node_modules/
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Build files
-dist/
-build/
 
 # Coverage
 .coverage
 htmlcov/
+
+# Migrations (Keep __init__.py, ignore the rest)
+**/migrations/*.py
+!**/migrations/__init__.py
