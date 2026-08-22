@@ -1,58 +1,73 @@
 {% extends 'base.html' %}
 {% load i18n static custom_filters %}
 
-{% block title %}{% trans "Confirm Your Code" %}{% endblock %}
+{% block title %}{% trans "Confirm Your Code" %} | Apply BM{% endblock %}
 
 {% block css %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'css/pages/confirm-code.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
 {% endblock %}
 
 {% block content %}
-    <section
-            class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-        <div class="p-8 rounded-lg shadow-lg w-full max-w-md md:bg-white bg-transparent text-gray-800">
-            <div class="text-center mb-8">
-                <a href="{% url 'main' %}"><img src="{% static 'images/logo.png' %}" alt="ApplyBaMa Logo"
-                                                class="mx-auto h-12 w-12"></a>
-                <h2 class="text-2xl font-bold mt-4 md:text-gray-800 text-white">{% trans "Enter Confirmation Code" %}</h2>
-                <p class="mt-2 text-sm md:text-gray-600 text-white/90">{% trans "We’ve sent a 6-digit code to your email. Enter it
-                    below." %}</p>
+<div class="auth-wrapper">
+    <div class="auth-brand-panel">
+        <div class="auth-brand-top">
+            <a href="{% url 'main' %}" class="ab-brand">
+                <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="40" height="40">
+                <span>Apply BM</span>
+            </a>
+        </div>
+
+        <div class="auth-brand-hero">
+            <h1 class="font-serif">{% trans "Almost There!" %}</h1>
+            <p>{% trans "We just need to verify your email address to secure your account and get you started." %}</p>
+            <div class="auth-brand-stats">
+                <div class="auth-stat-item"><strong><i class="fas fa-shield-alt"></i></strong><span>{% trans "Secure" %}</span></div>
+                <div class="auth-stat-item"><strong><i class="fas fa-lock"></i></strong><span>{% trans "Encrypted" %}</span></div>
+                <div class="auth-stat-item"><strong><i class="fas fa-user-check"></i></strong><span>{% trans "Verified" %}</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-form-panel">
+        <div class="auth-lang-switch">{% include 'partials/language_switcher.html' %}</div>
+        <div class="auth-mobile-logo">
+            <a href="{% url 'main' %}" class="ab-brand">
+                <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="40" height="40">
+                <span>Apply BM</span>
+            </a>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="auth-form-header" style="text-align: center;">
+                <div style="width: 4rem; height: 4rem; margin: 0 auto 1rem auto; background: var(--ab-primary-soft); color: var(--ab-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                    <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <h2 class="font-serif">{% trans "Check Your Email" %}</h2>
+                <p>{% trans "We've sent a 6-digit code to your email address. Enter it below." %}</p>
             </div>
 
-            <form id="confirmForm" action="{% url 'confirm_code' pk=user_id %}" method="post" novalidate>
+            <form id="confirmForm" action="{% url 'confirm_code' pk=user_id %}" method="post" class="auth-form" novalidate>
                 {% csrf_token %}
                 <div id="confirmNonFieldErrors"></div>
 
-                <div class="flex justify-between space-x-2 mb-6">
+                <div class="auth-code-boxes">
                     {% for _ in "123456" %}
-                        <input type="text" maxlength="1" inputmode="numeric" pattern="\d" class="w-12 h-12 text-center text-xl tracking-widest
-                      bg-white/20 md:bg-white border border-white/50 md:border-gray-300
-                      rounded md:rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300
-                      text-white md:text-gray-800" id="code{{ forloop.counter }}">
+                        <input type="text" maxlength="1" inputmode="numeric" pattern="\d" id="code{{ forloop.counter }}">
                     {% endfor %}
                 </div>
                 <input type="hidden" name="code" id="fullCode">
 
-                <button type="submit" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2
-                     bg-white/25 hover:bg-white/30 md:bg-blue-500 md:text-white
-                     text-white font-semibold md:hover:bg-blue-600 transition-all">
-                    {% trans "Verify Code" %}
-                </button>
+                <button type="submit" class="ab-btn ab-btn-primary">{% trans "Verify Code" %}</button>
             </form>
 
-            <div class="flex items-center justify-between mt-6 text-sm">
-                <a href="{% url 'resend_code' pk=user_id %}"
-                   class="underline md:text-blue-500 text-white hover:text-gray-200">
-                    {% trans "Resend Code" %}
-                </a>
-                <a href="{% url 'login' %}" class="underline md:text-gray-800 text-white hover:text-gray-200">
-                    {% trans "Back to Login" %}
-                </a>
+            <div class="auth-links" style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+                <a href="{% url 'resend_code' pk=user_id %}">{% trans "Resend Code" %}</a>
+                <a href="{% url 'login' %}">{% trans "Back to Login" %}</a>
             </div>
-            {% include 'partials/language_switcher.html' %}
         </div>
-    </section>
+    </div>
+</div>
 {% endblock %}
 
 {% block js %}

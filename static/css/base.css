@@ -1137,3 +1137,45 @@ html[lang="fa"] body {
         padding-block: 2rem;
     }
 }
+
+/* ==========================================================================
+   BEAUTIFUL SCROLLING
+========================================================================== */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem; /* anchors land below the sticky header */
+    scrollbar-width: thin;
+    scrollbar-color: var(--ab-primary) var(--ab-surface-2);
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--ab-surface-2);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--ab-primary);
+    border-radius: 999px;
+    border: 2px solid var(--ab-surface-2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--ab-primary-hover);
+}
+
+/* Thin gold reading-progress bar at the very top */
+#ab-scroll-progress {
+    position: fixed;
+    top: 0;
+    inset-inline-start: 0;
+    height: 3px;
+    width: 0;
+    background: linear-gradient(90deg, var(--ab-accent), var(--ab-accent-hover));
+    z-index: 100;
+    border-radius: 0 999px 999px 0;
+    transition: width 80ms linear;
+}

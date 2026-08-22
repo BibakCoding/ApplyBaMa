@@ -1,84 +1,89 @@
 {% extends 'base.html' %}
 {% load i18n static custom_filters %}
 
-{% block title %}{% trans "Login" %}{% endblock %}
+{% block title %}{% trans "Login" %} | Apply BM{% endblock %}
 
 {% block css %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'css/pages/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
 {% endblock %}
 
 {% block content %}
-    <section
-            class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 text-white p-8">
-        <div class="p-8 rounded-lg shadow-lg w-full max-w-md text-gray-800 md:bg-white bg-transparent">
-            <div class="text-center mb-8">
-                <a href="{% url 'main' %}">
-                    <img src="{% static 'images/logo.png' %}" alt="ApplyBaMa Logo" class="mx-auto h-12 w-12">
-                </a>
-                <h2 class="text-2xl font-bold mt-4 md:text-gray-800 text-white md:text-gray-800">
-                    {% trans "Login" %}
-                </h2>
+<div class="auth-wrapper">
+    <!-- LEFT BRANDING PANEL -->
+    <div class="auth-brand-panel">
+        <div class="auth-brand-top">
+            <a href="{% url 'main' %}" class="ab-brand">
+                <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="40" height="40">
+                <span>Apply BM</span>
+            </a>
+        </div>
+
+        <div class="auth-brand-hero">
+            <h1 class="font-serif">{% trans "Your Journey to a Global Education Begins Here." %}</h1>
+            <p>{% trans "Log in to access your personalized dashboard, track your applications, and connect with certified agents." %}</p>
+
+            <div class="auth-brand-stats">
+                <div class="auth-stat-item"><strong>1000+</strong><span>{% trans "Students" %}</span></div>
+                <div class="auth-stat-item"><strong>50+</strong><span>{% trans "Universities" %}</span></div>
+                <div class="auth-stat-item"><strong>4</strong><span>{% trans "Countries" %}</span></div>
+            </div>
+        </div>
+
+        <div style="position: relative; z-index: 1;">
+            <p style="font-size: 0.875rem; opacity: 0.6;">&copy; <span data-current-year></span> Apply BM. {% trans "All rights reserved." %}</p>
+        </div>
+    </div>
+
+    <!-- RIGHT FORM PANEL -->
+    <div class="auth-form-panel">
+        <div class="auth-lang-switch">{% include 'partials/language_switcher.html' %}</div>
+        <div class="auth-mobile-logo">
+            <a href="{% url 'main' %}" class="ab-brand">
+                <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="40" height="40">
+                <span>Apply BM</span>
+            </a>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="auth-form-header">
+                <h2 class="font-serif">{% trans "Welcome Back" %}</h2>
+                <p>{% trans "Please enter your details to sign in." %}</p>
             </div>
 
-            <form id="loginForm" action="{% url 'login' %}" method="post" novalidate>
+            <form id="loginForm" action="{% url 'login' %}" method="post" class="auth-form" novalidate>
                 {% csrf_token %}
-
-                {# Non-field errors container #}
                 <div id="loginNonFieldErrors"></div>
 
-                {# Email field #}
-                <div class="mb-4">
-                    <label for="id_username" class="block mb-2 md:text-gray-800 text-white">
-                        {% trans "Email" %}
-                    </label>
-                    <input type="email" name="username" id="id_username" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
-                 bg-white/20 md:bg-white border border-white/50 md:border-gray-300
-                 placeholder-white/70 md:placeholder-gray-500 text-white md:text-gray-800"
-                           placeholder="you@example.com" value="{{ form.username.value|default_if_none:'' }}">
+                <div class="ab-field">
+                    <label for="id_username" class="ab-label">{% trans "Email Address" %}</label>
+                    <input type="email" name="username" id="id_username" class="ab-input"
+                           placeholder="{% trans 'you@example.com' %}" value="{{ form.username.value|default_if_none:'' }}" required>
                 </div>
 
-                {# Password field #}
-                <div class="mb-6">
-                    <label for="id_password" class="block mb-2 md:text-gray-800 text-white">
-                        {% trans "Password" %}
-                    </label>
-                    <input type="password" name="password" id="id_password" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
-                 bg-white/20 md:bg-white border border-white/50 md:border-gray-300
-                 placeholder-white/70 md:placeholder-gray-500 text-white md:text-gray-800" placeholder="********"
-                           value="{{ form.password.value|default_if_none:'' }}">
+                <div class="ab-field">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <label for="id_password" class="ab-label">{% trans "Password" %}</label>
+                        <a href="{% url 'forget_password' %}" style="font-size: 0.85rem; font-weight: 600; color: var(--ab-primary);">{% trans "Forgot Password?" %}</a>
+                    </div>
+                    <input type="password" name="password" id="id_password" class="ab-input"
+                           placeholder="••••••••" value="{{ form.password.value|default_if_none:'' }}" required>
                 </div>
 
-                <div class="flex items-center mb-6">
-                    <input type="checkbox" id="remember_me" name="remember_me"
-                           class="mr-2 focus:ring-2 focus:ring-blue-300">
-                    <label for="remember_me" class="md:text-gray-800 text-white">
-                        {% trans "Remember Me" %}
-                    </label>
-                    <a href="{% url 'forget_password' %}" class="ml-auto md:text-blue-500 text-white hover:underline">
-                        {% trans "Forgot Password?" %}
-                    </a>
+                <div class="ab-field" style="flex-direction: row; align-items: center; display: flex; gap: 0.5rem;">
+                    <input type="checkbox" id="remember_me" name="remember_me" style="width: 1rem; height: 1rem; accent-color: var(--ab-primary);">
+                    <label for="remember_me" style="font-size: 0.9rem; color: var(--ab-muted); cursor: pointer;">{% trans "Remember Me" %}</label>
                 </div>
 
-                <button type="submit" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2
-                     bg-white/25 hover:bg-white/30 md:bg-blue-500 md:text-white
-                     text-white font-semibold md:hover:bg-blue-600 transition-all">
-                    {% trans "Login" %}
-                </button>
+                <button type="submit" class="ab-btn ab-btn-primary">{% trans "Sign In" %}</button>
             </form>
 
-            <div class="text-center mt-6 md:text-gray-800 text-white">
-                <p>
-                    {% trans "Don't have an account?" %}
-                    <a href="{% url 'register' %}" class="underline md:text-blue-500 text-white hover:text-gray-200">
-                        {% trans "Register here" %}
-                    </a>
-                </p>
+            <div class="auth-links">
+                <p>{% trans "Don't have an account?" %} <a href="{% url 'register' %}">{% trans "Create Account" %}</a></p>
             </div>
-
-            {% include 'partials/language_switcher.html' %}
         </div>
-    </section>
+    </div>
+</div>
 {% endblock %}
 
 {% block js %}

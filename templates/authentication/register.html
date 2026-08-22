@@ -1,87 +1,81 @@
-{# templates/authentication/register.html #}
 {% extends 'base.html' %}
 {% load i18n static custom_filters %}
 
-{% block title %}{% trans "Register" %}{% endblock %}
+{% block title %}{% trans "Create Account" %} | Apply BM{% endblock %}
 
 {% block css %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'css/pages/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
 {% endblock %}
 
 {% block content %}
-    <section class="min-h-screen flex items-center justify-center
-                bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-        <div class="p-8 rounded-lg shadow-lg w-full max-w-md
-              text-gray-800 md:bg-white bg-transparent">
-            <div class="text-center mb-8">
-                <a href="{% url 'main' %}">
-                    <img src="{% static 'images/logo.png' %}" alt="ApplyBaMa Logo" class="mx-auto h-12 w-12">
-                </a>
-                <h2 class="text-2xl font-bold mt-4 md:text-gray-800 text-white">
-                    {% trans "Register" %}
-                </h2>
+<div class="auth-wrapper">
+    <div class="auth-brand-panel">
+        <div class="auth-brand-top">
+            <a href="{% url 'main' %}" class="ab-brand">
+                <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="40" height="40">
+                <span>Apply BM</span>
+            </a>
+        </div>
+
+        <div class="auth-brand-hero">
+            <h1 class="font-serif">{% trans "Join the Global Academic Community." %}</h1>
+            <p>{% trans "Create your profile in seconds. Discover scholarships, manage your documents, and get accepted to top universities." %}</p>
+
+            <div class="auth-brand-stats">
+                <div class="auth-stat-item"><strong>100+</strong><span>{% trans "Certified Agents" %}</span></div>
+                <div class="auth-stat-item"><strong>3+</strong><span>{% trans "Years Exp." %}</span></div>
+                <div class="auth-stat-item"><strong>98%</strong><span>{% trans "Success Rate" %}</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-form-panel">
+        <div class="auth-lang-switch">{% include 'partials/language_switcher.html' %}</div>
+        <div class="auth-mobile-logo">
+            <a href="{% url 'main' %}" class="ab-brand">
+                <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="40" height="40">
+                <span>Apply BM</span>
+            </a>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="auth-form-header">
+                <h2 class="font-serif">{% trans "Create Your Account" %}</h2>
+                <p>{% trans "Start your journey to studying abroad." %}</p>
             </div>
 
-            <form id="registerForm" action="{% url 'register' %}" method="post" novalidate>
+            <form id="registerForm" action="{% url 'register' %}" method="post" class="auth-form" novalidate>
                 {% csrf_token %}
-
-                {# Non-field errors (password mismatch) #}
                 <div id="nonFieldErrors"></div>
 
-                {# Email #}
-                <div class="mb-4">
-                    <label for="id_email" class="block mb-2 md:text-gray-800 text-white">
-                        {% trans "Email" %}
-                    </label>
-                    <input type="email" name="email" id="id_email" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
-                      bg-white/20 md:bg-white border border-white/50 md:border-gray-300
-                      placeholder-white/70 md:placeholder-gray-500 text-white md:text-gray-800"
-                           placeholder="{% trans 'you@example.com' %}"
-                           value="{{ form.email.value|default_if_none:'' }}">
+                <div class="ab-field">
+                    <label for="id_email" class="ab-label">{% trans "Email Address" %}</label>
+                    <input type="email" name="email" id="id_email" class="ab-input"
+                           placeholder="{% trans 'you@example.com' %}" value="{{ form.email.value|default_if_none:'' }}" required>
                 </div>
 
-                {# Password #}
-                <div class="mb-4">
-                    <label for="id_password1" class="block mb-2 md:text-gray-800 text-white">
-                        {% trans "Password" %}
-                    </label>
-                    <input type="password" name="password1" id="id_password1" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
-                      bg-white/20 md:bg-white border border-white/50 md:border-gray-300
-                      placeholder-white/70 md:placeholder-gray-500 text-white md:text-gray-800" placeholder="********"
-                           value="{{ form.password1.value|default_if_none:'' }}">
+                <div class="ab-field">
+                    <label for="id_password1" class="ab-label">{% trans "Password" %}</label>
+                    <input type="password" name="password1" id="id_password1" class="ab-input"
+                           placeholder="{% trans 'Create a strong password' %}" value="{{ form.password1.value|default_if_none:'' }}" required>
                 </div>
 
-                {# Confirm Password #}
-                <div class="mb-6">
-                    <label for="id_password2" class="block mb-2 md:text-gray-800 text-white">
-                        {% trans "Confirm Password" %}
-                    </label>
-                    <input type="password" name="password2" id="id_password2" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-300
-                      bg-white/20 md:bg-white border border-white/50 md:border-gray-300
-                      placeholder-white/70 md:placeholder-gray-500 text-white md:text-gray-800" placeholder="********"
-                           value="{{ form.password2.value|default_if_none:'' }}">
+                <div class="ab-field">
+                    <label for="id_password2" class="ab-label">{% trans "Confirm Password" %}</label>
+                    <input type="password" name="password2" id="id_password2" class="ab-input"
+                           placeholder="{% trans 'Confirm your password' %}" value="{{ form.password2.value|default_if_none:'' }}" required>
                 </div>
 
-                <button type="submit" class="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2
-                     bg-white/25 hover:bg-white/30 md:bg-blue-500 md:text-white
-                     text-white font-semibold md:hover:bg-blue-600 transition-all">
-                    {% trans "Register" %}
-                </button>
+                <button type="submit" class="ab-btn ab-btn-primary">{% trans "Create Account" %}</button>
             </form>
 
-            <div class="text-center mt-6 md:text-gray-800 text-white">
-                <p>
-                    {% trans "Already have an account?" %}
-                    <a href="{% url 'login' %}" class="underline md:text-blue-500 text-white hover:text-gray-200">
-                        {% trans "Login here" %}
-                    </a>
-                </p>
+            <div class="auth-links">
+                <p>{% trans "Already have an account?" %} <a href="{% url 'login' %}">{% trans "Sign In" %}</a></p>
             </div>
-
-            {% include 'partials/language_switcher.html' %}
         </div>
-    </section>
+    </div>
+</div>
 {% endblock %}
 
 {% block js %}
