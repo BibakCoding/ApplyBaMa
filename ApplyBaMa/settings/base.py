@@ -8,6 +8,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Application definition
 INSTALLED_APPS = [
+    "modeltranslation",
+    "solo",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -20,8 +22,6 @@ INSTALLED_APPS = [
     "data_fetch.apps.DataFetchConfig",
     "api.apps.ApiConfig",
     "django_celery_beat",
-    # "modeltranslation",
-    # "solo"
 ]
 
 MIDDLEWARE = [
@@ -91,6 +91,10 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# media files
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

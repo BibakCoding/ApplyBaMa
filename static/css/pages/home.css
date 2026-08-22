@@ -1,10 +1,171 @@
 /* ==========================================================================
    HOME PAGE — /static/css/pages/home.css
+   Complete, consolidated, and responsive styles.
 ========================================================================== */
 
-/* ---------- HERO ---------- */
+/* ==========================================================================
+   1. HEADER & RESPONSIVE MOBILE MENU
+   (Note: Right now this fixes the Home page. Later, when we design the
+   Login/Register pages, we will move this specific block to base.css
+   so the responsive menu works globally across the whole site).
+========================================================================== */
+
+/* Desktop Navigation */
+.ab-navbar-desktop {
+    display: none;
+    /* Hidden by default on mobile */
+    align-items: center;
+    gap: 0.35rem;
+}
+
+@media (min-width: 1024px) {
+    .ab-navbar-desktop {
+        display: flex;
+        /* Show ONLY on desktop */
+    }
+}
+
+/* Header Actions Container */
+.ab-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Auth Buttons Container */
+.ab-auth-btns {
+    display: flex;
+    gap: 0.5rem;
+}
+
+@media (max-width: 640px) {
+    .ab-auth-btns {
+        display: none;
+        /* Hide on small mobile to make room for hamburger */
+    }
+}
+
+/* Hamburger Button */
+.ab-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: transparent;
+    border: 1px solid var(--ab-border);
+    border-radius: var(--ab-radius-md);
+    cursor: pointer;
+    padding: 0;
+    gap: 4px;
+    transition: background-color var(--ab-transition);
+}
+
+.ab-hamburger:hover {
+    background-color: var(--ab-surface-2);
+}
+
+.hamburger-line {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background-color: var(--ab-text);
+    border-radius: 2px;
+    transition: transform var(--ab-transition), opacity var(--ab-transition);
+}
+
+/* Hamburger Animation (X shape) */
+.ab-hamburger.active .hamburger-line:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.ab-hamburger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.ab-hamburger.active .hamburger-line:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+@media (min-width: 1024px) {
+    .ab-hamburger {
+        display: none;
+    }
+}
+
+/* Mobile Navigation Drawer */
+.ab-navbar-mobile {
+    display: none;
+    flex-direction: column;
+    background: var(--ab-surface);
+    border-top: 1px solid var(--ab-border);
+    padding: 1rem;
+    gap: 0.5rem;
+    box-shadow: var(--ab-shadow-md);
+}
+
+.ab-navbar-mobile.active {
+    display: flex;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ab-navbar-mobile .ab-nav-link {
+    justify-content: flex-start;
+    padding: 0.85rem 1rem;
+    width: 100%;
+    border-radius: var(--ab-radius-md);
+}
+
+.ab-mobile-auth {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--ab-border);
+}
+
+
+/* ==========================================================================
+   2. HERO SECTION (Full Height + Background)
+========================================================================== */
 .home-hero {
-    padding-block: 5.5rem 4.5rem;
+    position: relative;
+    overflow: hidden;
+    min-height: calc(100svh - 4.25rem);
+    /* Full screen below header */
+    display: flex;
+    align-items: center;
+    padding-block: 4rem 4.5rem;
+    background: radial-gradient(circle at top right, rgba(var(--ab-accent-rgb), 0.12), transparent 28%),
+        linear-gradient(135deg, var(--ab-primary), var(--ab-primary-active));
+    color: var(--ab-primary-contrast);
+}
+
+.home-hero-bg-wrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.home-hero-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.25;
 }
 
 .home-hero-badge {
@@ -30,9 +191,10 @@
     margin-inline: auto;
     margin-bottom: 2.5rem;
     font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.88);
 }
 
-/* Search bar */
+/* Search Bar */
 .home-search-bar {
     display: grid;
     grid-template-columns: 1fr;
@@ -51,34 +213,45 @@
     }
 }
 
-/* Stats */
-.home-stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin-top: 3rem;
+/* Scroll Hint */
+.home-scroll-hint {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.3rem;
+    z-index: 2;
+    animation: ab-bounce 2s infinite;
 }
 
-@media (min-width: 768px) {
-    .home-stats {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-.home-stat-number {
-    display: block;
-    font-size: 2.2rem;
-    font-weight: 800;
+.home-scroll-hint:hover {
     color: #ffffff;
 }
 
-.home-stat-label {
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 0.875rem;
-    font-weight: 600;
+@keyframes ab-bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    40% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+
+    60% {
+        transform: translateX(-50%) translateY(-5px);
+    }
 }
 
-/* ---------- TRUST BANNER ---------- */
+
+/* ==========================================================================
+   3. TRUST BANNER (Universities Grid)
+========================================================================== */
 .home-trust {
     background: var(--ab-surface);
     border-bottom: 1px solid var(--ab-border);
@@ -92,29 +265,76 @@
     font-weight: 800;
     color: var(--ab-muted);
     margin-bottom: 1.5rem;
+    text-align: center;
 }
 
 .home-trust-logos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+    .home-trust-logos {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .home-trust-logos {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.home-trust-logo {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    gap: 1.25rem 2.75rem;
+    gap: 0.75rem;
+    padding: 1.5rem 1rem;
+    background: var(--ab-surface);
+    border-radius: var(--ab-radius-lg);
+    border: 1px solid var(--ab-border);
+    box-shadow: var(--ab-shadow-sm);
+    transition: all 0.3s ease;
+    min-height: 150px;
 }
 
-.home-trust-logos li {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--ab-muted);
-    opacity: 0.65;
-    transition: opacity var(--ab-transition), color var(--ab-transition);
+.home-trust-logo:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--ab-shadow-md);
+    border-color: var(--ab-primary);
 }
 
-.home-trust-logos li:hover {
+.home-trust-logo img {
+    height: 65px;
+    width: 100%;
+    max-width: 140px;
+    object-fit: contain;
+    filter: grayscale(100%);
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.home-trust-logo:hover img {
+    filter: grayscale(0%);
     opacity: 1;
-    color: var(--ab-primary);
 }
 
-/* ---------- SECTION HEADINGS ---------- */
+.home-trust-logo span {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ab-text);
+    text-align: center;
+    line-height: 1.3;
+}
+
+
+/* ==========================================================================
+   4. SECTION HEADINGS (Shared)
+========================================================================== */
 .home-section-head {
     text-align: center;
     max-width: 44rem;
@@ -133,10 +353,73 @@
     font-size: 1.05rem;
 }
 
-/* ---------- WHY US ---------- */
+
+/* ==========================================================================
+   5. WHY CHOOSE US
+========================================================================== */
+.home-why-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+}
+
+@media (min-width: 1024px) {
+    .home-why-grid {
+        grid-template-columns: 1fr 1.35fr;
+    }
+}
+
+.home-why-media {
+    position: relative;
+}
+
+.home-why-media img {
+    width: 100%;
+    max-height: 430px;
+    object-fit: cover;
+    border-radius: var(--ab-radius-xl);
+    box-shadow: var(--ab-shadow-lg);
+    border: 4px solid var(--ab-surface);
+}
+
+.home-why-media-badge {
+    position: absolute;
+    bottom: 1rem;
+    inset-inline-start: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--ab-accent);
+    color: #ffffff;
+    padding: 0.55rem 1.1rem;
+    border-radius: var(--ab-radius-pill);
+    font-weight: 800;
+    font-size: 0.9rem;
+    box-shadow: var(--ab-shadow-md);
+}
+
+.home-why-features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+    .home-why-features {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
 .home-feature {
-    padding: 1.75rem 1.5rem;
+    padding: 1.5rem 1.25rem;
     text-align: center;
+    transition: transform var(--ab-transition), box-shadow var(--ab-transition);
+}
+
+.home-feature:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--ab-shadow-md);
 }
 
 .home-feature-icon {
@@ -163,7 +446,10 @@
     font-size: 0.925rem;
 }
 
-/* ---------- TIMELINE ---------- */
+
+/* ==========================================================================
+   6. HOW IT WORKS (Timeline / Journey Steps)
+========================================================================== */
 .home-timeline {
     display: grid;
     grid-template-columns: 1fr;
@@ -193,6 +479,20 @@
 
 .home-step {
     text-align: center;
+    padding: 2rem 1.5rem;
+    border-radius: var(--ab-radius-lg);
+    border: 1px solid transparent;
+    background: var(--ab-surface);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: default;
+    position: relative;
+}
+
+.home-step:hover {
+    background-color: var(--ab-primary-soft);
+    border-color: var(--ab-primary);
+    transform: translateY(-12px);
+    box-shadow: var(--ab-shadow-lg);
 }
 
 .home-step-number {
@@ -211,11 +511,28 @@
     position: relative;
     z-index: 1;
     box-shadow: 0 0 0 6px var(--ab-primary-soft);
+    transition: all 0.3s ease;
 }
 
-.home-step-number-accent {
+.home-step:hover .home-step-number {
     background: var(--ab-accent);
-    box-shadow: 0 0 0 6px var(--ab-accent-soft);
+    box-shadow: 0 0 0 8px var(--ab-accent-soft);
+    transform: scale(1.1);
+}
+
+.home-step-icon {
+    font-size: 1.5rem;
+    color: var(--ab-primary);
+    margin-bottom: 1rem;
+    transition: color 0.3s ease;
+}
+
+.home-step:hover .home-step-icon {
+    color: var(--ab-accent);
+}
+
+.home-step:hover h4 {
+    color: var(--ab-primary-active);
 }
 
 .home-step h4 {
@@ -229,50 +546,142 @@
     margin-inline: auto;
 }
 
-/* ---------- DOCUMENTS ---------- */
-.home-doc-head {
+
+/* ==========================================================================
+   7. REQUIRED DOCUMENTS (High Contrast + Background Image)
+========================================================================== */
+#documents {
+    background-color: #1E3A8A;
+    position: relative;
+}
+
+.home-doc-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.home-doc-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.home-doc-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.65), rgba(23, 37, 84, 0.75));
+    z-index: 2;
+}
+
+#documents .ab-container {
+    position: relative;
+    z-index: 10;
+}
+
+#documents .home-section-head h2 {
+    color: #FFFFFF;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+#documents .home-section-head p {
+    color: #E0F2FE;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.ab-card.home-doc-card {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.ab-card-header.home-doc-head {
+    background-color: #F8FAFC;
+    border-bottom: 2px solid #E2E8F0;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+}
+
+.ab-card-header.home-doc-head i {
+    color: #F59E0B;
+    font-size: 1.5rem;
+    margin-inline-end: 0.75rem;
+}
+
+.ab-card-header.home-doc-head h3 {
+    color: #1E3A8A;
+    font-weight: 800;
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.home-doc-list {
+    padding: 0.5rem 1.25rem 1.25rem;
+    background-color: #FFFFFF;
+    margin: 0;
+}
+
+.home-doc-list li {
+    color: #0F172A;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.6;
+    padding: 0.65rem 0;
+    border-bottom: 1px dashed #E2E8F0;
     display: flex;
     align-items: center;
     gap: 0.75rem;
 }
 
-.home-doc-head i {
-    color: var(--ab-accent);
-    font-size: 1.25rem;
+.home-doc-list li:last-child {
+    border-bottom: none;
 }
 
-.home-doc-list {
-    padding: 1.25rem;
-    display: grid;
-    gap: 0.7rem;
+.home-doc-list li i {
+    color: #10B981;
+    font-size: 1.15rem;
+    flex-shrink: 0;
 }
 
-.home-doc-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.6rem;
-    color: var(--ab-muted);
-    font-size: 0.925rem;
+
+/* ==========================================================================
+   8. SUCCESS STORIES
+========================================================================== */
+#stories {
+    position: relative;
+    overflow: hidden;
 }
 
-.home-doc-list i {
-    color: var(--ab-success);
-    margin-top: 0.25rem;
+.home-stories-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
 }
 
-.home-doc-note {
-    margin-top: 1.75rem;
-    text-align: center;
-    color: var(--ab-warning);
-    font-weight: 700;
-    font-size: 0.925rem;
+.home-stories-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.10;
 }
 
-.home-doc-note i {
-    margin-inline-end: 0.4rem;
+.home-stories-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, var(--ab-bg) 0%, transparent 18%, transparent 82%, var(--ab-bg) 100%);
 }
 
-/* ---------- SUCCESS STORIES ---------- */
+#stories .ab-container {
+    position: relative;
+    z-index: 1;
+}
+
 .home-story {
     padding: 1.5rem;
     display: flex;
@@ -306,7 +715,6 @@
     height: 2.75rem;
     flex-shrink: 0;
     border-radius: 50%;
-    background: var(--ab-gradient-primary, var(--ab-primary));
     background: linear-gradient(135deg, var(--ab-primary), var(--ab-primary-active));
     color: #ffffff;
     font-weight: 800;
@@ -321,7 +729,10 @@
     flex: 1;
 }
 
-/* ---------- WHATSAPP BAND ---------- */
+
+/* ==========================================================================
+   9. WHATSAPP CTA BAND
+========================================================================== */
 .home-whatsapp {
     background: linear-gradient(135deg, var(--ab-primary), var(--ab-primary-active));
     padding-block: 3.5rem;
@@ -356,8 +767,9 @@
     color: var(--ab-primary-active);
 }
 
+
 /* ==========================================================================
-   SCROLL ANIMATIONS
+   10. GLOBAL SCROLL ANIMATIONS
 ========================================================================== */
 .fade-in-up {
     opacity: 0;
@@ -368,136 +780,4 @@
 .fade-in-up.visible {
     opacity: 1;
     transform: translateY(0);
-}
-
-/* ==========================================================================
-   HERO BACKGROUND IMAGE
-========================================================================== */
-.home-hero {
-    position: relative;
-    overflow: hidden;
-}
-
-.home-hero-bg-wrapper {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-}
-
-.home-hero-bg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.25;
-}
-
-/* ==========================================================================
-   TRUST LOGOS WITH IMAGES
-========================================================================== */
-.home-trust-logo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
-}
-
-.home-trust-logo img {
-    height: 45px;
-    width: auto;
-    object-fit: contain;
-    filter: grayscale(100%);
-    opacity: 0.7;
-    transition: all 0.3s ease;
-}
-
-.home-trust-logo:hover img {
-    filter: grayscale(0%);
-    opacity: 1;
-    transform: scale(1.1);
-}
-
-.home-trust-logo:hover span {
-    color: var(--ab-primary);
-    opacity: 1;
-}
-
-/* ==========================================================================
-   WHY US FEATURE IMAGES
-========================================================================== */
-.home-feature-img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-bottom: 3px solid var(--ab-accent);
-}
-
-.home-feature-body {
-    padding: 1.5rem;
-    text-align: center;
-}
-
-/* ==========================================================================
-   JOURNEY STEPS (INTERACTIVE HOVER)
-========================================================================== */
-.home-step {
-    text-align: center;
-    padding: 2rem 1.5rem;
-    border-radius: var(--ab-radius-lg);
-    border: 1px solid transparent;
-    background: var(--ab-surface);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy transition */
-    cursor: default;
-    position: relative;
-}
-
-.home-step:hover {
-    background-color: var(--ab-primary-soft);
-    border-color: var(--ab-primary);
-    transform: translateY(-12px);
-    box-shadow: var(--ab-shadow-lg);
-}
-
-.home-step:hover .home-step-number {
-    background: var(--ab-accent);
-    color: #ffffff;
-    box-shadow: 0 0 0 8px var(--ab-accent-soft);
-    transform: scale(1.1);
-}
-
-.home-step:hover h4 {
-    color: var(--ab-primary-active);
-}
-
-.home-step-icon {
-    font-size: 1.5rem;
-    color: var(--ab-primary);
-    margin-bottom: 1rem;
-    transition: color 0.3s ease;
-}
-
-.home-step:hover .home-step-icon {
-    color: var(--ab-accent);
-}
-
-/* ==========================================================================
-   DOCUMENTS SECTION BACKGROUND
-========================================================================== */
-.home-doc-bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-}
-
-.home-doc-bg img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.home-doc-bg::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(30, 58, 138, 0.92), rgba(23, 37, 84, 0.95)); /* Blue overlay */
 }

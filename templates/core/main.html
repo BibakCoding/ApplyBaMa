@@ -1,62 +1,116 @@
 {% extends "base.html" %}
 {% load i18n static %}
-
 {% block title %}{{ settings.hero_title|default:_("Apply BM") }}{% endblock %}
-
 {% block css %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'css/pages/home.css' %}">
 {% endblock %}
-
 {% block header %}
-    <header class="ab-header">
-        <div class="ab-container ab-header-inner">
-            <a href="{% url 'main' %}" class="ab-brand">
-                <img src="{% static 'images/logo.png' %}" alt="Apply BM">
-                <span>Apply BM</span>
-            </a>
-            <nav class="ab-navbar hidden lg:flex">
-                <a href="#why" class="ab-nav-link">{% trans "Why Us" %}</a>
-                <a href="#how" class="ab-nav-link">{% trans "How It Works" %}</a>
-                <a href="#documents" class="ab-nav-link">{% trans "Documents" %}</a>
-                {% if stories %}<a href="#stories" class="ab-nav-link">{% trans "Success Stories" %}</a>{% endif %}
-            </nav>
-            <div class="flex items-center gap-3">
-                {% include "partials/language_switcher.html" %}
-                <a href="{% url 'login' %}"
-                   class="ab-btn ab-btn-ghost ab-btn-sm hidden sm:inline-flex">{% trans "Login" %}</a>
+<header class="ab-header">
+    <div class="ab-container ab-header-inner">
+        <a href="{% url 'main' %}" class="ab-brand">
+            <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="150" height="40">
+            <span>Apply BM</span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="ab-navbar hidden lg:flex">
+            <a href="#why" class="ab-nav-link">{% trans "Why Us" %}</a>
+            <a href="#how" class="ab-nav-link">{% trans "How It Works" %}</a>
+            <a href="#documents" class="ab-nav-link">{% trans "Documents" %}</a>
+            {% if stories %}<a href="#stories" class="ab-nav-link">{% trans "Success Stories" %}</a>{% endif %}
+        </nav>
+
+        <div class="flex items-center gap-3">
+            {% include "partials/language_switcher.html" %}
+
+            {% if user.is_authenticated %}
+                <!-- LOGGED IN STATE -->
+                <a href="{% url 'dashboard' %}" class="ab-btn ab-btn-ghost ab-btn-sm hidden sm:inline-flex">
+                    <i class="fas fa-th-large"></i> {% trans "Dashboard" %}
+                </a>
+                <form action="{% url 'logout' %}" method="post" class="inline hidden sm:block">
+                    {% csrf_token %}
+                    <button type="submit" class="ab-btn ab-btn-outline ab-btn-sm">{% trans "Logout" %}</button>
+                </form>
+            {% else %}
+                <!-- LOGGED OUT STATE -->
+                <a href="{% url 'login' %}" class="ab-btn ab-btn-ghost ab-btn-sm hidden sm:inline-flex">{% trans "Login" %}</a>
                 <a href="{% url 'register' %}" class="ab-btn ab-btn-primary ab-btn-sm">{% trans "Get Started" %}</a>
-            </div>
+            {% endif %}
+
+            <!-- Mobile Hamburger Button -->
+            <button id="mobile-menu-btn" class="lg:hidden p-2 text-2xl text-gray-700" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-    </header>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-200 shadow-lg">
+        <nav class="ab-container py-4 flex flex-col gap-2">
+            <a href="#why" class="ab-nav-link w-full text-left">{% trans "Why Us" %}</a>
+            <a href="#how" class="ab-nav-link w-full text-left">{% trans "How It Works" %}</a>
+            <a href="#documents" class="ab-nav-link w-full text-left">{% trans "Documents" %}</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="ab-nav-link w-full text-left">{% trans "Dashboard" %}</a>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="ab-nav-link w-full text-left text-red-600 font-bold">{% trans "Logout" %}</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="ab-nav-link w-full text-left">{% trans "Login" %}</a>
+                <a href="{% url 'register' %}" class="ab-nav-link w-full text-left">{% trans "Get Started" %}</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
 {% endblock %}
-
 {% block content %}
-
     <!-- ================= HERO ================= -->
     <section class="ab-hero home-hero">
         <div class="home-hero-bg-wrapper">
-            <img src="{% static settings.hero_background_image|default:'images/home/hero.jpg' %}" alt="" class="home-hero-bg">
+            {% if settings and settings.hero_background_image %}
+                <!-- Added onerror fallback to fix the 404 issue from the database default -->
+                <img src="{{ settings.hero_background_image.url }}"
+                     alt=""
+                     class="home-hero-bg"
+                     width="1600"
+                     height="1000"
+                     loading="eager"
+                     onerror="this.onerror=null; this.src='{% static 'images/home/hero.jpg' %}';">
+            {% else %}
+                <img src="{% static 'images/home/hero.jpg' %}"
+                     alt=""
+                     class="home-hero-bg"
+                     width="1600"
+                     height="1000"
+                     loading="eager">
+            {% endif %}
         </div>
         <div class="ab-container relative z-10">
             <div class="max-w-4xl mx-auto text-center fade-in-up">
-            <span class="home-hero-badge">
-                <i class="fas fa-star"></i> {% trans "Trusted by 1000+ students worldwide" %}
-            </span>
+                <span class="home-hero-badge">
+                    <i class="fas fa-star"></i> {% trans "Trusted by 1000+ students worldwide" %}
+                </span>
                 <h1 class="ab-hero-title font-serif">{{ settings.hero_title|default:_("Unlock Your Fully Funded Future.") }}</h1>
                 <p class="ab-hero-text home-hero-sub">
                     {{ settings.hero_subtitle|default:_("Your trusted bridge to education abroad.") }}
                 </p>
-
                 <div class="home-search-bar">
-                    <select id="home-country" class="ab-select" aria-label="{% trans 'Destination Country' %}">
+                    <select id="home-country"
+                            class="ab-select"
+                            aria-label="{% trans 'Destination Country' %}">
                         <option value="">{% trans "Destination Country" %}</option>
                         <option value="tr">{% trans "Turkey" %}</option>
                         <option value="de">{% trans "Germany" %}</option>
                         <option value="ge">{% trans "Georgia" %}</option>
                         <option value="nc">{% trans "Northern Cyprus" %}</option>
                     </select>
-                    <select id="home-level" class="ab-select" aria-label="{% trans 'Degree Level' %}">
+                    <select id="home-level"
+                            class="ab-select"
+                            aria-label="{% trans 'Degree Level' %}">
                         <option value="">{% trans "Degree Level" %}</option>
                         <option value="associate">{% trans "Associate" %}</option>
                         <option value="bachelor">{% trans "Bachelor" %}</option>
@@ -69,8 +123,12 @@
                 </div>
             </div>
         </div>
+        <a href="#why"
+           class="home-scroll-hint"
+           aria-label="{% trans 'Scroll down' %}">
+            <i class="fas fa-chevron-down"></i>
+        </a>
     </section>
-
     <!-- ================= TRUST BANNER (Dynamic Universities) ================= -->
     {% if homepage_universities %}
         <section class="home-trust fade-in-up">
@@ -80,7 +138,11 @@
                     {% for uni in homepage_universities %}
                         <li class="home-trust-logo">
                             {% if uni.logo %}
-                                <img src="{{ uni.logo.url }}" alt="{{ uni.name }}">
+                                <img src="{{ uni.logo.url }}"
+                                     alt="{{ uni.name }}"
+                                     width="120"
+                                     height="60"
+                                     loading="lazy">
                             {% endif %}
                             <span class="font-serif">{{ uni.name }}</span>
                         </li>
@@ -89,46 +151,61 @@
             </div>
         </section>
     {% endif %}
-
     <!-- ================= WHY CHOOSE US ================= -->
     <section id="why" class="ab-section">
         <div class="ab-container">
             <div class="home-section-head fade-in-up">
                 <h2 class="font-serif">{% trans "Why Students Choose Apply BM" %}</h2>
-                <p>{% trans "More than a platform — a personal team that walks with you from first message to first day of class." %}</p>
+                <p>
+                    {% trans "More than a platform — a personal team that walks with you from first message to first day of class." %}
+                </p>
             </div>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Feature 1 -->
-                <div class="ab-card home-feature fade-in-up">
-                    <img src="{% static 'images/home/why-us.jpg' %}" alt="" class="home-feature-img">
-                    <div class="home-feature-body">
-                        <div class="home-feature-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="home-why-grid">
+                <!-- Image side -->
+                <div class="home-why-media fade-in-up">
+                    <img src="{% static 'images/home/why-us.jpg' %}"
+                         alt="{% trans 'Our consultant guiding a student' %}"
+                         width="1200"
+                         height="900"
+                         loading="lazy">
+                    <div class="home-why-media-badge">
+                        <i class="fas fa-handshake"></i> {% trans "3+ Years of Trust" %}
+                    </div>
+                </div>
+                <!-- 2x2 feature cards (no image inside) -->
+                <div class="home-why-features">
+                    <div class="ab-card home-feature fade-in-up">
+                        <div class="home-feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
                         <h3>{% trans "Verified Programs" %}</h3>
                         <p>{% trans "Every university, program and deadline is manually verified by our academic team." %}</p>
                     </div>
-                </div>
-                <!-- Feature 2 -->
-                <div class="ab-card home-feature fade-in-up">
-                    <div class="home-feature-icon"><i class="fas fa-user-tie"></i></div>
-                    <h3>{% trans "Certified Agents" %}</h3>
-                    <p>{% trans "Vetted representatives and company managers handle your file from start to finish." %}</p>
-                </div>
-                <!-- Feature 3 -->
-                <div class="ab-card home-feature fade-in-up">
-                    <div class="home-feature-icon"><i class="fab fa-whatsapp"></i></div>
-                    <h3>{% trans "WhatsApp Guidance" %}</h3>
-                    <p>{% trans "One tap opens a ready-made WhatsApp message to our manager — no waiting, no confusion." %}</p>
-                </div>
-                <!-- Feature 4 -->
-                <div class="ab-card home-feature fade-in-up">
-                    <div class="home-feature-icon"><i class="fas fa-folder-open"></i></div>
-                    <h3>{% trans "One Dashboard" %}</h3>
-                    <p>{% trans "Documents, application steps and your acceptance letter — tracked in one place." %}</p>
+                    <div class="ab-card home-feature fade-in-up">
+                        <div class="home-feature-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h3>{% trans "Certified Agents" %}</h3>
+                        <p>{% trans "Vetted representatives and company managers handle your file from start to finish." %}</p>
+                    </div>
+                    <div class="ab-card home-feature fade-in-up">
+                        <div class="home-feature-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <h3>{% trans "WhatsApp Guidance" %}</h3>
+                        <p>{% trans "One tap opens a ready-made WhatsApp message to our manager — no waiting, no confusion." %}</p>
+                    </div>
+                    <div class="ab-card home-feature fade-in-up">
+                        <div class="home-feature-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <h3>{% trans "One Dashboard" %}</h3>
+                        <p>{% trans "Documents, application steps and your acceptance letter — tracked in one place." %}</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-
     <!-- ================= HOW IT WORKS (Dynamic & Interactive) ================= -->
     {% if steps %}
         <section id="how" class="ab-section ab-bg">
@@ -141,7 +218,9 @@
                     {% for step in steps %}
                         <div class="home-step fade-in-up">
                             <span class="home-step-number">{{ forloop.counter }}</span>
-                            <div class="home-step-icon"><i class="{{ step.icon_class }}"></i></div>
+                            <div class="home-step-icon">
+                                <i class="{{ step.icon_class }}"></i>
+                            </div>
                             <h4>{{ step.title }}</h4>
                             <p>{{ step.description }}</p>
                         </div>
@@ -150,12 +229,15 @@
             </div>
         </section>
     {% endif %}
-
     <!-- ================= REQUIRED DOCUMENTS (Dynamic) ================= -->
     {% if documents %}
         <section id="documents" class="ab-section relative overflow-hidden">
             <div class="home-doc-bg">
-                <img src="{% static 'images/home/documents-bg.jpg' %}" alt="">
+                <img src="{% static 'images/home/documents-bg.jpg' %}"
+                     alt=""
+                     width="1600"
+                     height="900"
+                     loading="lazy">
             </div>
             <div class="ab-container relative z-10">
                 <div class="home-section-head fade-in-up">
@@ -172,7 +254,9 @@
                             </div>
                             <ul class="home-doc-list">
                                 {% for doc in level.list %}
-                                    <li><i class="fas fa-check-circle"></i> {{ doc.title }}</li>
+                                    <li>
+                                        <i class="fas fa-check-circle"></i> {{ doc.title }}
+                                    </li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -181,11 +265,18 @@
             </div>
         </section>
     {% endif %}
-
     <!-- ================= SUCCESS STORIES (Conditional) ================= -->
     {% if stories and settings.instagram_url %}
-        <section id="stories" class="ab-section ab-bg">
-            <div class="ab-container">
+        <section id="stories" class="ab-section ab-bg relative overflow-hidden">
+            <!-- Background photo -->
+            <div class="home-stories-bg">
+                <img src="{% static 'images/home/stories-bg.jpg' %}"
+                     alt=""
+                     width="1600"
+                     height="900"
+                     loading="lazy">
+            </div>
+            <div class="ab-container relative z-10">
                 <div class="home-section-head fade-in-up">
                     <h2 class="font-serif">{% trans "Real Students. Real Acceptances." %}</h2>
                     <p>{% trans "Watch their own words on our Instagram — unedited and honest." %}</p>
@@ -203,7 +294,9 @@
                             </div>
                             <p class="home-story-quote">“{{ story.quote }}”</p>
                             {% if story.instagram_video_url %}
-                                <a href="{{ story.instagram_video_url }}" target="_blank" rel="noopener"
+                                <a href="{{ story.instagram_video_url }}"
+                                   target="_blank"
+                                   rel="noopener"
                                    class="ab-btn ab-btn-outline ab-btn-sm">
                                     <i class="fab fa-instagram"></i> {% trans "Watch Story" %}
                                 </a>
@@ -212,7 +305,9 @@
                     {% endfor %}
                 </div>
                 <div class="text-center mt-10 fade-in-up">
-                    <a href="{{ settings.instagram_url }}" target="_blank" rel="noopener"
+                    <a href="{{ settings.instagram_url }}"
+                       target="_blank"
+                       rel="noopener"
                        class="ab-btn ab-btn-primary ab-btn-lg">
                         <i class="fab fa-instagram"></i> {% trans "See More Stories on Instagram" %}
                     </a>
@@ -220,7 +315,6 @@
             </div>
         </section>
     {% endif %}
-
     <!-- ================= WHATSAPP CTA BAND ================= -->
     <section class="home-whatsapp">
         <div class="ab-container home-whatsapp-inner fade-in-up">
@@ -229,24 +323,24 @@
                 <p>{% trans "Our managers reply within minutes on WhatsApp — in your language." %}</p>
             </div>
             <a href="https://wa.me/{{ settings.whatsapp_number|cut:'+' }}?text=Hello%20Apply%20BM!%20I%20want%20to%20know%20more%20about%20scholarship%20programs."
-               target="_blank" rel="noopener" class="ab-btn home-whatsapp-btn ab-btn-lg">
+               target="_blank"
+               rel="noopener"
+               class="ab-btn home-whatsapp-btn ab-btn-lg">
                 <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
             </a>
         </div>
     </section>
-
 {% endblock %}
-
 {% block js %}
     {{ block.super }}
     <script>
-        window.AppConfig = {
-            urls: {register: "{% url 'register' %}"},
-            translations: {
-                searchInfo: "{% trans 'Create your free account to see programs matching your search.' %}",
-                newsletterSuccess: "{% trans 'Thank you! You are on the scholarship alerts list.' %}"
-            }
-        };
+    window.AppConfig = {
+        urls: { register: "{% url 'register' %}" },
+        translations: {
+            searchInfo: "{% trans 'Create your free account to see programs matching your search.' %}",
+            newsletterSuccess: "{% trans 'Thank you! You are on the scholarship alerts list.' %}"
+        }
+    };
     </script>
     <script src="{% static 'js/pages/home.js' %}" defer></script>
 {% endblock %}

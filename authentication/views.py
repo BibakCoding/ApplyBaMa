@@ -24,8 +24,6 @@ from .tasks import send_async_email
 User = get_user_model()
 
 
-# Helpers
-
 
 def is_ajax(request):
     return request.headers.get('X-Requested-With') == 'XMLHttpRequest'
@@ -44,6 +42,10 @@ def dispatch_email(subject, template_name, context, to):
 
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def login_view(request):
+    if request.user.is_authenticated:
+        messages.info(request, _("You are already logged in."))
+        return redirect("dashboard")
+
     form = LoginForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
@@ -54,7 +56,7 @@ def login_view(request):
                     {"success": True, "message": msg, "redirect": reverse("dashboard")}
                 )
             messages.success(request, msg)
-            return redirect("profile")
+            return redirect("dashboard")
 
         errors = form.errors.get_json_data()
         if is_ajax(request):
@@ -70,6 +72,10 @@ def login_view(request):
 
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def register_view(request):
+    if request.user.is_authenticated:
+        messages.info(request, _("You are already logged in."))
+        return redirect("dashboard")
+
     form = RegisterForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
@@ -125,6 +131,10 @@ def logout_view(request):
 
 
 def confirm_code(request, pk):
+    if request.user.is_authenticated:
+        messages.info(request, _("You are already logged in."))
+        return redirect("dashboard")
+
     user = get_object_or_404(User, pk=pk)
     vc = VerificationCode.objects.filter(
         user=user, code_type=VerificationCode.CodeType.REGISTRATION
@@ -180,6 +190,10 @@ def confirm_code(request, pk):
 
 @ratelimit(key="ip", rate="3/m", method="POST", block=True)
 def resend_code(request, pk):
+    if request.user.is_authenticated:
+        messages.info(request, _("You are already logged in."))
+        return redirect("dashboard")
+
     user = User.objects.filter(pk=pk, is_active=False).first()
     if not user:
         msg = _("User not found or already active.")
@@ -213,6 +227,10 @@ def resend_code(request, pk):
 
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def forget_password(request):
+    if request.user.is_authenticated:
+        messages.info(request, _("You are already logged in."))
+        return redirect("dashboard")
+
     form = PasswordResetRequestForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         email = form.cleaned_data["email"]
@@ -252,6 +270,10 @@ def forget_password(request):
 
 
 def change_password(request, token):
+    if request.user.is_authenticated:
+        messages.info(request, _("You are already logged in."))
+        return redirect("dashboard")
+
     vc = VerificationCode.objects.filter(
         token=token,
         code_type=VerificationCode.CodeType.RESET,
