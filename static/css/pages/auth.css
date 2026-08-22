@@ -1,0 +1,145 @@
+/* ==========================================================================
+   AUTH PAGES SHARED STYLES — /static/css/pages/auth.css
+   Used by: login, register, confirm_code, forget_password, change_password
+========================================================================== */
+
+.auth-wrapper {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--ab-bg);
+}
+
+/* LEFT PANEL: BRANDING & HERO (Desktop Only) */
+.auth-brand-panel {
+    display: none; /* Hidden on mobile */
+    width: 45%;
+    background: linear-gradient(135deg, #1E3A8A, #172554); /* Theme 1 Deep Blue */
+    color: #ffffff;
+    padding: 4rem 3rem;
+    position: relative;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+@media (min-width: 1024px) {
+    .auth-brand-panel { display: flex; }
+}
+
+.auth-brand-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,100 C30,50 70,50 100,100 Z" fill="rgba(245,158,11,0.05)"/></svg>');
+    background-size: cover;
+    background-position: bottom;
+    pointer-events: none;
+}
+
+.auth-brand-top { position: relative; z-index: 1; }
+.auth-brand-top .ab-brand { color: #ffffff; font-size: 1.5rem; }
+.auth-brand-top .ab-brand img { filter: brightness(0) invert(1); } /* Makes logo white */
+
+.auth-brand-hero { position: relative; z-index: 1; max-width: 450px; }
+.auth-brand-hero h1 {
+    font-family: var(--ab-font-serif);
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+.auth-brand-hero p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.auth-brand-stats {
+    display: flex;
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 2rem;
+}
+
+.auth-stat-item { display: flex; flex-direction: column; }
+.auth-stat-item strong { font-size: 1.5rem; font-weight: 800; color: #F59E0B; /* Theme 1 Gold */ }
+.auth-stat-item span { font-size: 0.875rem; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* RIGHT PANEL: FORM AREA */
+.auth-form-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    background: var(--ab-surface);
+}
+
+@media (min-width: 1024px) { .auth-form-panel { padding: 4rem; } }
+
+.auth-lang-switch {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 10;
+}
+html[dir="rtl"] .auth-lang-switch { right: auto; left: 1.5rem; }
+
+.auth-form-container { width: 100%; max-width: 420px; margin: 0 auto; }
+
+.auth-form-header { margin-bottom: 2.5rem; }
+.auth-form-header h2 {
+    font-family: var(--ab-font-serif);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ab-text);
+    margin-bottom: 0.5rem;
+}
+.auth-form-header p { color: var(--ab-muted); font-size: 1rem; }
+
+.auth-mobile-logo { display: block; margin-bottom: 2rem; text-align: center; }
+.auth-mobile-logo .ab-brand { display: inline-flex; }
+@media (min-width: 1024px) { .auth-mobile-logo { display: none; } }
+
+/* FORM FIELDS OVERRIDES */
+.auth-form .ab-field { margin-bottom: 1.25rem; }
+.auth-form .ab-btn { width: 100%; margin-top: 0.5rem; }
+
+.auth-links { text-align: center; margin-top: 2rem; color: var(--ab-muted); font-size: 0.925rem; }
+.auth-links a { color: var(--ab-primary); font-weight: 700; }
+.auth-links a:hover { text-decoration: underline; }
+
+/* CONFIRM CODE BOXES */
+.auth-code-boxes {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    direction: ltr; /* Force LTR for numbers */
+}
+.auth-code-boxes input {
+    width: 100%;
+    aspect-ratio: 1 / 1.2;
+    max-width: 60px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    border: 2px solid var(--ab-border);
+    border-radius: var(--ab-radius-md);
+    background: var(--ab-surface);
+    color: var(--ab-text);
+    transition: all var(--ab-transition);
+}
+.auth-code-boxes input:focus {
+    border-color: var(--ab-primary);
+    box-shadow: 0 0 0 4px var(--ab-primary-soft);
+    outline: none;
+}
+
+/* Error styling for JS validation */
+.auth-error-msg { color: var(--ab-danger); font-size: 0.8rem; margin-top: 0.35rem; display: none; }
+.auth-error-msg.visible { display: block; }
