@@ -1,0 +1,144 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% if title %}{{ title }} | {% endif %}Apply BM Admin{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}" style="color: #fff; font-weight: 800; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" style="height: 32px; width: auto; filter: brightness(0) invert(1);">
+        Apply BM Control Center
+    </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* THEME 1 OVERRIDES FOR DJANGO ADMIN */
+    :root {
+        --admin-primary: #1E3A8A;
+        --admin-accent: #F59E0B;
+        --admin-body-bg: #F8FAFC;
+        --admin-surface: #ffffff;
+        --admin-border: #E2E8F0;
+        --admin-text: #0F172A;
+        --admin-muted: #475569;
+    }
+
+    /* Header */
+    #header {
+        background: linear-gradient(135deg, #1E3A8A, #172554) !important;
+        color: #fff !important;
+        padding: 1rem 2rem !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    }
+    #header a:link, #header a:visited { color: #fff !important; }
+    #header a:hover { color: #F59E0B !important; }
+
+    #user-tools { text-transform: none !important; font-weight: 500 !important; font-size: 0.9rem !important; }
+    #user-tools a { text-decoration: none !important; border-bottom: 1px dotted rgba(255,255,255,0.5) !important; }
+    #user-tools a:hover { border-bottom-color: #F59E0B !important; color: #F59E0B !important; }
+
+    /* Breadcrumbs */
+    div.breadcrumbs {
+        background: #1E40AF !important;
+        color: #DBEAFE !important;
+        padding: 0.75rem 2rem !important;
+        border: none !important;
+    }
+    div.breadcrumbs a { color: #fff !important; font-weight: 600 !important; }
+    div.breadcrumbs a:hover { color: #F59E0B !important; }
+
+    /* Body & Links */
+    body { background: var(--admin-body-bg) !important; font-family: 'Noto Sans', 'Vazirmatn', system-ui, sans-serif !important; color: var(--admin-text) !important; }
+    a:link, a:visited { color: var(--admin-primary) !important; }
+    a:hover { color: var(--admin-accent) !important; }
+
+    /* Modules (The categorization tables) */
+    .module {
+        background: var(--admin-surface) !important;
+        border: 1px solid var(--admin-border) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+        margin-bottom: 2rem !important;
+        overflow: hidden !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .module:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    .module caption {
+        background: transparent !important;
+        color: var(--admin-text) !important;
+        font-size: 1.15rem !important;
+        font-weight: 800 !important;
+        padding: 1.25rem 1.5rem 0.75rem !important;
+        border-bottom: 2px solid var(--admin-border) !important;
+        margin: 0 !important;
+    }
+    .module caption a.section { color: var(--admin-text) !important; text-decoration: none !important; }
+
+    .module th, .module td {
+        padding: 1rem 1.5rem !important;
+        border-bottom: 1px solid #F1F5F9 !important;
+        font-size: 0.95rem !important;
+    }
+    .module tr:last-child td { border-bottom: none !important; }
+    .module th { width: 60% !important; font-weight: 600 !important; }
+
+    /* Buttons in Admin */
+    .button, input[type=submit], input[type=button], .submit-row input {
+        background: var(--admin-primary) !important;
+        color: #fff !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.6rem 1.2rem !important;
+        font-weight: 600 !important;
+        text-transform: none !important;
+        transition: all 0.2s !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+    }
+    .button:hover, input[type=submit]:hover, input[type=button]:hover {
+        background: var(--admin-accent) !important;
+        color: #fff !important;
+        transform: translateY(-1px);
+    }
+    .default { background: var(--admin-accent) !important; }
+    .default:hover { background: #D97706 !important; }
+
+    /* Form Fields in Admin */
+    .form-row { border-bottom: 1px solid #F1F5F9 !important; padding: 1.25rem 1.5rem !important; }
+    .form-row:last-child { border-bottom: none !important; }
+
+    input[type=text], input[type=password], input[type=email], input[type=url], input[type=number], input[type=tel], textarea, select, .vTextField {
+        border: 1px solid var(--admin-border) !important;
+        border-radius: 8px !important;
+        padding: 0.6rem 0.8rem !important;
+        font-size: 0.95rem !important;
+        transition: all 0.2s !important;
+        background: #fff !important;
+    }
+    input:focus, textarea:focus, select:focus, .vTextField:focus {
+        border-color: var(--admin-primary) !important;
+        box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15) !important;
+        outline: none !important;
+    }
+
+    /* Messages */
+    .messagelist li {
+        border-radius: 8px !important;
+        padding: 0.8rem 1.2rem !important;
+        margin-bottom: 0.5rem !important;
+        font-weight: 500 !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+    }
+    .messagelist li.success { background: #DCFCE7 !important; color: #15803D !important; border: 1px solid #BBF7D0 !important; }
+    .messagelist li.warning { background: #FEF3C7 !important; color: #B45309 !important; border: 1px solid #FDE68A !important; }
+    .messagelist li.error { background: #FEE2E2 !important; color: #B91C1C !important; border: 1px solid #FECACA !important; }
+</style>
+{% endblock %}
