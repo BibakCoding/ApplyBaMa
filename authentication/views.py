@@ -38,8 +38,6 @@ def dispatch_email(subject, template_name, context, to):
 
 
 # Login
-
-
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def login_view(request):
     if request.user.is_authenticated:
@@ -68,8 +66,6 @@ def login_view(request):
 
 
 # Register
-
-
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def register_view(request):
     if request.user.is_authenticated:
@@ -119,8 +115,6 @@ def register_view(request):
 
 
 # Logout
-
-
 def logout_view(request):
     auth_logout(request)
     messages.success(request, _("You have logged out."))
@@ -128,8 +122,6 @@ def logout_view(request):
 
 
 # Confirm Code
-
-
 def confirm_code(request, pk):
     if request.user.is_authenticated:
         messages.info(request, _("You are already logged in."))
@@ -186,8 +178,6 @@ def confirm_code(request, pk):
 
 
 # Resend Code
-
-
 @ratelimit(key="ip", rate="3/m", method="POST", block=True)
 def resend_code(request, pk):
     if request.user.is_authenticated:
@@ -267,8 +257,6 @@ def forget_password(request):
 
 
 # Password Change via Token
-
-
 def change_password(request, token):
     if request.user.is_authenticated:
         messages.info(request, _("You are already logged in."))
