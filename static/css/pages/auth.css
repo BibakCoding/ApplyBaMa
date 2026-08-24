@@ -207,3 +207,9 @@ html[dir="rtl"] .auth-lang-switch { right: auto; left: 1.5rem; }
     font-weight: 600;
     font-size: 0.9rem;
 }
+
+.auth-brand-panel {
+    background-image: linear-gradient(rgba(30, 58, 138, 0.92), rgba(23, 37, 84, 0.95)), url('/static/images/auth/auth-bg.png');
+    background-size: cover;
+    background-position: center;
+}

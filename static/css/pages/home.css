@@ -781,3 +781,8 @@
     opacity: 1;
     transform: translateY(0);
 }
+
+.ab-header .ab-brand img {
+    /* This turns the logo into a solid blue silhouette */
+    filter: brightness(0) saturate(100%) invert(17%) sepia(82%) saturate(2476%) hue-rotate(221deg) brightness(91%) contrast(98%);
+}
