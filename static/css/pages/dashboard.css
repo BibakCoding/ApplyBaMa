@@ -398,3 +398,23 @@
 .content-container .grid > div:has(> form.profile-form) > form.profile-form > button[type="submit"] {
     margin-top: auto !important;
 }
+
+.view-details-btn {
+    color: var(--ab-primary, #1E3A8A) !important;
+    background-color: transparent !important;
+    border: 1px solid var(--ab-primary, #1E3A8A) !important;
+    transition: all 0.3s ease !important;
+}
+
+.view-details-btn:hover {
+    color: #ffffff !important;
+    background-color: var(--ab-primary, #1E3A8A) !important;
+    border-color: var(--ab-primary, #1E3A8A) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+}
+
+.view-details-btn:hover i {
+    transform: translateX(4px);
+    transition: transform 0.3s ease;
+}
