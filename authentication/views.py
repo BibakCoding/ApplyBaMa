@@ -158,9 +158,9 @@ def confirm_code(request, pk):
                 auth_login(request, user)
                 msg = _("Account confirmed!")
                 if is_ajax(request):
-                    return JsonResponse({"success": True, "redirect": reverse("main")})
+                    return JsonResponse({"success": True, "redirect": reverse("dashboard")})
                 messages.success(request, msg)
-                return redirect("main")
+                return redirect("dashboard")
 
         errors = form.errors.get_json_data()
         if is_ajax(request):

@@ -8,21 +8,43 @@ from core.models import User
 
 
 class LoginForm(forms.Form):
-    username = forms.EmailField(label=_("Email"))
+    username = forms.CharField(label=_("Email or Username"))
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
     def clean(self):
         cleaned = super().clean()
-        user = authenticate(
-            username=cleaned.get("username"), password=cleaned.get("password")
-        )
-        if not user:
+        identifier = cleaned.get("username", "").strip()
+        password = cleaned.get("password")
+
+        if not identifier or not password:
             raise forms.ValidationError(
-                _("Wrong email or password!"), code="invalid_credentials"
+                _("Please enter your email/username and password."),
+                code="required",
             )
-        if not user.is_active:
-            raise forms.ValidationError(_("The user is not active!"), code="inactive")
-        self.user = user
+
+        # Try email first, then username
+        user = User.objects.filter(email__iexact=identifier).first()
+        if not user:
+            user = User.objects.filter(username__iexact=identifier).first()
+
+        if user:
+            authenticated = authenticate(username=user.username, password=password)
+            if authenticated is None:
+                raise forms.ValidationError(
+                    _("Wrong email/username or password!"),
+                    code="invalid_credentials",
+                )
+            if not user.is_active:
+                raise forms.ValidationError(
+                    _("Your account is not active. Please verify your email."),
+                    code="inactive",
+                )
+            self.user = authenticated
+        else:
+            raise forms.ValidationError(
+                _("No account found with this email or username."),
+                code="not_found",
+            )
         return cleaned
 
 

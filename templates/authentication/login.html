@@ -56,19 +56,26 @@
                 <div id="loginNonFieldErrors"></div>
 
                 <div class="ab-field">
-                    <label for="id_username" class="ab-label">{% trans "Email Address" %}</label>
-                    <input type="email" name="username" id="id_username" class="ab-input"
-                           placeholder="{% trans 'you@example.com' %}" value="{{ form.username.value|default_if_none:'' }}" required>
-                </div>
+    <label for="id_username" class="ab-label">{% trans "Email or Username" %}</label>
+    <input type="text" name="username" id="id_username" class="ab-input"
+           placeholder="{% trans 'you@example.com or username' %}" value="{{ form.username.value|default_if_none:'' }}" required>
+</div>
+
 
                 <div class="ab-field">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <label for="id_password" class="ab-label">{% trans "Password" %}</label>
-                        <a href="{% url 'forget_password' %}" style="font-size: 0.85rem; font-weight: 600; color: var(--ab-primary);">{% trans "Forgot Password?" %}</a>
-                    </div>
-                    <input type="password" name="password" id="id_password" class="ab-input"
-                           placeholder="••••••••" value="{{ form.password.value|default_if_none:'' }}" required>
-                </div>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <label for="id_password" class="ab-label">{% trans "Password" %}</label>
+        <a href="{% url 'forget_password' %}" style="font-size: 0.85rem; font-weight: 600; color: var(--ab-primary);">{% trans "Forgot Password?" %}</a>
+    </div>
+    <div class="password-wrapper" style="position: relative;">
+        <input type="password" name="password" id="id_password" class="ab-input"
+               placeholder="••••••••" required style="padding-right: 3rem;">
+        <button type="button" class="pwd-toggle" data-target="id_password"
+                style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--ab-muted); font-size: 1.1rem; padding: 0;">
+            <i class="fas fa-eye"></i>
+        </button>
+    </div>
+</div>
 
                 <div class="ab-field" style="flex-direction: row; align-items: center; display: flex; gap: 0.5rem;">
                     <input type="checkbox" id="remember_me" name="remember_me" style="width: 1rem; height: 1rem; accent-color: var(--ab-primary);">

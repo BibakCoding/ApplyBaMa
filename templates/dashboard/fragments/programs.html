@@ -6,8 +6,9 @@
     </div>
 
     <!-- Search & Filter Bar -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
-        <form id="progFilterForm" onsubmit="handleProgFilter(event)" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
+        <form id="progFilterForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {% csrf_token %}
             <div class="lg:col-span-2">
                 <input type="text" name="search" value="{{ filters.search }}" placeholder="{% trans 'Search programs...' %}" class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white">
             </div>
@@ -36,7 +37,7 @@
     </div>
 
     <!-- Results Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
         {% for prog in page_obj %}
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
             <div>
@@ -51,19 +52,28 @@
                 </div>
                 <h3 class="text-lg font-bold text-gray-800 mb-1 font-serif line-clamp-2">{{ prog.name }}</h3>
                 <p class="text-sm text-[var(--ab-primary)] font-medium mb-4">
-                    <i class="fas fa-university mr-1"></i> {{ prog.university.name }}
+                    <i class="fas fa-university mr-1"></i>
+                    <a href="#" onclick="loadContent('university_detail?id={{ prog.university.pk }}'); return false;"
+                       class="hover:underline">{{ prog.university.name }}</a>
                 </p>
             </div>
 
-            <div class="border-t border-gray-100 pt-4 mt-auto grid grid-cols-2 gap-4 text-sm">
-                <div>
-                    <span class="block text-xs text-gray-400 uppercase">{% trans "Duration" %}</span>
-                    <span class="font-semibold text-gray-700">{{ prog.duration|default:"-" }} {% trans "Years" %}</span>
+            <div class="border-t border-gray-100 pt-4 mt-auto">
+                <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+                    <div>
+                        <span class="block text-xs text-gray-400 uppercase mb-1">{% trans "Duration" %}</span>
+                        <span class="font-semibold text-gray-700">{{ prog.duration|default:"-" }} {% trans "Years" %}</span>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-gray-400 uppercase mb-1">{% trans "Total Fee" %}</span>
+                        <span class="font-semibold text-gray-700">${{ prog.cash_fees|floatformat:0 }}</span>
+                    </div>
                 </div>
-                <div>
-                    <span class="block text-xs text-gray-400 uppercase">{% trans "Total Fee" %}</span>
-                    <span class="font-semibold text-gray-700">${{ prog.cash_fees|floatformat:0 }}</span>
-                </div>
+                <!-- 🔧 Apply Request Button -->
+                <button class="apply-request-btn w-full bg-[var(--ab-primary)] text-white py-2 px-4 rounded-lg hover:opacity-90 transition text-sm font-medium"
+                        data-program-id="{{ prog.pk }}">
+                    <i class="fas fa-paper-plane mr-1"></i> {% trans "Apply Request" %}
+                </button>
             </div>
         </div>
         {% empty %}
@@ -74,28 +84,58 @@
         {% endfor %}
     </div>
 
-    <!-- Pagination -->
+    <!-- Modern Pagination -->
     {% if page_obj.has_other_pages %}
-    <div class="flex justify-center space-x-2 mt-6 flex-wrap gap-y-2">
-        {% if page_obj.has_previous %}
-        <button onclick="loadContent('programs?page={{ page_obj.previous_page_number }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}')" class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        {% endif %}
-
-        {% for i in page_obj.paginator.page_range %}
-            {% if page_obj.number == i %}
-                <span class="px-4 py-2 rounded-lg bg-[var(--ab-primary)] text-white font-medium shadow-sm">{{ i }}</span>
-            {% else %}
-                <button onclick="loadContent('programs?page={{ i }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}')" class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition">{{ i }}</button>
+    <div class="flex flex-col items-center gap-4 mt-8">
+        <div class="flex items-center gap-2 flex-wrap justify-center">
+            {% if page_obj.has_previous %}
+            <button onclick="loadContent('programs', 'page=1&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}')"
+                    class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm">
+                <i class="fas fa-angle-double-left"></i>
+            </button>
+            <button onclick="loadContent('programs', 'page={{ page_obj.previous_page_number }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}')"
+                    class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
+                <i class="fas fa-chevron-left mr-1"></i> {% trans "Prev" %}
+            </button>
             {% endif %}
-        {% endfor %}
 
-        {% if page_obj.has_next %}
-        <button onclick="loadContent('programs?page={{ page_obj.next_page_number }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}')" class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-        {% endif %}
+            {% for i in page_obj.paginator.page_range %}
+                {% if page_obj.number == i %}
+                    <span class="px-4 py-2 rounded-lg bg-[var(--ab-primary)] text-white font-bold shadow-sm text-sm">{{ i }}</span>
+                {% elif i >= page_obj.number|add:"-2" and i <= page_obj.number|add:"2" %}
+                    <button onclick="loadContent('programs', 'page={{ i }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}')"
+                            class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">{{ i }}</button>
+                {% elif i == 1 or i == page_obj.paginator.num_pages %}
+                    <button onclick="loadContent('programs', 'page={{ i }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}')"
+                            class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">{{ i }}</button>
+                {% elif i == page_obj.number|add:"-3" or i == page_obj.number|add:"3" %}
+                    <span class="px-2 py-2 text-gray-400 text-sm">...</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <button onclick="loadContent('programs', 'page={{ page_obj.next_page_number }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}')"
+                    class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
+                {% trans "Next" %} <i class="fas fa-chevron-right ml-1"></i>
+            </button>
+            <button onclick="loadContent('programs', 'page={{ page_obj.paginator.num_pages }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}')"
+                    class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm">
+                <i class="fas fa-angle-double-right"></i>
+            </button>
+            {% endif %}
+        </div>
+
+        <form id="goToPageForm" data-section="programs" data-max-page="{{ page_obj.paginator.num_pages }}"
+              data-filters="search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}"
+              class="flex items-center gap-2 text-sm text-gray-600">
+            {% csrf_token %}
+            <span>{% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}</span>
+            <span class="mx-1">|</span>
+            <label>{% trans "Go to" %}:</label>
+            <input type="number" name="goto_page" min="1" max="{{ page_obj.paginator.num_pages }}"
+                   class="w-16 px-2 py-1 border border-gray-300 rounded-lg text-center text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)]">
+            <button type="submit" class="px-3 py-1 bg-[var(--ab-primary)] text-white rounded-lg text-sm hover:opacity-90 transition">{% trans "Go" %}</button>
+        </form>
     </div>
     {% endif %}
 </div>

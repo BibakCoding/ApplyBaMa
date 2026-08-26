@@ -1,0 +1,136 @@
+{% load i18n static %}
+<div class="max-w-5xl mx-auto animate-[auth-fade-in-up_0.6s_ease-out]">
+    <button onclick="loadContent('universities')" class="mb-6 text-[var(--ab-primary)] hover:underline flex items-center font-medium">
+        <i class="fas fa-arrow-left mr-2"></i> {% trans "Back to Universities" %}
+    </button>
+
+    <!-- University Header Card -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+        <div class="h-40 bg-gradient-to-r from-blue-800 to-indigo-900 flex items-center justify-center">
+            {% if uni.logo %}
+                <img src="{{ uni.logo.url }}" alt="{{ uni.name }}" class="max-h-28 max-w-[60%] object-contain bg-white p-4 rounded-xl shadow-lg">
+            {% else %}
+                <i class="fas fa-university text-6xl text-white/30"></i>
+            {% endif %}
+        </div>
+        <div class="p-8">
+            <h1 class="text-3xl font-bold text-[var(--ab-text)] font-serif mb-3">{{ uni.name }}</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-map-marker-alt text-[var(--ab-primary)]"></i>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-gray-400 uppercase">{% trans "Location" %}</span>
+                        <span class="text-sm font-medium text-gray-700">{% if uni.city %}{{ uni.city.name }}, {% endif %}{{ uni.country.name|default:"-" }}</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-building text-purple-600"></i>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-gray-400 uppercase">{% trans "Sector" %}</span>
+                        <span class="text-sm font-medium text-gray-700">{{ uni.get_sector_display }}</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-calendar text-green-600"></i>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-gray-400 uppercase">{% trans "Founded" %}</span>
+                        <span class="text-sm font-medium text-gray-700">{{ uni.founded_in|default:"-" }}</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-globe text-yellow-600"></i>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-gray-400 uppercase">{% trans "Website" %}</span>
+                        {% if uni.website %}
+                            <a href="{{ uni.website }}" target="_blank" class="text-sm font-medium text-[var(--ab-primary)] hover:underline">{% trans "Visit" %} <i class="fas fa-external-link-alt text-xs"></i></a>
+                        {% else %}
+                            <span class="text-sm font-medium text-gray-700">-</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% if uni.address %}
+            <p class="text-sm text-[var(--ab-muted)] mb-2"><i class="fas fa-map-pin mr-2 text-[var(--ab-primary)]"></i>{{ uni.address }}</p>
+            {% endif %}
+            {% if uni.main_campus %}
+            <p class="text-sm text-[var(--ab-muted)]"><i class="fas fa-school mr-2 text-[var(--ab-primary)]"></i>{% trans "Main Campus" %}: {{ uni.main_campus }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Programs Section -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-[var(--ab-text)] font-serif mb-6 flex items-center">
+            <i class="fas fa-book-open text-[var(--ab-primary)] mr-3"></i>
+            {% trans "Programs & Scholarships" %}
+            <span class="ml-3 text-sm font-normal text-gray-400 bg-gray-100 px-3 py-1 rounded-full">{{ programs|length }}</span>
+        </h2>
+
+        {% if programs %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for prog in programs %}
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full
+                            {% if prog.status == 'available' %}bg-green-100 text-green-800
+                            {% elif prog.status == 'near_to_close' %}bg-yellow-100 text-yellow-800
+                            {% else %}bg-red-100 text-red-800{% endif %}">
+                            {{ prog.get_status_display }}
+                        </span>
+                        <span class="text-xs text-gray-400 uppercase tracking-wide font-bold">{{ prog.get_degree_display }}</span>
+                    </div>
+                    <h3 class="text-base font-bold text-gray-800 mb-2 font-serif line-clamp-2">{{ prog.name }}</h3>
+                    {% if prog.faculty %}
+                    <p class="text-sm text-[var(--ab-muted)] mb-3"><i class="fas fa-layer-group mr-1"></i> {{ prog.faculty.name }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="border-t border-gray-100 pt-4 mt-auto">
+                    <div class="grid grid-cols-2 gap-3 text-sm mb-4">
+                        <div>
+                            <span class="block text-xs text-gray-400 uppercase mb-1">{% trans "Duration" %}</span>
+                            <span class="font-semibold text-gray-700">{{ prog.duration|default:"-" }} {% trans "Years" %}</span>
+                        </div>
+                        <div>
+                            <span class="block text-xs text-gray-400 uppercase mb-1">{% trans "Total Fee" %}</span>
+                            <span class="font-semibold text-gray-700">${{ prog.cash_fees|floatformat:0 }}</span>
+                        </div>
+                        {% if prog.offer %}
+                        <div>
+                            <span class="block text-xs text-gray-400 uppercase mb-1">{% trans "Scholarship" %}</span>
+                            <span class="font-semibold text-green-600">${{ prog.offer|floatformat:0 }}</span>
+                        </div>
+                        {% endif %}
+                        {% if prog.semester_fee %}
+                        <div>
+                            <span class="block text-xs text-gray-400 uppercase mb-1">{% trans "Per Semester" %}</span>
+                            <span class="font-semibold text-gray-700">${{ prog.semester_fee|floatformat:0 }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <button class="apply-request-btn w-full bg-[var(--ab-primary)] text-white py-2 px-4 rounded-lg hover:opacity-90 transition text-sm font-medium"
+                            data-program-id="{{ prog.pk }}">
+                        <i class="fas fa-paper-plane mr-1"></i> {% trans "Apply Request" %}
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-12 bg-white rounded-xl border border-gray-100">
+            <i class="fas fa-book-open text-4xl text-gray-300 mb-4"></i>
+            <p class="text-gray-500">{% trans "No programs available for this university yet." %}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>

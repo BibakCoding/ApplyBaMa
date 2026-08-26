@@ -22,9 +22,9 @@ def dashboard_main(request):
     """Renders the main dashboard layout (sidebar + empty content container)"""
     return render(request, "dashboard/main.html", context={"user": request.user})
 
+
 @login_required
 def dashboard_content(request, page):
-    """Renders the specific inner fragment requested via AJAX"""
     content_map = {
         'welcome': 'dashboard/fragments/welcome.html',
         'profile': 'dashboard/fragments/profile.html',
@@ -34,6 +34,7 @@ def dashboard_content(request, page):
         'my_applications': 'dashboard/fragments/my_applications.html',
         'my_students': 'dashboard/fragments/my_students.html',
         'application_detail': 'dashboard/fragments/application_detail.html',
+        'university_detail': 'dashboard/fragments/university_detail.html',
     }
 
     if page not in content_map:
@@ -63,7 +64,7 @@ def dashboard_content(request, page):
         if sector:
             qs = qs.filter(sector=sector)
 
-        paginator = Paginator(qs, 12) # 12 universities per page
+        paginator = Paginator(qs, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
@@ -73,7 +74,6 @@ def dashboard_content(request, page):
             'search': search_query,
             'country': country_id,
             'sector': sector,
-            'page': page_number or 1
         }
 
     # --- PROGRAMS LOGIC ---
@@ -93,7 +93,7 @@ def dashboard_content(request, page):
         if status:
             qs = qs.filter(status=status)
 
-        paginator = Paginator(qs, 12) # 12 programs per page
+        paginator = Paginator(qs, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
@@ -106,8 +106,18 @@ def dashboard_content(request, page):
             'university': university_id,
             'degree': degree,
             'status': status,
-            'page': page_number or 1
         }
+
+    # --- UNIVERSITY DETAIL ---
+    elif page == 'university_detail':
+        uni_id = request.GET.get('id')
+        if uni_id:
+            uni = get_object_or_404(University, pk=uni_id)
+            programs = Program.objects.filter(university=uni).select_related('faculty')
+            context['uni'] = uni
+            context['programs'] = programs
+        else:
+            return redirect('dashboard')
 
     elif page == 'my_applications':
         if request.user.user_type == User.UserType.AGENT:
@@ -130,13 +140,51 @@ def dashboard_content(request, page):
         if pk:
             app = get_object_or_404(Application, pk=pk)
             if request.user != app.agent and request.user != app.student:
-                 messages.error(request, _("Permission denied."))
-                 return redirect('dashboard')
+                messages.error(request, _("Permission denied."))
+                return redirect('dashboard')
             context['app'] = app
         else:
             return redirect('dashboard')
 
     return render(request, content_map[page], context=context)
+
+
+@login_required
+def program_apply_request(request):
+    """Student clicks 'Apply Request' on a program → email sent to admin."""
+    if request.method == 'POST':
+        program_id = request.POST.get('program_id')
+        if not program_id:
+            return JsonResponse({'success': False, 'message': str(_('Invalid request.'))})
+
+        program = get_object_or_404(Program, pk=program_id)
+        user = request.user
+
+        # Build email
+        from django.core.mail import send_mail
+        from django.conf import settings
+
+        subject = f"Apply Request: {user.get_full_name() or user.username} → {program.name}"
+        message = (
+            f"A student has requested to apply for a program.\n\n"
+            f"Student: {user.get_full_name() or user.username}\n"
+            f"Email: {user.email}\n"
+            f"Username: {user.username}\n"
+            f"Program: {program.name}\n"
+            f"University: {program.university.name}\n"
+            f"Degree: {program.get_degree_display()}\n"
+            f"Status: {program.get_status_display()}\n\n"
+            f"Please contact the student to proceed."
+        )
+
+        try:
+            admin_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'admin@applybama.com'
+            send_mail(subject, message, admin_email, [admin_email], fail_silently=False)
+            return JsonResponse({'success': True, 'message': str(_('Your request has been sent! Our team will contact you soon.'))})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(_('Failed to send request. Please try again.'))})
+
+    return JsonResponse({'success': False, 'message': str(_('Invalid request.'))})
 
 @login_required
 def application_action(request, pk):

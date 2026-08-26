@@ -329,3 +329,50 @@
     animation: auth-fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
     opacity: 0;
 }
+
+/* ==========================================================================
+   TYPOGRAPHY & SPACING FIXES
+========================================================================== */
+
+/* Prevent text from collapsing into each other */
+.content-container h1 { margin-bottom: 0.5rem; line-height: 1.3; }
+.content-container h2 { margin-bottom: 0.75rem; line-height: 1.35; }
+.content-container h3 { margin-bottom: 0.5rem; line-height: 1.4; }
+.content-container p { margin-bottom: 0.75rem; line-height: 1.6; }
+
+/* Cards need breathing room */
+.content-container .rounded-xl { margin-bottom: 0; }
+
+/* Ensure forms have proper spacing between fields */
+.content-container form .ab-field,
+.content-container form > div { margin-bottom: 1rem; }
+
+/* Table spacing */
+.content-container table td,
+.content-container table th { padding: 1rem 1.5rem; }
+
+/* Fix line-clamp utility if Tailwind CDN doesn't include it */
+.line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+.line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+/* Ensure buttons inside cards have proper text color */
+.dashboard-main button.text-white,
+.dashboard-main button[class*="bg-[var(--ab-primary)]"] {
+    color: #ffffff !important;
+}
+
+/* Go-to-page form styling */
+#goToPageForm input[type="number"]::-webkit-inner-spin-button {
+    opacity: 1;
+}
+
