@@ -1,65 +1,23 @@
 /* ==========================================================================
-   DASHBOARD SHARED STYLES — /static/css/pages/dashboard.css
+   DASHBOARD MASTER STYLES — /static/css/pages/dashboard.css
+   Rewritten from scratch for flawless UI/UX, responsiveness, and animations.
 ========================================================================== */
 
 :root {
     --ab-sidebar-width: 280px;
-    --ab-header-height: 64px;
     --ab-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* --- GLOBAL WRAPPER --- */
 .dashboard-wrapper {
     display: flex;
     min-height: 100vh;
     background-color: var(--ab-bg, #F3F4F6);
-    overflow: hidden;
+    overflow-x: hidden; /* Prevents horizontal scroll on mobile */
 }
 
 /* ==========================================================================
-   FIXES FOR REPORTED BUGS
-========================================================================== */
-
-/* FIX 1: The Ugly White Scrollbar on the dark blue sidebar */
-.sidebar-nav::-webkit-scrollbar {
-    width: 6px;
-}
-.sidebar-nav::-webkit-scrollbar-track {
-    background: transparent;
-}
-.sidebar-nav::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-}
-.sidebar-nav::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.4);
-}
-
-/* Firefox scrollbar */
-.sidebar-nav {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-}
-
-/* FIX 2: Button text colors (Solid vs Outline) */
-.dashboard-main button {
-    transition: all 0.2s ease;
-}
-
-/* Only force white text if it has a solid blue background */
-.dashboard-main button[class*="bg-[var(--ab-primary)]"],
-.dashboard-main button.bg-blue-500,
-.dashboard-main button.bg-blue-600 {
-    color: #ffffff !important;
-}
-
-/* Outline buttons (like View Details) should keep their primary color */
-.dashboard-main button[class*="border-[var(--ab-primary)]"] {
-    color: var(--ab-primary, #1E3A8A) !important;
-}
-
-
-/* ==========================================================================
-   SIDEBAR
+   SIDEBAR (Desktop & Mobile)
 ========================================================================== */
 
 .dashboard-sidebar {
@@ -72,9 +30,9 @@
     inset: 0 auto 0 0;
     z-index: 40;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    transform: translateX(0);
 }
 
+/* --- Brand & Header --- */
 .sidebar-brand {
     display: flex;
     align-items: center;
@@ -82,7 +40,6 @@
     padding: 1.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .sidebar-brand .ab-brand {
     display: flex;
     align-items: center;
@@ -90,15 +47,8 @@
     color: #ffffff;
     text-decoration: none;
 }
-
-.sidebar-brand .ab-brand img {
-    filter: brightness(0) invert(1);
-}
-
-.sidebar-brand .ab-brand span {
-    font-size: 1.25rem;
-    font-weight: 700;
-}
+.sidebar-brand .ab-brand img { filter: brightness(0) invert(1); }
+.sidebar-brand .ab-brand span { font-size: 1.25rem; font-weight: 700; }
 
 .sidebar-close-btn {
     background: none;
@@ -110,12 +60,12 @@
     border-radius: 0.5rem;
     transition: var(--ab-transition);
 }
-
 .sidebar-close-btn:hover {
     background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
 
+/* --- User Card --- */
 .sidebar-user-card {
     display: flex;
     align-items: center;
@@ -123,7 +73,6 @@
     padding: 1.25rem 1.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .user-avatar {
     width: 48px;
     height: 48px;
@@ -132,9 +81,7 @@
     border: 2px solid rgba(255, 255, 255, 0.3);
     flex-shrink: 0;
 }
-
 .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
-
 .avatar-placeholder {
     width: 100%;
     height: 100%;
@@ -145,9 +92,7 @@
     color: rgba(255, 255, 255, 0.6);
     font-size: 1.25rem;
 }
-
-.user-info { overflow: hidden; }
-
+.user-info { overflow: hidden; flex: 1; }
 .user-name {
     font-weight: 600;
     font-size: 0.95rem;
@@ -155,7 +100,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 .user-role {
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.6);
@@ -163,15 +107,22 @@
     letter-spacing: 0.05em;
 }
 
+/* --- Navigation --- */
 .sidebar-nav {
     flex: 1;
     overflow-y: auto;
     padding: 1.5rem 0;
+    /* Custom Scrollbar for Sidebar */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
+.sidebar-nav::-webkit-scrollbar { width: 6px; }
+.sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+.sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+.sidebar-nav::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
 
 .nav-list { list-style: none; margin: 0; padding: 0 1rem; }
 .nav-list li { margin-bottom: 0.5rem; }
-
 .nav-link {
     display: flex;
     align-items: center;
@@ -183,15 +134,12 @@
     transition: var(--ab-transition);
     font-weight: 500;
 }
-
 .nav-link i { width: 1.25rem; text-align: center; font-size: 1.1rem; }
-
 .nav-link:hover {
     background: rgba(255, 255, 255, 0.08);
     color: #ffffff;
-    transform: translateX(4px); /* Added premium hover slide */
+    transform: translateX(4px);
 }
-
 .nav-link.active {
     background: rgba(245, 158, 11, 0.15);
     color: #F59E0B;
@@ -200,7 +148,6 @@
 }
 
 .nav-divider { margin: 1.5rem 0 0.75rem; padding: 0 1rem; }
-
 .divider-text {
     font-size: 0.7rem;
     text-transform: uppercase;
@@ -209,8 +156,8 @@
     font-weight: 600;
 }
 
+/* --- Footer --- */
 .sidebar-footer { padding: 1rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); }
-
 .logout-btn {
     width: 100%;
     display: flex;
@@ -226,11 +173,11 @@
     cursor: pointer;
     transition: var(--ab-transition);
 }
-
 .logout-btn:hover {
     background: rgba(239, 68, 68, 0.2);
     color: #FCA5A5;
 }
+
 
 /* ==========================================================================
    MAIN CONTENT AREA
@@ -238,7 +185,6 @@
 
 .dashboard-main {
     flex: 1;
-    margin-left: var(--ab-sidebar-width);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -251,6 +197,7 @@
     overflow-y: auto;
 }
 
+/* Mobile Header */
 .mobile-header {
     display: none;
     align-items: center;
@@ -259,9 +206,7 @@
     background: linear-gradient(135deg, #1E3A8A, #172554);
     color: #ffffff;
 }
-
 .hamburger-btn { background: none; border: none; color: #ffffff; font-size: 1.5rem; cursor: pointer; padding: 0.5rem; }
-
 .mobile-logo {
     display: flex;
     align-items: center;
@@ -271,9 +216,9 @@
     font-weight: 700;
     font-size: 1.25rem;
 }
-
 .mobile-logo img { filter: brightness(0) invert(1); }
 
+/* Mobile Overlay */
 .mobile-overlay {
     display: none;
     position: fixed;
@@ -283,9 +228,9 @@
     opacity: 0;
     transition: opacity 0.3s ease;
 }
-
 .mobile-overlay.active { display: block; opacity: 1; }
 
+/* Loading Spinner */
 .content-loading {
     display: flex;
     flex-direction: column;
@@ -294,7 +239,6 @@
     padding: 4rem;
     color: var(--ab-muted);
 }
-
 .spinner {
     width: 40px;
     height: 40px;
@@ -303,18 +247,12 @@
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
-
 @keyframes spin { to { transform: rotate(360deg); } }
 
-@media (max-width: 1023px) {
-    .dashboard-sidebar { transform: translateX(-100%); }
-    .dashboard-sidebar.open { transform: translateX(0); }
-    .dashboard-main { margin-left: 0; }
-    .mobile-header { display: flex; }
-    .content-container { padding: 1.5rem 1rem; }
-}
 
-@media (min-width: 1024px) { .sidebar-close-btn { display: none; } }
+/* ==========================================================================
+   ANIMATIONS
+========================================================================== */
 
 @keyframes auth-fade-in-up {
     0% { opacity: 0; transform: translateY(30px); }
@@ -326,27 +264,65 @@
     100% { opacity: 1; transform: translateX(0); }
 }
 
-.dashboard-sidebar { animation: auth-slide-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-.dashboard-main {
-    animation: auth-fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-    opacity: 0;
+/* ==========================================================================
+   RESPONSIVE DESIGN (Mobile vs Desktop)
+   🔧 FIX 1: Animations are now strictly separated to prevent mobile override.
+========================================================================== */
+
+/* --- MOBILE (max-width: 1023px) --- */
+@media (max-width: 1023px) {
+    /* Hide sidebar off-screen by default on mobile */
+    .dashboard-sidebar {
+        transform: translateX(-100%);
+    }
+    /* Show sidebar when open class is added */
+    .dashboard-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .dashboard-main {
+        margin-left: 0;
+        /* Reset animation opacity/transform for mobile */
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .mobile-header { display: flex; }
+    .content-container { padding: 1.5rem 1rem; }
+    .sidebar-close-btn { display: block; }
 }
+
+/* --- DESKTOP (min-width: 1024px) --- */
+@media (min-width: 1024px) {
+    /* Sidebar is always visible on desktop */
+    .dashboard-sidebar {
+        transform: translateX(0);
+        /* Apply slide-in animation ONLY on desktop */
+        animation: auth-slide-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .dashboard-main {
+        margin-left: var(--ab-sidebar-width);
+        /* Apply fade-up animation ONLY on desktop */
+        animation: auth-fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+        opacity: 0;
+    }
+
+    .sidebar-close-btn { display: none; }
+}
+
 
 /* ==========================================================================
    TYPOGRAPHY & SPACING FIXES
 ========================================================================== */
 
-/* Prevent text from collapsing into each other */
 .content-container h1 { margin-bottom: 0.5rem; line-height: 1.3; }
 .content-container h2 { margin-bottom: 0.75rem; line-height: 1.35; }
 .content-container h3 { margin-bottom: 0.5rem; line-height: 1.4; }
 .content-container p { margin-bottom: 0.75rem; line-height: 1.6; }
 
-/* Cards need breathing room */
-.content-container .rounded-xl { margin-bottom: 0; }
-
-/* Ensure forms have proper spacing between fields */
+/* Forms spacing */
 .content-container form .ab-field,
 .content-container form > div { margin-bottom: 1rem; }
 
@@ -354,7 +330,7 @@
 .content-container table td,
 .content-container table th { padding: 1rem 1.5rem; }
 
-/* Fix line-clamp utility if Tailwind CDN doesn't include it */
+/* Line-clamp utilities */
 .line-clamp-1 {
     overflow: hidden;
     display: -webkit-box;
@@ -368,14 +344,57 @@
     -webkit-line-clamp: 2;
 }
 
-/* Ensure buttons inside cards have proper text color */
-.dashboard-main button.text-white,
-.dashboard-main button[class*="bg-[var(--ab-primary)]"] {
-    color: #ffffff !important;
-}
-
 /* Go-to-page form styling */
 #goToPageForm input[type="number"]::-webkit-inner-spin-button {
     opacity: 1;
 }
 
+
+/* ==========================================================================
+   🔧 FIX 3: BUTTON COLOR FIXES (Solid vs Outline)
+   Strictly differentiates solid buttons from outline buttons.
+========================================================================== */
+
+.dashboard-main button {
+    transition: all 0.2s ease;
+}
+
+/* Force white text ONLY on solid primary/blue backgrounds (excludes transparent inline styles) */
+.dashboard-main button[class*="bg-[var(--ab-primary)]"]:not([style*="transparent"]),
+.dashboard-main button.bg-blue-500,
+.dashboard-main button.bg-blue-600 {
+    color: #ffffff !important;
+}
+
+/* Force primary color text on outline buttons (like View Details) */
+.dashboard-main button[class*="border-[var(--ab-primary)]"] {
+    color: var(--ab-primary, #1E3A8A) !important;
+}
+.dashboard-main button[class*="border-[var(--ab-primary)]"]:hover {
+    color: #ffffff !important;
+}
+
+
+/* ==========================================================================
+   🔧 FIX 2: PROFILE BUTTON ALIGNMENT
+   Uses :has() to force all profile cards into flex columns, pushing the
+   submit buttons to the very bottom so they align perfectly.
+========================================================================== */
+
+/* Target the grid container's direct children that contain a profile form */
+.content-container .grid > div:has(> form.profile-form) {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Make the form itself a flex column so the button can be pushed to the bottom */
+.content-container .grid > div:has(> form.profile-form) > form.profile-form {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+}
+
+/* Push the submit button to the very bottom */
+.content-container .grid > div:has(> form.profile-form) > form.profile-form > button[type="submit"] {
+    margin-top: auto !important;
+}
