@@ -10,13 +10,13 @@
 
     <form method="post" enctype="multipart/form-data" id="profile-form">
         {% csrf_token %}
-        
+
         <div id="view-mode">
             <!-- Profile Header -->
             <div class="flex items-center mb-6">
                 <div class="mr-4">
                     {% if user.profile_image %}
-                        <img src="{{ user.profile_image.url }}" alt="Profile Image" 
+                        <img src="{{ user.profile_image.url }}" alt="Profile Image"
                              class="w-32 h-32 rounded-full object-cover border-2 border-gray-300">
                     {% else %}
                         <div class="bg-gray-200 border-2 border-dashed rounded-full w-32 h-32 flex items-center justify-center text-gray-500">
@@ -30,7 +30,7 @@
                     <p class="text-gray-600 text-sm">{% trans "Username" %}: {{ user.username }}</p>
                 </div>
             </div>
-            
+
             <!-- Personal Info -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-4">
@@ -47,7 +47,7 @@
                         <p>{{ user.mobile|default:"-" }}</p>
                     </div>
                 </div>
-                
+
                 <div class="space-y-4">
                     <div>
                         <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Country" %}</h4>
@@ -63,7 +63,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Family Info -->
             <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -76,7 +76,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="edit-mode" class="hidden">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <!-- Left Column -->
@@ -88,7 +88,7 @@
                         </label>
                         <div class="flex items-center">
                             {% if user.profile_image %}
-                                <img src="{{ user.profile_image.url }}" alt="Profile Image" 
+                                <img src="{{ user.profile_image.url }}" alt="Profile Image"
                                      class="w-32 h-32 rounded-full object-cover border-2 border-gray-300">
                             {% else %}
                                 <div class="bg-gray-200 border-2 border-dashed rounded-full w-32 h-32 flex items-center justify-center text-gray-500">
@@ -104,7 +104,7 @@
                             <p class="text-red-500 text-xs italic mt-2">{{ form.profile_image.errors.0 }}</p>
                         {% endif %}
                     </div>
-                    
+
                     <!-- Account Info -->
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="id_username">
@@ -115,7 +115,7 @@
                             <p class="text-red-500 text-xs italic mt-2">{{ form.username.errors.0 }}</p>
                         {% endif %}
                     </div>
-                    
+
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="id_email">
                             {% trans "Email" %}
@@ -127,7 +127,7 @@
                         {% endif %}
                     </div>
                 </div>
-                
+
                 <!-- Right Column -->
                 <div>
                     <!-- Personal Info -->
@@ -140,7 +140,7 @@
                             <p class="text-red-500 text-xs italic mt-2">{{ form.first_name.errors.0 }}</p>
                         {% endif %}
                     </div>
-                    
+
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="id_last_name">
                             {% trans "Last Name" %}
@@ -150,7 +150,7 @@
                             <p class="text-red-500 text-xs italic mt-2">{{ form.last_name.errors.0 }}</p>
                         {% endif %}
                     </div>
-                    
+
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="id_gender">
                             {% trans "Gender" %}
@@ -160,7 +160,7 @@
                             <p class="text-red-500 text-xs italic mt-2">{{ form.gender.errors.0 }}</p>
                         {% endif %}
                     </div>
-                    
+
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="id_date_of_birth">
                             {% trans "Date of Birth" %}
@@ -172,7 +172,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Location Info -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
@@ -198,7 +198,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Contact Info -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
@@ -224,7 +224,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Family Info -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
@@ -250,7 +250,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="flex justify-end space-x-2">
                 <button type="button" id="cancel-edit" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                     {% trans "Cancel" %}

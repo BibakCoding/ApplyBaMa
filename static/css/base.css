@@ -86,12 +86,8 @@
 }
 
 /* ==========================================================================
-   THEME OPTION 1 — GLOBAL TRUST & ACHIEVEMENT
+   THEME OPTION 1 — GLOBAL TRUST & ACHIEVEMENT (ACTIVE)
    Blue + Gold
-
-   To activate this theme:
-   1) uncomment this block
-   2) comment the currently active Option 3 block
 ========================================================================== */
 
 :root {
@@ -150,10 +146,6 @@
 /* ==========================================================================
    THEME OPTION 2 — MODERN EXPLORER
    Teal + Coral
-
-   To activate this theme:
-   1) uncomment this block
-   2) comment the currently active Option 3 block
 ========================================================================== */
 
 /*
@@ -217,10 +209,8 @@
 */
 
 /* ==========================================================================
-   THEME OPTION 3 — IVY LEAGUE PRESTIGE  (ACTIVE)
+   THEME OPTION 3 — IVY LEAGUE PRESTIGE
    Emerald + Bronze
-
-   This is the currently active theme.
 ========================================================================== */
 
 /*:root {*/
