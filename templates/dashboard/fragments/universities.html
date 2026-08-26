@@ -98,14 +98,3 @@
     </div>
     {% endif %}
 </div>
-
-<script>
-function handleUniFilter(e) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const params = new URLSearchParams(formData).toString();
-    if (typeof loadContent === 'function') {
-        loadContent('universities?' + params);
-    }
-}
-</script>

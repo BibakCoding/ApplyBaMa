@@ -1,5 +1,4 @@
 // static/js/pages/dashboard.js
-
 document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
@@ -8,51 +7,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const contentContainer = document.getElementById('dashboard-content');
     const navLinks = document.querySelectorAll('.nav-link');
 
-    // Mobile Sidebar Toggle
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.add('open');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-    }
-
-    if (sidebarClose) {
-        sidebarClose.addEventListener('click', closeSidebar);
-    }
-
-    if (overlay) {
-        overlay.addEventListener('click', closeSidebar);
-    }
+    // --- Sidebar Controls ---
+    if (sidebarToggle) sidebarToggle.addEventListener('click', () => { sidebar.classList.add('open'); overlay.classList.add('active'); });
+    if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
+    if (overlay) overlay.addEventListener('click', closeSidebar);
 
     function closeSidebar() {
         sidebar.classList.remove('open');
         overlay.classList.remove('active');
-        document.body.style.overflow = '';
     }
 
-    // Load Content Function (Global so fragments can use it)
+    // --- SPA Navigation ---
     window.loadContent = function(page, params = '') {
-        const queryString = params ? `?${params}` : '';
+        const queryString = params ? (params.startsWith('?') ? params : `?${params}`) : '';
         const url = window.AppConfig.urls.dashboardContent.replace('PAGE_PLACEHOLDER', page) + queryString;
 
-        // Show loading state
-        contentContainer.innerHTML = `
-            <div class="content-loading">
-                <div class="spinner"></div>
-                <p>${window.AppConfig.translations.loadingContent}</p>
-            </div>
-        `;
+        contentContainer.innerHTML = `<div class="content-loading"><div class="spinner"></div><p>Loading...</p></div>`;
 
-        // Fetch the content
-        fetch(url, {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.text();
+        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => {
+            if (!r.ok) throw new Error('Network error');
+            return r.text();
         })
         .then(html => {
             contentContainer.innerHTML = html;
@@ -60,52 +35,138 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update active nav link
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('data-page') === page) {
-                    link.classList.add('active');
-                }
+                if (link.getAttribute('data-page') === page) link.classList.add('active');
             });
 
-            // Close mobile sidebar if open
-            if (window.innerWidth < 1024) {
-                closeSidebar();
-            }
+            closeSidebar();
 
-            // Update browser URL without reload (History API)
-            window.history.pushState({ page: page }, '', `/dashboard/${page}${queryString}`);
+            // Update URL safely
+            const newUrl = `${window.location.pathname}?page=${page}${params ? '&' + params.replace('?', '') : ''}`;
+            window.history.pushState({ page }, '', newUrl);
         })
         .catch(error => {
-            contentContainer.innerHTML = `
-                <div class="text-center py-12">
-                    <i class="fas fa-exclamation-triangle text-4xl text-red-400 mb-4"></i>
-                    <h2 class="text-xl font-bold text-gray-800 mb-2">${window.AppConfig.translations.loadingError}</h2>
-                    <p class="text-gray-500 mb-4">${window.AppConfig.translations.errorSupport}</p>
-                    <button onclick="window.location.reload()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-                        ${window.AppConfig.translations.reloadPage}
-                    </button>
-                </div>
-            `;
-            console.error('Error loading content:', error);
+            contentContainer.innerHTML = `<div class="text-center py-12 text-red-500">Error loading content. Please refresh.</div>`;
+            console.error(error);
         });
     };
 
-    // Navigation Link Click Handlers
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            const page = this.getAttribute('data-page');
-            loadContent(page);
+            loadContent(this.getAttribute('data-page'));
         });
     });
 
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', function(e) {
-        if (e.state && e.state.page) {
-            loadContent(e.state.page);
+    // --- BULLETPROOF EVENT DELEGATION ---
+
+    // 1. Catch ALL form submissions inside the dashboard
+    contentContainer.addEventListener('submit', function(e) {
+        const form = e.target.closest('form');
+        if (!form) return;
+
+        if (form.classList.contains('profile-form')) {
+            e.preventDefault();
+            handleProfileSubmit(form);
+        } else if (form.id === 'uniFilterForm' || form.id === 'progFilterForm') {
+            e.preventDefault();
+            handleFilterSubmit(form);
+        } else if (form.id === 'newAppForm' || form.id === 'addStudentForm') {
+            e.preventDefault();
+            handleJsonSubmit(form, true);
+        } else if (form.classList.contains('delete-form') || form.classList.contains('step-form')) {
+            e.preventDefault();
+            handleJsonSubmit(form, false);
         }
     });
 
-    // Load default page (welcome) if no state exists
-    if (!window.history.state || !window.history.state.page) {
-        loadContent('welcome');
+    // 2. Catch button clicks (like Generate Password)
+    contentContainer.addEventListener('click', function(e) {
+        if (e.target.id === 'generatePwdBtn' || e.target.closest('#generatePwdBtn')) {
+            const genPwdUrl = window.AppConfig.urls.generatePassword || '/dashboard/generate-password/';
+            fetch(genPwdUrl)
+                .then(r => r.json())
+                .then(data => {
+                    const pwdInput = document.querySelector('input[name="password"]');
+                    if (pwdInput) pwdInput.value = data.password;
+                });
+        }
+    });
+
+    // --- AJAX Handlers ---
+    function handleProfileSubmit(form) {
+        const formData = new FormData(form);
+        const btn = form.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
+
+        fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                showToast(data.message, 'success');
+                loadContent('profile'); // Reload fragment to show updated data
+            } else {
+                showToast(data.errors ? data.errors.join('\n') : 'Error', 'error');
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        });
     }
+
+    function handleFilterSubmit(form) {
+        const formData = new FormData(form);
+        const params = new URLSearchParams(formData).toString();
+        const page = form.id === 'uniFilterForm' ? 'universities' : 'programs';
+        loadContent(page, params);
+    }
+
+    function handleJsonSubmit(form, isCreation) {
+        if (form.classList.contains('delete-form')) {
+            if (!confirm('Are you sure you want to delete this?')) return;
+        }
+        const formData = new FormData(form);
+        fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                showToast(data.message || 'Success', 'success');
+                const currentPage = window.history.state ? window.history.state.page : 'my_applications';
+                loadContent(data.redirect ? 'my_applications' : currentPage);
+            } else {
+                const errDiv = form.querySelector('#formErrors');
+                if (errDiv && data.errors) {
+                    errDiv.innerHTML = Object.entries(data.errors).map(([k,v]) => `<p>${k}: ${v.join(', ')}</p>`).join('');
+                    errDiv.classList.remove('hidden');
+                } else {
+                    showToast(data.message || 'Error', 'error');
+                }
+            }
+        });
+    }
+
+    function showToast(message, type) {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            container.className = 'fixed top-4 right-4 z-50 space-y-3';
+            document.body.appendChild(container);
+        }
+        const toast = document.createElement('div');
+        toast.className = `p-4 rounded-lg shadow-lg text-white z-50 transition-all ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+        toast.innerText = message;
+        container.appendChild(toast);
+        setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+    }
+
+    // Handle browser back/forward and page refresh
+    window.addEventListener('popstate', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        loadContent(urlParams.get('page') || 'welcome');
+    });
+
+    // Initial load
+    const urlParams = new URLSearchParams(window.location.search);
+    loadContent(urlParams.get('page') || 'welcome');
 });
