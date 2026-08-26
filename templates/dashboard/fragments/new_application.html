@@ -1,6 +1,66 @@
-<div class="bg-white p-6 rounded-lg shadow">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">New Application</h2>
-    <div class="p-4 border rounded-lg bg-yellow-50">
-        <p class="text-yellow-700">This is a temporary view. The actual new application content will be implemented soon.</p>
+{% load i18n static %}
+<div class="max-w-3xl mx-auto animate-[auth-fade-in-up_0.6s_ease-out]">
+    <div class="mb-8 border-l-4 border-[var(--ab-primary)] pl-4">
+        <h1 class="text-3xl font-bold text-[var(--ab-text)] font-serif">{% trans "New Application" %}</h1>
+        <p class="text-[var(--ab-muted)] mt-2">{% trans "Start a new university application for one of your students." %}</p>
+    </div>
+
+    <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+        <form id="newAppForm" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Select Student" %}</label>
+                {{ form.student }}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Select Program" %}</label>
+                {{ form.program }}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Student Type" %}</label>
+                {{ form.student_type }}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Documents (Optional)" %}</label>
+                {{ form.documents }}
+            </div>
+
+            <div id="formErrors" class="hidden text-red-500 text-sm bg-red-50 p-3 rounded-lg"></div>
+
+            <button type="submit" class="w-full bg-[var(--ab-primary)] text-white py-3 rounded-lg hover:opacity-90 transition font-semibold shadow-sm flex items-center justify-center">
+                <i class="fas fa-paper-plane mr-2"></i> {% trans "Create Application" %}
+            </button>
+        </form>
     </div>
 </div>
+
+<script>
+document.getElementById('newAppForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const btn = this.querySelector('button[type="submit"]');
+    btn.disabled = true;
+
+    fetch("{% url 'submit_new_application' %}", {
+        method: 'POST',
+        body: formData,
+        headers: {'X-Requested-With': 'XMLHttpRequest'}
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            showToast('{% trans "Application created successfully!" %}', 'success');
+            if (data.redirect) loadContent('my_applications');
+        } else {
+            const errDiv = document.getElementById('formErrors');
+            errDiv.classList.remove('hidden');
+            let errHtml = '';
+            for (const [field, errors] of Object.entries(data.errors)) {
+                errHtml += `<p>${field}: ${errors.join(', ')}</p>`;
+            }
+            errDiv.innerHTML = errHtml;
+            btn.disabled = false;
+        }
+    });
+});
+</script>

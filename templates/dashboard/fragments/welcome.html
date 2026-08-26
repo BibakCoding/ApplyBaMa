@@ -1,30 +1,115 @@
 {% load i18n static %}
 
-<div class="max-w-4xl mx-auto">
-    <div class="text-center py-6">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">{% trans "Welcome to Your Dashboard" %}</h1>
-        <p class="text-gray-600 text-lg mb-8">
-            {% trans "Get started by using the menu to navigate to the section you need." %}
+<div class="max-w-6xl mx-auto animate-[auth-fade-in-up_0.6s_ease-out]">
+    <!-- Welcome Header -->
+    <div class="mb-10">
+        <h1 class="text-4xl font-bold text-[var(--ab-text)] font-serif mb-2">
+            {% trans "Welcome" %}, {{ user.get_full_name|default:user.username }}!
+        </h1>
+        <p class="text-lg text-[var(--ab-muted)]">
+            {% trans "Here's an overview of your dashboard and quick actions." %}
         </p>
-        
-        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
-            <h2 class="text-xl font-semibold text-gray-800 mb-3">{% trans "Quick Start" %}</h2>
-            <ul class="space-y-2 text-left">
-                <li class="flex items-start">
-                    <i class="fas fa-user text-blue-500 mt-1 mr-3"></i>
-                    <span>{% trans "Complete your profile information" %}</span>
-                </li>
-                <li class="flex items-start">
-                    <i class="fas fa-university text-blue-500 mt-1 mr-3"></i>
-                    <span>{% trans "Browse universities and programs" %}</span>
-                </li>
-                {% if user.user_type == 'company' or user.user_type == 'agent' or user.user_type == 'student' and user.is_representative %}
-                <li class="flex items-start">
-                    <i class="fas fa-file-alt text-blue-500 mt-1 mr-3"></i>
-                    <span>{% trans "Start a new application" %}</span>
-                </li>
-                {% endif %}
-            </ul>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <!-- Profile Completion -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                    <i class="fas fa-user text-xl text-[var(--ab-primary)]"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-500">{% trans "Profile" %}</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">{% trans "Profile Settings" %}</h3>
+            <p class="text-sm text-[var(--ab-muted)] mb-4">{% trans "Manage your personal information and account details." %}</p>
+            <button onclick="loadContent('profile')" class="w-full bg-[var(--ab-primary)] text-white py-2 px-4 rounded-lg hover:opacity-90 transition text-sm font-medium">
+                {% trans "Go to Profile" %}
+            </button>
+        </div>
+
+        <!-- Universities -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+                    <i class="fas fa-university text-xl text-green-600"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-500">{% trans "Academics" %}</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">{% trans "Browse Universities" %}</h3>
+            <p class="text-sm text-[var(--ab-muted)] mb-4">{% trans "Explore partner universities and available programs." %}</p>
+            <button onclick="loadContent('universities')" class="w-full bg-[var(--ab-primary)] text-white py-2 px-4 rounded-lg hover:opacity-90 transition text-sm font-medium">
+                {% trans "View Universities" %}
+            </button>
+        </div>
+
+        <!-- Applications (Conditional) -->
+        {% if user.user_type == 'company' or user.user_type == 'agent' or user.user_type == 'student' and user.is_representative %}
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
+                    <i class="fas fa-file-alt text-xl text-purple-600"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-500">{% trans "Applications" %}</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">{% trans "My Applications" %}</h3>
+            <p class="text-sm text-[var(--ab-muted)] mb-4">{% trans "Track the progress of your university applications." %}</p>
+            <button onclick="loadContent('my_applications')" class="w-full bg-[var(--ab-primary)] text-white py-2 px-4 rounded-lg hover:opacity-90 transition text-sm font-medium">
+                {% trans "View Applications" %}
+            </button>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Quick Tips Section -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 border border-blue-100">
+        <h2 class="text-xl font-bold text-gray-800 font-serif mb-6 flex items-center">
+            <i class="fas fa-lightbulb text-[var(--ab-primary)] mr-3"></i>
+            {% trans "Quick Start Guide" %}
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-user-check text-[var(--ab-primary)]"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-800 mb-1">{% trans "Complete Your Profile" %}</h3>
+                    <p class="text-sm text-[var(--ab-muted)]">{% trans "Add your personal details, contact info, and profile picture to get started." %}</p>
+                </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-graduation-cap text-[var(--ab-primary)]"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-800 mb-1">{% trans "Explore Programs" %}</h3>
+                    <p class="text-sm text-[var(--ab-muted)]">{% trans "Browse available universities and programs to find your perfect match." %}</p>
+                </div>
+            </div>
+
+            {% if user.user_type == 'agent' %}
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-users text-[var(--ab-primary)]"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-800 mb-1">{% trans "Add Students" %}</h3>
+                    <p class="text-sm text-[var(--ab-muted)]">{% trans "Create student accounts and start managing their applications." %}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-headset text-[var(--ab-primary)]"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-800 mb-1">{% trans "Need Help?" %}</h3>
+                    <p class="text-sm text-[var(--ab-muted)]">{% trans "Contact our support team for assistance with your applications." %}</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

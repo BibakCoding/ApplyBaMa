@@ -1,6 +1,130 @@
-<div class="bg-white p-6 rounded-lg shadow">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">My Students</h2>
-    <div class="p-4 border rounded-lg bg-yellow-50">
-        <p class="text-yellow-700">This is a temporary view. The actual my students content will be implemented soon.</p>
+{% load i18n static %}
+<div class="max-w-6xl mx-auto animate-[auth-fade-in-up_0.6s_ease-out]">
+    <div class="flex justify-between items-center mb-8 border-l-4 border-[var(--ab-primary)] pl-4">
+        <div>
+            <h1 class="text-3xl font-bold text-[var(--ab-text)] font-serif">{% trans "My Students" %}</h1>
+            <p class="text-[var(--ab-muted)] mt-2">{% trans "Manage the students you are representing." %}</p>
+        </div>
+        <button onclick="document.getElementById('addStudentModal').classList.remove('hidden')" class="bg-[var(--ab-primary)] text-white px-4 py-2 rounded-lg hover:opacity-90 transition shadow-sm flex items-center">
+            <i class="fas fa-user-plus mr-2"></i> {% trans "Add New Student" %}
+        </button>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-left">
+            <thead class="bg-gray-50 border-b border-gray-100">
+                <tr>
+                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">{% trans "Name" %}</th>
+                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">{% trans "Email" %}</th>
+                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">{% trans "Applications" %}</th>
+                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">{% trans "Actions" %}</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                {% for student in students %}
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-6 py-4 font-medium text-gray-800">{{ student.get_full_name|default:student.username }}</td>
+                    <td class="px-6 py-4 text-gray-600">{{ student.email }}</td>
+                    <td class="px-6 py-4 text-gray-600">{{ student.student_applications.count }}</td>
+                    <td class="px-6 py-4">
+                        <button onclick="loadContent('my_applications')" class="text-[var(--ab-primary)] hover:underline text-sm font-medium">{% trans "View Applications" %}</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="px-6 py-12 text-center text-gray-500">
+                        <i class="fas fa-users text-3xl text-gray-300 mb-2"></i>
+                        <p>{% trans "No students added yet." %}</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
+
+<!-- Add Student Modal -->
+<div id="addStudentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 animate-[auth-fade-in-up_0.4s_ease-out]">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-800 font-serif">{% trans "Add New Student" %}</h2>
+            <button onclick="document.getElementById('addStudentModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        <form id="addStudentForm" class="space-y-4">
+            {% csrf_token %}
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "First Name" %}</label>
+                    {{ add_student_form.first_name }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Last Name" %}</label>
+                    {{ add_student_form.last_name }}
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Username" %}</label>
+                {{ add_student_form.username }}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Email" %}</label>
+                {{ add_student_form.email }}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Temporary Password" %}</label>
+                <div class="flex gap-2">
+                    {{ add_student_form.password }}
+                    <button type="button" id="generatePwdBtn" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition text-sm font-medium whitespace-nowrap">
+                        <i class="fas fa-magic mr-1"></i> {% trans "Generate" %}
+                    </button>
+                </div>
+            </div>
+            <div id="formErrors" class="hidden text-red-500 text-sm bg-red-50 p-3 rounded-lg"></div>
+            <button type="submit" class="w-full bg-[var(--ab-primary)] text-white py-3 rounded-lg hover:opacity-90 transition font-semibold shadow-sm">
+                {% trans "Create Student Account" %}
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.getElementById('generatePwdBtn').addEventListener('click', function() {
+    fetch("{% url 'generate_password' %}")
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('{{ add_student_form.password.auto_id }}').value = data.password;
+        });
+});
+
+document.getElementById('addStudentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const btn = this.querySelector('button[type="submit"]');
+    btn.disabled = true;
+
+    fetch("{% url 'submit_add_student' %}", {
+        method: 'POST',
+        body: formData,
+        headers: {'X-Requested-With': 'XMLHttpRequest'}
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            alert('{% trans "Student added successfully!" %}');
+            document.getElementById('addStudentModal').classList.add('hidden');
+            loadContent('my_students');
+        } else {
+            const errDiv = document.getElementById('formErrors');
+            errDiv.classList.remove('hidden');
+            let errHtml = '';
+            for (const [field, errors] of Object.entries(data.errors)) {
+                errHtml += `<p>${field}: ${errors.join(', ')}</p>`;
+            }
+            errDiv.innerHTML = errHtml;
+            btn.disabled = false;
+        }
+    });
+});
+</script>

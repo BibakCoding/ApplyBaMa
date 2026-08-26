@@ -1,264 +1,246 @@
-{% load i18n %}
-
-<div class="bg-white rounded-lg shadow-md p-6 max-w-4xl mx-auto">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">{% trans "Profile" %}</h2>
-        <button id="edit-toggle" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            {% trans "Edit Profile" %}
-        </button>
+{% load i18n static %}
+<div class="max-w-4xl mx-auto animate-[auth-fade-in-up_0.6s_ease-out]">
+    <div class="mb-8 border-l-4 border-[var(--ab-primary)] pl-4">
+        <h1 class="text-3xl font-bold text-[var(--ab-text)] font-serif">{% trans "Profile Settings" %}</h1>
+        <p class="text-[var(--ab-muted)] mt-2">
+            {% trans "Manage your personal information, contact details, and security settings." %}
+        </p>
     </div>
-
-    <form method="post" enctype="multipart/form-data" id="profile-form">
-        {% csrf_token %}
-
-        <div id="view-mode">
-            <!-- Profile Header -->
-            <div class="flex items-center mb-6">
-                <div class="mr-4">
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-3"></div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Personal Information Card -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center font-serif">
+                <i class="fas fa-id-card text-[var(--ab-primary)] mr-2"></i> {% trans "Personal Information" %}
+            </h2>
+            <form method="POST"
+                  action="{% url 'profile_view' %}"
+                  class="space-y-4 profile-form"
+                  data-form-type="personal_info">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="personal_info">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "First Name" %}</label>
+                        {{ personal_form.first_name }}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Last Name" %}</label>
+                        {{ personal_form.last_name }}
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Gender" %}</label>
+                        {{ personal_form.gender }}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Date of Birth" %}</label>
+                        {{ personal_form.date_of_birth }}
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Father's Name" %}</label>
+                        {{ personal_form.father_name }}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Mother's Name" %}</label>
+                        {{ personal_form.mother_name }}
+                    </div>
+                </div>
+                <button type="submit"
+                        class="w-full bg-[var(--ab-primary)] text-white py-2.5 px-4 rounded-lg hover:opacity-90 transition font-medium mt-4 shadow-sm">
+                    {% trans "Update Personal Info" %}
+                </button>
+            </form>
+        </div>
+        <!-- Contact Information Card -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center font-serif">
+                <i class="fas fa-address-book text-[var(--ab-primary)] mr-2"></i> {% trans "Contact Information" %}
+            </h2>
+            <form method="POST"
+                  action="{% url 'profile_view' %}"
+                  class="space-y-4 profile-form"
+                  data-form-type="contact_info">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="contact_info">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Email Address" %}</label>
+                    {{ contact_form.email }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Mobile Number" %}</label>
+                    {{ contact_form.mobile }}
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Country" %}</label>
+                        {{ contact_form.country }}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "City" %}</label>
+                        {{ contact_form.city }}
+                    </div>
+                </div>
+                <button type="submit"
+                        class="w-full bg-[var(--ab-primary)] text-white py-2.5 px-4 rounded-lg hover:opacity-90 transition font-medium mt-4 shadow-sm">
+                    {% trans "Update Contact Info" %}
+                </button>
+            </form>
+        </div>
+        <!-- Profile Image Card -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center font-serif">
+                <i class="fas fa-image text-[var(--ab-primary)] mr-2"></i> {% trans "Profile Picture" %}
+            </h2>
+            <form method="POST"
+                  action="{% url 'profile_view' %}"
+                  enctype="multipart/form-data"
+                  class="space-y-4 profile-form"
+                  data-form-type="profile_image">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="profile_image">
+                <div class="flex items-center space-x-4 mb-4">
                     {% if user.profile_image %}
-                        <img src="{{ user.profile_image.url }}" alt="Profile Image"
-                             class="w-32 h-32 rounded-full object-cover border-2 border-gray-300">
+                        <img src="{{ user.profile_image.url }}"
+                             alt="Profile"
+                             class="w-20 h-20 rounded-full object-cover border-2 border-gray-200 shadow-sm">
                     {% else %}
-                        <div class="bg-gray-200 border-2 border-dashed rounded-full w-32 h-32 flex items-center justify-center text-gray-500">
-                            <i class="fas fa-user fa-3x"></i>
+                        <div class="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 shadow-inner">
+                            <i class="fas fa-user text-3xl"></i>
                         </div>
                     {% endif %}
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold">{{ user.get_full_name }}</h3>
-                    <p class="text-gray-600">{{ user.email }}</p>
-                    <p class="text-gray-600 text-sm">{% trans "Username" %}: {{ user.username }}</p>
-                </div>
-            </div>
-
-            <!-- Personal Info -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-4">
                     <div>
-                        <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Gender" %}</h4>
-                        <p>{{ user.get_gender_display|default:"-" }}</p>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Date of Birth" %}</h4>
-                        <p>{{ user.date_of_birth|date:"Y-m-d"|default:"-" }}</p>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Mobile" %}</h4>
-                        <p>{{ user.mobile|default:"-" }}</p>
+                        <p class="text-sm font-medium text-gray-800">{{ user.get_full_name|default:user.username }}</p>
+                        <p class="text-xs text-[var(--ab-muted)]">{% trans "JPG, PNG or GIF. Max size 2MB." %}</p>
                     </div>
                 </div>
-
-                <div class="space-y-4">
-                    <div>
-                        <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Country" %}</h4>
-                        <p>{{ user.country.name|default:"-" }}</p>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "City" %}</h4>
-                        <p>{{ user.city.name|default:"-" }}</p>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Citizenship" %}</h4>
-                        <p>{{ user.citizenship.name|default:"-" }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Family Info -->
-            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Father's Name" %}</h4>
-                    <p>{{ user.father_name|default:"-" }}</p>
-                </div>
-                <div>
-                    <h4 class="text-sm font-semibold text-gray-500 mb-1">{% trans "Mother's Name" %}</h4>
-                    <p>{{ user.mother_name|default:"-" }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="edit-mode" class="hidden">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <!-- Left Column -->
-                <div>
-                    <!-- Profile Image -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_profile_image">
-                            {% trans "Profile Image" %}
-                        </label>
-                        <div class="flex items-center">
-                            {% if user.profile_image %}
-                                <img src="{{ user.profile_image.url }}" alt="Profile Image"
-                                     class="w-32 h-32 rounded-full object-cover border-2 border-gray-300">
-                            {% else %}
-                                <div class="bg-gray-200 border-2 border-dashed rounded-full w-32 h-32 flex items-center justify-center text-gray-500">
-                                    <i class="fas fa-user fa-3x"></i>
-                                </div>
-                            {% endif %}
-                            <div class="ml-4">
-                                {{ form.profile_image }}
-                                <p class="text-sm text-gray-500 mt-2">{% trans "JPG, PNG, GIF. Max 2MB" %}</p>
-                            </div>
-                        </div>
-                        {% if form.profile_image.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.profile_image.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <!-- Account Info -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_username">
-                            {% trans "Username" %}
-                        </label>
-                        {{ form.username }}
-                        {% if form.username.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.username.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_email">
-                            {% trans "Email" %}
-                            <input>
-                        </label>
-                        {{ form.email }}
-                        {% if form.email.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.email.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- Right Column -->
-                <div>
-                    <!-- Personal Info -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_first_name">
-                            {% trans "First Name" %}
-                        </label>
-                        {{ form.first_name }}
-                        {% if form.first_name.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.first_name.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_last_name">
-                            {% trans "Last Name" %}
-                        </label>
-                        {{ form.last_name }}
-                        {% if form.last_name.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.last_name.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_gender">
-                            {% trans "Gender" %}
-                        </label>
-                        {{ form.gender }}
-                        {% if form.gender.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.gender.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_date_of_birth">
-                            {% trans "Date of Birth" %}
-                        </label>
-                        {{ form.date_of_birth }}
-                        {% if form.date_of_birth.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.date_of_birth.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Location Info -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_country">
-                            {% trans "Country" %}
-                        </label>
-                        {{ form.country }}
-                        {% if form.country.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.country.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-                <div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_city">
-                            {% trans "City" %}
-                        </label>
-                        {{ form.city }}
-                        {% if form.city.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.city.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contact Info -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_citizenship">
-                            {% trans "Citizenship" %}
-                        </label>
-                        {{ form.citizenship }}
-                        {% if form.citizenship.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.citizenship.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-                <div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_mobile">
-                            {% trans "Mobile Number" %}
-                        </label>
-                        {{ form.mobile }}
-                        {% if form.mobile.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.mobile.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Family Info -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_father_name">
-                            {% trans "Father's Name" %}
-                        </label>
-                        {{ form.father_name }}
-                        {% if form.father_name.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.father_name.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-                <div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="id_mother_name">
-                            {% trans "Mother's Name" %}
-                        </label>
-                        {{ form.mother_name }}
-                        {% if form.mother_name.errors %}
-                            <p class="text-red-500 text-xs italic mt-2">{{ form.mother_name.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex justify-end space-x-2">
-                <button type="button" id="cancel-edit" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                    {% trans "Cancel" %}
+                {{ image_form.profile_image }}
+                <button type="submit"
+                        class="w-full bg-[var(--ab-primary)] text-white py-2.5 px-4 rounded-lg hover:opacity-90 transition font-medium shadow-sm">
+                    {% trans "Upload New Picture" %}
                 </button>
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    {% trans "Save Changes" %}
-                </button>
-            </div>
+            </form>
         </div>
-    </form>
+        <!-- Password Change Card -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center font-serif">
+                <i class="fas fa-lock text-[var(--ab-primary)] mr-2"></i> {% trans "Change Password" %}
+            </h2>
+            <form method="POST"
+                  action="{% url 'profile_view' %}"
+                  class="space-y-4 profile-form"
+                  data-form-type="password_change">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="password_change">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Current Password" %}</label>
+                    {{ password_form.old_password }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "New Password" %}</label>
+                    {{ password_form.new_password1 }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Confirm New Password" %}</label>
+                    {{ password_form.new_password2 }}
+                </div>
+                <button type="submit"
+                        class="w-full bg-[var(--ab-primary)] text-white py-2.5 px-4 rounded-lg hover:opacity-90 transition font-medium mt-4 shadow-sm">
+                    {% trans "Update Password" %}
+                </button>
+            </form>
+        </div>
+        <!-- Student Profile Card (Conditional) -->
+        {% if student_form %}
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow lg:col-span-2">
+                <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center font-serif">
+                    <i class="fas fa-user-graduate text-[var(--ab-primary)] mr-2"></i> {% trans "Student Profile Details" %}
+                </h2>
+                <form method="POST"
+                      action="{% url 'profile_view' %}"
+                      class="space-y-4 grid grid-cols-1 md:grid-cols-3 gap-4 profile-form"
+                      data-form-type="student_profile">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="student_profile">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Passport Number" %}</label>
+                        {{ student_form.passport }}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Stage" %}</label>
+                        {{ student_form.stage }}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Language" %}</label>
+                        {{ student_form.language }}
+                    </div>
+                    <div class="md:col-span-3">
+                        <button type="submit"
+                                class="w-full bg-[var(--ab-primary)] text-white py-2.5 px-4 rounded-lg hover:opacity-90 transition font-medium shadow-sm">
+                            {% trans "Update Student Details" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+    </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('.profile-form');
+
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const formType = form.getAttribute('data-form-type');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> {% trans "Saving..." %}';
+
+            fetch("{% url 'profile_view' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    setTimeout(() => loadContent('profile'), 1500); // Reload fragment to reset form state
+                } else {
+                    const errorText = data.errors ? data.errors.join('\n') : '{% trans "An error occurred." %}';
+                    showToast(errorText, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            })
+            .catch(error => {
+                showToast('{% trans "Network error. Please try again." %}', 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            });
+        });
+    });
+});
+
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `p-4 rounded-lg shadow-lg text-white z-50 transition-all duration-300 transform translate-y-0 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+    toast.innerText = message;
+    document.getElementById('toast-container').appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+</script>

@@ -1,6 +1,49 @@
-<div class="bg-white p-6 rounded-lg shadow">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">My Applications</h2>
-    <div class="p-4 border rounded-lg bg-yellow-50">
-        <p class="text-yellow-700">This is a temporary view. The actual my applications content will be implemented soon.</p>
+{% load i18n static %}
+<div class="max-w-6xl mx-auto animate-[auth-fade-in-up_0.6s_ease-out]">
+    <div class="flex justify-between items-center mb-8 border-l-4 border-[var(--ab-primary)] pl-4">
+        <div>
+            <h1 class="text-3xl font-bold text-[var(--ab-text)] font-serif">{% trans "My Applications" %}</h1>
+            <p class="text-[var(--ab-muted)] mt-2">{% trans "Track the progress of your university applications." %}</p>
+        </div>
+        {% if user.user_type == 'agent' %}
+        <button onclick="loadContent('new_application')" class="bg-[var(--ab-primary)] text-white px-4 py-2 rounded-lg hover:opacity-90 transition shadow-sm flex items-center">
+            <i class="fas fa-plus mr-2"></i> {% trans "New Application" %}
+        </button>
+        {% endif %}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for app in applications %}
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-1" onclick="loadContent('application_detail?id={{ app.pk }}')">
+            <div class="flex justify-between items-start mb-4">
+                <span class="px-3 py-1 text-xs font-semibold rounded-full
+                    {% if app.status == 'finished' %}bg-green-100 text-green-800
+                    {% elif app.status == 'failed' %}bg-red-100 text-red-800
+                    {% else %}bg-blue-100 text-blue-800{% endif %}">
+                    {{ app.get_status_display }}
+                </span>
+                <span class="text-sm text-gray-500">#{{ app.application_name }}</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">
+                {% if user.user_type == 'agent' %}
+                    {{ app.student.get_full_name|default:app.student.username }}
+                {% else %}
+                    {{ app.program.name|default:_("Unassigned Program") }}
+                {% endif %}
+            </h3>
+            <p class="text-sm text-[var(--ab-muted)] mb-4">
+                <i class="fas fa-university mr-1"></i> {{ app.program.university.name|default:_("N/A") }}
+            </p>
+            <div class="flex items-center justify-between text-sm">
+                <span class="text-gray-600"><i class="fas fa-tasks mr-1 text-[var(--ab-primary)]"></i> {% trans "Step" %} {{ app.step }} / 7</span>
+                <span class="text-[var(--ab-primary)] font-medium">{% trans "View Details" %} <i class="fas fa-arrow-right ml-1"></i></span>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12 bg-white rounded-xl border border-gray-100">
+            <i class="fas fa-folder-open text-4xl text-gray-300 mb-4"></i>
+            <p class="text-gray-500">{% trans "No applications found." %}</p>
+        </div>
+        {% endfor %}
     </div>
 </div>
