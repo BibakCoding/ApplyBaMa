@@ -40,18 +40,21 @@
     scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
-/* FIX 2: Black Text on Blue Buttons (Global CSS Override Fix) */
+/* FIX 2: Button text colors (Solid vs Outline) */
 .dashboard-main button {
-    color: #374151; /* Default button text dark grey */
     transition: all 0.2s ease;
 }
 
-/* Force white text on primary/blue buttons */
-.dashboard-main button.bg-\[var\(--ab-primary\)\],
+/* Only force white text if it has a solid blue background */
+.dashboard-main button[class*="bg-[var(--ab-primary)]"],
 .dashboard-main button.bg-blue-500,
-.dashboard-main button.bg-blue-600,
-.dashboard-main button.btn-primary {
+.dashboard-main button.bg-blue-600 {
     color: #ffffff !important;
+}
+
+/* Outline buttons (like View Details) should keep their primary color */
+.dashboard-main button[class*="border-[var(--ab-primary)]"] {
+    color: var(--ab-primary, #1E3A8A) !important;
 }
 
 

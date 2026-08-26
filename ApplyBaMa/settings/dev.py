@@ -11,8 +11,22 @@ SECRET_KEY = os.getenv(
     'SECRET_KEY'
 )
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '[::1]',
+    '0.0.0.0',
+    'dsalfsdfasdfsdaf.com',
+    'olds-quicktime.tun.ply.gg',
+    "18350f4ff543e9.lhr.life"
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://dsalfsdfasdfsdaf.com',
+    'https://olds-quicktime.tun.ply.gg',
+    'http://olds-quicktime.tun.ply.gg:42909',
+    'https://18350f4ff543e9.lhr.life/'
+]
 # Database
 DATABASES = {
     "default": {
