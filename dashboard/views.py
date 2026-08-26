@@ -4,9 +4,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
+from django.conf import settings
 import secrets
 import string
 
@@ -19,12 +20,11 @@ from .forms import (
 
 @login_required
 def dashboard_main(request):
-    """Renders the main dashboard layout (sidebar + empty content container)"""
     return render(request, "dashboard/main.html", context={"user": request.user})
-
 
 @login_required
 def dashboard_content(request, page):
+    """Handles GET requests to render SPA fragments"""
     content_map = {
         'welcome': 'dashboard/fragments/welcome.html',
         'profile': 'dashboard/fragments/profile.html',
@@ -50,19 +50,26 @@ def dashboard_content(request, page):
 
     context = {"user": request.user}
 
+    # --- PROFILE LOGIC (Initialize forms for GET request) ---
+    if page == 'profile':
+        user = request.user
+        student_profile = getattr(user, 'student_profile', None)
+        context['personal_form'] = PersonalInfoForm(instance=user)
+        context['contact_form'] = ContactInfoForm(instance=user)
+        context['image_form'] = ProfileImageForm(instance=user)
+        context['password_form'] = CustomPasswordChangeForm(user=user)
+        context['student_form'] = StudentProfileForm(instance=student_profile) if student_profile else None
+
     # --- UNIVERSITIES LOGIC ---
-    if page == 'universities':
+    elif page == 'universities':
         qs = University.objects.all().select_related('country', 'city')
         search_query = request.GET.get('search', '')
         country_id = request.GET.get('country', '')
         sector = request.GET.get('sector', '')
 
-        if search_query:
-            qs = qs.filter(name__icontains=search_query)
-        if country_id:
-            qs = qs.filter(country_id=country_id)
-        if sector:
-            qs = qs.filter(sector=sector)
+        if search_query: qs = qs.filter(name__icontains=search_query)
+        if country_id: qs = qs.filter(country_id=country_id)
+        if sector: qs = qs.filter(sector=sector)
 
         paginator = Paginator(qs, 12)
         page_number = request.GET.get('page')
@@ -70,11 +77,7 @@ def dashboard_content(request, page):
 
         context['page_obj'] = page_obj
         context['countries'] = Country.objects.all().order_by('name')
-        context['filters'] = {
-            'search': search_query,
-            'country': country_id,
-            'sector': sector,
-        }
+        context['filters'] = {'search': search_query, 'country': country_id, 'sector': sector}
 
     # --- PROGRAMS LOGIC ---
     elif page == 'programs':
@@ -84,14 +87,10 @@ def dashboard_content(request, page):
         degree = request.GET.get('degree', '')
         status = request.GET.get('status', '')
 
-        if search_query:
-            qs = qs.filter(name__icontains=search_query)
-        if university_id:
-            qs = qs.filter(university_id=university_id)
-        if degree:
-            qs = qs.filter(degree=degree)
-        if status:
-            qs = qs.filter(status=status)
+        if search_query: qs = qs.filter(name__icontains=search_query)
+        if university_id: qs = qs.filter(university_id=university_id)
+        if degree: qs = qs.filter(degree=degree)
+        if status: qs = qs.filter(status=status)
 
         paginator = Paginator(qs, 12)
         page_number = request.GET.get('page')
@@ -101,12 +100,7 @@ def dashboard_content(request, page):
         context['universities_filter'] = University.objects.all().order_by('name')
         context['degrees'] = Program.DEGREE_CHOICES
         context['statuses'] = Program.StatusChoices.choices
-        context['filters'] = {
-            'search': search_query,
-            'university': university_id,
-            'degree': degree,
-            'status': status,
-        }
+        context['filters'] = {'search': search_query, 'university': university_id, 'degree': degree, 'status': status}
 
     # --- UNIVERSITY DETAIL ---
     elif page == 'university_detail':
@@ -149,43 +143,71 @@ def dashboard_content(request, page):
     return render(request, content_map[page], context=context)
 
 
+# =========================================================================
+# PROFILE POST HANDLER (Handles the form submissions via AJAX)
+# =========================================================================
 @login_required
-def program_apply_request(request):
-    """Student clicks 'Apply Request' on a program → email sent to admin."""
-    if request.method == 'POST':
-        program_id = request.POST.get('program_id')
-        if not program_id:
-            return JsonResponse({'success': False, 'message': str(_('Invalid request.'))})
+def profile_view(request):
+    if request.method != 'POST':
+        return redirect('dashboard')
 
-        program = get_object_or_404(Program, pk=program_id)
-        user = request.user
+    user = request.user
+    student_profile = getattr(user, 'student_profile', None)
+    form_type = request.POST.get('form_type')
 
-        # Build email
-        from django.core.mail import send_mail
-        from django.conf import settings
+    if form_type == 'personal_info':
+        form = PersonalInfoForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return _success_response(_("Personal information updated successfully."))
+        return _form_error_response(form)
 
-        subject = f"Apply Request: {user.get_full_name() or user.username} → {program.name}"
-        message = (
-            f"A student has requested to apply for a program.\n\n"
-            f"Student: {user.get_full_name() or user.username}\n"
-            f"Email: {user.email}\n"
-            f"Username: {user.username}\n"
-            f"Program: {program.name}\n"
-            f"University: {program.university.name}\n"
-            f"Degree: {program.get_degree_display()}\n"
-            f"Status: {program.get_status_display()}\n\n"
-            f"Please contact the student to proceed."
-        )
+    elif form_type == 'contact_info':
+        form = ContactInfoForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return _success_response(_("Contact information updated successfully."))
+        return _form_error_response(form)
 
-        try:
-            admin_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'admin@applybama.com'
-            send_mail(subject, message, admin_email, [admin_email], fail_silently=False)
-            return JsonResponse({'success': True, 'message': str(_('Your request has been sent! Our team will contact you soon.'))})
-        except Exception as e:
-            return JsonResponse({'success': False, 'message': str(_('Failed to send request. Please try again.'))})
+    elif form_type == 'profile_image':
+        form = ProfileImageForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return _success_response(_("Profile image updated successfully."))
+        return _form_error_response(form)
 
-    return JsonResponse({'success': False, 'message': str(_('Invalid request.'))})
+    elif form_type == 'password_change':
+        form = CustomPasswordChangeForm(user=user, data=request.POST)
+        if form.is_valid():
+            updated_user = form.save()
+            update_session_auth_hash(request, updated_user)
+            return _success_response(_("Password changed successfully."))
+        return _form_error_response(form)
 
+    elif form_type == 'student_profile' and student_profile:
+        form = StudentProfileForm(request.POST, instance=student_profile)
+        if form.is_valid():
+            form.save()
+            return _success_response(_("Student profile updated successfully."))
+        return _form_error_response(form)
+
+    return JsonResponse({'success': False, 'errors': [_('Invalid form type.')]})
+
+
+def _success_response(message):
+    return JsonResponse({'success': True, 'message': str(message)})
+
+def _form_error_response(form):
+    errors = []
+    for field, error_list in form.errors.items():
+        for error in error_list:
+            errors.append(f"{field.replace('_', ' ').title()}: {error}")
+    return JsonResponse({'success': False, 'errors': errors})
+
+
+# =========================================================================
+# OTHER ACTION VIEWS
+# =========================================================================
 @login_required
 def application_action(request, pk):
     app = get_object_or_404(Application, pk=pk)
@@ -246,95 +268,33 @@ def submit_add_student(request):
     return JsonResponse({'success': False, 'message': _('Invalid request.')})
 
 @login_required
-def profile_view(request):
-    if request.method == 'GET' and request.headers.get('x-requested-with') != 'XMLHttpRequest':
-        from django.urls import reverse
-        return redirect(f"{reverse('dashboard')}?page=profile")
-
-    user = request.user
-    student_profile = getattr(user, 'student_profile', None)
-
-    personal_form = PersonalInfoForm(instance=user)
-    contact_form = ContactInfoForm(instance=user)
-    image_form = ProfileImageForm(instance=user)
-    password_form = CustomPasswordChangeForm(user=user)
-    student_form = StudentProfileForm(instance=student_profile) if student_profile else None
-
+def program_apply_request(request):
     if request.method == 'POST':
-        form_type = request.POST.get('form_type')
+        program_id = request.POST.get('program_id')
+        if not program_id:
+            return JsonResponse({'success': False, 'message': str(_('Invalid request.'))})
 
-        if form_type == 'personal_info':
-            personal_form = PersonalInfoForm(request.POST, instance=user)
-            if personal_form.is_valid():
-                personal_form.save()
-                return _success_response(request, _("Personal information updated successfully."))
-            else:
-                return _form_error_response(request, personal_form)
+        program = get_object_or_404(Program, pk=program_id)
+        user = request.user
 
-        elif form_type == 'contact_info':
-            contact_form = ContactInfoForm(request.POST, instance=user)
-            if contact_form.is_valid():
-                contact_form.save()
-                return _success_response(request, _("Contact information updated successfully."))
-            else:
-                return _form_error_response(request, contact_form)
+        subject = f"Apply Request: {user.get_full_name() or user.username} → {program.name}"
+        message = (
+            f"A student has requested to apply for a program.\n\n"
+            f"Student: {user.get_full_name() or user.username}\n"
+            f"Email: {user.email}\n"
+            f"Username: {user.username}\n"
+            f"Program: {program.name}\n"
+            f"University: {program.university.name}\n"
+            f"Degree: {program.get_degree_display()}\n"
+            f"Status: {program.get_status_display()}\n\n"
+            f"Please contact the student to proceed."
+        )
 
-        elif form_type == 'profile_image':
-            image_form = ProfileImageForm(request.POST, request.FILES, instance=user)
-            if image_form.is_valid():
-                image_form.save()
-                return _success_response(request, _("Profile image updated successfully."))
-            else:
-                return _form_error_response(request, image_form)
+        try:
+            admin_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'admin@applybama.com'
+            send_mail(subject, message, admin_email, [admin_email], fail_silently=False)
+            return JsonResponse({'success': True, 'message': str(_('Your request has been sent! Our team will contact you soon.'))})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(_('Failed to send request. Please try again.'))})
 
-        elif form_type == 'password_change':
-            password_form = CustomPasswordChangeForm(user=user, data=request.POST)
-            if password_form.is_valid():
-                user = password_form.save()
-                update_session_auth_hash(request, user) # Keep user logged in
-                return _success_response(request, _("Password changed successfully."))
-            else:
-                return _form_error_response(request, password_form)
-
-        elif form_type == 'student_profile' and student_form:
-            student_form = StudentProfileForm(request.POST, instance=student_profile)
-            if student_form.is_valid():
-                student_form.save()
-                return _success_response(request, _("Student profile updated successfully."))
-            else:
-                return _form_error_response(request, student_form)
-
-    context = {
-        'user': user,
-        'personal_form': personal_form,
-        'contact_form': contact_form,
-        'image_form': image_form,
-        'password_form': password_form,
-        'student_form': student_form,
-    }
-
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        html = render_to_string('dashboard/fragments/profile.html', context, request=request)
-        return JsonResponse({'form_html': html})
-
-    return render(request, 'dashboard/fragments/profile.html', context)
-
-def _success_response(request, message):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return JsonResponse({'success': True, 'message': str(message)})
-    messages.success(request, message)
-    return redirect('profile_view')
-
-def _form_error_response(request, form):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        errors = []
-        for field, error_list in form.errors.items():
-            for error in error_list:
-                errors.append(f"{field.replace('_', ' ').title()}: {error}")
-        return JsonResponse({'success': False, 'errors': errors})
-
-    # Fallback for non-AJAX
-    for field, error_list in form.errors.items():
-        for error in error_list:
-            messages.error(request, f"{field.replace('_', ' ').title()}: {error}")
-    return redirect('profile_view')
+    return JsonResponse({'success': False, 'message': str(_('Invalid request.'))})
