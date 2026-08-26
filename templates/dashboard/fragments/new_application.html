@@ -33,34 +33,3 @@
         </form>
     </div>
 </div>
-
-<script>
-document.getElementById('newAppForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-    const btn = this.querySelector('button[type="submit"]');
-    btn.disabled = true;
-
-    fetch("{% url 'submit_new_application' %}", {
-        method: 'POST',
-        body: formData,
-        headers: {'X-Requested-With': 'XMLHttpRequest'}
-    })
-    .then(r => r.json())
-    .then(data => {
-        if (data.success) {
-            showToast('{% trans "Application created successfully!" %}', 'success');
-            if (data.redirect) loadContent('my_applications');
-        } else {
-            const errDiv = document.getElementById('formErrors');
-            errDiv.classList.remove('hidden');
-            let errHtml = '';
-            for (const [field, errors] of Object.entries(data.errors)) {
-                errHtml += `<p>${field}: ${errors.join(', ')}</p>`;
-            }
-            errDiv.innerHTML = errHtml;
-            btn.disabled = false;
-        }
-    });
-});
-</script>

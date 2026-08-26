@@ -99,14 +99,3 @@
     </div>
     {% endif %}
 </div>
-
-<script>
-function handleProgFilter(e) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const params = new URLSearchParams(formData).toString();
-    if (typeof loadContent === 'function') {
-        loadContent('programs?' + params);
-    }
-}
-</script>

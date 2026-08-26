@@ -66,29 +66,3 @@
         </form>
     </div>
 </div>
-
-<script>
-document.querySelector('.delete-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (confirm('{% trans "Are you sure you want to delete this application?" %}')) {
-        fetch(this.action, {
-            method: 'POST',
-            body: new FormData(this),
-            headers: {'X-Requested-With': 'XMLHttpRequest'}
-        }).then(r => r.json()).then(data => {
-            if (data.success) loadContent('my_applications');
-        });
-    }
-});
-
-document.querySelector('.step-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    fetch(this.action, {
-        method: 'POST',
-        body: new FormData(this),
-        headers: {'X-Requested-With': 'XMLHttpRequest'}
-    }).then(r => r.json()).then(data => {
-        if (data.success) loadContent('application_detail?id={{ app.pk }}');
-    });
-});
-</script>

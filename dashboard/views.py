@@ -199,6 +199,10 @@ def submit_add_student(request):
 
 @login_required
 def profile_view(request):
+    if request.method == 'GET' and request.headers.get('x-requested-with') != 'XMLHttpRequest':
+        from django.urls import reverse
+        return redirect(f"{reverse('dashboard')}?page=profile")
+
     user = request.user
     student_profile = getattr(user, 'student_profile', None)
 
