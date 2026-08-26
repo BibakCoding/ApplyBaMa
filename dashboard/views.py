@@ -2,24 +2,29 @@
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
-from core.models import StudentProfile
-from .forms import PersonalInfoForm, ContactInfoForm, ProfileImageForm, StudentProfileForm, CustomPasswordChangeForm
-
-# Add these imports at the top of dashboard/views.py
-from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 import secrets
 import string
-from core.models import *
-from .forms import *
 
+from core.models import User, StudentProfile, Application, University, Program, Country
+from .forms import (
+    PersonalInfoForm, ContactInfoForm, ProfileImageForm,
+    StudentProfileForm, CustomPasswordChangeForm,
+    ApplicationForm, AddStudentForm
+)
+
+@login_required
+def dashboard_main(request):
+    """Renders the main dashboard layout (sidebar + empty content container)"""
+    return render(request, "dashboard/main.html", context={"user": request.user})
 
 @login_required
 def dashboard_content(request, page):
-    # Inside dashboard/views.py, update the content_map:
+    """Renders the specific inner fragment requested via AJAX"""
     content_map = {
         'welcome': 'dashboard/fragments/welcome.html',
         'profile': 'dashboard/fragments/profile.html',
