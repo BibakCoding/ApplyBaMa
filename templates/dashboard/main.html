@@ -1,185 +1,173 @@
 {% extends "base.html" %}
 {% load i18n static %}
 
-{% block title %}{% trans "Dashboard" %}{% endblock %}
+{% block title %}{% trans "Dashboard" %} | Apply BM{% endblock %}
 
 {% block css %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}">
-{% endblock %}
-
-{% block header %}
-    <!-- Mobile top bar with hamburger -->
-    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md md:hidden">
-        <div class="flex items-center justify-between px-4 py-3">
-            <button id="sidebarToggle" class="text-white focus:outline-none">
-                <i class="fas fa-bars fa-lg"></i>
-            </button>
-            <a href="{% url 'main' %}" class="flex items-center space-x-2">
-                <img src="{% static 'images/logo.png' %}" alt="ApplyBaMa Logo" class="w-8 h-8">
-                <span class="text-xl font-bold">ApplyBaMa</span>
-            </a>
-        </div>
-    </div>
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <div id="sidebar"
-             class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform -translate-x-full transition-transform duration-200 ease-in-out z-30 md:translate-x-0 md:relative">
-            <div class="flex flex-col h-full">
-                <!-- Sidebar Header -->
-                <div class="flex items-center justify-between px-4 py-4 border-b border-gray-200">
-                    <a href="{% url 'main' %}" class="flex items-center space-x-2">
-                        <img src="{% static 'images/logo.png' %}" alt="ApplyBaMa Logo" class="w-8 h-8">
-                        <span class="text-xl font-bold text-gray-800">ApplyBaMa</span>
-                    </a>
-                    <button id="sidebarClose" class="md:hidden text-gray-600 focus:outline-none">
-                        <i class="fas fa-times fa-lg"></i>
-                    </button>
-                </div>
+<div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="dashboard-sidebar">
+        <!-- Brand Logo -->
+        <div class="sidebar-brand">
+            <a href="{% url 'main' %}" class="ab-brand">
+                <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="36" height="36">
+                <span class="font-serif">Apply BM</span>
+            </a>
+            <button id="sidebarClose" class="sidebar-close-btn md:hidden">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
 
-                <!-- User Profile -->
-                <div class="px-4 py-4 border-b border-gray-200">
-                    <div class="flex items-center space-x-3">
-                        <div class="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10"></div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-800">{{ user.get_full_name }}</p>
-                            <p class="text-xs text-gray-500">{{ user.email }}</p>
-                        </div>
+        <!-- User Profile Card -->
+        <div class="sidebar-user-card">
+            <div class="user-avatar">
+                {% if user.profile_image %}
+                    <img src="{{ user.profile_image.url }}" alt="{{ user.username }}">
+                {% else %}
+                    <div class="avatar-placeholder">
+                        <i class="fas fa-user"></i>
                     </div>
-                </div>
-
-                <!-- Menu Links -->
-                <nav class="flex-1 px-4 py-6 overflow-y-auto">
-                    <ul class="space-y-1">
-                        <!-- Dashboard Home -->
-                        <li>
-                            <a href="#" data-page="welcome"
-                               class="dashboard-link flex items-center px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                                <i class="fas fa-home w-5 text-gray-500"></i>
-                                <span class="ml-3 font-medium">{% trans "Dashboard" %}</span>
-                            </a>
-                        </li>
-
-                        <!-- Common Menu Items -->
-                        <li>
-                            <a href="#" data-page="announcements"
-                               class="dashboard-link flex items-center px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                                <i class="fas fa-bullhorn w-5 text-gray-500"></i>
-                                <span class="ml-3 font-medium">{% trans "Announcements" %}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" data-page="profile"
-                               class="dashboard-link flex items-center px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                                <i class="fas fa-user w-5 text-gray-500"></i>
-                                <span class="ml-3 font-medium">{% trans "Profile" %}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" data-page="chat"
-                               class="dashboard-link flex items-center px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                                <i class="fas fa-comments w-5 text-gray-500"></i>
-                                <span class="ml-3 font-medium">{% trans "Chat" %}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" data-page="universities"
-                               class="dashboard-link flex items-center px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                                <i class="fas fa-university w-5 text-gray-500"></i>
-                                <span class="ml-3 font-medium">{% trans "Universities" %}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" data-page="programs"
-                               class="dashboard-link flex items-center px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                                <i class="fas fa-book w-5 text-gray-500"></i>
-                                <span class="ml-3 font-medium">{% trans "Programs" %}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" data-page="scholarships"
-                               class="dashboard-link flex items-center px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                                <i class="fas fa-graduation-cap w-5 text-gray-500"></i>
-                                <span class="ml-3 font-medium">{% trans "Scholarships" %}</span>
-                            </a>
-                        </li>
-
-                        <!-- Application Section -->
-                        {% if user.user_type == 'company' or user.user_type == 'agent' or user.user_type == 'student' and user.is_representative %}
-                            <li class="mt-6 pt-4 border-t border-gray-200">
-                                <span class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{% trans "Applications" %}</span>
-                            </li>
-                            <li>
-                                <a href="#" data-page="new_application"
-                                   class="dashboard-link flex items-center px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                                    <i class="fas fa-file-alt w-5 text-blue-500"></i>
-                                    <span class="ml-3 font-medium">{% trans "New Application" %}</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" data-page="my_applications"
-                                   class="dashboard-link flex items-center px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                                    <i class="fas fa-folder w-5 text-blue-500"></i>
-                                    <span class="ml-3 font-medium">{% trans "My Applications" %}</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" data-page="my_students"
-                                   class="dashboard-link flex items-center px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                                    <i class="fas fa-users w-5 text-blue-500"></i>
-                                    <span class="ml-3 font-medium">{% trans "My Students" %}</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-
-                <!-- Logout -->
-                <div class="px-4 py-4 mt-auto border-t border-gray-200">
-                    <form method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="w-full flex items-center justify-center space-x-2 px-3 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors">
-                            <i class="fas fa-sign-out-alt w-5"></i>
-                            <span class="font-medium">{% trans "Logout" %}</span>
-                        </button>
-                    </form>
-                </div>
+                {% endif %}
+            </div>
+            <div class="user-info">
+                <p class="user-name">{{ user.get_full_name|default:user.username }}</p>
+                <p class="user-role">
+                    {% if user.user_type == 'agent' %}
+                        {% trans "Agent" %}
+                    {% elif user.user_type == 'company' %}
+                        {% trans "Company" %}
+                    {% else %}
+                        {% trans "Student" %}
+                    {% endif %}
+                </p>
             </div>
         </div>
 
-        <!-- Overlay for mobile -->
-        <div id="overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-20"></div>
+        <!-- Navigation Menu -->
+        <nav class="sidebar-nav">
+            <ul class="nav-list">
+                <!-- Dashboard Home -->
+                <li>
+                    <a href="#" data-page="welcome" class="nav-link active">
+                        <i class="fas fa-home"></i>
+                        <span>{% trans "Dashboard" %}</span>
+                    </a>
+                </li>
 
-        <!-- Main content area -->
-        <div id="dashboard-content" class="flex-1 overflow-y-auto bg-gray-50">
-            <div class="px-4 py-6 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-                <!-- Content loaded here dynamically -->
+                <!-- Profile -->
+                <li>
+                    <a href="#" data-page="profile" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        <span>{% trans "Profile" %}</span>
+                    </a>
+                </li>
+
+                <!-- Universities -->
+                <li>
+                    <a href="#" data-page="universities" class="nav-link">
+                        <i class="fas fa-university"></i>
+                        <span>{% trans "Universities" %}</span>
+                    </a>
+                </li>
+
+                <!-- Programs -->
+                <li>
+                    <a href="#" data-page="programs" class="nav-link">
+                        <i class="fas fa-book-open"></i>
+                        <span>{% trans "Programs" %}</span>
+                    </a>
+                </li>
+
+                <!-- Application Section (Conditional) -->
+                {% if user.user_type == 'company' or user.user_type == 'agent' or user.user_type == 'student' and user.is_representative %}
+                <li class="nav-divider">
+                    <span class="divider-text">{% trans "Applications" %}</span>
+                </li>
+
+                <li>
+                    <a href="#" data-page="new_application" class="nav-link">
+                        <i class="fas fa-file-circle-plus"></i>
+                        <span>{% trans "New Application" %}</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" data-page="my_applications" class="nav-link">
+                        <i class="fas fa-folder-open"></i>
+                        <span>{% trans "My Applications" %}</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" data-page="my_students" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>{% trans "My Students" %}</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <!-- Logout -->
+        <div class="sidebar-footer">
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>{% trans "Logout" %}</span>
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- Mobile Overlay -->
+    <div id="overlay" class="mobile-overlay"></div>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button id="sidebarToggle" class="hamburger-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="{% url 'main' %}" class="mobile-logo">
+                <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="32" height="32">
+                <span class="font-serif">Apply BM</span>
+            </a>
+        </div>
+
+        <!-- Dynamic Content Container -->
+        <div id="dashboard-content" class="content-container">
+            <!-- Content loaded here via JS -->
+            <div class="content-loading">
+                <div class="spinner"></div>
+                <p>{% trans "Loading..." %}</p>
             </div>
         </div>
-    </div>
+    </main>
+</div>
 {% endblock %}
 
 {% block js %}
-    {{ block.super }}
-
-    <script>
-        window.AppConfig = {
-            urls: {
-                // This generates the URL with a dummy placeholder
-                dashboardContent: "{% url 'dashboard_content' 'PAGE_PLACEHOLDER' %}"
-            },
-            translations: {
-                loadingContent: "{% trans 'Loading content...' %}",
-                loadingError: "{% trans 'Loading Error' %}",
-                errorSupport: "{% trans 'Please try again or contact support' %}",
-                reloadPage: "{% trans 'Reload Page' %}"
-            }
-        };
-    </script>
-
-    <script src="{% static 'js/pages/dashboard.js' %}" defer></script>
+{{ block.super }}
+<script>
+    window.AppConfig = {
+        urls: {
+            dashboardContent: "{% url 'dashboard_content' 'PAGE_PLACEHOLDER' %}",
+            logout: "{% url 'logout' %}"
+        },
+        translations: {
+            loadingContent: "{% trans 'Loading content...' %}",
+            loadingError: "{% trans 'Loading Error' %}",
+            errorSupport: "{% trans 'Please try again or contact support' %}",
+            reloadPage: "{% trans 'Reload Page' %}"
+        }
+    };
+</script>
+<script src="{% static 'js/pages/dashboard.js' %}" defer></script>
 {% endblock %}
