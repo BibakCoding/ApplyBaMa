@@ -318,3 +318,14 @@ def program_apply_request(request):
             return JsonResponse({'success': False, 'message': str(_('Failed to send request. Please try again.'))})
 
     return JsonResponse({'success': False, 'message': str(_('Invalid request.'))})
+
+
+@login_required
+def get_cities_by_country(request):
+    """AJAX endpoint to get cities for a selected country"""
+    country_id = request.GET.get('country_id')
+    if country_id:
+        cities = City.objects.filter(country_id=country_id).order_by('name')
+        cities_data = [{'id': city.id, 'name': city.name} for city in cities]
+        return JsonResponse({'cities': cities_data})
+    return JsonResponse({'cities': []})

@@ -28,17 +28,26 @@ class ContactInfoForm(forms.ModelForm):
         widgets = {
             'email': forms.EmailInput(attrs={'class': BASE_INPUT_CLASS, 'placeholder': _('Email Address')}),
             'mobile': forms.TextInput(attrs={'class': BASE_INPUT_CLASS, 'placeholder': _('Mobile Number')}),
-            'country': forms.Select(attrs={'class': BASE_INPUT_CLASS}),
-            'city': forms.Select(attrs={'class': BASE_INPUT_CLASS}),
+            'country': forms.Select(attrs={
+                'class': 'select2-country ' + BASE_INPUT_CLASS,
+                'data-placeholder': _('Select a country'),
+            }),
+            'city': forms.Select(attrs={
+                'class': 'select2-city ' + BASE_INPUT_CLASS,
+                'data-placeholder': _('Select a city'),
+            }),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['city'].queryset = City.objects.none()
+
         if 'country' in self.data:
             try:
                 country_id = int(self.data.get('country'))
-                self.fields['city'].queryset = City.objects.filter(country_id=country_id).order_by('name')
+                self.fields['city'].queryset = City.objects.filter(
+                    country_id=country_id
+                ).order_by('name')
             except (ValueError, TypeError):
                 pass
         elif self.instance.country:
