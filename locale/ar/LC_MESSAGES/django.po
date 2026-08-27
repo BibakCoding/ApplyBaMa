@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-24 00:48+0330\n"
+"POT-Creation-Date: 2026-08-27 03:13+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,41 +18,1541 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-#: .\core\models.py:7
-msgid "Name"
-msgstr ""
 
-#: .\core\models.py:9
-msgid "Enter the official university name"
-msgstr ""
+#: .\authentication\forms.py:11 .\templates\authentication\login.html:59
+msgid "Email or Username"
+msgstr "البريد الإلكتروني أو اسم المستخدم"
 
-#: .\core\models.py:13
-msgid "University"
-msgstr ""
+#: .\authentication\forms.py:12 .\authentication\forms.py:53
+#: .\templates\authentication\login.html:67
+#: .\templates\authentication\register.html:59
+msgid "Password"
+msgstr "كلمة المرور"
 
-#: .\core\models.py:14
-msgid "Universities"
-msgstr ""
+#: .\authentication\forms.py:21
+msgid "Please enter your email/username and password."
+msgstr "يرجى إدخال بريدك الإلكتروني/اسم المستخدم وكلمة المرور."
 
-#: .\templates\core\base.html:7
-msgid "Multilingual Test"
-msgstr ""
+#: .\authentication\forms.py:34
+msgid "Wrong email/username or password!"
+msgstr "البريد الإلكتروني/اسم المستخدم أو كلمة المرور غير صحيحة!"
 
+#: .\authentication\forms.py:39
+msgid "Your account is not active. Please verify your email."
+msgstr "حسابك غير نشط. يرجى التحقق من بريدك الإلكتروني."
 
-msgid "Welcome to our multilingual site!"
-msgstr "مرحبًا بكم في موقعنا متعدد اللغات!"
+#: .\authentication\forms.py:45
+msgid "No account found with this email or username."
+msgstr "لم يتم العثور على حساب بهذا البريد الإلكتروني أو اسم المستخدم."
 
-msgid "Current language"
+#: .\authentication\forms.py:55 .\templates\authentication\register.html:71
+msgid "Confirm Password"
+msgstr "تأكيد كلمة المرور"
+
+#: .\authentication\forms.py:60 .\authentication\forms.py:86
+#: .\templates\dashboard\fragments\my_students.html:18
+#: .\templates\dashboard\fragments\my_students.html:72
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#: .\authentication\forms.py:66
+msgid "Email already in use."
+msgstr "البريد الإلكتروني مستخدم بالفعل."
+
+#: .\authentication\forms.py:72 .\authentication\forms.py:111
+msgid "Passwords do not match."
+msgstr "كلمات المرور غير متطابقة."
+
+#: .\authentication\forms.py:80
+msgid "Confirmation Code"
+msgstr "رمز التأكيد"
+
+#: .\authentication\forms.py:93
+#: .\templates\authentication\change_password.html:51
+msgid "Verification Code"
+msgstr "رمز التحقق"
+
+#: .\authentication\forms.py:99
+#: .\templates\authentication\change_password.html:58
+#: .\templates\dashboard\fragments\profile.html:150
+msgid "New Password"
+msgstr "كلمة المرور الجديدة"
+
+#: .\authentication\forms.py:104
+#: .\templates\authentication\change_password.html:65
+#: .\templates\dashboard\fragments\profile.html:160
+msgid "Confirm New Password"
+msgstr "تأكيد كلمة المرور الجديدة"
+
+#: .\authentication\models.py:15
+#, fuzzy
+#| msgid "Scholarship Registration"
+msgid "Registration"
+msgstr "تسجيل المنحة الدراسية"
+
+#: .\authentication\models.py:16
+msgid "Password Reset"
+msgstr "إعادة تعيين كلمة المرور"
+
+#: .\authentication\views.py:44 .\authentication\views.py:72
+#: .\authentication\views.py:127 .\authentication\views.py:184
+#: .\authentication\views.py:221 .\authentication\views.py:262
+msgid "You are already logged in."
+msgstr "أنت مسجل الدخول بالفعل."
+
+#: .\authentication\views.py:51
+msgid "Logged in successfully."
+msgstr "تم تسجيل الدخول بنجاح."
+
+#: .\authentication\views.py:90
+msgid "Your Confirmation Code"
+msgstr "رمز التأكيد الخاص بك"
+
+#: .\authentication\views.py:97
+msgid "We sent you an email that includes verification code."
+msgstr "أرسلنا لك بريدًا إلكترونيًا يتضمن رمز التحقق."
+
+#: .\authentication\views.py:120
+msgid "You have logged out."
+msgstr "تم تسجيل الخروج."
+
+#: .\authentication\views.py:136
+msgid "This confirmation page is no longer valid."
+msgstr "صفحة التأكيد هذه لم تعد صالحة."
+
+#: .\authentication\views.py:150
+msgid "Your code has expired."
+msgstr "انتهت صلاحية الرمز الخاص بك."
+
+#: .\authentication\views.py:152
+msgid "Invalid confirmation code."
+msgstr "رمز تأكيد غير صالح."
+
+#: .\authentication\views.py:159
+msgid "Account confirmed!"
+msgstr "تم تأكيد الحساب!"
+
+#: .\authentication\views.py:189
+msgid "User not found or already active."
+msgstr "المستخدم غير موجود أو نشط بالفعل."
+
+#: .\authentication\views.py:202
+msgid "Your new Confirmation Code"
+msgstr "رمز التأكيد الجديد الخاص بك"
+
+#: .\authentication\views.py:207
+msgid "A fresh confirmation code has been sent."
+msgstr "تم إرسال رمز تأكيد جديد."
+
+#: .\authentication\views.py:234 .\templates\emails\reset_password.html:8
+#: .\templates\emails\reset_password.html:62
+msgid "Reset Your Password"
+msgstr "إعادة تعيين كلمة المرور"
+
+#: .\authentication\views.py:243
+msgid "If that email is registered, you’ll receive reset instructions."
+msgstr "إذا كان هذا البريد الإلكتروني مسجلاً، ستتلقى تعليمات إعادة التعيين."
+
+#: .\authentication\views.py:273
+msgid "Invalid or expired reset link."
+msgstr "رابط إعادة التعيين غير صالح أو منتهي الصلاحية."
+
+#: .\authentication\views.py:286
+msgid "Invalid verification code."
+msgstr "رمز تحقق غير صالح."
+
+#: .\authentication\views.py:293
+msgid "Password updated successfully."
+msgstr "تم تحديث كلمة المرور بنجاح."
+
+#: .\core\forms.py:46
+msgid "Username is already taken."
+msgstr "اسم المستخدم مستخدم بالفعل."
+
+#: .\core\forms.py:52
+msgid "Email is already in use."
+msgstr "البريد الإلكتروني مستخدم بالفعل."
+
+#: .\core\forms.py:60
+msgid "Image file too large (max 2MB)"
+msgstr "حجم ملف الصورة كبير جداً (الحد الأقصى 2 ميجابايت)"
+
+#: .\core\models.py:34
+msgid "Unsupported file extension. Allowed: .jpg, .jpeg, .png, .gif, .webp"
+msgstr "امتداد ملف غير مدعوم. المسموح: .jpg, .jpeg, .png, .gif, .webp"
+
+#: .\core\models.py:44
+msgid ""
+"Unsupported file extension. Allowed: .pdf, .doc, .docx, .jpg, .jpeg, .png"
+msgstr "امتداد ملف غير مدعوم. المسموح: .pdf, .doc, .docx, .jpg, .jpeg, .png"
+
+#: .\core\models.py:74 .\core\models.py:102 .\core\models.py:172
+#: .\core\models.py:249
+msgid "ID from info.studyfans.com"
+msgstr "المعرف من info.studyfans.com"
+
+#: .\core\models.py:78
+#, fuzzy
+#| msgid "Current language"
+msgid "Primary language"
 msgstr "اللغة الحالية"
 
-msgid "This is a test sentence to demonstrate translation."
-msgstr "هذه جملة اختبارية لشرح الترجمة."
+#: .\core\models.py:81
+msgid "Nationality adjective"
+msgstr "صفة الجنسية"
 
-msgid "Today is %(current_date)s."
-msgstr "اليوم هو %(current_date)s."
+#: .\core\models.py:136
+msgid "Number of years—for example, '1', '1.5', '2', etc."
+msgstr "عدد السنوات - على سبيل المثال، '1'، '1.5'، '2'، إلخ."
 
+#: .\core\models.py:150
+msgid ""
+"Select one or more possible durations (in years) that this faculty offers."
+msgstr "اختر مدة أو أكثر (بالسنوات) التي تقدمها هذه الكلية."
+
+#: .\core\models.py:197
+msgid "Parsed details (dates, exams, documents, fees, etc.) from the site"
+msgstr "تفاصيل مستخرجة (تواريخ، امتحانات، وثائق، رسوم، إلخ) من الموقع"
+
+#: .\core\models.py:203
+msgid "Year founded, e.g. 2013"
+msgstr "سنة التأسيس، مثلاً 2013"
+
+#: .\core\models.py:207
+msgid "University PIN code"
+msgstr "الرمز السري للجامعة"
+
+#: .\core\models.py:214
+msgid "Which country languages are taught/used by this university"
+msgstr "لغات الدولة التي تُدرس/تُستخدم في هذه الجامعة"
+
+#: .\core\models.py:235
+msgid "Available"
+msgstr "متاح"
+
+#: .\core\models.py:236
+msgid "Near to Close"
+msgstr "يوشك على الإغلاق"
+
+#: .\core\models.py:237
+msgid "Quota Full"
+msgstr "الحصة مكتملة"
+
+#: .\core\models.py:238
+msgid "Closed"
+msgstr "مغلق"
+
+#: .\core\models.py:271
+msgid "Duration in years; should be one of the faculty's year options"
+msgstr "المدة بالسنوات؛ يجب أن تكون أحد خيارات سنوات الكلية"
+
+#: .\core\models.py:281
+msgid "Fee per semester"
+msgstr "الرسوم لكل فصل دراسي"
+
+#: .\core\models.py:289
+msgid "Scholarship or discount offered"
+msgstr "منحة دراسية أو خصم مقدم"
+
+#: .\core\models.py:304
+msgid "Default"
+msgstr "افتراضي"
+
+#: .\core\models.py:305 .\templates\dashboard\main.html:43
+msgid "Company"
+msgstr "شركة"
+
+#: .\core\models.py:306 .\templates\dashboard\main.html:41
+msgid "Agent"
+msgstr "وكيل"
+
+#: .\core\models.py:309
+msgid "Male"
+msgstr "ذكر"
+
+#: .\core\models.py:310
+msgid "Female"
+msgstr "أنثى"
+
+#: .\core\models.py:347
+msgid "Profile Image"
+msgstr "صورة الملف الشخصي"
+
+#: .\core\models.py:348
+msgid "Upload a profile image (max 2MB)"
+msgstr "تحميل صورة الملف الشخصي (الحد الأقصى 2 ميجابايت)"
+
+#: .\core\models.py:354
+msgid "Designates whether this student can access representative features"
+msgstr "يحدد ما إذا كان بإمكان هذا الطالب الوصول إلى ميزات الممثل"
+
+#: .\core\models.py:364
+msgid "Only student users can be representatives"
+msgstr "يمكن لمستخدمي الطلاب فقط أن يكونوا ممثلين"
+
+#: .\core\models.py:411
+msgid "Select the country whose language you speak"
+msgstr "اختر الدولة التي تتحدث لغتها"
+
+#: .\core\models.py:423
+msgid "In Progress"
+msgstr "قيد التنفيذ"
+
+#: .\core\models.py:424
+msgid "Finished"
+msgstr "منتهي"
+
+#: .\core\models.py:425
+msgid "Failed"
+msgstr "فشل"
+
+#: .\core\models.py:428
+msgid "Step One"
+msgstr "الخطوة الأولى"
+
+#: .\core\models.py:429
+msgid "Step Two"
+msgstr "الخطوة الثانية"
+
+#: .\core\models.py:430
+msgid "Step Three"
+msgstr "الخطوة الثالثة"
+
+#: .\core\models.py:431
+msgid "Step Four"
+msgstr "الخطوة الرابعة"
+
+#: .\core\models.py:432
+msgid "Step Five"
+msgstr "الخطوة الخامسة"
+
+#: .\core\models.py:433
+msgid "Step Six"
+msgstr "الخطوة السادسة"
+
+#: .\core\models.py:434
+msgid "Step Seven"
+msgstr "الخطوة السابعة"
+
+#: .\core\models.py:437
+msgid "Transfer Student"
+msgstr "طالب تحويل"
+
+#: .\core\models.py:438
+msgid "First-Year Student"
+msgstr "طالب سنة أولى"
+
+#: .\core\models.py:471
+msgid "Auto-generated application code"
+msgstr "رمز طلب تم إنشاؤه تلقائياً"
+
+#: .\core\models.py:477
+msgid "Application Documents"
+msgstr "وثائق الطلب"
+
+#: .\core\models.py:547
+msgid "Associate & Bachelor"
+msgstr "دبلومة وبكالوريوس"
+
+#: .\core\models.py:548 .\templates\core\main.html:117
+msgid "Master"
+msgstr "ماجستير"
+
+#: .\core\models.py:549 .\templates\core\main.html:118
+msgid "PhD"
+msgstr "دكتوراه"
+
+#: .\dashboard\forms.py:15 .\dashboard\forms.py:98
+#: .\templates\dashboard\fragments\my_students.html:59
+#: .\templates\dashboard\fragments\profile.html:25
+msgid "First Name"
+msgstr "الاسم الأول"
+
+#: .\dashboard\forms.py:16 .\dashboard\forms.py:99
+#: .\templates\dashboard\fragments\my_students.html:63
+#: .\templates\dashboard\fragments\profile.html:29
+msgid "Last Name"
+msgstr "اسم العائلة"
+
+#: .\dashboard\forms.py:19
+msgid "Father Name"
+msgstr "اسم الأب"
+
+#: .\dashboard\forms.py:20
+msgid "Mother Name"
+msgstr "اسم الأم"
+
+#: .\dashboard\forms.py:28 .\dashboard\forms.py:101
+#: .\templates\authentication\forget_password.html:51
+#: .\templates\authentication\register.html:53
+#: .\templates\dashboard\fragments\profile.html:71
+msgid "Email Address"
+msgstr "عنوان البريد الإلكتروني"
+
+#: .\dashboard\forms.py:29 .\templates\dashboard\fragments\profile.html:75
+msgid "Mobile Number"
+msgstr "رقم الهاتف المحمول"
+
+#: .\dashboard\forms.py:59 .\templates\dashboard\fragments\profile.html:188
+msgid "Passport Number"
+msgstr "رقم جواز السفر"
+
+#: .\dashboard\forms.py:100 .\templates\dashboard\fragments\my_students.html:68
+msgid "Username"
+msgstr "اسم المستخدم"
+
+#: .\dashboard\forms.py:102 .\templates\dashboard\fragments\my_students.html:76
+msgid "Temporary Password"
+msgstr "كلمة المرور المؤقتة"
+
+#: .\dashboard\views.py:41
+msgid "Page not found."
+msgstr "الصفحة غير موجودة."
+
+#: .\dashboard\views.py:48
+msgid "You do not have permission to access this page."
+msgstr "ليس لديك إذن للوصول إلى هذه الصفحة."
+
+#: .\dashboard\views.py:137
+msgid "Permission denied."
+msgstr "تم رفض الإذن."
+
+#: .\dashboard\views.py:162
+msgid "Personal information updated successfully."
+msgstr "تم تحديث المعلومات الشخصية بنجاح."
+
+#: .\dashboard\views.py:169
+msgid "Contact information updated successfully."
+msgstr "تم تحديث معلومات الاتصال بنجاح."
+
+#: .\dashboard\views.py:176
+msgid "Profile image updated successfully."
+msgstr "تم تحديث صورة الملف الشخصي بنجاح."
+
+#: .\dashboard\views.py:184
+msgid "Password changed successfully."
+msgstr "تم تغيير كلمة المرور بنجاح."
+
+#: .\dashboard\views.py:191
+msgid "Student profile updated successfully."
+msgstr "تم تحديث ملف الطالب بنجاح."
+
+#: .\dashboard\views.py:194
+msgid "Invalid form type."
+msgstr "نوع نموذج غير صالح."
+
+#: .\dashboard\views.py:224
+msgid "Step updated."
+msgstr "تم تحديث الخطوة."
+
+#: .\dashboard\views.py:227
+msgid "Application deleted."
+msgstr "تم حذف الطلب."
+
+#: .\dashboard\views.py:245
+msgid "Application created successfully."
+msgstr "تم إنشاء الطلب بنجاح."
+
+#: .\dashboard\views.py:248 .\dashboard\views.py:268 .\dashboard\views.py:275
+#: .\dashboard\views.py:300
+msgid "Invalid request."
+msgstr "طلب غير صالح."
+
+#: .\dashboard\views.py:265
+msgid "Student added successfully."
+msgstr "تمت إضافة الطالب بنجاح."
+
+#: .\dashboard\views.py:296
+msgid "Your request has been sent! Our team will contact you soon."
+msgstr "تم إرسال طلبك! سيتواصل معك فريقنا قريباً."
+
+#: .\dashboard\views.py:298
+msgid "Failed to send request. Please try again."
+msgstr "فشل إرسال الطلب. يرجى المحاولة مرة أخرى."
+
+#: .\templates\admin\index.html:178
+msgid "Welcome to Apply BM Control Center"
+msgstr "مرحباً بك في مركز تحكم Apply BM"
+
+#: .\templates\admin\index.html:179
+msgid ""
+"Manage your platform, content, and users from one centralized dashboard."
+msgstr "أدر منصتك ومحتواك ومستخدميك من لوحة تحكم مركزية واحدة."
+
+#: .\templates\admin\index.html:188
+msgid "Homepage Management"
+msgstr "إدارة الصفحة الرئيسية"
+
+#: .\templates\admin\index.html:192 .\templates\admin\index.html:193
+#: .\templates\admin\index.html:194 .\templates\admin\index.html:195
+#: .\templates\admin\index.html:209 .\templates\admin\index.html:210
+#: .\templates\admin\index.html:211 .\templates\admin\index.html:212
+#: .\templates\admin\index.html:213 .\templates\admin\index.html:214
+#: .\templates\admin\index.html:215 .\templates\admin\index.html:229
+#: .\templates\admin\index.html:230 .\templates\admin\index.html:231
+#: .\templates\admin\index.html:232 .\templates\admin\index.html:246
+#: .\templates\admin\index.html:260 .\templates\admin\index.html:295
+msgid "Add"
+msgstr "إضافة"
+
+#: .\templates\admin\index.html:192 .\templates\admin\index.html:193
+#: .\templates\admin\index.html:194 .\templates\admin\index.html:195
+#: .\templates\admin\index.html:209 .\templates\admin\index.html:210
+#: .\templates\admin\index.html:211 .\templates\admin\index.html:212
+#: .\templates\admin\index.html:213 .\templates\admin\index.html:214
+#: .\templates\admin\index.html:215 .\templates\admin\index.html:229
+#: .\templates\admin\index.html:230 .\templates\admin\index.html:231
+#: .\templates\admin\index.html:232 .\templates\admin\index.html:246
+#: .\templates\admin\index.html:260 .\templates\admin\index.html:296
+msgid "Change"
+msgstr "تغيير"
+
+#: .\templates\admin\index.html:205
+msgid "Universities & Programs"
+msgstr "الجامعات والبرامج"
+
+#: .\templates\admin\index.html:225
+msgid "Users & Companies"
+msgstr "المستخدمون والشركات"
+
+#: .\templates\admin\index.html:242
+#: .\templates\dashboard\fragments\my_students.html:19
+#: .\templates\dashboard\fragments\welcome.html:64
+#: .\templates\dashboard\main.html:89
+msgid "Applications"
+msgstr "الطلبات"
+
+#: .\templates\admin\index.html:256
+msgid "Security & Verification"
+msgstr "الأمان والتحقق"
+
+#: .\templates\admin\index.html:270
+msgid "System & Automation"
+msgstr "النظام والأتمتة"
+
+#: .\templates\admin\index.html:310
+msgid "Recent Actions"
+msgstr "الإجراءات الأخيرة"
+
+#: .\templates\admin\index.html:316
+msgid "Added"
+msgstr "تمت الإضافة"
+
+#: .\templates\admin\index.html:318
+msgid "Changed"
+msgstr "تم التغيير"
+
+#: .\templates\admin\index.html:320
+msgid "Deleted"
+msgstr "تم الحذف"
+
+#: .\templates\admin\index.html:333
+#: .\templates\dashboard\fragments\universities.html:72
+msgid "Unknown"
+msgstr "غير معروف"
+
+#: .\templates\authentication\change_password.html:4
+#: .\templates\authentication\change_password.html:43
+msgid "Set New Password"
+msgstr "تعيين كلمة مرور جديدة"
+
+#: .\templates\authentication\change_password.html:22
+msgid "Secure Your Account."
+msgstr "أمّن حسابك."
+
+#: .\templates\authentication\change_password.html:23
+msgid ""
+"Create a strong, unique password to protect your academic journey and "
+"personal data."
+msgstr "أنشئ كلمة مرور قوية وفريدة لحماية رحلتك الأكاديمية وبياناتك الشخصية."
+
+#: .\templates\authentication\change_password.html:25
+#: .\templates\authentication\confirm_code.html:26
+msgid "Encrypted"
+msgstr "مشفّر"
+
+#: .\templates\authentication\change_password.html:26
+msgid "Protected"
+msgstr "محمي"
+
+#: .\templates\authentication\change_password.html:27
+#: .\templates\authentication\confirm_code.html:27
+msgid "Verified"
+msgstr "تم التحقق"
+
+#: .\templates\authentication\change_password.html:44
+msgid "Enter your verification code and your new password below."
+msgstr "أدخل رمز التحقق وكلمة المرور الجديدة أدناه."
+
+#: .\templates\authentication\change_password.html:53
+msgid "Enter code"
+msgstr "أدخل الرمز"
+
+#: .\templates\authentication\change_password.html:60
+#: .\templates\authentication\register.html:62
+msgid "Create a strong password"
+msgstr "أنشئ كلمة مرور قوية"
+
+#: .\templates\authentication\change_password.html:67
+#: .\templates\authentication\register.html:74
+msgid "Confirm your password"
+msgstr "أكد كلمة المرور الخاصة بك"
+
+#: .\templates\authentication\change_password.html:71
+#: .\templates\dashboard\fragments\profile.html:131
+msgid "Change Password"
+msgstr "تغيير كلمة المرور"
+
+#: .\templates\authentication\confirm_code.html:4
+msgid "Confirm Your Code"
+msgstr "تأكيد الرمز الخاص بك"
+
+#: .\templates\authentication\confirm_code.html:22
+msgid "Almost There!"
+msgstr "لقد اقتربت!"
+
+#: .\templates\authentication\confirm_code.html:23
+msgid ""
+"We just need to verify your email address to secure your account and get you "
+"started."
+msgstr "نحتاج فقط إلى التحقق من عنوان بريدك الإلكتروني لتأمين حسابك والبدء."
+
+#: .\templates\authentication\confirm_code.html:25
+msgid "Secure"
+msgstr "آمن"
+
+#: .\templates\authentication\confirm_code.html:46
+msgid "Check Your Email"
+msgstr "تحقق من بريدك الإلكتروني"
+
+#: .\templates\authentication\confirm_code.html:47
+msgid "We've sent a 6-digit code to your email address. Enter it below."
+msgstr "لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى عنوان بريدك الإلكتروني. أدخله أدناه."
+
+#: .\templates\authentication\confirm_code.html:61
+msgid "Verify Code"
+msgstr "تحقق من الرمز"
+
+#: .\templates\authentication\confirm_code.html:65
+msgid "Resend Code"
+msgstr "إعادة إرسال الرمز"
+
+#: .\templates\authentication\confirm_code.html:66
+msgid "Back to Login"
+msgstr "العودة إلى تسجيل الدخول"
+
+#: .\templates\authentication\forget_password.html:4
+msgid "Forgot Password"
+msgstr "نسيت كلمة المرور"
+
+#: .\templates\authentication\forget_password.html:22
+msgid "Don't Worry, It Happens."
+msgstr "لا تقلق، هذا يحدث."
+
+#: .\templates\authentication\forget_password.html:23
+msgid ""
+"Forgot your password? No problem. Just enter your email and we'll send you a "
+"secure link to reset it."
+msgstr "نسيت كلمة المرور؟ لا مشكلة. فقط أدخل بريدك الإلكتروني وسنرسل لك رابطاً آمناً لإعادة تعيينها."
+
+#: .\templates\authentication\forget_password.html:25
+msgid "Reset Easily"
+msgstr "إعادة تعيين بسهولة"
+
+#: .\templates\authentication\forget_password.html:26
+msgid "Instant Email"
+msgstr "بريد إلكتروني فوري"
+
+#: .\templates\authentication\forget_password.html:27
+msgid "Secure Link"
+msgstr "رابط آمن"
+
+#: .\templates\authentication\forget_password.html:43
+msgid "Reset Password"
+msgstr "إعادة تعيين كلمة المرور"
+
+#: .\templates\authentication\forget_password.html:44
+msgid ""
+"Enter your email address and we'll send you a link to reset your password."
+msgstr "أدخل عنوان بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور."
+
+#: .\templates\authentication\forget_password.html:53
+#: .\templates\authentication\register.html:55
+msgid "you@example.com"
+msgstr "you@example.com"
+
+#: .\templates\authentication\forget_password.html:57
+msgid "Send Reset Link"
+msgstr "إرسال رابط إعادة التعيين"
+
+#: .\templates\authentication\forget_password.html:61
+msgid "Remembered your password?"
+msgstr "تذكرت كلمة المرور الخاصة بك؟"
+
+#: .\templates\authentication\forget_password.html:61
+#: .\templates\authentication\login.html:85
+#: .\templates\authentication\register.html:86
+msgid "Sign In"
+msgstr "تسجيل الدخول"
+
+#: .\templates\authentication\login.html:4 .\templates\core\main.html:38
+#: .\templates\core\main.html:63
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+#: .\templates\authentication\login.html:23
+msgid "Your Journey to a Global Education Begins Here."
+msgstr "رحلتك نحو تعليم عالمي تبدأ من هنا."
+
+#: .\templates\authentication\login.html:24
+msgid ""
+"Log in to access your personalized dashboard, track your applications, and "
+"connect with certified agents."
+msgstr "سجل الدخول للوصول إلى لوحة التحكم المخصصة لك، وتتبع طلباتك، والتواصل مع الوكلاء المعتمدين."
+
+#: .\templates\authentication\login.html:27
+msgid "Students"
+msgstr "الطلاب"
+
+#: .\templates\authentication\login.html:28
+#: .\templates\dashboard\fragments\universities.html:4
+#: .\templates\dashboard\main.html:74
+msgid "Universities"
+msgstr "الجامعات"
+
+#: .\templates\authentication\login.html:29
+msgid "Countries"
+msgstr "الدول"
+
+#: .\templates\authentication\login.html:34
+#: .\templates\emails\reset_password.html:69
+msgid "All rights reserved."
+msgstr "جميع الحقوق محفوظة."
+
+#: .\templates\authentication\login.html:50
+msgid "Welcome Back"
+msgstr "مرحباً بعودتك"
+
+#: .\templates\authentication\login.html:51
+msgid "Please enter your details to sign in."
+msgstr "يرجى إدخال تفاصيلك لتسجيل الدخول."
+
+#: .\templates\authentication\login.html:61
+msgid "you@example.com or username"
+msgstr "you@example.com أو اسم المستخدم"
+
+#: .\templates\authentication\login.html:68
+msgid "Forgot Password?"
+msgstr "نسيت كلمة المرور؟"
+
+#: .\templates\authentication\login.html:82
+msgid "Remember Me"
+msgstr "تذكرني"
+
+#: .\templates\authentication\login.html:89
+msgid "Don't have an account?"
+msgstr "ليس لديك حساب؟"
+
+#: .\templates\authentication\login.html:89
+#: .\templates\authentication\register.html:4
+#: .\templates\authentication\register.html:82
+msgid "Create Account"
+msgstr "إنشاء حساب"
+
+#: .\templates\authentication\register.html:22
+msgid "Join the Global Academic Community."
+msgstr "انضم إلى المجتمع الأكاديمي العالمي."
+
+#: .\templates\authentication\register.html:23
+msgid ""
+"Create your profile in seconds. Discover scholarships, manage your "
+"documents, and get accepted to top universities."
+msgstr "أنشئ ملفك الشخصي في ثوانٍ. اكتشف المنح الدراسية، وأدر وثائقك، واحصل على قبول في أفضل الجامعات."
+
+#: .\templates\authentication\register.html:26 .\templates\core\main.html:188
+msgid "Certified Agents"
+msgstr "وكلاء معتمدون"
+
+#: .\templates\authentication\register.html:27
+msgid "Years Exp."
+msgstr "سنوات الخبرة"
+
+#: .\templates\authentication\register.html:28
+msgid "Success Rate"
+msgstr "معدل النجاح"
+
+#: .\templates\authentication\register.html:44
+msgid "Create Your Account"
+msgstr "أنشئ حسابك"
+
+#: .\templates\authentication\register.html:45
+msgid "Start your journey to studying abroad."
+msgstr "ابدأ رحلتك للدراسة في الخارج."
+
+#: .\templates\authentication\register.html:86
+msgid "Already have an account?"
+msgstr "هل لديك حساب بالفعل؟"
+
+#: .\templates\base.html:12
 msgid "Scholarship Registration"
 msgstr "تسجيل المنحة الدراسية"
 
-msgid "Test page"
-msgstr "صفحة اختبار"  # For Arabic
+#: .\templates\core\main.html:3
+msgid "Apply BM"
+msgstr "Apply BM"
+
+#: .\templates\core\main.html:18 .\templates\core\main.html:52
+msgid "Why Us"
+msgstr "لماذا نحن"
+
+#: .\templates\core\main.html:19 .\templates\core\main.html:53
+msgid "How It Works"
+msgstr "كيف يعمل"
+
+#: .\templates\core\main.html:20 .\templates\core\main.html:54
+msgid "Documents"
+msgstr "الوثائق"
+
+#: .\templates\core\main.html:21
+msgid "Success Stories"
+msgstr "قصص النجاح"
+
+#: .\templates\core\main.html:30 .\templates\core\main.html:57
+#: .\templates\dashboard\main.html:4 .\templates\dashboard\main.html:58
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#: .\templates\core\main.html:34 .\templates\core\main.html:60
+#: .\templates\dashboard\main.html:122
+msgid "Logout"
+msgstr "تسجيل الخروج"
+
+#: .\templates\core\main.html:39 .\templates\core\main.html:64
+msgid "Get Started"
+msgstr "ابدأ الآن"
+
+#: .\templates\core\main.html:95
+msgid "Trusted by 1000+ students worldwide"
+msgstr "موثوق به من قبل أكثر من 1000 طالب حول العالم"
+
+#: .\templates\core\main.html:97
+msgid "Unlock Your Fully Funded Future."
+msgstr "افتح مستقبلك الممول بالكامل."
+
+#: .\templates\core\main.html:99
+msgid "Your trusted bridge to education abroad."
+msgstr "جسرك الموثوق للتعليم في الخارج."
+
+#: .\templates\core\main.html:104 .\templates\core\main.html:105
+msgid "Destination Country"
+msgstr "دولة الوجهة"
+
+#: .\templates\core\main.html:106
+msgid "Turkey"
+msgstr "تركيا"
+
+#: .\templates\core\main.html:107
+msgid "Germany"
+msgstr "ألمانيا"
+
+#: .\templates\core\main.html:108
+msgid "Georgia"
+msgstr "جورجيا"
+
+#: .\templates\core\main.html:109
+msgid "Northern Cyprus"
+msgstr "قبرص الشمالية"
+
+#: .\templates\core\main.html:113 .\templates\core\main.html:114
+msgid "Degree Level"
+msgstr "المستوى الدراسي"
+
+#: .\templates\core\main.html:115
+msgid "Associate"
+msgstr "دبلومة"
+
+#: .\templates\core\main.html:116
+msgid "Bachelor"
+msgstr "بكالوريوس"
+
+#: .\templates\core\main.html:121
+msgid "Search Programs"
+msgstr "البحث في البرامج"
+
+#: .\templates\core\main.html:128
+msgid "Scroll down"
+msgstr "انتقل لأسفل"
+
+#: .\templates\core\main.html:136
+msgid "Our students study at"
+msgstr "يدرس طلابنا في"
+
+#: .\templates\core\main.html:158
+msgid "Why Students Choose Apply BM"
+msgstr "لماذا يختار الطلاب Apply BM"
+
+#: .\templates\core\main.html:160
+msgid ""
+"More than a platform — a personal team that walks with you from first "
+"message to first day of class."
+msgstr "أكثر من مجرد منصة — فريق شخصي يمشي معك من أول رسالة إلى أول يوم دراسي."
+
+#: .\templates\core\main.html:167
+msgid "Our consultant guiding a student"
+msgstr "مستشارنا يوجه طالباً"
+
+#: .\templates\core\main.html:172
+msgid "3+ Years of Trust"
+msgstr "أكثر من 3 سنوات من الثقة"
+
+#: .\templates\core\main.html:181
+msgid "Verified Programs"
+msgstr "برامج تم التحقق منها"
+
+#: .\templates\core\main.html:182
+msgid ""
+"Every university, program and deadline is manually verified by our academic "
+"team."
+msgstr "يتم التحقق يدوياً من كل جامعة وبرنامج وموعد نهائي من قبل فريقنا الأكاديمي."
+
+#: .\templates\core\main.html:189
+msgid ""
+"Vetted representatives and company managers handle your file from start to "
+"finish."
+msgstr "يتعامل ممثلون ومديرو شركات تم فحصهم مع ملفك من البداية إلى النهاية."
+
+#: .\templates\core\main.html:195
+msgid "WhatsApp Guidance"
+msgstr "توجيه عبر واتساب"
+
+#: .\templates\core\main.html:196
+msgid ""
+"One tap opens a ready-made WhatsApp message to our manager — no waiting, no "
+"confusion."
+msgstr "نقرة واحدة تفتح رسالة واتساب جاهزة لمديرنا — بدون انتظار، بدون ارتباك."
+
+#: .\templates\core\main.html:202
+msgid "One Dashboard"
+msgstr "لوحة تحكم واحدة"
+
+#: .\templates\core\main.html:203
+msgid ""
+"Documents, application steps and your acceptance letter — tracked in one "
+"place."
+msgstr "الوثائق، وخطوات الطلب، ورسالة القبول الخاصة بك — كلها متتبعة في مكان واحد."
+
+#: .\templates\core\main.html:214
+msgid "Your Journey to Acceptance"
+msgstr "رحلتك نحو القبول"
+
+#: .\templates\core\main.html:215
+msgid "Hover over the steps to see how we guide you."
+msgstr "مرر المؤشر فوق الخطوات لترى كيف نوجهك."
+
+#: .\templates\core\main.html:244
+msgid "Prepare Your Documents"
+msgstr "أعد وثائقك"
+
+#: .\templates\core\main.html:245
+msgid "Know exactly what you need before you start — no surprises."
+msgstr "اعرف بالضبط ما تحتاجه قبل أن تبدأ — بدون مفاجآت."
+
+#: .\templates\core\main.html:281
+msgid "Real Students. Real Acceptances."
+msgstr "طلاب حقيقيون. قبول حقيقي."
+
+#: .\templates\core\main.html:282
+msgid "Watch their own words on our Instagram — unedited and honest."
+msgstr "شاهد كلماتهم الخاصة على إنستغرام لدينا — غير محررة وصادقة."
+
+#: .\templates\core\main.html:301
+msgid "Watch Story"
+msgstr "شاهد القصة"
+
+#: .\templates\core\main.html:312
+msgid "See More Stories on Instagram"
+msgstr "شاهد المزيد من القصص على إنستغرام"
+
+#: .\templates\core\main.html:322
+msgid "Still have questions?"
+msgstr "لا تزال لديك أسئلة؟"
+
+#: .\templates\core\main.html:323
+msgid "Our managers reply within minutes on WhatsApp — in your language."
+msgstr "يرد مديرونا خلال دقائق على واتساب — بلغتك."
+
+#: .\templates\core\main.html:329
+msgid "Chat on WhatsApp"
+msgstr "دردش على واتساب"
+
+#: .\templates\core\main.html:340
+msgid "Create your free account to see programs matching your search."
+msgstr "أنشئ حسابك المجاني لرؤية البرامج التي تطابق بحثك."
+
+#: .\templates\core\main.html:341
+msgid "Thank you! You are on the scholarship alerts list."
+msgstr "شكراً لك! أنت في قائمة تنبيهات المنح الدراسية."
+
+#: .\templates\dashboard\fragments\application_detail.html:4
+msgid "Back to Applications"
+msgstr "العودة إلى الطلبات"
+
+#: .\templates\dashboard\fragments\application_detail.html:10
+msgid "Application Details"
+msgstr "تفاصيل الطلب"
+
+#: .\templates\dashboard\fragments\application_detail.html:11
+msgid "Code"
+msgstr "الرمز"
+
+#: .\templates\dashboard\fragments\application_detail.html:17
+msgid "Delete"
+msgstr "حذف"
+
+#: .\templates\dashboard\fragments\application_detail.html:37
+#, fuzzy
+#| msgid "Current language"
+msgid "Current Step"
+msgstr "اللغة الحالية"
+
+#: .\templates\dashboard\fragments\application_detail.html:42
+#: .\templates\dashboard\main.html:45
+msgid "Student"
+msgstr "طالب"
+
+#: .\templates\dashboard\fragments\application_detail.html:47
+msgid "Program"
+msgstr "البرنامج"
+
+#: .\templates\dashboard\fragments\application_detail.html:48
+msgid "Unassigned"
+msgstr "غير معين"
+
+#: .\templates\dashboard\fragments\application_detail.html:49
+#: .\templates\dashboard\fragments\my_applications.html:35
+msgid "N/A"
+msgstr "غير متاح"
+
+#: .\templates\dashboard\fragments\application_detail.html:57
+msgid "Update Step"
+msgstr "تحديث الخطوة"
+
+#: .\templates\dashboard\fragments\application_detail.html:64
+msgid "Save"
+msgstr "حفظ"
+
+#: .\templates\dashboard\fragments\my_applications.html:5
+#: .\templates\dashboard\fragments\welcome.html:66
+#: .\templates\dashboard\main.html:102
+msgid "My Applications"
+msgstr "طلباتي"
+
+#: .\templates\dashboard\fragments\my_applications.html:6
+#: .\templates\dashboard\fragments\welcome.html:67
+msgid "Track the progress of your university applications."
+msgstr "تتبع تقدم طلباتك الجامعية."
+
+#: .\templates\dashboard\fragments\my_applications.html:10
+#: .\templates\dashboard\fragments\new_application.html:4
+#: .\templates\dashboard\main.html:95
+msgid "New Application"
+msgstr "طلب جديد"
+
+#: .\templates\dashboard\fragments\my_applications.html:31
+msgid "Unassigned Program"
+msgstr "برنامج غير معين"
+
+#: .\templates\dashboard\fragments\my_applications.html:38
+msgid "Step"
+msgstr "الخطوة"
+
+#: .\templates\dashboard\fragments\my_applications.html:39
+#: .\templates\dashboard\fragments\universities.html:84
+msgid "View Details"
+msgstr "عرض التفاصيل"
+
+#: .\templates\dashboard\fragments\my_applications.html:45
+msgid "No applications found."
+msgstr "لم يتم العثور على طلبات."
+
+#: .\templates\dashboard\fragments\my_students.html:5
+#: .\templates\dashboard\main.html:109
+msgid "My Students"
+msgstr "طلابي"
+
+#: .\templates\dashboard\fragments\my_students.html:6
+msgid "Manage the students you are representing."
+msgstr "أدر الطلاب الذين تمثلهم."
+
+#: .\templates\dashboard\fragments\my_students.html:9
+#: .\templates\dashboard\fragments\my_students.html:50
+msgid "Add New Student"
+msgstr "إضافة طالب جديد"
+
+#: .\templates\dashboard\fragments\my_students.html:17
+msgid "Name"
+msgstr "الاسم"
+
+#: .\templates\dashboard\fragments\my_students.html:20
+msgid "Actions"
+msgstr "الإجراءات"
+
+#: .\templates\dashboard\fragments\my_students.html:30
+#: .\templates\dashboard\fragments\welcome.html:70
+msgid "View Applications"
+msgstr "عرض الطلبات"
+
+#: .\templates\dashboard\fragments\my_students.html:37
+msgid "No students added yet."
+msgstr "لم تتم إضافة طلاب بعد."
+
+#: .\templates\dashboard\fragments\my_students.html:80
+msgid "Generate"
+msgstr "إنشاء"
+
+#: .\templates\dashboard\fragments\my_students.html:86
+msgid "Create Student Account"
+msgstr "إنشاء حساب طالب"
+
+#: .\templates\dashboard\fragments\new_application.html:5
+msgid "Start a new university application for one of your students."
+msgstr "ابدأ طلباً جامعياً جديداً لأحد طلابك."
+
+#: .\templates\dashboard\fragments\new_application.html:12
+msgid "Select Student"
+msgstr "اختر طالباً"
+
+#: .\templates\dashboard\fragments\new_application.html:16
+msgid "Select Program"
+msgstr "اختر برنامجاً"
+
+#: .\templates\dashboard\fragments\new_application.html:20
+msgid "Student Type"
+msgstr "نوع الطالب"
+
+#: .\templates\dashboard\fragments\new_application.html:24
+msgid "Documents (Optional)"
+msgstr "الوثائق (اختياري)"
+
+#: .\templates\dashboard\fragments\new_application.html:31
+msgid "Create Application"
+msgstr "إنشاء طلب"
+
+#: .\templates\dashboard\fragments\profile.html:4
+#: .\templates\dashboard\fragments\welcome.html:20
+msgid "Profile Settings"
+msgstr "إعدادات الملف الشخصي"
+
+#: .\templates\dashboard\fragments\profile.html:6
+msgid ""
+"Manage your personal information, contact details, and security settings."
+msgstr "أدر معلوماتك الشخصية، وتفاصيل الاتصال، وإعدادات الأمان."
+
+#: .\templates\dashboard\fragments\profile.html:15
+msgid "Personal Information"
+msgstr "المعلومات الشخصية"
+
+#: .\templates\dashboard\fragments\profile.html:35
+msgid "Gender"
+msgstr "الجنس"
+
+#: .\templates\dashboard\fragments\profile.html:39
+msgid "Date of Birth"
+msgstr "تاريخ الميلاد"
+
+#: .\templates\dashboard\fragments\profile.html:45
+msgid "Father's Name"
+msgstr "اسم الأب"
+
+#: .\templates\dashboard\fragments\profile.html:49
+msgid "Mother's Name"
+msgstr "اسم الأم"
+
+#: .\templates\dashboard\fragments\profile.html:55
+msgid "Update Personal Info"
+msgstr "تحديث المعلومات الشخصية"
+
+#: .\templates\dashboard\fragments\profile.html:62
+msgid "Contact Information"
+msgstr "معلومات الاتصال"
+
+#: .\templates\dashboard\fragments\profile.html:80
+msgid "Country"
+msgstr "الدولة"
+
+#: .\templates\dashboard\fragments\profile.html:84
+msgid "City"
+msgstr "المدينة"
+
+#: .\templates\dashboard\fragments\profile.html:90
+msgid "Update Contact Info"
+msgstr "تحديث معلومات الاتصال"
+
+#: .\templates\dashboard\fragments\profile.html:97
+msgid "Profile Picture"
+msgstr "صورة الملف الشخصي"
+
+#: .\templates\dashboard\fragments\profile.html:118
+msgid "JPG, PNG or GIF. Max size 2MB."
+msgstr "JPG أو PNG أو GIF. الحد الأقصى للحجم 2 ميجابايت."
+
+#: .\templates\dashboard\fragments\profile.html:124
+msgid "Upload New Picture"
+msgstr "تحميل صورة جديدة"
+
+#: .\templates\dashboard\fragments\profile.html:140
+msgid "Current Password"
+msgstr "كلمة المرور الحالية"
+
+#: .\templates\dashboard\fragments\profile.html:171
+msgid "Update Password"
+msgstr "تحديث كلمة المرور"
+
+#: .\templates\dashboard\fragments\profile.html:179
+msgid "Student Profile Details"
+msgstr "تفاصيل ملف الطالب"
+
+#: .\templates\dashboard\fragments\profile.html:192
+msgid "Stage"
+msgstr "المرحلة"
+
+#: .\templates\dashboard\fragments\profile.html:196
+msgid "Language"
+msgstr "اللغة"
+
+#: .\templates\dashboard\fragments\profile.html:202
+msgid "Update Student Details"
+msgstr "تحديث تفاصيل الطالب"
+
+#: .\templates\dashboard\fragments\programs.html:4
+#: .\templates\dashboard\main.html:82
+msgid "Programs"
+msgstr "البرامج"
+
+#: .\templates\dashboard\fragments\programs.html:5
+msgid "Explore available academic programs and degrees."
+msgstr "استكشف البرامج الأكاديمية والدرجات المتاحة."
+
+#: .\templates\dashboard\fragments\programs.html:16
+msgid "Search programs..."
+msgstr "البحث في البرامج..."
+
+#: .\templates\dashboard\fragments\programs.html:22
+msgid "All Universities"
+msgstr "جميع الجامعات"
+
+#: .\templates\dashboard\fragments\programs.html:34
+msgid "All Degrees"
+msgstr "جميع الدرجات العلمية"
+
+#: .\templates\dashboard\fragments\programs.html:43
+msgid "Filter"
+msgstr "تصفية"
+
+#: .\templates\dashboard\fragments\programs.html:70
+#: .\templates\dashboard\fragments\university_detail.html:101
+msgid "Duration"
+msgstr "المدة"
+
+#: .\templates\dashboard\fragments\programs.html:71
+#: .\templates\dashboard\fragments\university_detail.html:102
+msgid "Years"
+msgstr "سنوات"
+
+#: .\templates\dashboard\fragments\programs.html:74
+#: .\templates\dashboard\fragments\university_detail.html:105
+msgid "Total Fee"
+msgstr "إجمالي الرسوم"
+
+#: .\templates\dashboard\fragments\programs.html:81
+#: .\templates\dashboard\fragments\university_detail.html:123
+msgid "Apply Request"
+msgstr "طلب تقديم"
+
+#: .\templates\dashboard\fragments\programs.html:88
+msgid "No programs match your current filters."
+msgstr "لا توجد برامج تطابق عوامل التصفية الحالية."
+
+#: .\templates\dashboard\fragments\programs.html:103
+#: .\templates\dashboard\fragments\universities.html:107
+msgid "Prev"
+msgstr "السابق"
+
+#: .\templates\dashboard\fragments\programs.html:126
+#: .\templates\dashboard\fragments\universities.html:130
+msgid "Next"
+msgstr "التالي"
+
+#: .\templates\dashboard\fragments\programs.html:140
+#: .\templates\dashboard\fragments\universities.html:146
+msgid "Page"
+msgstr "الصفحة"
+
+#: .\templates\dashboard\fragments\programs.html:140
+#: .\templates\dashboard\fragments\universities.html:146
+msgid "of"
+msgstr "من"
+
+#: .\templates\dashboard\fragments\programs.html:142
+#: .\templates\dashboard\fragments\universities.html:148
+msgid "Go to"
+msgstr "انتقل إلى"
+
+#: .\templates\dashboard\fragments\programs.html:150
+#: .\templates\dashboard\fragments\universities.html:156
+msgid "Go"
+msgstr "انتقل"
+
+#: .\templates\dashboard\fragments\universities.html:5
+msgid "Browse and filter our partner universities."
+msgstr "تصفح وقم بتصفية الجامعات الشريكة لنا."
+
+#: .\templates\dashboard\fragments\universities.html:16
+msgid "Search by name..."
+msgstr "البحث بالاسم..."
+
+#: .\templates\dashboard\fragments\universities.html:22
+msgid "All Countries"
+msgstr "جميع الدول"
+
+#: .\templates\dashboard\fragments\universities.html:34
+msgid "All Sectors"
+msgstr "جميع القطاعات"
+
+#: .\templates\dashboard\fragments\universities.html:35
+msgid "Public"
+msgstr "حكومي"
+
+#: .\templates\dashboard\fragments\universities.html:37
+msgid "Private"
+msgstr "خاص"
+
+#: .\templates\dashboard\fragments\universities.html:38
+msgid "Other"
+msgstr "أخرى"
+
+#: .\templates\dashboard\fragments\universities.html:44
+msgid "Search"
+msgstr "بحث"
+
+#: .\templates\dashboard\fragments\universities.html:79
+msgid "Est."
+msgstr "تأسست"
+
+#: .\templates\dashboard\fragments\universities.html:91
+msgid "No universities match your search criteria."
+msgstr "لا توجد جامعات تطابق معايير البحث الخاصة بك."
+
+#: .\templates\dashboard\fragments\universities.html:102
+msgid "First"
+msgstr "الأول"
+
+#: .\templates\dashboard\fragments\universities.html:134
+msgid "Last"
+msgstr "الأخير"
+
+#: .\templates\dashboard\fragments\university_detail.html:4
+msgid "Back to Universities"
+msgstr "العودة إلى الجامعات"
+
+#: .\templates\dashboard\fragments\university_detail.html:24
+msgid "Location"
+msgstr "الموقع"
+
+#: .\templates\dashboard\fragments\university_detail.html:33
+msgid "Sector"
+msgstr "القطاع"
+
+#: .\templates\dashboard\fragments\university_detail.html:42
+msgid "Founded"
+msgstr "تأسست"
+
+#: .\templates\dashboard\fragments\university_detail.html:51
+msgid "Website"
+msgstr "الموقع الإلكتروني"
+
+#: .\templates\dashboard\fragments\university_detail.html:53
+msgid "Visit"
+msgstr "زيارة"
+
+#: .\templates\dashboard\fragments\university_detail.html:65
+msgid "Main Campus"
+msgstr "الحرم الجامعي الرئيسي"
+
+#: .\templates\dashboard\fragments\university_detail.html:74
+msgid "Programs & Scholarships"
+msgstr "البرامج والمنح الدراسية"
+
+#: .\templates\dashboard\fragments\university_detail.html:110
+#, fuzzy
+#| msgid "Scholarship Registration"
+msgid "Scholarship"
+msgstr "تسجيل المنحة الدراسية"
+
+#: .\templates\dashboard\fragments\university_detail.html:116
+msgid "Per Semester"
+msgstr "لكل فصل دراسي"
+
+#: .\templates\dashboard\fragments\university_detail.html:132
+msgid "No programs available for this university yet."
+msgstr "لا توجد برامج متاحة لهذه الجامعة بعد."
+
+#: .\templates\dashboard\fragments\welcome.html:6
+msgid "Welcome"
+msgstr "مرحباً"
+
+#: .\templates\dashboard\fragments\welcome.html:8
+msgid "Here's an overview of your dashboard and quick actions."
+msgstr "إليك نظرة عامة على لوحة التحكم الخاصة بك والإجراءات السريعة."
+
+#: .\templates\dashboard\fragments\welcome.html:18
+#: .\templates\dashboard\main.html:66
+msgid "Profile"
+msgstr "الملف الشخصي"
+
+#: .\templates\dashboard\fragments\welcome.html:21
+msgid "Manage your personal information and account details."
+msgstr "أدر معلوماتك الشخصية وتفاصيل حسابك."
+
+#: .\templates\dashboard\fragments\welcome.html:24
+msgid "Go to Profile"
+msgstr "الانتقال إلى الملف الشخصي"
+
+#: .\templates\dashboard\fragments\welcome.html:33
+msgid "Academics"
+msgstr "الشؤون الأكاديمية"
+
+#: .\templates\dashboard\fragments\welcome.html:35
+msgid "Browse Universities"
+msgstr "تصفح الجامعات"
+
+#: .\templates\dashboard\fragments\welcome.html:36
+msgid "Explore partner universities and their details."
+msgstr "استكشف الجامعات الشريكة وتفاصيلها."
+
+#: .\templates\dashboard\fragments\welcome.html:39
+msgid "View Universities"
+msgstr "عرض الجامعات"
+
+#: .\templates\dashboard\fragments\welcome.html:48
+#, fuzzy
+#| msgid "Scholarship Registration"
+msgid "Scholarships"
+msgstr "تسجيل المنحة الدراسية"
+
+#: .\templates\dashboard\fragments\welcome.html:50
+msgid "Browse Programs"
+msgstr "تصفح البرامج"
+
+#: .\templates\dashboard\fragments\welcome.html:51
+msgid "Discover scholarships and academic programs available."
+msgstr "اكتشف المنح الدراسية والبرامج الأكاديمية المتاحة."
+
+#: .\templates\dashboard\fragments\welcome.html:54
+msgid "View Programs"
+msgstr "عرض البرامج"
+
+#: .\templates\dashboard\fragments\welcome.html:79
+msgid "Quick Start Guide"
+msgstr "دليل البدء السريع"
+
+#: .\templates\dashboard\fragments\welcome.html:87
+msgid "Complete Your Profile"
+msgstr "أكمل ملفك الشخصي"
+
+#: .\templates\dashboard\fragments\welcome.html:89
+msgid ""
+"Add your personal details, contact info, and profile picture to get started."
+msgstr "أضف تفاصيلك الشخصية، ومعلومات الاتصال، وصورة الملف الشخصي للبدء."
+
+#: .\templates\dashboard\fragments\welcome.html:98
+msgid "Explore Programs"
+msgstr "استكشف البرامج"
+
+#: .\templates\dashboard\fragments\welcome.html:100
+msgid "Browse available universities and programs to find your perfect match."
+msgstr "تصفح الجامعات والبرامج المتاحة للعثور على ما يناسبك تماماً."
+
+#: .\templates\dashboard\fragments\welcome.html:110
+msgid "Add Students"
+msgstr "إضافة طلاب"
+
+#: .\templates\dashboard\fragments\welcome.html:112
+msgid "Create student accounts and start managing their applications."
+msgstr "أنشئ حسابات طلابية وابدأ في إدارة طلباتهم."
+
+#: .\templates\dashboard\fragments\welcome.html:122
+msgid "Need Help?"
+msgstr "هل تحتاج إلى مساعدة؟"
+
+#: .\templates\dashboard\fragments\welcome.html:124
+msgid "Contact our support team for assistance with your applications."
+msgstr "تواصل مع فريق الدعم لدينا للحصول على المساعدة في طلباتك."
+
+#: .\templates\dashboard\main.html:149
+msgid "Loading..."
+msgstr "جارٍ التحميل..."
+
+#: .\templates\dashboard\main.html:167
+msgid "Loading content..."
+msgstr "جارٍ تحميل المحتوى..."
+
+#: .\templates\dashboard\main.html:168
+msgid "Loading Error"
+msgstr "خطأ في التحميل"
+
+#: .\templates\dashboard\main.html:169
+msgid "Please try again or contact support"
+msgstr "يرجى المحاولة مرة أخرى أو التواصل مع الدعم"
+
+#: .\templates\dashboard\main.html:170
+msgid "Reload Page"
+msgstr "إعادة تحميل الصفحة"
+
+#: .\templates\emails\reset_password.html:53
+msgid "You recently requested to reset your password for your"
+msgstr "لقد طلبت مؤخراً إعادة تعيين كلمة المرور الخاصة بك لحساب"
+
+#: .\templates\emails\reset_password.html:55
+msgid "account."
+msgstr "الحساب."
+
+#: .\templates\emails\reset_password.html:58
+msgid ""
+"Click the button below and enter the following code to reset your password. "
+"This link and code are valid for 15 minutes."
+msgstr "انقر فوق الزر أدناه وأدخل الرمز التالي لإعادة تعيين كلمة المرور الخاصة بك. هذا الرابط والرمز صالحان لمدة 15 دقيقة."
+
+#: .\templates\emails\reset_password.html:60
+msgid "Verification Code:"
+msgstr "رمز التحقق:"
+
+#: .\templates\emails\reset_password.html:64
+msgid ""
+"If the button above does not work, copy and paste the following link into "
+"your browser:"
+msgstr "إذا كان الزر أعلاه لا يعمل، فانسخ الرابط التالي والصقه في متصفحك:"
+
+#: .\templates\emails\reset_password.html:66
+msgid "If you did not request a password reset, please ignore this email."
+msgstr "إذا لم تطلب إعادة تعيين كلمة المرور، يرجى تجاهل هذا البريد الإلكتروني."
+
+#: .\templates\emails\reset_password.html:67
+msgid "Thank you,"
+msgstr "شكراً لك،"
+
+#: .\templates\emails\reset_password.html:67
+msgid "Team"
+msgstr "الفريق"
+
+#~ msgid "Welcome to our multilingual site!"
+#~ msgstr "مرحبًا بكم في موقعنا متعدد اللغات!"
+
+#~ msgid "This is a test sentence to demonstrate translation."
+#~ msgstr "هذه جملة اختبارية لشرح الترجمة."
+
+#~ msgid "Today is %(current_date)s."
+#~ msgstr "اليوم هو %(current_date)s."
+
+#~ msgid "Test page"
+#~ msgstr "صفحة اختبار"

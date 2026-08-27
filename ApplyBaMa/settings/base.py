@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "data_fetch.apps.DataFetchConfig",
     "api.apps.ApiConfig",
     "django_celery_beat",
+    'rosetta',
 ]
 
 MIDDLEWARE = [

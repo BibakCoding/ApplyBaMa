@@ -8,46 +8,1605 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-24 00:25+0330\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2026-08-27 03:13+0330\n"
+"PO-Revision-Date: 2026-08-27 03:43+0000\n"
+"Last-Translator:   <a@g.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-#: .\core\models.py:7
+"X-Translated-Using: django-rosetta 0.10.3\n"
+
+#: .\authentication\forms.py:11 .\templates\authentication\login.html:59
+msgid "Email or Username"
+msgstr "ایمیل یا نام کاربری"
+
+#: .\authentication\forms.py:12 .\authentication\forms.py:53
+#: .\templates\authentication\login.html:67
+#: .\templates\authentication\register.html:59
+msgid "Password"
+msgstr "رمز عبور"
+
+#: .\authentication\forms.py:21
+msgid "Please enter your email/username and password."
+msgstr "لطفاً ایمیل/نام کاربری و رمز عبور خود را وارد کنید."
+
+#: .\authentication\forms.py:34
+msgid "Wrong email/username or password!"
+msgstr "ایمیل/نام کاربری یا رمز عبور اشتباه است!"
+
+#: .\authentication\forms.py:39
+msgid "Your account is not active. Please verify your email."
+msgstr "حساب کاربری شما فعال نیست. لطفاً ایمیل خود را تأیید کنید."
+
+#: .\authentication\forms.py:45
+msgid "No account found with this email or username."
+msgstr "هیچ حسابی با این ایمیل یا نام کاربری یافت نشد."
+
+#: .\authentication\forms.py:55 .\templates\authentication\register.html:71
+msgid "Confirm Password"
+msgstr "تأیید رمز عبور"
+
+#: .\authentication\forms.py:60 .\authentication\forms.py:86
+#: .\templates\dashboard\fragments\my_students.html:18
+#: .\templates\dashboard\fragments\my_students.html:72
+msgid "Email"
+msgstr "ایمیل"
+
+#: .\authentication\forms.py:66
+msgid "Email already in use."
+msgstr "این ایمیل قبلاً استفاده شده است."
+
+#: .\authentication\forms.py:72 .\authentication\forms.py:111
+msgid "Passwords do not match."
+msgstr "رمزهای عبور مطابقت ندارند."
+
+#: .\authentication\forms.py:80
+msgid "Confirmation Code"
+msgstr "کد تأیید"
+
+#: .\authentication\forms.py:93
+#: .\templates\authentication\change_password.html:51
+msgid "Verification Code"
+msgstr "کد تأیید"
+
+#: .\authentication\forms.py:99
+#: .\templates\authentication\change_password.html:58
+#: .\templates\dashboard\fragments\profile.html:150
+msgid "New Password"
+msgstr "رمز عبور جدید"
+
+#: .\authentication\forms.py:104
+#: .\templates\authentication\change_password.html:65
+#: .\templates\dashboard\fragments\profile.html:160
+msgid "Confirm New Password"
+msgstr "تأیید رمز عبور جدید"
+
+#: .\authentication\models.py:15
+#| msgid "Scholarship Registration"
+msgid "Registration"
+msgstr "ثبت‌نام"
+
+#: .\authentication\models.py:16
+msgid "Password Reset"
+msgstr "بازیابی رمز عبور"
+
+#: .\authentication\views.py:44 .\authentication\views.py:72
+#: .\authentication\views.py:127 .\authentication\views.py:184
+#: .\authentication\views.py:221 .\authentication\views.py:262
+msgid "You are already logged in."
+msgstr "شما قبلاً وارد شده‌اید."
+
+#: .\authentication\views.py:51
+msgid "Logged in successfully."
+msgstr "با موفقیت وارد شدید."
+
+#: .\authentication\views.py:90
+msgid "Your Confirmation Code"
+msgstr "کد تأیید شما"
+
+#: .\authentication\views.py:97
+msgid "We sent you an email that includes verification code."
+msgstr "ایمیلی شامل کد تأیید برای شما ارسال کردیم."
+
+#: .\authentication\views.py:120
+msgid "You have logged out."
+msgstr "شما از حساب کاربری خود خارج شدید."
+
+#: .\authentication\views.py:136
+msgid "This confirmation page is no longer valid."
+msgstr "این صفحه تأیید دیگر معتبر نیست."
+
+#: .\authentication\views.py:150
+msgid "Your code has expired."
+msgstr "کد شما منقضی شده است."
+
+#: .\authentication\views.py:152
+msgid "Invalid confirmation code."
+msgstr "کد تأیید نامعتبر است."
+
+#: .\authentication\views.py:159
+msgid "Account confirmed!"
+msgstr "حساب کاربری تأیید شد!"
+
+#: .\authentication\views.py:189
+msgid "User not found or already active."
+msgstr "کاربر یافت نشد یا قبلاً فعال شده است."
+
+#: .\authentication\views.py:202
+msgid "Your new Confirmation Code"
+msgstr "کد تأیید جدید شما"
+
+#: .\authentication\views.py:207
+msgid "A fresh confirmation code has been sent."
+msgstr "یک کد تأیید جدید ارسال شد."
+
+#: .\authentication\views.py:234 .\templates\emails\reset_password.html:8
+#: .\templates\emails\reset_password.html:62
+msgid "Reset Your Password"
+msgstr "بازیابی رمز عبور"
+
+#: .\authentication\views.py:243
+msgid "If that email is registered, you’ll receive reset instructions."
+msgstr ""
+"اگر آن ایمیل ثبت شده باشد، دستورالعمل‌های بازیابی را دریافت خواهید کرد."
+
+#: .\authentication\views.py:273
+msgid "Invalid or expired reset link."
+msgstr "لینک بازیابی نامعتبر یا منقضی شده است."
+
+#: .\authentication\views.py:286
+msgid "Invalid verification code."
+msgstr "کد تأیید نامعتبر است."
+
+#: .\authentication\views.py:293
+msgid "Password updated successfully."
+msgstr "رمز عبور با موفقیت به‌روزرسانی شد."
+
+#: .\core\forms.py:46
+msgid "Username is already taken."
+msgstr "این نام کاربری قبلاً گرفته شده است."
+
+#: .\core\forms.py:52
+msgid "Email is already in use."
+msgstr "این ایمیل قبلاً استفاده شده است."
+
+#: .\core\forms.py:60
+msgid "Image file too large (max 2MB)"
+msgstr "فایل تصویر بسیار بزرگ است (حداکثر ۲ مگابایت)"
+
+#: .\core\models.py:34
+msgid "Unsupported file extension. Allowed: .jpg, .jpeg, .png, .gif, .webp"
+msgstr "پسوند فایل پشتیبانی نمی‌شود. مجاز: .jpg, .jpeg, .png, .gif, .webp"
+
+#: .\core\models.py:44
+msgid ""
+"Unsupported file extension. Allowed: .pdf, .doc, .docx, .jpg, .jpeg, .png"
+msgstr ""
+"پسوند فایل پشتیبانی نمی‌شود. مجاز: .pdf, .doc, .docx, .jpg, .jpeg, .png"
+
+#: .\core\models.py:74 .\core\models.py:102 .\core\models.py:172
+#: .\core\models.py:249
+msgid "ID from info.studyfans.com"
+msgstr "شناسه از info.studyfans.com"
+
+#: .\core\models.py:78
+#, fuzzy
+#| msgid "Current language"
+msgid "Primary language"
+msgstr "زبان اصلی"
+
+#: .\core\models.py:81
+msgid "Nationality adjective"
+msgstr "صفت ملیت"
+
+#: .\core\models.py:136
+msgid "Number of years—for example, '1', '1.5', '2', etc."
+msgstr "تعداد سال‌ها—برای مثال، '1'، '1.5'، '2' و غیره."
+
+#: .\core\models.py:150
+msgid ""
+"Select one or more possible durations (in years) that this faculty offers."
+msgstr ""
+"یک یا چند مدت زمان ممکن (به سال) که این دانشکده ارائه می‌دهد را انتخاب کنید."
+
+#: .\core\models.py:197
+msgid "Parsed details (dates, exams, documents, fees, etc.) from the site"
+msgstr ""
+"جزئیات استخراج‌شده (تاریخ‌ها، آزمون‌ها، مدارک، هزینه‌ها و غیره) از سایت"
+
+#: .\core\models.py:203
+msgid "Year founded, e.g. 2013"
+msgstr "سال تأسیس، مثلاً ۲۰۱۳"
+
+#: .\core\models.py:207
+#, fuzzy
+#| msgid "University"
+msgid "University PIN code"
+msgstr "کد پین دانشگاه"
+
+#: .\core\models.py:214
+msgid "Which country languages are taught/used by this university"
+msgstr "زبان‌های کدام کشورها در این دانشگاه تدریس/استفاده می‌شوند"
+
+#: .\core\models.py:235
+msgid "Available"
+msgstr "موجود"
+
+#: .\core\models.py:236
+msgid "Near to Close"
+msgstr "نزدیک به بسته شدن"
+
+#: .\core\models.py:237
+msgid "Quota Full"
+msgstr "سهمیه تکمیل است"
+
+#: .\core\models.py:238
+msgid "Closed"
+msgstr "بسته شده"
+
+#: .\core\models.py:271
+msgid "Duration in years; should be one of the faculty's year options"
+msgstr "مدت زمان به سال؛ باید یکی از گزینه‌های سال دانشکده باشد"
+
+#: .\core\models.py:281
+msgid "Fee per semester"
+msgstr "شهریه هر ترم"
+
+#: .\core\models.py:289
+msgid "Scholarship or discount offered"
+msgstr "بورس تحصیلی یا تخفیف ارائه شده"
+
+#: .\core\models.py:304
+msgid "Default"
+msgstr "پیش‌فرض"
+
+#: .\core\models.py:305 .\templates\dashboard\main.html:43
+msgid "Company"
+msgstr "شرکت"
+
+#: .\core\models.py:306 .\templates\dashboard\main.html:41
+msgid "Agent"
+msgstr "نماینده"
+
+#: .\core\models.py:309
+msgid "Male"
+msgstr "مرد"
+
+#: .\core\models.py:310
+msgid "Female"
+msgstr "زن"
+
+#: .\core\models.py:347
+msgid "Profile Image"
+msgstr "تصویر پروفایل"
+
+#: .\core\models.py:348
+msgid "Upload a profile image (max 2MB)"
+msgstr "آپلود تصویر پروفایل (حداکثر ۲ مگابایت)"
+
+#: .\core\models.py:354
+msgid "Designates whether this student can access representative features"
+msgstr ""
+"مشخص می‌کند که آیا این دانشجو می‌تواند به ویژگی‌های نمایندگی دسترسی داشته "
+"باشد"
+
+#: .\core\models.py:364
+msgid "Only student users can be representatives"
+msgstr "فقط کاربران دانشجو می‌توانند نماینده باشند"
+
+#: .\core\models.py:411
+msgid "Select the country whose language you speak"
+msgstr "کشوری که به زبان آن صحبت می‌کنید را انتخاب کنید"
+
+#: .\core\models.py:423
+msgid "In Progress"
+msgstr "در حال انجام"
+
+#: .\core\models.py:424
+msgid "Finished"
+msgstr "پایان یافته"
+
+#: .\core\models.py:425
+msgid "Failed"
+msgstr "ناموفق"
+
+#: .\core\models.py:428
+msgid "Step One"
+msgstr "مرحله اول"
+
+#: .\core\models.py:429
+msgid "Step Two"
+msgstr "مرحله دوم"
+
+#: .\core\models.py:430
+msgid "Step Three"
+msgstr "مرحله سوم"
+
+#: .\core\models.py:431
+msgid "Step Four"
+msgstr "مرحله چهارم"
+
+#: .\core\models.py:432
+msgid "Step Five"
+msgstr "مرحله پنجم"
+
+#: .\core\models.py:433
+msgid "Step Six"
+msgstr "مرحله ششم"
+
+#: .\core\models.py:434
+msgid "Step Seven"
+msgstr "مرحله هفتم"
+
+#: .\core\models.py:437
+msgid "Transfer Student"
+msgstr "دانشجوی انتقالی"
+
+#: .\core\models.py:438
+msgid "First-Year Student"
+msgstr "دانشجوی سال اول"
+
+#: .\core\models.py:471
+msgid "Auto-generated application code"
+msgstr "کد درخواست تولیدشده به‌صورت خودکار"
+
+#: .\core\models.py:477
+msgid "Application Documents"
+msgstr "مدارک درخواست"
+
+#: .\core\models.py:547
+msgid "Associate & Bachelor"
+msgstr "کاردانی و کارشناسی"
+
+#: .\core\models.py:548 .\templates\core\main.html:117
+msgid "Master"
+msgstr "کارشناسی ارشد"
+
+#: .\core\models.py:549 .\templates\core\main.html:118
+msgid "PhD"
+msgstr "دکتری"
+
+#: .\dashboard\forms.py:15 .\dashboard\forms.py:98
+#: .\templates\dashboard\fragments\my_students.html:59
+#: .\templates\dashboard\fragments\profile.html:25
+msgid "First Name"
+msgstr "نام"
+
+#: .\dashboard\forms.py:16 .\dashboard\forms.py:99
+#: .\templates\dashboard\fragments\my_students.html:63
+#: .\templates\dashboard\fragments\profile.html:29
+#| msgid "Name"
+msgid "Last Name"
+msgstr "نام خانوادگی"
+
+#: .\dashboard\forms.py:19
+msgid "Father Name"
+msgstr "نام پدر"
+
+#: .\dashboard\forms.py:20
+msgid "Mother Name"
+msgstr "نام مادر"
+
+#: .\dashboard\forms.py:28 .\dashboard\forms.py:101
+#: .\templates\authentication\forget_password.html:51
+#: .\templates\authentication\register.html:53
+#: .\templates\dashboard\fragments\profile.html:71
+msgid "Email Address"
+msgstr "آدرس ایمیل"
+
+#: .\dashboard\forms.py:29 .\templates\dashboard\fragments\profile.html:75
+msgid "Mobile Number"
+msgstr "شماره موبایل"
+
+#: .\dashboard\forms.py:59 .\templates\dashboard\fragments\profile.html:188
+msgid "Passport Number"
+msgstr "شماره پاسپورت"
+
+#: .\dashboard\forms.py:100
+#: .\templates\dashboard\fragments\my_students.html:68
+msgid "Username"
+msgstr "نام کاربری"
+
+#: .\dashboard\forms.py:102
+#: .\templates\dashboard\fragments\my_students.html:76
+msgid "Temporary Password"
+msgstr "رمز عبور موقت"
+
+#: .\dashboard\views.py:41
+msgid "Page not found."
+msgstr "صفحه یافت نشد."
+
+#: .\dashboard\views.py:48
+msgid "You do not have permission to access this page."
+msgstr "شما مجوز دسترسی به این صفحه را ندارید."
+
+#: .\dashboard\views.py:137
+msgid "Permission denied."
+msgstr "دسترسی ممنوع."
+
+#: .\dashboard\views.py:162
+msgid "Personal information updated successfully."
+msgstr "اطلاعات شخصی با موفقیت به‌روزرسانی شد."
+
+#: .\dashboard\views.py:169
+msgid "Contact information updated successfully."
+msgstr "اطلاعات تماس با موفقیت به‌روزرسانی شد."
+
+#: .\dashboard\views.py:176
+msgid "Profile image updated successfully."
+msgstr "تصویر پروفایل با موفقیت به‌روزرسانی شد."
+
+#: .\dashboard\views.py:184
+msgid "Password changed successfully."
+msgstr "رمز عبور با موفقیت تغییر یافت."
+
+#: .\dashboard\views.py:191
+msgid "Student profile updated successfully."
+msgstr "پروفایل دانشجو با موفقیت به‌روزرسانی شد."
+
+#: .\dashboard\views.py:194
+msgid "Invalid form type."
+msgstr "نوع فرم نامعتبر است."
+
+#: .\dashboard\views.py:224
+msgid "Step updated."
+msgstr "مرحله به‌روزرسانی شد."
+
+#: .\dashboard\views.py:227
+msgid "Application deleted."
+msgstr "درخواست حذف شد."
+
+#: .\dashboard\views.py:245
+msgid "Application created successfully."
+msgstr "درخواست با موفقیت ایجاد شد."
+
+#: .\dashboard\views.py:248 .\dashboard\views.py:268 .\dashboard\views.py:275
+#: .\dashboard\views.py:300
+msgid "Invalid request."
+msgstr "درخواست نامعتبر است."
+
+#: .\dashboard\views.py:265
+msgid "Student added successfully."
+msgstr "دانشجو با موفقیت اضافه شد."
+
+#: .\dashboard\views.py:296
+msgid "Your request has been sent! Our team will contact you soon."
+msgstr "درخواست شما ارسال شد! تیم ما به‌زودی با شما تماس خواهد گرفت."
+
+#: .\dashboard\views.py:298
+msgid "Failed to send request. Please try again."
+msgstr "ارسال درخواست ناموفق بود. لطفاً دوباره تلاش کنید."
+
+#: .\templates\admin\index.html:178
+msgid "Welcome to Apply BM Control Center"
+msgstr "به مرکز کنترل Apply BM خوش آمدید"
+
+#: .\templates\admin\index.html:179
+msgid ""
+"Manage your platform, content, and users from one centralized dashboard."
+msgstr "پلتفرم، محتوا و کاربران خود را از یک داشبورد متمرکز مدیریت کنید."
+
+#: .\templates\admin\index.html:188
+msgid "Homepage Management"
+msgstr "مدیریت صفحه اصلی"
+
+#: .\templates\admin\index.html:192 .\templates\admin\index.html:193
+#: .\templates\admin\index.html:194 .\templates\admin\index.html:195
+#: .\templates\admin\index.html:209 .\templates\admin\index.html:210
+#: .\templates\admin\index.html:211 .\templates\admin\index.html:212
+#: .\templates\admin\index.html:213 .\templates\admin\index.html:214
+#: .\templates\admin\index.html:215 .\templates\admin\index.html:229
+#: .\templates\admin\index.html:230 .\templates\admin\index.html:231
+#: .\templates\admin\index.html:232 .\templates\admin\index.html:246
+#: .\templates\admin\index.html:260 .\templates\admin\index.html:295
+msgid "Add"
+msgstr "افزودن"
+
+#: .\templates\admin\index.html:192 .\templates\admin\index.html:193
+#: .\templates\admin\index.html:194 .\templates\admin\index.html:195
+#: .\templates\admin\index.html:209 .\templates\admin\index.html:210
+#: .\templates\admin\index.html:211 .\templates\admin\index.html:212
+#: .\templates\admin\index.html:213 .\templates\admin\index.html:214
+#: .\templates\admin\index.html:215 .\templates\admin\index.html:229
+#: .\templates\admin\index.html:230 .\templates\admin\index.html:231
+#: .\templates\admin\index.html:232 .\templates\admin\index.html:246
+#: .\templates\admin\index.html:260 .\templates\admin\index.html:296
+msgid "Change"
+msgstr "تغییر"
+
+#: .\templates\admin\index.html:205
+#, fuzzy
+#| msgid "Universities"
+msgid "Universities & Programs"
+msgstr "دانشگاه‌ها و برنامه‌ها"
+
+#: .\templates\admin\index.html:225
+msgid "Users & Companies"
+msgstr "کاربران و شرکت‌ها"
+
+#: .\templates\admin\index.html:242
+#: .\templates\dashboard\fragments\my_students.html:19
+#: .\templates\dashboard\fragments\welcome.html:64
+#: .\templates\dashboard\main.html:89
+msgid "Applications"
+msgstr "درخواست‌ها"
+
+#: .\templates\admin\index.html:256
+msgid "Security & Verification"
+msgstr "امنیت و تأیید"
+
+#: .\templates\admin\index.html:270
+msgid "System & Automation"
+msgstr "سیستم و خودکارسازی"
+
+#: .\templates\admin\index.html:310
+msgid "Recent Actions"
+msgstr "اقدامات اخیر"
+
+#: .\templates\admin\index.html:316
+msgid "Added"
+msgstr "افزوده شد"
+
+#: .\templates\admin\index.html:318
+msgid "Changed"
+msgstr "تغییر یافت"
+
+#: .\templates\admin\index.html:320
+msgid "Deleted"
+msgstr "حذف شد"
+
+#: .\templates\admin\index.html:333
+#: .\templates\dashboard\fragments\universities.html:72
+msgid "Unknown"
+msgstr "نامشخص"
+
+#: .\templates\authentication\change_password.html:4
+#: .\templates\authentication\change_password.html:43
+msgid "Set New Password"
+msgstr "تنظیم رمز عبور جدید"
+
+#: .\templates\authentication\change_password.html:22
+msgid "Secure Your Account."
+msgstr "حساب کاربری خود را ایمن کنید."
+
+#: .\templates\authentication\change_password.html:23
+msgid ""
+"Create a strong, unique password to protect your academic journey and "
+"personal data."
+msgstr ""
+"یک رمز عبور قوی و منحصر‌به‌فرد برای محافظت از مسیر تحصیلی و داده‌های شخصی "
+"خود ایجاد کنید."
+
+#: .\templates\authentication\change_password.html:25
+#: .\templates\authentication\confirm_code.html:26
+msgid "Encrypted"
+msgstr "رمزگذاری‌شده"
+
+#: .\templates\authentication\change_password.html:26
+msgid "Protected"
+msgstr "محافظت‌شده"
+
+#: .\templates\authentication\change_password.html:27
+#: .\templates\authentication\confirm_code.html:27
+msgid "Verified"
+msgstr "تأییدشده"
+
+#: .\templates\authentication\change_password.html:44
+msgid "Enter your verification code and your new password below."
+msgstr "کد تأیید و رمز عبور جدید خود را در زیر وارد کنید."
+
+#: .\templates\authentication\change_password.html:53
+msgid "Enter code"
+msgstr "کد را وارد کنید"
+
+#: .\templates\authentication\change_password.html:60
+#: .\templates\authentication\register.html:62
+msgid "Create a strong password"
+msgstr "یک رمز عبور قوی ایجاد کنید"
+
+#: .\templates\authentication\change_password.html:67
+#: .\templates\authentication\register.html:74
+msgid "Confirm your password"
+msgstr "رمز عبور خود را تأیید کنید"
+
+#: .\templates\authentication\change_password.html:71
+#: .\templates\dashboard\fragments\profile.html:131
+msgid "Change Password"
+msgstr "تغییر رمز عبور"
+
+#: .\templates\authentication\confirm_code.html:4
+msgid "Confirm Your Code"
+msgstr "کد خود را تأیید کنید"
+
+#: .\templates\authentication\confirm_code.html:22
+msgid "Almost There!"
+msgstr "تقریباً تمام شد!"
+
+#: .\templates\authentication\confirm_code.html:23
+msgid ""
+"We just need to verify your email address to secure your account and get you"
+" started."
+msgstr ""
+"ما فقط نیاز داریم آدرس ایمیل شما را تأیید کنیم تا حساب شما ایمن شود و شروع "
+"کنید."
+
+#: .\templates\authentication\confirm_code.html:25
+msgid "Secure"
+msgstr "ایمن"
+
+#: .\templates\authentication\confirm_code.html:46
+msgid "Check Your Email"
+msgstr "ایمیل خود را بررسی کنید"
+
+#: .\templates\authentication\confirm_code.html:47
+msgid "We've sent a 6-digit code to your email address. Enter it below."
+msgstr ""
+"ما یک کد ۶ رقمی به آدرس ایمیل شما ارسال کرده‌ایم. آن را در زیر وارد کنید."
+
+#: .\templates\authentication\confirm_code.html:61
+msgid "Verify Code"
+msgstr "تأیید کد"
+
+#: .\templates\authentication\confirm_code.html:65
+msgid "Resend Code"
+msgstr "ارسال مجدد کد"
+
+#: .\templates\authentication\confirm_code.html:66
+msgid "Back to Login"
+msgstr "بازگشت به ورود"
+
+#: .\templates\authentication\forget_password.html:4
+msgid "Forgot Password"
+msgstr "فراموشی رمز عبور"
+
+#: .\templates\authentication\forget_password.html:22
+msgid "Don't Worry, It Happens."
+msgstr "نگران نباشید، پیش می‌آید."
+
+#: .\templates\authentication\forget_password.html:23
+msgid ""
+"Forgot your password? No problem. Just enter your email and we'll send you a"
+" secure link to reset it."
+msgstr ""
+"رمز عبور خود را فراموش کرده‌اید؟ مشکلی نیست. فقط ایمیل خود را وارد کنید تا "
+"یک لینک امن برای بازیابی آن برای شما ارسال کنیم."
+
+#: .\templates\authentication\forget_password.html:25
+msgid "Reset Easily"
+msgstr "بازیابی آسان"
+
+#: .\templates\authentication\forget_password.html:26
+msgid "Instant Email"
+msgstr "ایمیل فوری"
+
+#: .\templates\authentication\forget_password.html:27
+msgid "Secure Link"
+msgstr "لینک امن"
+
+#: .\templates\authentication\forget_password.html:43
+msgid "Reset Password"
+msgstr "بازیابی رمز عبور"
+
+#: .\templates\authentication\forget_password.html:44
+msgid ""
+"Enter your email address and we'll send you a link to reset your password."
+msgstr ""
+"آدرس ایمیل خود را وارد کنید تا لینکی برای بازیابی رمز عبور برای شما ارسال "
+"کنیم."
+
+#: .\templates\authentication\forget_password.html:53
+#: .\templates\authentication\register.html:55
+msgid "you@example.com"
+msgstr "you@example.com"
+
+#: .\templates\authentication\forget_password.html:57
+msgid "Send Reset Link"
+msgstr "ارسال لینک بازیابی"
+
+#: .\templates\authentication\forget_password.html:61
+msgid "Remembered your password?"
+msgstr "رمز عبور خود را به یاد آوردید؟"
+
+#: .\templates\authentication\forget_password.html:61
+#: .\templates\authentication\login.html:85
+#: .\templates\authentication\register.html:86
+msgid "Sign In"
+msgstr "ورود"
+
+#: .\templates\authentication\login.html:4 .\templates\core\main.html:38
+#: .\templates\core\main.html:63
+msgid "Login"
+msgstr "ورود"
+
+#: .\templates\authentication\login.html:23
+msgid "Your Journey to a Global Education Begins Here."
+msgstr "سفر شما به سوی آموزش جهانی از اینجا آغاز می‌شود."
+
+#: .\templates\authentication\login.html:24
+msgid ""
+"Log in to access your personalized dashboard, track your applications, and "
+"connect with certified agents."
+msgstr ""
+"برای دسترسی به داشبورد شخصی‌سازی‌شده، پیگیری درخواست‌ها و ارتباط با "
+"نمایندگان معتبر وارد شوید."
+
+#: .\templates\authentication\login.html:27
+msgid "Students"
+msgstr "دانشجویان"
+
+#: .\templates\authentication\login.html:28
+#: .\templates\dashboard\fragments\universities.html:4
+#: .\templates\dashboard\main.html:74
+msgid "Universities"
+msgstr "دانشگاه‌ها"
+
+#: .\templates\authentication\login.html:29
+msgid "Countries"
+msgstr "کشورها"
+
+#: .\templates\authentication\login.html:34
+#: .\templates\emails\reset_password.html:69
+msgid "All rights reserved."
+msgstr "تمامی حقوق محفوظ است."
+
+#: .\templates\authentication\login.html:50
+msgid "Welcome Back"
+msgstr "خوش آمدید"
+
+#: .\templates\authentication\login.html:51
+msgid "Please enter your details to sign in."
+msgstr "لطفاً برای ورود جزئیات خود را وارد کنید."
+
+#: .\templates\authentication\login.html:61
+msgid "you@example.com or username"
+msgstr "you@example.com یا نام کاربری"
+
+#: .\templates\authentication\login.html:68
+msgid "Forgot Password?"
+msgstr "رمز عبور را فراموش کرده‌اید؟"
+
+#: .\templates\authentication\login.html:82
+msgid "Remember Me"
+msgstr "مرا به خاطر بسپار"
+
+#: .\templates\authentication\login.html:89
+msgid "Don't have an account?"
+msgstr "حساب کاربری ندارید؟"
+
+#: .\templates\authentication\login.html:89
+#: .\templates\authentication\register.html:4
+#: .\templates\authentication\register.html:82
+msgid "Create Account"
+msgstr "ایجاد حساب کاربری"
+
+#: .\templates\authentication\register.html:22
+msgid "Join the Global Academic Community."
+msgstr "به جامعه علمی جهانی بپیوندید."
+
+#: .\templates\authentication\register.html:23
+msgid ""
+"Create your profile in seconds. Discover scholarships, manage your "
+"documents, and get accepted to top universities."
+msgstr ""
+"پروفایل خود را در چند ثانیه ایجاد کنید. بورس‌های تحصیلی را کشف کنید، مدارک "
+"خود را مدیریت کنید و در دانشگاه‌های برتر پذیرش بگیرید."
+
+#: .\templates\authentication\register.html:26 .\templates\core\main.html:188
+msgid "Certified Agents"
+msgstr "نمایندگان معتبر"
+
+#: .\templates\authentication\register.html:27
+msgid "Years Exp."
+msgstr "سال تجربه"
+
+#: .\templates\authentication\register.html:28
+msgid "Success Rate"
+msgstr "نرخ موفقیت"
+
+#: .\templates\authentication\register.html:44
+msgid "Create Your Account"
+msgstr "حساب کاربری خود را ایجاد کنید"
+
+#: .\templates\authentication\register.html:45
+msgid "Start your journey to studying abroad."
+msgstr "سفر خود را برای تحصیل در خارج از کشور آغاز کنید."
+
+#: .\templates\authentication\register.html:86
+msgid "Already have an account?"
+msgstr "قبلاً حساب کاربری دارید؟"
+
+#: .\templates\base.html:12
+msgid "Scholarship Registration"
+msgstr "ثبت‌نام بورس تحصیلی"
+
+#: .\templates\core\main.html:3
+msgid "Apply BM"
+msgstr "Apply BM"
+
+#: .\templates\core\main.html:18 .\templates\core\main.html:52
+msgid "Why Us"
+msgstr "چرا ما"
+
+#: .\templates\core\main.html:19 .\templates\core\main.html:53
+msgid "How It Works"
+msgstr "نحوه کار"
+
+#: .\templates\core\main.html:20 .\templates\core\main.html:54
+msgid "Documents"
+msgstr "مدارک"
+
+#: .\templates\core\main.html:21
+msgid "Success Stories"
+msgstr "داستان‌های موفقیت"
+
+#: .\templates\core\main.html:30 .\templates\core\main.html:57
+#: .\templates\dashboard\main.html:4 .\templates\dashboard\main.html:58
+msgid "Dashboard"
+msgstr "داشبورد"
+
+#: .\templates\core\main.html:34 .\templates\core\main.html:60
+#: .\templates\dashboard\main.html:122
+msgid "Logout"
+msgstr "خروج"
+
+#: .\templates\core\main.html:39 .\templates\core\main.html:64
+msgid "Get Started"
+msgstr "شروع کنید"
+
+#: .\templates\core\main.html:95
+msgid "Trusted by 1000+ students worldwide"
+msgstr "مورد اعتماد بیش از ۱۰۰۰ دانشجو در سراسر جهان"
+
+#: .\templates\core\main.html:97
+msgid "Unlock Your Fully Funded Future."
+msgstr "آینده کاملاً تأمین‌شده خود را کشف کنید."
+
+#: .\templates\core\main.html:99
+msgid "Your trusted bridge to education abroad."
+msgstr "پل مطمئن شما به سوی آموزش در خارج از کشور."
+
+#: .\templates\core\main.html:104 .\templates\core\main.html:105
+msgid "Destination Country"
+msgstr "کشور مقصد"
+
+#: .\templates\core\main.html:106
+msgid "Turkey"
+msgstr "ترکیه"
+
+#: .\templates\core\main.html:107
+msgid "Germany"
+msgstr "آلمان"
+
+#: .\templates\core\main.html:108
+msgid "Georgia"
+msgstr "گرجستان"
+
+#: .\templates\core\main.html:109
+msgid "Northern Cyprus"
+msgstr "قبرس شمالی"
+
+#: .\templates\core\main.html:113 .\templates\core\main.html:114
+msgid "Degree Level"
+msgstr "مقطع تحصیلی"
+
+#: .\templates\core\main.html:115
+msgid "Associate"
+msgstr "کاردانی"
+
+#: .\templates\core\main.html:116
+msgid "Bachelor"
+msgstr "کارشناسی"
+
+#: .\templates\core\main.html:121
+msgid "Search Programs"
+msgstr "جستجوی برنامه‌ها"
+
+#: .\templates\core\main.html:128
+msgid "Scroll down"
+msgstr "پایین بروید"
+
+#: .\templates\core\main.html:136
+msgid "Our students study at"
+msgstr "دانشجویان ما در این دانشگاه‌ها تحصیل می‌کنند"
+
+#: .\templates\core\main.html:158
+msgid "Why Students Choose Apply BM"
+msgstr "چرا دانشجویان Apply BM را انتخاب می‌کنند"
+
+#: .\templates\core\main.html:160
+msgid ""
+"More than a platform — a personal team that walks with you from first "
+"message to first day of class."
+msgstr ""
+"بیشتر از یک پلتفرم — یک تیم شخصی که از اولین پیام تا اولین روز کلاس در کنار "
+"شماست."
+
+#: .\templates\core\main.html:167
+msgid "Our consultant guiding a student"
+msgstr "مشاور ما در حال راهنمایی یک دانشجو"
+
+#: .\templates\core\main.html:172
+msgid "3+ Years of Trust"
+msgstr "بیش از ۳ سال اعتماد"
+
+#: .\templates\core\main.html:181
+msgid "Verified Programs"
+msgstr "برنامه‌های تأییدشده"
+
+#: .\templates\core\main.html:182
+msgid ""
+"Every university, program and deadline is manually verified by our academic "
+"team."
+msgstr ""
+"هر دانشگاه، برنامه و مهلت زمانی به‌صورت دستی توسط تیم آکادمیک ما تأیید "
+"می‌شود."
+
+#: .\templates\core\main.html:189
+msgid ""
+"Vetted representatives and company managers handle your file from start to "
+"finish."
+msgstr ""
+"نمایندگان و مدیران شرکت‌های بررسی‌شده، پرونده شما را از ابتدا تا انتها "
+"مدیریت می‌کنند."
+
+#: .\templates\core\main.html:195
+msgid "WhatsApp Guidance"
+msgstr "راهنمایی از طریق واتس‌اپ"
+
+#: .\templates\core\main.html:196
+msgid ""
+"One tap opens a ready-made WhatsApp message to our manager — no waiting, no "
+"confusion."
+msgstr ""
+"با یک ضربه، یک پیام واتس‌اپ آماده به مدیر ما باز می‌شود — بدون انتظار، بدون "
+"سردرگمی."
+
+#: .\templates\core\main.html:202
+msgid "One Dashboard"
+msgstr "یک داشبورد"
+
+#: .\templates\core\main.html:203
+msgid ""
+"Documents, application steps and your acceptance letter — tracked in one "
+"place."
+msgstr ""
+"مدارک، مراحل درخواست و نامه پذیرش شما — همه در یک مکان پیگیری می‌شوند."
+
+#: .\templates\core\main.html:214
+msgid "Your Journey to Acceptance"
+msgstr "سفر شما به سوی پذیرش"
+
+#: .\templates\core\main.html:215
+msgid "Hover over the steps to see how we guide you."
+msgstr "برای دیدن نحوه راهنمایی ما، ماوس را روی مراحل نگه دارید."
+
+#: .\templates\core\main.html:244
+msgid "Prepare Your Documents"
+msgstr "مدارک خود را آماده کنید"
+
+#: .\templates\core\main.html:245
+msgid "Know exactly what you need before you start — no surprises."
+msgstr "دقیقاً بدانید قبل از شروع به چه چیزی نیاز دارید — بدون غافلگیری."
+
+#: .\templates\core\main.html:281
+msgid "Real Students. Real Acceptances."
+msgstr "دانشجویان واقعی. پذیرش‌های واقعی."
+
+#: .\templates\core\main.html:282
+msgid "Watch their own words on our Instagram — unedited and honest."
+msgstr "سخنان خودشان را در اینستاگرام ما ببینید — بدون ویرایش و صادقانه."
+
+#: .\templates\core\main.html:301
+msgid "Watch Story"
+msgstr "تماشای استوری"
+
+#: .\templates\core\main.html:312
+msgid "See More Stories on Instagram"
+msgstr "مشاهده داستان‌های بیشتر در اینستاگرام"
+
+#: .\templates\core\main.html:322
+msgid "Still have questions?"
+msgstr "هنوز سوالی دارید؟"
+
+#: .\templates\core\main.html:323
+msgid "Our managers reply within minutes on WhatsApp — in your language."
+msgstr "مدیران ما در عرض چند دقیقه در واتس‌اپ پاسخ می‌دهند — به زبان شما."
+
+#: .\templates\core\main.html:329
+msgid "Chat on WhatsApp"
+msgstr "گفتگو در واتس‌اپ"
+
+#: .\templates\core\main.html:340
+msgid "Create your free account to see programs matching your search."
+msgstr ""
+"حساب کاربری رایگان خود را ایجاد کنید تا برنامه‌های منطبق با جستجوی خود را "
+"ببینید."
+
+#: .\templates\core\main.html:341
+msgid "Thank you! You are on the scholarship alerts list."
+msgstr "متشکریم! شما در فهرست هشدارهای بورس تحصیلی قرار دارید."
+
+#: .\templates\dashboard\fragments\application_detail.html:4
+msgid "Back to Applications"
+msgstr "بازگشت به درخواست‌ها"
+
+#: .\templates\dashboard\fragments\application_detail.html:10
+msgid "Application Details"
+msgstr "جزئیات درخواست"
+
+#: .\templates\dashboard\fragments\application_detail.html:11
+msgid "Code"
+msgstr "کد"
+
+#: .\templates\dashboard\fragments\application_detail.html:17
+msgid "Delete"
+msgstr "حذف"
+
+#: .\templates\dashboard\fragments\application_detail.html:37
+#| msgid "Current language"
+msgid "Current Step"
+msgstr "مرحله فعلی"
+
+#: .\templates\dashboard\fragments\application_detail.html:42
+#: .\templates\dashboard\main.html:45
+msgid "Student"
+msgstr "دانشجو"
+
+#: .\templates\dashboard\fragments\application_detail.html:47
+msgid "Program"
+msgstr "برنامه"
+
+#: .\templates\dashboard\fragments\application_detail.html:48
+msgid "Unassigned"
+msgstr "تخصیص‌نیافته"
+
+#: .\templates\dashboard\fragments\application_detail.html:49
+#: .\templates\dashboard\fragments\my_applications.html:35
+msgid "N/A"
+msgstr "نامشخص"
+
+#: .\templates\dashboard\fragments\application_detail.html:57
+msgid "Update Step"
+msgstr "به‌روزرسانی مرحله"
+
+#: .\templates\dashboard\fragments\application_detail.html:64
+msgid "Save"
+msgstr "ذخیره"
+
+#: .\templates\dashboard\fragments\my_applications.html:5
+#: .\templates\dashboard\fragments\welcome.html:66
+#: .\templates\dashboard\main.html:102
+msgid "My Applications"
+msgstr "درخواست‌های من"
+
+#: .\templates\dashboard\fragments\my_applications.html:6
+#: .\templates\dashboard\fragments\welcome.html:67
+msgid "Track the progress of your university applications."
+msgstr "پیشرفت درخواست‌های دانشگاهی خود را پیگیری کنید."
+
+#: .\templates\dashboard\fragments\my_applications.html:10
+#: .\templates\dashboard\fragments\new_application.html:4
+#: .\templates\dashboard\main.html:95
+msgid "New Application"
+msgstr "درخواست جدید"
+
+#: .\templates\dashboard\fragments\my_applications.html:31
+msgid "Unassigned Program"
+msgstr "برنامه تخصیص‌نیافته"
+
+#: .\templates\dashboard\fragments\my_applications.html:38
+msgid "Step"
+msgstr "مرحله"
+
+#: .\templates\dashboard\fragments\my_applications.html:39
+#: .\templates\dashboard\fragments\universities.html:84
+msgid "View Details"
+msgstr "مشاهده جزئیات"
+
+#: .\templates\dashboard\fragments\my_applications.html:45
+msgid "No applications found."
+msgstr "هیچ درخواستی یافت نشد."
+
+#: .\templates\dashboard\fragments\my_students.html:5
+#: .\templates\dashboard\main.html:109
+msgid "My Students"
+msgstr "دانشجویان من"
+
+#: .\templates\dashboard\fragments\my_students.html:6
+msgid "Manage the students you are representing."
+msgstr "دانشجویانی که نمایندگی آن‌ها را بر عهده دارید مدیریت کنید."
+
+#: .\templates\dashboard\fragments\my_students.html:9
+#: .\templates\dashboard\fragments\my_students.html:50
+msgid "Add New Student"
+msgstr "افزودن دانشجوی جدید"
+
+#: .\templates\dashboard\fragments\my_students.html:17
 msgid "Name"
 msgstr "نام"
 
-#: .\core\models.py:9
-msgid "Enter the official university name"
-msgstr "نام دانشگاه را وارد نمایید"
+#: .\templates\dashboard\fragments\my_students.html:20
+msgid "Actions"
+msgstr "اقدامات"
 
-#: .\core\models.py:13
-msgid "University"
-msgstr "دانشگاه"
+#: .\templates\dashboard\fragments\my_students.html:30
+#: .\templates\dashboard\fragments\welcome.html:70
+msgid "View Applications"
+msgstr "مشاهده درخواست‌ها"
 
-#: .\core\models.py:14
-msgid "Universities"
-msgstr "دانشگاه ها"
+#: .\templates\dashboard\fragments\my_students.html:37
+msgid "No students added yet."
+msgstr "هنوز دانشجویی اضافه نشده است."
 
+#: .\templates\dashboard\fragments\my_students.html:80
+msgid "Generate"
+msgstr "تولید"
 
-msgid "Welcome to our multilingual site!"
-msgstr "به سایت چند زبانه ما خوش آمدید!"
+#: .\templates\dashboard\fragments\my_students.html:86
+msgid "Create Student Account"
+msgstr "ایجاد حساب کاربری دانشجو"
 
-msgid "Current language"
-msgstr "زبان فعلی"
+#: .\templates\dashboard\fragments\new_application.html:5
+msgid "Start a new university application for one of your students."
+msgstr "یک درخواست دانشگاهی جدید برای یکی از دانشجویان خود شروع کنید."
 
-msgid "This is a test sentence to demonstrate translation."
-msgstr "این یک جمله آزمایشی برای نمایش ترجمه است."
+#: .\templates\dashboard\fragments\new_application.html:12
+msgid "Select Student"
+msgstr "انتخاب دانشجو"
 
-msgid "Today is %(current_date)s."
-msgstr "امروز %(current_date)s است."
+#: .\templates\dashboard\fragments\new_application.html:16
+msgid "Select Program"
+msgstr "انتخاب برنامه"
 
-msgid "Scholarship Registration"
+#: .\templates\dashboard\fragments\new_application.html:20
+msgid "Student Type"
+msgstr "نوع دانشجو"
+
+#: .\templates\dashboard\fragments\new_application.html:24
+msgid "Documents (Optional)"
+msgstr "مدارک (اختیاری)"
+
+#: .\templates\dashboard\fragments\new_application.html:31
+msgid "Create Application"
+msgstr "ایجاد درخواست"
+
+#: .\templates\dashboard\fragments\profile.html:4
+#: .\templates\dashboard\fragments\welcome.html:20
+msgid "Profile Settings"
+msgstr "تنظیمات پروفایل"
+
+#: .\templates\dashboard\fragments\profile.html:6
+msgid ""
+"Manage your personal information, contact details, and security settings."
+msgstr "اطلاعات شخصی، جزئیات تماس و تنظیمات امنیتی خود را مدیریت کنید."
+
+#: .\templates\dashboard\fragments\profile.html:15
+msgid "Personal Information"
+msgstr "اطلاعات شخصی"
+
+#: .\templates\dashboard\fragments\profile.html:35
+msgid "Gender"
+msgstr "جنسیت"
+
+#: .\templates\dashboard\fragments\profile.html:39
+msgid "Date of Birth"
+msgstr "تاریخ تولد"
+
+#: .\templates\dashboard\fragments\profile.html:45
+msgid "Father's Name"
+msgstr "نام پدر"
+
+#: .\templates\dashboard\fragments\profile.html:49
+msgid "Mother's Name"
+msgstr "نام مادر"
+
+#: .\templates\dashboard\fragments\profile.html:55
+msgid "Update Personal Info"
+msgstr "به‌روزرسانی اطلاعات شخصی"
+
+#: .\templates\dashboard\fragments\profile.html:62
+msgid "Contact Information"
+msgstr "اطلاعات تماس"
+
+#: .\templates\dashboard\fragments\profile.html:80
+msgid "Country"
+msgstr "کشور"
+
+#: .\templates\dashboard\fragments\profile.html:84
+msgid "City"
+msgstr "شهر"
+
+#: .\templates\dashboard\fragments\profile.html:90
+msgid "Update Contact Info"
+msgstr "به‌روزرسانی اطلاعات تماس"
+
+#: .\templates\dashboard\fragments\profile.html:97
+msgid "Profile Picture"
+msgstr "عکس پروفایل"
+
+#: .\templates\dashboard\fragments\profile.html:118
+msgid "JPG, PNG or GIF. Max size 2MB."
+msgstr "JPG، PNG یا GIF. حداکثر اندازه ۲ مگابایت."
+
+#: .\templates\dashboard\fragments\profile.html:124
+msgid "Upload New Picture"
+msgstr "آپلود تصویر جدید"
+
+#: .\templates\dashboard\fragments\profile.html:140
+msgid "Current Password"
+msgstr "رمز عبور فعلی"
+
+#: .\templates\dashboard\fragments\profile.html:171
+msgid "Update Password"
+msgstr "به‌روزرسانی رمز عبور"
+
+#: .\templates\dashboard\fragments\profile.html:179
+msgid "Student Profile Details"
+msgstr "جزئیات پروفایل دانشجو"
+
+#: .\templates\dashboard\fragments\profile.html:192
+msgid "Stage"
+msgstr "مرحله"
+
+#: .\templates\dashboard\fragments\profile.html:196
+msgid "Language"
+msgstr "زبان"
+
+#: .\templates\dashboard\fragments\profile.html:202
+msgid "Update Student Details"
+msgstr "به‌روزرسانی جزئیات دانشجو"
+
+#: .\templates\dashboard\fragments\programs.html:4
+#: .\templates\dashboard\main.html:82
+msgid "Programs"
+msgstr "برنامه‌ها"
+
+#: .\templates\dashboard\fragments\programs.html:5
+msgid "Explore available academic programs and degrees."
+msgstr "برنامه‌ها و مدارک تحصیلی موجود را کاوش کنید."
+
+#: .\templates\dashboard\fragments\programs.html:16
+msgid "Search programs..."
+msgstr "جستجوی برنامه‌ها..."
+
+#: .\templates\dashboard\fragments\programs.html:22
+#, fuzzy
+#| msgid "Universities"
+msgid "All Universities"
+msgstr "همه دانشگاه‌ها"
+
+#: .\templates\dashboard\fragments\programs.html:34
+msgid "All Degrees"
+msgstr "همه مقاطع"
+
+#: .\templates\dashboard\fragments\programs.html:43
+msgid "Filter"
+msgstr "فیلتر"
+
+#: .\templates\dashboard\fragments\programs.html:70
+#: .\templates\dashboard\fragments\university_detail.html:101
+msgid "Duration"
+msgstr "مدت زمان"
+
+#: .\templates\dashboard\fragments\programs.html:71
+#: .\templates\dashboard\fragments\university_detail.html:102
+msgid "Years"
+msgstr "سال"
+
+#: .\templates\dashboard\fragments\programs.html:74
+#: .\templates\dashboard\fragments\university_detail.html:105
+msgid "Total Fee"
+msgstr "شهریه کل"
+
+#: .\templates\dashboard\fragments\programs.html:81
+#: .\templates\dashboard\fragments\university_detail.html:123
+msgid "Apply Request"
+msgstr "درخواست ثبت‌نام"
+
+#: .\templates\dashboard\fragments\programs.html:88
+msgid "No programs match your current filters."
+msgstr "هیچ برنامه‌ای با فیلترهای فعلی شما مطابقت ندارد."
+
+#: .\templates\dashboard\fragments\programs.html:103
+#: .\templates\dashboard\fragments\universities.html:107
+msgid "Prev"
+msgstr "قبلی"
+
+#: .\templates\dashboard\fragments\programs.html:126
+#: .\templates\dashboard\fragments\universities.html:130
+msgid "Next"
+msgstr "بعدی"
+
+#: .\templates\dashboard\fragments\programs.html:140
+#: .\templates\dashboard\fragments\universities.html:146
+msgid "Page"
+msgstr "صفحه"
+
+#: .\templates\dashboard\fragments\programs.html:140
+#: .\templates\dashboard\fragments\universities.html:146
+msgid "of"
+msgstr "از"
+
+#: .\templates\dashboard\fragments\programs.html:142
+#: .\templates\dashboard\fragments\universities.html:148
+msgid "Go to"
+msgstr "برو به"
+
+#: .\templates\dashboard\fragments\programs.html:150
+#: .\templates\dashboard\fragments\universities.html:156
+msgid "Go"
+msgstr "برو"
+
+#: .\templates\dashboard\fragments\universities.html:5
+msgid "Browse and filter our partner universities."
+msgstr "دانشگاه‌های همکار ما را مرور و فیلتر کنید."
+
+#: .\templates\dashboard\fragments\universities.html:16
+msgid "Search by name..."
+msgstr "جستجو بر اساس نام..."
+
+#: .\templates\dashboard\fragments\universities.html:22
+msgid "All Countries"
+msgstr "همه کشورها"
+
+#: .\templates\dashboard\fragments\universities.html:34
+msgid "All Sectors"
+msgstr "همه بخش‌ها"
+
+#: .\templates\dashboard\fragments\universities.html:35
+msgid "Public"
+msgstr "دولتی"
+
+#: .\templates\dashboard\fragments\universities.html:37
+msgid "Private"
+msgstr "خصوصی"
+
+#: .\templates\dashboard\fragments\universities.html:38
+msgid "Other"
+msgstr "سایر"
+
+#: .\templates\dashboard\fragments\universities.html:44
+msgid "Search"
+msgstr "جستجو"
+
+#: .\templates\dashboard\fragments\universities.html:79
+msgid "Est."
+msgstr "تأسیس"
+
+#: .\templates\dashboard\fragments\universities.html:91
+msgid "No universities match your search criteria."
+msgstr "هیچ دانشگاهی با معیارهای جستجوی شما مطابقت ندارد."
+
+#: .\templates\dashboard\fragments\universities.html:102
+msgid "First"
+msgstr "اول"
+
+#: .\templates\dashboard\fragments\universities.html:134
+msgid "Last"
+msgstr "آخر"
+
+#: .\templates\dashboard\fragments\university_detail.html:4
+#, fuzzy
+#| msgid "Universities"
+msgid "Back to Universities"
+msgstr "بازگشت به دانشگاه‌ها"
+
+#: .\templates\dashboard\fragments\university_detail.html:24
+msgid "Location"
+msgstr "موقعیت"
+
+#: .\templates\dashboard\fragments\university_detail.html:33
+msgid "Sector"
+msgstr "بخش"
+
+#: .\templates\dashboard\fragments\university_detail.html:42
+msgid "Founded"
+msgstr "تأسیس"
+
+#: .\templates\dashboard\fragments\university_detail.html:51
+msgid "Website"
+msgstr "وب‌سایت"
+
+#: .\templates\dashboard\fragments\university_detail.html:53
+msgid "Visit"
+msgstr "بازدید"
+
+#: .\templates\dashboard\fragments\university_detail.html:65
+msgid "Main Campus"
+msgstr "دانشگاه اصلی"
+
+#: .\templates\dashboard\fragments\university_detail.html:74
+msgid "Programs & Scholarships"
+msgstr "برنامه‌ها و بورس‌های تحصیلی"
+
+#: .\templates\dashboard\fragments\university_detail.html:110
+#, fuzzy
+#| msgid "Scholarship Registration"
+msgid "Scholarship"
 msgstr "بورس تحصیلی"
 
-msgid "Test page"
-msgstr "صفحه آزمایش"  # For Farsi
+#: .\templates\dashboard\fragments\university_detail.html:116
+msgid "Per Semester"
+msgstr "هر ترم"
+
+#: .\templates\dashboard\fragments\university_detail.html:132
+msgid "No programs available for this university yet."
+msgstr "هنوز برنامه‌ای برای این دانشگاه موجود نیست."
+
+#: .\templates\dashboard\fragments\welcome.html:6
+msgid "Welcome"
+msgstr "خوش آمدید"
+
+#: .\templates\dashboard\fragments\welcome.html:8
+msgid "Here's an overview of your dashboard and quick actions."
+msgstr "در اینجا مروری بر داشبورد و اقدامات سریع شما وجود دارد."
+
+#: .\templates\dashboard\fragments\welcome.html:18
+#: .\templates\dashboard\main.html:66
+msgid "Profile"
+msgstr "پروفایل"
+
+#: .\templates\dashboard\fragments\welcome.html:21
+msgid "Manage your personal information and account details."
+msgstr "اطلاعات شخصی و جزئیات حساب کاربری خود را مدیریت کنید."
+
+#: .\templates\dashboard\fragments\welcome.html:24
+msgid "Go to Profile"
+msgstr "رفتن به پروفایل"
+
+#: .\templates\dashboard\fragments\welcome.html:33
+msgid "Academics"
+msgstr "امور آکادمیک"
+
+#: .\templates\dashboard\fragments\welcome.html:35
+#, fuzzy
+#| msgid "Universities"
+msgid "Browse Universities"
+msgstr "مرور دانشگاه‌ها"
+
+#: .\templates\dashboard\fragments\welcome.html:36
+msgid "Explore partner universities and their details."
+msgstr "دانشگاه‌های همکار و جزئیات آن‌ها را کاوش کنید."
+
+#: .\templates\dashboard\fragments\welcome.html:39
+#, fuzzy
+#| msgid "Universities"
+msgid "View Universities"
+msgstr "مشاهده دانشگاه‌ها"
+
+#: .\templates\dashboard\fragments\welcome.html:48
+#, fuzzy
+#| msgid "Scholarship Registration"
+msgid "Scholarships"
+msgstr "بورس‌های تحصیلی"
+
+#: .\templates\dashboard\fragments\welcome.html:50
+msgid "Browse Programs"
+msgstr "مرور برنامه‌ها"
+
+#: .\templates\dashboard\fragments\welcome.html:51
+msgid "Discover scholarships and academic programs available."
+msgstr "بورس‌های تحصیلی و برنامه‌های آکادمیک موجود را کشف کنید."
+
+#: .\templates\dashboard\fragments\welcome.html:54
+msgid "View Programs"
+msgstr "مشاهده برنامه‌ها"
+
+#: .\templates\dashboard\fragments\welcome.html:79
+msgid "Quick Start Guide"
+msgstr "راهنمای شروع سریع"
+
+#: .\templates\dashboard\fragments\welcome.html:87
+msgid "Complete Your Profile"
+msgstr "پروفایل خود را تکمیل کنید"
+
+#: .\templates\dashboard\fragments\welcome.html:89
+msgid ""
+"Add your personal details, contact info, and profile picture to get started."
+msgstr ""
+"برای شروع، جزئیات شخصی، اطلاعات تماس و تصویر پروفایل خود را اضافه کنید."
+
+#: .\templates\dashboard\fragments\welcome.html:98
+msgid "Explore Programs"
+msgstr "کاوش برنامه‌ها"
+
+#: .\templates\dashboard\fragments\welcome.html:100
+msgid "Browse available universities and programs to find your perfect match."
+msgstr ""
+"دانشگاه‌ها و برنامه‌های موجود را مرور کنید تا بهترین گزینه را پیدا کنید."
+
+#: .\templates\dashboard\fragments\welcome.html:110
+msgid "Add Students"
+msgstr "افزودن دانشجویان"
+
+#: .\templates\dashboard\fragments\welcome.html:112
+msgid "Create student accounts and start managing their applications."
+msgstr "حساب‌های دانشجویی ایجاد کنید و مدیریت درخواست‌های آن‌ها را شروع کنید."
+
+#: .\templates\dashboard\fragments\welcome.html:122
+msgid "Need Help?"
+msgstr "به کمک نیاز دارید؟"
+
+#: .\templates\dashboard\fragments\welcome.html:124
+msgid "Contact our support team for assistance with your applications."
+msgstr ""
+"برای دریافت کمک در مورد درخواست‌های خود با تیم پشتیبانی ما تماس بگیرید."
+
+#: .\templates\dashboard\main.html:149
+msgid "Loading..."
+msgstr "در حال بارگذاری..."
+
+#: .\templates\dashboard\main.html:167
+msgid "Loading content..."
+msgstr "در حال بارگذاری محتوا..."
+
+#: .\templates\dashboard\main.html:168
+msgid "Loading Error"
+msgstr "خطا در بارگذاری"
+
+#: .\templates\dashboard\main.html:169
+msgid "Please try again or contact support"
+msgstr "لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید"
+
+#: .\templates\dashboard\main.html:170
+msgid "Reload Page"
+msgstr "بارگذاری مجدد صفحه"
+
+#: .\templates\emails\reset_password.html:53
+msgid "You recently requested to reset your password for your"
+msgstr "شما اخیراً درخواست بازیابی رمز عبور برای"
+
+#: .\templates\emails\reset_password.html:55
+msgid "account."
+msgstr "حساب کاربری خود را داده‌اید."
+
+#: .\templates\emails\reset_password.html:58
+msgid ""
+"Click the button below and enter the following code to reset your password. "
+"This link and code are valid for 15 minutes."
+msgstr ""
+"روی دکمه زیر کلیک کنید و کد زیر را برای بازیابی رمز عبور خود وارد کنید. این "
+"لینک و کد به مدت ۱۵ دقیقه معتبر هستند."
+
+#: .\templates\emails\reset_password.html:60
+msgid "Verification Code:"
+msgstr "کد تأیید:"
+
+#: .\templates\emails\reset_password.html:64
+msgid ""
+"If the button above does not work, copy and paste the following link into "
+"your browser:"
+msgstr ""
+"اگر دکمه بالا کار نمی‌کند، لینک زیر را کپی کرده و در مرورگر خود جای‌گذاری "
+"کنید:"
+
+#: .\templates\emails\reset_password.html:66
+msgid "If you did not request a password reset, please ignore this email."
+msgstr ""
+"اگر درخواست بازیابی رمز عبور نداده‌اید، لطفاً این ایمیل را نادیده بگیرید."
+
+#: .\templates\emails\reset_password.html:67
+msgid "Thank you,"
+msgstr "با تشکر،"
+
+#: .\templates\emails\reset_password.html:67
+msgid "Team"
+msgstr "تیم"
+
+#~ msgid "Enter the official university name"
+#~ msgstr "نام دانشگاه را وارد نمایید"
+
+#~ msgid "Welcome to our multilingual site!"
+#~ msgstr "به سایت چند زبانه ما خوش آمدید!"
+
+#~ msgid "This is a test sentence to demonstrate translation."
+#~ msgstr "این یک جمله آزمایشی برای نمایش ترجمه است."
+
+#~ msgid "Today is %(current_date)s."
+#~ msgstr "امروز %(current_date)s است."
+
+#~ msgid "Test page"
+#~ msgstr "صفحه آزمایش"
