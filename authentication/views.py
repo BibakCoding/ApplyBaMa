@@ -37,7 +37,6 @@ def dispatch_email(subject, template_name, context, to):
         return False
 
 
-# Login
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def login_view(request):
     if request.user.is_authenticated:
@@ -47,6 +46,14 @@ def login_view(request):
     form = LoginForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
+            remember_me = request.POST.get('remember_me')
+
+            # Set session expiry based on remember_me
+            if remember_me:
+                request.session.set_expiry(60 * 60 * 24 * 30)  # 30 days
+            else:
+                request.session.set_expiry(0)  # Expire when browser closes
+
             auth_login(request, form.user)
             msg = _("Logged in successfully.")
             if is_ajax(request):
@@ -63,7 +70,6 @@ def login_view(request):
             messages.error(request, err)
 
     return render(request, "authentication/login.html", {"form": form})
-
 
 # Register
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)

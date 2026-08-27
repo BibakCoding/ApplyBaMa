@@ -3,8 +3,9 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import PasswordChangeForm
 from core.models import User, StudentProfile, City
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 
-# Base widget attributes to match your design system
 BASE_INPUT_CLASS = 'ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] focus:border-transparent transition-all bg-white'
 
 class PersonalInfoForm(forms.ModelForm):
@@ -94,9 +95,28 @@ class ApplicationForm(forms.ModelForm):
         else:
             self.fields['student'].queryset = User.objects.none()
 
+
 class AddStudentForm(forms.Form):
     first_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'class': BASE_INPUT_CLASS, 'placeholder': _('First Name')}))
     last_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'class': BASE_INPUT_CLASS, 'placeholder': _('Last Name')}))
     username = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class': BASE_INPUT_CLASS, 'placeholder': _('Username')}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': BASE_INPUT_CLASS, 'placeholder': _('Email Address')}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': BASE_INPUT_CLASS, 'placeholder': _('Temporary Password')}))
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise ValidationError(_('This username is already taken.'))
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError(_('This email is already registered.'))
+        return email
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if len(password) < 8:
+            raise ValidationError(_('Password must be at least 8 characters long.'))
+        return password

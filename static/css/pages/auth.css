@@ -221,3 +221,75 @@ html[dir="rtl"] .auth-lang-switch { right: auto; left: 1.5rem; }
 .pwd-toggle:hover {
     color: var(--ab-primary) !important;
 }
+
+
+/* ==========================================================================
+   AUTH PAGES - REMOVED INLINE STYLES
+========================================================================== */
+
+.auth-copyright {
+    position: relative;
+    z-index: 1;
+}
+
+.auth-copyright-text {
+    font-size: 0.875rem;
+    opacity: 0.6;
+}
+
+.auth-password-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.auth-forgot-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ab-primary);
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper .ab-input {
+    padding-right: 3rem;
+}
+
+.pwd-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ab-muted);
+    font-size: 1.1rem;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.pwd-toggle:hover {
+    color: var(--ab-primary);
+}
+
+.auth-remember-field {
+    flex-direction: row;
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.auth-checkbox {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--ab-primary);
+}
+
+.auth-remember-label {
+    font-size: 0.9rem;
+    color: var(--ab-muted);
+    cursor: pointer;
+}

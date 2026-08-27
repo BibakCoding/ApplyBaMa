@@ -11,6 +11,8 @@ from django.conf import settings
 import secrets
 import string
 
+from django_ratelimit.decorators import ratelimit
+from django.utils.decorators import method_decorator
 from core.models import User, StudentProfile, Application, University, Program, Country
 from .forms import (
     PersonalInfoForm, ContactInfoForm, ProfileImageForm,
@@ -115,9 +117,17 @@ def dashboard_content(request, page):
 
     elif page == 'my_applications':
         if request.user.user_type == User.UserType.AGENT:
-            applications = Application.objects.filter(agent=request.user).order_by('-created_at')
+            applications = Application.objects.filter(
+                agent=request.user
+            ).select_related(
+                'student', 'program', 'program__university'
+            ).order_by('-created_at')
         else:
-            applications = Application.objects.filter(student=request.user).order_by('-created_at')
+            applications = Application.objects.filter(
+                student=request.user
+            ).select_related(
+                'program', 'program__university', 'agent'
+            ).order_by('-created_at')
         context['applications'] = applications
 
     elif page == 'my_students':
@@ -247,11 +257,21 @@ def submit_new_application(request):
             return JsonResponse({'success': False, 'errors': form.errors})
     return JsonResponse({'success': False, 'message': _('Invalid request.')})
 
+
 @login_required
+@ratelimit(key='user', rate='5/h', method='POST', block=True)  # Max 5 students per hour
 def submit_add_student(request):
     if request.method == 'POST' and request.user.user_type == User.UserType.AGENT:
         form = AddStudentForm(request.POST)
         if form.is_valid():
+            # Check if agent already has too many students (prevent spam)
+            existing_count = Application.objects.filter(agent=request.user).count()
+            if existing_count >= 100:  # Max 100 students per agent
+                return JsonResponse({
+                    'success': False,
+                    'message': _('You have reached the maximum number of students (100). Please contact support.')
+                })
+
             user = User.objects.create_user(
                 username=form.cleaned_data['username'],
                 email=form.cleaned_data['email'],
