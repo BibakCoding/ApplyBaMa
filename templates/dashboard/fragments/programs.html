@@ -10,15 +10,17 @@
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
             {% csrf_token %}
             <div class="lg:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Search" %}</label>
                 <input type="text"
                        name="search"
                        value="{{ filters.search }}"
                        placeholder="{% trans 'Search programs...' %}"
-                       class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white">
+                       class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[42px]">
             </div>
             <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "University" %}</label>
                 <select name="university"
-                        class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white">
+                        class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[42px]">
                     <option value="">{% trans "All Universities" %}</option>
                     {% for uni in universities_filter %}
                         <option value="{{ uni.id }}"
@@ -29,17 +31,18 @@
                 </select>
             </div>
             <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Degree" %}</label>
                 <select name="degree"
-                        class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white">
+                        class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[42px]">
                     <option value="">{% trans "All Degrees" %}</option>
                     {% for val, label in degrees %}
                         <option value="{{ val }}" {% if filters.degree == val %}selected{% endif %}>{{ label }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="flex items-end">
+            <div>
                 <button type="submit"
-                        class="w-full bg-[var(--ab-primary)] text-white py-2 px-4 rounded-lg hover:opacity-90 transition font-medium shadow-sm">
+                        class="w-full bg-[var(--ab-primary)] text-white py-2 px-4 rounded-lg hover:opacity-90 transition font-medium shadow-sm h-[42px]">
                     <i class="fas fa-search mr-2"></i> {% trans "Filter" %}
                 </button>
             </div>
@@ -75,7 +78,7 @@
                             <span class="font-semibold text-gray-700">${{ prog.cash_fees|floatformat:0 }}</span>
                         </div>
                     </div>
-                    <!-- 🔧 Apply Request Button -->
+                    <!-- Apply Request Button -->
                     <button class="apply-request-btn w-full bg-[var(--ab-primary)] text-white py-2 px-4 rounded-lg hover:opacity-90 transition text-sm font-medium"
                             data-program-id="{{ prog.pk }}">
                         <i class="fas fa-paper-plane mr-1"></i> {% trans "Apply Request" %}
@@ -95,7 +98,8 @@
             <div class="flex items-center gap-2 flex-wrap justify-center">
                 {% if page_obj.has_previous %}
                     <button onclick="loadContent('programs', 'page=1&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}')"
-                            class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm">
+                            class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm"
+                            title="{% trans 'First' %}">
                         <i class="fas fa-angle-double-left"></i>
                     </button>
                     <button onclick="loadContent('programs', 'page={{ page_obj.previous_page_number }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}')"
@@ -126,7 +130,8 @@
                         {% trans "Next" %} <i class="fas fa-chevron-right ml-1"></i>
                     </button>
                     <button onclick="loadContent('programs', 'page={{ page_obj.paginator.num_pages }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&status={{ filters.status }}')"
-                            class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm">
+                            class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm"
+                            title="{% trans 'Last' %}">
                         <i class="fas fa-angle-double-right"></i>
                     </button>
                 {% endif %}
