@@ -786,3 +786,44 @@
     /* This turns the logo into a solid blue silhouette */
     filter: brightness(0) saturate(100%) invert(17%) sepia(82%) saturate(2476%) hue-rotate(221deg) brightness(91%) contrast(98%);
 }
+
+/* ==========================================================================
+   RESPONSIVE HEADER OVERRIDE
+   Fixes bug where desktop nav remains visible on mobile due to CSS conflicts
+========================================================================== */
+
+/* MOBILE MODE (Screens smaller than 1024px) */
+@media (max-width: 1023px) {
+    /* 1. Force Desktop Nav Links to Hide */
+    .ab-navbar {
+        display: none !important;
+    }
+
+    /* 2. Force Desktop Auth Buttons (Login, Dashboard, Logout) to Hide */
+    .ab-header-inner .hidden {
+        display: none !important;
+    }
+
+    /* 3. Force Mobile Hamburger Button to be Visible */
+    #mobile-menu-btn {
+        display: block !important;
+    }
+}
+
+/* DESKTOP MODE (Screens 1024px and larger) */
+@media (min-width: 1024px) {
+    /* 1. Force Desktop Nav Links to Show (Flex) */
+    .ab-navbar {
+        display: flex !important;
+    }
+
+    /* 2. Force Mobile Hamburger Button to Hide */
+    #mobile-menu-btn {
+        display: none !important;
+    }
+
+    /* 3. Force Mobile Dropdown Menu to Hide (it should only open via JS) */
+    #mobile-menu {
+        display: none !important;
+    }
+}
