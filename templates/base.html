@@ -31,31 +31,69 @@
         {% block header %}{% endblock %}
         {% block content %}{% endblock %}
         {% block footer %}{% endblock %}
-        {% block js %}
-            <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const notyf = new Notyf({
-                duration: 20000,
-                dismissible: true,
-                position: {x: 'right', y: 'top'}
-            });
-            const levelMap = {
-                'debug': 'info',
-                'info': 'info',
-                'success': 'success',
-                'warning': 'warning',
-                'error': 'error'
-            };
+{% block js %}
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const notyf = new Notyf({
+        duration: 20000,
+        dismissible: true,
+        position: {x: 'right', y: 'top'},
+        types: [
+            {
+                type: 'success',
+                background: '#15803D',
+                icon: {
+                    className: 'fas fa-check-circle',
+                    tagName: 'i',
+                    color: 'white'
+                }
+            },
+            {
+                type: 'error',
+                background: '#B91C1C',
+                icon: {
+                    className: 'fas fa-exclamation-circle',
+                    tagName: 'i',
+                    color: 'white'
+                }
+            },
+            {
+                type: 'warning',
+                background: '#B45309',
+                icon: {
+                    className: 'fas fa-exclamation-triangle',
+                    tagName: 'i',
+                    color: 'white'
+                }
+            },
+            {
+                type: 'info',
+                background: '#0369A1',
+                icon: {
+                    className: 'fas fa-info-circle',
+                    tagName: 'i',
+                    color: 'white'
+                }
+            }
+        ]
+    });
+    const levelMap = {
+        'debug': 'info',
+        'info': 'info',
+        'success': 'success',
+        'warning': 'warning',
+        'error': 'error'
+    };
 
-            {% for message in messages %}
-                notyf.open({
-                    type: levelMap["{{ message.tags }}"] || 'info',
-                    message: "{{ message|escapejs }}"
-                });
-            {% endfor %}
+    {% for message in messages %}
+        notyf.open({
+            type: levelMap["{{ message.tags }}"] || 'info',
+            message: "{{ message|escapejs }}"
         });
-            </script>
-            <script src="{% static 'js/base.js' %}" defer></script>
-        {% endblock %}
+    {% endfor %}
+});
+    </script>
+    <script src="{% static 'js/base.js' %}" defer></script>
+{% endblock %}
     </body>
 </html>

@@ -359,10 +359,15 @@ class User(AbstractUser):
         return self.get_username()
 
     def clean(self):
-        # Student representatives must be student users
         if self.is_representative and self.user_type != User.UserType.DEFAULT:
             raise ValidationError(_("Only student users can be representatives"))
 
+    def save(self, *args, **kwargs):
+        # Compress profile image only if it's newly uploaded or changed
+        if self.profile_image and hasattr(self.profile_image, "file"):
+            if not self.pk or User.objects.get(pk=self.pk).profile_image != self.profile_image:
+                compress_image(self.profile_image, max_size=(500, 500), quality=85)
+        super().save(*args, **kwargs)
 
 class CompanyProfile(TimeStampedModel):
     user = models.OneToOneField(
