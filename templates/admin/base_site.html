@@ -109,7 +109,7 @@
         transform: translateY(-1px);
     }
     .default { background: var(--admin-accent) !important; }
-    .default:hover { background: #D97706 !important; }
+    .default:hover { background: #010000 !important; }
 
     /* Form Fields in Admin */
     .form-row { border-bottom: 1px solid #F1F5F9 !important; padding: 1.25rem 1.5rem !important; }
@@ -122,12 +122,14 @@
         font-size: 0.95rem !important;
         transition: all 0.2s !important;
         background: #fff !important;
+        color: var(--admin-text)
     }
     input:focus, textarea:focus, select:focus, .vTextField:focus {
         border-color: var(--admin-primary) !important;
         box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15) !important;
         outline: none !important;
     }
+    select option { color: var(--admin-text) !important; background: #fff !important; }
 
     /* Messages */
     .messagelist li {

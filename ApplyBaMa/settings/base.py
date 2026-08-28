@@ -1,12 +1,8 @@
-"""
-Settings that are common to all environments.
-"""
 import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# Application definition
 INSTALLED_APPS = [
     "modeltranslation",
     "solo",
@@ -22,7 +18,7 @@ INSTALLED_APPS = [
     "data_fetch.apps.DataFetchConfig",
     "api.apps.ApiConfig",
     "django_celery_beat",
-    'rosetta',
+    "rosetta",
 ]
 
 MIDDLEWARE = [
@@ -56,7 +52,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "ApplyBaMa.wsgi.application"
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -72,7 +67,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
 LANGUAGE_CODE = "en"
 TIME_ZONE = "UTC"
 USE_I18N = True
@@ -88,26 +82,21 @@ LANGUAGES = [
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
-# Static files
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-# media files
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Authentication
 AUTH_USER_MODEL = "core.User"
 PASSWORD_RESET_TIMEOUT = 1 * 60 * 60
 
-# Celery
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
-
 CELERY_BEAT_SCHEDULE = {
     "refresh-data-every-20-minutes": {
         "task": "data_fetch.tasks.refresh_universities_and_programs",
@@ -115,6 +104,5 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-# Custom variables
-SF_EMAIL = os.getenv('SF_EMAIL', 'Matinf1060@gmail.com')
-SF_PASSWORD = os.getenv('SF_PASSWORD', 'Mt20201381')
+SF_EMAIL = os.getenv("SF_EMAIL")
+SF_PASSWORD = os.getenv("SF_PASSWORD")

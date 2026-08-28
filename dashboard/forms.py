@@ -31,17 +31,22 @@ class ContactInfoForm(forms.ModelForm):
             'country': forms.Select(attrs={
                 'class': 'select2-country ' + BASE_INPUT_CLASS,
                 'data-placeholder': _('Select a country'),
+                'id': 'id_country',
             }),
             'city': forms.Select(attrs={
                 'class': 'select2-city ' + BASE_INPUT_CLASS,
                 'data-placeholder': _('Select a city'),
+                'id': 'id_city',
             }),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['city'].queryset = City.objects.none()
 
+        # Show ALL countries for profile pages
+        self.fields['country'].queryset = Country.objects.all().order_by('name')
+
+        # Start with empty cities or cities for current country
         if 'country' in self.data:
             try:
                 country_id = int(self.data.get('country'))
@@ -49,9 +54,11 @@ class ContactInfoForm(forms.ModelForm):
                     country_id=country_id
                 ).order_by('name')
             except (ValueError, TypeError):
-                pass
-        elif self.instance.country:
+                self.fields['city'].queryset = City.objects.none()
+        elif self.instance.pk and self.instance.country:
             self.fields['city'].queryset = self.instance.country.cities.order_by('name')
+        else:
+            self.fields['city'].queryset = City.objects.none()
 
 class ProfileImageForm(forms.ModelForm):
     class Meta:

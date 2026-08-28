@@ -1,25 +1,37 @@
 """
 Development settings.
 """
+
 from .base import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv(
-    'SECRET_KEY'
-)
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '[::1]',
-    '0.0.0.0',
+    "localhost",
+    "127.0.0.1",
+    "[::1]",
+    "0.0.0.0",
+    "4d496648d3bc84.lhr.life",
+    "913aae4061c026.lhr.life",
+    ".lhr.life",
+    ".serveo.net",
 ]
 
 # CSRF_TRUSTED_ORIGINS = [
+#     'https://4d496648d3bc84.lhr.life/',
+#     'https://913aae4061c026.lhr.life/',
+#     'https://*.lhr.life',
+#     'https://*.serveo.net',
+#     'http://localhost:2345',
+#     'http://127.0.0.1:2345'
 # ]
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SECURE = False
 
 
 # Database
@@ -35,9 +47,9 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'djangokar.test@gmail.com')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'slxe vwdr kxjp fibo')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@applybama.com')
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "djangokar.test@gmail.com")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "slxe vwdr kxjp fibo")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "webmaster@applybama.com")
 
 # Cache
 # CACHES = {
@@ -69,8 +81,8 @@ CACHES = {
 # CELERY_RESULT_BACKEND = 'rpc://'
 
 # Temporary Celery settings for development (without Redis)
-CELERY_BROKER_URL = 'memory://'
-CELERY_RESULT_BACKEND = 'cache+memory://'
+CELERY_BROKER_URL = "memory://"
+CELERY_RESULT_BACKEND = "cache+memory://"
 
 # Run tasks synchronously during development
 CELERY_TASK_ALWAYS_EAGER = True
