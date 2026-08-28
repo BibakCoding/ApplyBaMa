@@ -33,10 +33,13 @@
         {% block header %}{% endblock %}
         {% block content %}{% endblock %}
         {% block footer %}{% endblock %}
-        {% block js %}
-            <script>
+{% block js %}
+    <script>
+// Make notyf globally accessible
+let notyf;
+
 document.addEventListener('DOMContentLoaded', () => {
-    const notyf = new Notyf({
+    notyf = new Notyf({
         duration: 20000,
         dismissible: true,
         position: {x: 'right', y: 'top'},
@@ -79,6 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         ]
     });
+
+    // Make it globally available
+    window.notyf = notyf;
+
     const levelMap = {
         'debug': 'info',
         'info': 'info',
@@ -93,10 +100,11 @@ document.addEventListener('DOMContentLoaded', () => {
             message: "{{ message|escapejs }}"
         });
     {% endfor %}
+    
 });
-            </script>
-            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-            <script src="{% static 'js/base.js' %}" defer></script>
-        {% endblock %}
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{% static 'js/base.js' %}" defer></script>
+{% endblock %}
     </body>
 </html>

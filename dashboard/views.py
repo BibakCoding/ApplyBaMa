@@ -13,7 +13,7 @@ import string
 
 from django_ratelimit.decorators import ratelimit
 from django.utils.decorators import method_decorator
-from core.models import User, StudentProfile, Application, University, Program, Country
+from core.models import User, StudentProfile, Application, University, Program, Country, City
 from .forms import (
     PersonalInfoForm, ContactInfoForm, ProfileImageForm,
     StudentProfileForm, CustomPasswordChangeForm,
@@ -55,7 +55,11 @@ def dashboard_content(request, page):
     # --- PROFILE LOGIC (Initialize forms for GET request) ---
     if page == 'profile':
         user = request.user
-        student_profile = getattr(user, 'student_profile', None)
+
+        try:
+            student_profile = user.student_profile
+        except StudentProfile.DoesNotExist:
+            student_profile = None
         context['personal_form'] = PersonalInfoForm(instance=user)
         context['contact_form'] = ContactInfoForm(instance=user)
         context['image_form'] = ProfileImageForm(instance=user)
@@ -78,7 +82,13 @@ def dashboard_content(request, page):
         page_obj = paginator.get_page(page_number)
 
         context['page_obj'] = page_obj
-        context['countries'] = Country.objects.all().order_by('name')
+
+        # 🔥 FIX: Only show countries that have universities in the database
+        countries_with_universities = Country.objects.filter(
+            universities__isnull=False
+        ).distinct().order_by('name')
+
+        context['countries'] = countries_with_universities
         context['filters'] = {'search': search_query, 'country': country_id, 'sector': sector}
 
     # --- PROGRAMS LOGIC ---
@@ -154,6 +164,23 @@ def dashboard_content(request, page):
 
 
 # =========================================================================
+# 🔥 AJAX ENDPOINT: GET CITIES BY COUNTRY (For cascading dropdowns)
+# =========================================================================
+@login_required
+def get_cities_by_country(request):
+    """AJAX endpoint to get cities for a selected country"""
+    country_id = request.GET.get('country_id')
+    if country_id:
+        try:
+            cities = City.objects.filter(country_id=country_id).order_by('name')
+            cities_data = [{'id': city.id, 'name': city.name} for city in cities]
+            return JsonResponse({'cities': cities_data})
+        except Exception as e:
+            return JsonResponse({'cities': [], 'error': str(e)})
+    return JsonResponse({'cities': []})
+
+
+# =========================================================================
 # PROFILE POST HANDLER (Handles the form submissions via AJAX)
 # =========================================================================
 @login_required
@@ -202,7 +229,6 @@ def profile_view(request):
         return _form_error_response(form)
 
     return JsonResponse({'success': False, 'errors': [_('Invalid form type.')]})
-
 
 def _success_response(message):
     return JsonResponse({'success': True, 'message': str(message)})
@@ -257,9 +283,8 @@ def submit_new_application(request):
             return JsonResponse({'success': False, 'errors': form.errors})
     return JsonResponse({'success': False, 'message': _('Invalid request.')})
 
-
 @login_required
-@ratelimit(key='user', rate='5/h', method='POST', block=True)  # Max 5 students per hour
+@ratelimit(key='user', rate='5/h', method='POST', block=True)
 def submit_add_student(request):
     if request.method == 'POST' and request.user.user_type == User.UserType.AGENT:
         form = AddStudentForm(request.POST)
@@ -318,14 +343,3 @@ def program_apply_request(request):
             return JsonResponse({'success': False, 'message': str(_('Failed to send request. Please try again.'))})
 
     return JsonResponse({'success': False, 'message': str(_('Invalid request.'))})
-
-
-@login_required
-def get_cities_by_country(request):
-    """AJAX endpoint to get cities for a selected country"""
-    country_id = request.GET.get('country_id')
-    if country_id:
-        cities = City.objects.filter(country_id=country_id).order_by('name')
-        cities_data = [{'id': city.id, 'name': city.name} for city in cities]
-        return JsonResponse({'cities': cities_data})
-    return JsonResponse({'cities': []})
