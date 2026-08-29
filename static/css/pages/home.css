@@ -138,7 +138,6 @@
     border-top: 1px solid var(--ab-border);
 }
 
-
 /* ==========================================================================
    2. HERO SECTION (Full Height + Background)
 ========================================================================== */
@@ -248,7 +247,6 @@
     }
 }
 
-
 /* ==========================================================================
    3. TRUST BANNER (Universities Grid)
 ========================================================================== */
@@ -331,7 +329,6 @@
     line-height: 1.3;
 }
 
-
 /* ==========================================================================
    4. SECTION HEADINGS (Shared)
 ========================================================================== */
@@ -352,7 +349,6 @@
     color: var(--ab-muted);
     font-size: 1.05rem;
 }
-
 
 /* ==========================================================================
    5. WHY CHOOSE US
@@ -446,14 +442,14 @@
     font-size: 0.925rem;
 }
 
-
 /* ==========================================================================
-   6. HOW IT WORKS (Timeline / Journey Steps)
+   6. HOW IT WORKS (Timeline / Journey Steps) - FIXED CONNECTING LINES
 ========================================================================== */
 .home-timeline {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2.25rem;
+    position: relative;
 }
 
 @media (min-width: 900px) {
@@ -462,18 +458,23 @@
         gap: 1.5rem;
     }
 
-    .home-step {
-        position: relative;
-    }
-
-    .home-step:not(:last-child)::after {
+    /* 🔧 FIX: Draw the connecting line across the entire timeline container */
+    .home-timeline::before {
         content: "";
         position: absolute;
         top: 1.5rem;
-        inset-inline-start: calc(50% + 2rem);
-        width: calc(100% - 4rem);
+        /* Aligns perfectly with the center of the 3rem step circles */
+        left: 10%;
+        right: 10%;
         height: 2px;
         background: var(--ab-border);
+        z-index: 0;
+    }
+
+    .home-step {
+        position: relative;
+        z-index: 1;
+        /* Keeps the circles above the line */
     }
 }
 
@@ -486,6 +487,8 @@
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: default;
     position: relative;
+    z-index: 1;
+    /* Ensure it stays above the line on all screens */
 }
 
 .home-step:hover {
@@ -545,7 +548,6 @@
     max-width: 14rem;
     margin-inline: auto;
 }
-
 
 /* ==========================================================================
    7. REQUIRED DOCUMENTS (High Contrast + Background Image)
@@ -647,7 +649,6 @@
     flex-shrink: 0;
 }
 
-
 /* ==========================================================================
    8. SUCCESS STORIES
 ========================================================================== */
@@ -729,7 +730,6 @@
     flex: 1;
 }
 
-
 /* ==========================================================================
    9. WHATSAPP CTA BAND
 ========================================================================== */
@@ -767,7 +767,6 @@
     color: var(--ab-primary-active);
 }
 
-
 /* ==========================================================================
    10. GLOBAL SCROLL ANIMATIONS
 ========================================================================== */
@@ -794,6 +793,7 @@
 
 /* MOBILE MODE (Screens smaller than 1024px) */
 @media (max-width: 1023px) {
+
     /* 1. Force Desktop Nav Links to Hide */
     .ab-navbar {
         display: none !important;
@@ -812,6 +812,7 @@
 
 /* DESKTOP MODE (Screens 1024px and larger) */
 @media (min-width: 1024px) {
+
     /* 1. Force Desktop Nav Links to Show (Flex) */
     .ab-navbar {
         display: flex !important;
@@ -827,7 +828,6 @@
         display: none !important;
     }
 }
-
 
 /* Base hero styles for title and text */
 .ab-hero-title {
