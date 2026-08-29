@@ -5,6 +5,7 @@
 
 {% block css %}
 {{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/css/intlTelInput.css">
 <link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}">
 {% endblock %}
 
@@ -155,6 +156,7 @@
 
 {% block js %}
 {{ block.super }}
+
 <script>
     window.AppConfig = {
         urls: {
@@ -172,4 +174,5 @@
     };
 </script>
 <script src="{% static 'js/pages/dashboard.js' %}" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/js/intlTelInput.min.js" defer></script>
 {% endblock %}

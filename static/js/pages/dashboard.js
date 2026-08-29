@@ -20,9 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
     overlay.classList.remove("active");
   }
 
-  // --- SPA Navigation (FIXED: handles 'page?params' as single arg) ---
+  // --- SPA Navigation ---
   window.loadContent = function (page, params) {
-    // 🔧 FIX: If page contains '?', split it
     if (page && page.includes("?")) {
       const parts = page.split("?");
       page = parts[0];
@@ -48,12 +47,22 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((html) => {
         contentContainer.innerHTML = html;
+
+        // Update Active Nav
         navLinks.forEach((link) => {
           link.classList.remove("active");
           if (link.getAttribute("data-page") === page)
             link.classList.add("active");
         });
+
         closeSidebar();
+
+        // 🔥 TRIGGER PAGE-SPECIFIC SCRIPTS AFTER AJAX LOAD
+        initProfileScripts();
+        initSearchAutocomplete();
+        initProgramAutocomplete();
+
+        // Update Browser URL
         const cleanParams = params.replace(/^\?/, "");
         const newUrl =
           window.location.pathname +
@@ -61,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
           page +
           (cleanParams ? "&" + cleanParams : "");
         window.history.pushState({ page: page }, "", newUrl);
-        // Scroll to top of content
+
         contentContainer.scrollTop = 0;
       })
       .catch((err) => {
@@ -106,90 +115,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // --- Event Delegation: Clicks ---
   contentContainer.addEventListener("click", function (e) {
-    // ========== GENERATE PASSWORD BUTTON ==========
+    // Generate Password
     if (
       e.target.id === "generatePwdBtn" ||
       e.target.closest("#generatePwdBtn")
     ) {
-      const genPwdUrl =
+      fetch(
         window.AppConfig.urls.generatePassword ||
-        "/dashboard/generate-password/";
-      fetch(genPwdUrl)
+          "/dashboard/generate-password/",
+      )
         .then((r) => r.json())
         .then((data) => {
           const pwdInput = document.querySelector('input[name="password"]');
           if (pwdInput) pwdInput.value = data.password;
           showToast("Password generated successfully!", "success");
-        })
-        .catch(() => {
-          showToast("Failed to generate password.", "error");
         });
     }
 
-    // ========== COPY PASSWORD BUTTON ==========
-    if (e.target.id === "copyPwdBtn" || e.target.closest("#copyPwdBtn")) {
-      const pwdInput = document.querySelector('input[name="password"]');
-      if (pwdInput && pwdInput.value) {
-        navigator.clipboard
-          .writeText(pwdInput.value)
-          .then(() => {
-            const btn =
-              document.getElementById("copyPwdBtn") ||
-              e.target.closest("#copyPwdBtn");
-            const icon = btn.querySelector("i");
-            if (icon) {
-              icon.classList.replace("fa-copy", "fa-check");
-              btn.classList.add("copied");
-              showToast("Password copied to clipboard!", "success");
-              setTimeout(() => {
-                icon.classList.replace("fa-check", "fa-copy");
-                btn.classList.remove("copied");
-              }, 2000);
-            }
-          })
-          .catch(() => {
-            showToast("Failed to copy password.", "error");
-          });
-      } else {
-        showToast("No password to copy. Generate one first.", "error");
-      }
-    }
-
-    // ========== PASSWORD TOGGLE (Profile Page - .pwd-toggle-dash) ==========
-    const pwdToggleDash = e.target.closest(".pwd-toggle-dash");
-    if (pwdToggleDash) {
-      const input = document.getElementById(pwdToggleDash.dataset.target);
-      if (!input) return;
-      const icon = pwdToggleDash.querySelector("i");
-      if (input.type === "password") {
-        input.type = "text";
-        icon.classList.replace("fa-eye", "fa-eye-slash");
-      } else {
-        input.type = "password";
-        icon.classList.replace("fa-eye-slash", "fa-eye");
-      }
-    }
-
-    // ========== PASSWORD TOGGLE (Add Student Modal - .pwd-toggle) ==========
-    const pwdToggle = e.target.closest(".pwd-toggle");
+    // Password Toggles
+    const pwdToggle = e.target.closest(".pwd-toggle-dash, .pwd-toggle");
     if (pwdToggle) {
+      const targetId = pwdToggle.dataset.target;
       const wrapper = pwdToggle.closest(".password-wrapper");
-      if (!wrapper) return;
-      const input = wrapper.querySelector(
-        'input[type="password"], input[type="text"]',
-      );
-      if (!input) return;
-      const icon = pwdToggle.querySelector("i");
-      if (input.type === "password") {
-        input.type = "text";
-        if (icon) icon.classList.replace("fa-eye", "fa-eye-slash");
-      } else {
-        input.type = "password";
-        if (icon) icon.classList.replace("fa-eye-slash", "fa-eye");
+      let input;
+
+      if (targetId) input = document.getElementById(targetId);
+      else if (wrapper)
+        input = wrapper.querySelector(
+          'input[type="password"], input[type="text"]',
+        );
+
+      if (input) {
+        const icon = pwdToggle.querySelector("i");
+        input.type = input.type === "password" ? "text" : "password";
+        if (icon) {
+          icon.classList.replace(
+            input.type === "password" ? "fa-eye" : "fa-eye-slash",
+            input.type === "password" ? "fa-eye" : "fa-eye-slash",
+          );
+        }
       }
     }
 
-    // ========== APPLY REQUEST BUTTON (Programs Page) ==========
+    // Apply Request Button
     const applyBtn = e.target.closest(".apply-request-btn");
     if (applyBtn) {
       const programId = applyBtn.dataset.programId;
@@ -197,9 +165,9 @@ document.addEventListener("DOMContentLoaded", function () {
       applyBtn.innerHTML =
         '<i class="fas fa-spinner fa-spin mr-1"></i> Sending...';
 
-      const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
       const formData = new FormData();
       formData.append("program_id", programId);
+      const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
       if (csrfToken) formData.append("csrfmiddlewaretoken", csrfToken.value);
 
       fetch(
@@ -218,24 +186,102 @@ document.addEventListener("DOMContentLoaded", function () {
           applyBtn.innerHTML = data.success
             ? '<i class="fas fa-check mr-1"></i> Sent!'
             : '<i class="fas fa-paper-plane mr-1"></i> Apply Request';
-        })
-        .catch(() => {
-          showToast("Network error.", "error");
-          applyBtn.disabled = false;
-          applyBtn.innerHTML =
-            '<i class="fas fa-paper-plane mr-1"></i> Apply Request';
         });
     }
-
-    // ========== VIEW DETAILS BUTTON (Universities Page) ==========
-    const viewDetailsBtn = e.target.closest(".view-details-btn");
-    if (viewDetailsBtn) {
-      const uniId = viewDetailsBtn.getAttribute("onclick").match(/id=(\d+)/);
-      if (uniId && uniId[1]) {
-        loadContent("university_detail?id=" + uniId[1]);
-      }
-    }
   });
+
+  // 🔥 NEW: Profile Scripts (Intl-Tel-Input & Cascading Dropdowns)
+  function initProfileScripts() {
+    const mobileInput = document.getElementById("id_mobile");
+    if (mobileInput && window.intlTelInput) {
+      window.intlTelInput(mobileInput, {
+        utilsScript:
+          "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/js/utils.js",
+        separateDialCode: true,
+        preferredCountries: ["tr", "ir", "de", "us"],
+      });
+    }
+
+    const countrySelect = document.getElementById("id_country");
+    const citySelect = document.getElementById("id_city");
+    if (countrySelect && citySelect) {
+      countrySelect.addEventListener("change", function () {
+        citySelect.innerHTML = '<option value="">---------</option>';
+        if (!this.value) return;
+
+        fetch(`/dashboard/get-cities/?country_id=${this.value}`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.cities) {
+              data.cities.forEach((city) => {
+                const opt = document.createElement("option");
+                opt.value = city.id;
+                opt.textContent = city.name;
+                citySelect.appendChild(opt);
+              });
+            }
+          });
+      });
+    }
+  }
+
+  // 🔥 NEW: Search-as-you-Type (Debounced)
+  function initSearchAutocomplete() {
+    let searchTimeout;
+    document.querySelectorAll(".search-input").forEach((input) => {
+      input.addEventListener("input", function () {
+        clearTimeout(searchTimeout);
+        const form = this.closest("form");
+        searchTimeout = setTimeout(() => {
+          form.dispatchEvent(new Event("submit", { cancelable: true }));
+        }, 400); // 400ms debounce
+      });
+    });
+  }
+
+  // 🔥 NEW: Program AJAX Autocomplete for New Application Page
+  function initProgramAutocomplete() {
+    const searchInput = document.getElementById("program-search-input");
+    const hiddenSelect = document.getElementById("id_program");
+    const resultsDiv = document.getElementById("program-results");
+    if (!searchInput || !hiddenSelect || !resultsDiv) return;
+
+    let timeout;
+    searchInput.addEventListener("input", function () {
+      clearTimeout(timeout);
+      const q = this.value;
+      if (q.length < 2) {
+        resultsDiv.classList.add("hidden");
+        return;
+      }
+
+      timeout = setTimeout(() => {
+        fetch(`/dashboard/programs-search/?q=${q}`)
+          .then((r) => r.json())
+          .then((data) => {
+            resultsDiv.innerHTML = "";
+            resultsDiv.classList.remove("hidden");
+            if (data.results.length === 0) {
+              resultsDiv.innerHTML =
+                '<div class="p-2 text-sm text-gray-500">No results found</div>';
+              return;
+            }
+            data.results.forEach((p) => {
+              const div = document.createElement("div");
+              div.className =
+                "p-2 hover:bg-blue-50 cursor-pointer border-b text-sm";
+              div.textContent = p.text;
+              div.onclick = () => {
+                hiddenSelect.innerHTML = `<option value="${p.id}" selected>${p.text}</option>`;
+                searchInput.value = p.text;
+                resultsDiv.classList.add("hidden");
+              };
+              resultsDiv.appendChild(div);
+            });
+          });
+      }, 300);
+    });
+  }
 
   // --- Handlers ---
   function handleProfileSubmit(form) {
@@ -244,6 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const orig = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
+
     fetch(form.action, {
       method: "POST",
       body: formData,
@@ -264,11 +311,6 @@ document.addEventListener("DOMContentLoaded", function () {
           btn.disabled = false;
           btn.innerHTML = orig;
         }
-      })
-      .catch(() => {
-        showToast("Network error. Please try again.", "error");
-        btn.disabled = false;
-        btn.innerHTML = orig;
       });
   }
 
@@ -285,14 +327,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const formData = new FormData(form);
     const csrfToken = form.querySelector("[name=csrfmiddlewaretoken]");
-
-    // Ensure CSRF token is included
     if (csrfToken && !formData.has("csrfmiddlewaretoken")) {
       formData.append("csrfmiddlewaretoken", csrfToken.value);
     }
 
     const btn = form.querySelector('button[type="submit"]');
-    const origText = btn ? btn.innerHTML : "";
     if (btn) {
       btn.disabled = true;
       btn.innerHTML =
@@ -311,15 +350,13 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((data) => {
         if (data.success) {
           showToast(data.message || "Success", "success");
-          const cur = window.history.state
-            ? window.history.state.page
-            : "my_applications";
-
-          // Close modal if it exists
           const modal = document.getElementById("addStudentModal");
           if (modal) modal.classList.add("hidden");
 
           setTimeout(() => {
+            const cur = window.history.state
+              ? window.history.state.page
+              : "my_applications";
             loadContent(data.redirect ? "my_applications" : cur);
           }, 500);
         } else {
@@ -328,11 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
             errDiv.innerHTML = Object.entries(data.errors)
               .map(
                 ([k, v]) =>
-                  "<p>" +
-                  k +
-                  ": " +
-                  (Array.isArray(v) ? v.join(", ") : v) +
-                  "</p>",
+                  `<p>${k}: ${Array.isArray(v) ? v.join(", ") : v}</p>`,
               )
               .join("");
             errDiv.classList.remove("hidden");
@@ -341,15 +374,8 @@ document.addEventListener("DOMContentLoaded", function () {
           }
           if (btn) {
             btn.disabled = false;
-            btn.innerHTML = origText;
+            btn.innerHTML = "Submit";
           }
-        }
-      })
-      .catch((err) => {
-        showToast("Network error. Please try again.", "error");
-        if (btn) {
-          btn.disabled = false;
-          btn.innerHTML = origText;
         }
       });
   }
@@ -357,15 +383,11 @@ document.addEventListener("DOMContentLoaded", function () {
   function handleGoToPage(form) {
     const pageInput = form.querySelector('input[name="goto_page"]');
     const targetPage = parseInt(pageInput.value);
-    const section = form.dataset.section; // 'universities' or 'programs'
+    const section = form.dataset.section;
     const filters = form.dataset.filters || "";
+
     if (isNaN(targetPage) || targetPage < 1) {
       showToast("Please enter a valid page number.", "error");
-      return;
-    }
-    const maxPage = parseInt(form.dataset.maxPage) || 999;
-    if (targetPage > maxPage) {
-      showToast("Page number cannot exceed " + maxPage + ".", "error");
       return;
     }
     loadContent(section, "page=" + targetPage + (filters ? "&" + filters : ""));
@@ -391,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 3500);
   }
 
-  // --- Browser History (Back/Forward) ---
+  // --- Browser History ---
   window.addEventListener("popstate", function () {
     const p = new URLSearchParams(window.location.search);
     loadContent(p.get("page") || "welcome");

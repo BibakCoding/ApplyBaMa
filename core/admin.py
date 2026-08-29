@@ -82,6 +82,7 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ("username", "email")
     list_filter = ("user_type", "is_active")
     ordering = ("-date_joined",)
+    raw_id_fields = ('country', 'city', 'citizenship')
 
 
 @admin.register(CompanyProfile)

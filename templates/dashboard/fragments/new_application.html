@@ -4,17 +4,24 @@
         <h1 class="text-3xl font-bold text-[var(--ab-text)] font-serif">{% trans "New Application" %}</h1>
         <p class="text-[var(--ab-muted)] mt-2">{% trans "Start a new university application for one of your students." %}</p>
     </div>
-
     <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-        <form id="newAppForm" class="space-y-6">
+        <form id="newAppForm" class="space-y-6" enctype="multipart/form-data">
             {% csrf_token %}
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Select Student" %}</label>
                 {{ form.student }}
             </div>
-            <div>
+            <div class="relative">
                 <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Select Program" %}</label>
-                {{ form.program }}
+                <input type="text"
+                       id="program-search-input"
+                       placeholder="{% trans 'Type to search programs...' %}"
+                       class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[42px] text-gray-800"
+                       autocomplete="off">
+                <div id="program-results"
+                     class="bg-white border border-gray-200 rounded-lg mt-1 max-h-40 overflow-y-auto shadow-lg absolute w-full z-10 hidden">
+                </div>
+                <div class="hidden">{{ form.program }}</div>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Student Type" %}</label>
@@ -24,10 +31,10 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Documents (Optional)" %}</label>
                 {{ form.documents }}
             </div>
-
-            <div id="formErrors" class="hidden text-red-500 text-sm bg-red-50 p-3 rounded-lg"></div>
-
-            <button type="submit" class="w-full bg-[var(--ab-primary)] text-white py-3 rounded-lg hover:opacity-90 transition font-semibold shadow-sm flex items-center justify-center">
+            <div id="formErrors"
+                 class="hidden text-red-500 text-sm bg-red-50 p-3 rounded-lg"></div>
+            <button type="submit"
+                    class="w-full bg-[var(--ab-primary)] text-white py-3 rounded-lg hover:opacity-90 transition font-semibold shadow-sm flex items-center justify-center">
                 <i class="fas fa-paper-plane mr-2"></i> {% trans "Create Application" %}
             </button>
         </form>

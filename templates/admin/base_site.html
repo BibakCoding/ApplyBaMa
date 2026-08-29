@@ -1,22 +1,31 @@
 {% extends "admin/base.html" %}
 {% load i18n static %}
-
-{% block title %}{% if title %}{{ title }} | {% endif %}Apply BM Admin{% endblock %}
-
-{% block branding %}
-<h1 id="site-name">
-    <a href="{% url 'admin:index' %}" style="color: #fff; font-weight: 800; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-        <img src="{% static 'images/logo.png' %}" alt="Logo" style="height: 32px; width: auto; filter: brightness(0) invert(1);">
-        Apply BM Control Center
-    </a>
-</h1>
+{% block title %}
+    {% if title %}{{ title }} |{% endif %}
+    Apply BM Admin
 {% endblock %}
-
+{% block branding %}
+    <h1 id="site-name">
+        <a href="{% url 'admin:index' %}"
+           style="color: #fff;
+                  font-weight: 800;
+                  font-size: 1.5rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem">
+            <img src="{% static 'images/logo.png' %}"
+                 alt="Logo"
+                 style="height: 32px;
+                        width: auto;
+                        filter: brightness(0) invert(1)">
+            Apply BM Control Center
+        </a>
+    </h1>
+{% endblock %}
 {% block nav-global %}{% endblock %}
-
 {% block extrastyle %}
-{{ block.super }}
-<style>
+    {{ block.super }}
+    <style>
     /* THEME 1 OVERRIDES FOR DJANGO ADMIN */
     :root {
         --admin-primary: #1E3A8A;
@@ -162,5 +171,14 @@
         }
     }
 
-</style>
+    @media (prefers-color-scheme: dark) {
+    :root { --primary: #1e3a8a; --body-bg: #0f172a; --body-fg: #f8fafc; }
+    .deletelink { background: #dc3545 !important; color: #ffffff !important; border-color: #dc3545 !important; }
+    select, input[type=text], input[type=email] {
+        background-color: #1e293b !important; color: #ffffff !important;
+        border: 1px solid #334155 !important; padding: 8px !important; line-height: 1.5 !important; height: auto !important;
+    }
+}
+
+    </style>
 {% endblock %}
