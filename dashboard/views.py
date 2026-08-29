@@ -20,6 +20,19 @@ from .forms import (
     ApplicationForm, AddStudentForm
 )
 
+def get_managed_students(user):
+    """Returns student IDs managed by an Agent or a Company's agents."""
+    if user.user_type == User.UserType.AGENT:
+        return Application.objects.filter(agent=user).values_list('student_id', flat=True).distinct()
+    elif user.user_type == User.UserType.COMPANY:
+        try:
+            company_profile = user.company_profile
+            agent_users = User.objects.filter(agent_profile__agency=company_profile)
+            return Application.objects.filter(agent__in=agent_users).values_list('student_id', flat=True).distinct()
+        except Exception:
+            return []
+    return []
+
 @login_required
 def dashboard_main(request):
     return render(request, "dashboard/main.html", context={"user": request.user})
@@ -52,10 +65,8 @@ def dashboard_content(request, page):
 
     context = {"user": request.user}
 
-    # --- PROFILE LOGIC (Initialize forms for GET request) ---
     if page == 'profile':
         user = request.user
-
         try:
             student_profile = user.student_profile
         except StudentProfile.DoesNotExist:
@@ -66,7 +77,6 @@ def dashboard_content(request, page):
         context['password_form'] = CustomPasswordChangeForm(user=user)
         context['student_form'] = StudentProfileForm(instance=student_profile) if student_profile else None
 
-    # --- UNIVERSITIES LOGIC ---
     elif page == 'universities':
         qs = University.objects.all().select_related('country', 'city')
         search_query = request.GET.get('search', '')
@@ -82,16 +92,10 @@ def dashboard_content(request, page):
         page_obj = paginator.get_page(page_number)
 
         context['page_obj'] = page_obj
-
-        # 🔥 FIX: Only show countries that have universities in the database
-        countries_with_universities = Country.objects.filter(
-            universities__isnull=False
-        ).distinct().order_by('name')
-
+        countries_with_universities = Country.objects.filter(universities__isnull=False).distinct().order_by('name')
         context['countries'] = countries_with_universities
         context['filters'] = {'search': search_query, 'country': country_id, 'sector': sector}
 
-    # --- PROGRAMS LOGIC ---
     elif page == 'programs':
         qs = Program.objects.all().select_related('university', 'faculty')
         search_query = request.GET.get('search', '')
@@ -114,7 +118,6 @@ def dashboard_content(request, page):
         context['statuses'] = Program.StatusChoices.choices
         context['filters'] = {'search': search_query, 'university': university_id, 'degree': degree, 'status': status}
 
-    # --- UNIVERSITY DETAIL ---
     elif page == 'university_detail':
         uni_id = request.GET.get('id')
         if uni_id:
@@ -127,27 +130,20 @@ def dashboard_content(request, page):
 
     elif page == 'my_applications':
         if request.user.user_type == User.UserType.AGENT:
-            applications = Application.objects.filter(
-                agent=request.user
-            ).select_related(
-                'student', 'program', 'program__university'
-            ).order_by('-created_at')
+            applications = Application.objects.filter(agent=request.user).select_related('student', 'program', 'program__university').order_by('-created_at')
         else:
-            applications = Application.objects.filter(
-                student=request.user
-            ).select_related(
-                'program', 'program__university', 'agent'
-            ).order_by('-created_at')
+            applications = Application.objects.filter(student=request.user).select_related('program', 'program__university', 'agent').order_by('-created_at')
         context['applications'] = applications
 
     elif page == 'my_students':
-        student_ids = Application.objects.filter(agent=request.user).values_list('student_id', flat=True).distinct()
+        student_ids = get_managed_students(request.user)
         students = User.objects.filter(id__in=student_ids)
         context['students'] = students
         context['add_student_form'] = AddStudentForm()
 
     elif page == 'new_application':
-        context['form'] = ApplicationForm(agent=request.user)
+        student_ids = get_managed_students(request.user)
+        context['form'] = ApplicationForm(student_queryset=student_ids)
 
     elif page == 'application_detail':
         pk = request.GET.get('id')
@@ -162,13 +158,8 @@ def dashboard_content(request, page):
 
     return render(request, content_map[page], context=context)
 
-
-# =========================================================================
-# 🔥 AJAX ENDPOINT: GET CITIES BY COUNTRY (For cascading dropdowns)
-# =========================================================================
 @login_required
 def get_cities_by_country(request):
-    """AJAX endpoint to get cities for a selected country"""
     country_id = request.GET.get('country_id')
     if country_id:
         try:
@@ -179,10 +170,6 @@ def get_cities_by_country(request):
             return JsonResponse({'cities': [], 'error': str(e)})
     return JsonResponse({'cities': []})
 
-
-# =========================================================================
-# PROFILE POST HANDLER (Handles the form submissions via AJAX)
-# =========================================================================
 @login_required
 def profile_view(request):
     if request.method != 'POST':
@@ -240,10 +227,6 @@ def _form_error_response(form):
             errors.append(f"{field.replace('_', ' ').title()}: {error}")
     return JsonResponse({'success': False, 'errors': errors})
 
-
-# =========================================================================
-# OTHER ACTION VIEWS
-# =========================================================================
 @login_required
 def application_action(request, pk):
     app = get_object_or_404(Application, pk=pk)
@@ -272,8 +255,10 @@ def generate_password(request):
 
 @login_required
 def submit_new_application(request):
-    if request.method == 'POST' and request.user.user_type == User.UserType.AGENT:
-        form = ApplicationForm(request.POST, request.FILES, agent=request.user)
+    # Allowed for both AGENT and COMPANY
+    if request.method == 'POST' and request.user.user_type in [User.UserType.AGENT, User.UserType.COMPANY]:
+        student_ids = get_managed_students(request.user)
+        form = ApplicationForm(request.POST, request.FILES, student_queryset=student_ids)
         if form.is_valid():
             application = form.save(commit=False)
             application.agent = request.user
@@ -284,14 +269,15 @@ def submit_new_application(request):
     return JsonResponse({'success': False, 'message': _('Invalid request.')})
 
 @login_required
+@ratelimit(key='ip', rate='10/h', method='POST', block=True)
 @ratelimit(key='user', rate='5/h', method='POST', block=True)
 def submit_add_student(request):
-    if request.method == 'POST' and request.user.user_type == User.UserType.AGENT:
+    # Allowed for both AGENT and COMPANY
+    if request.method == 'POST' and request.user.user_type in [User.UserType.AGENT, User.UserType.COMPANY]:
         form = AddStudentForm(request.POST)
         if form.is_valid():
-            # Check if agent already has too many students (prevent spam)
             existing_count = Application.objects.filter(agent=request.user).count()
-            if existing_count >= 100:  # Max 100 students per agent
+            if existing_count >= 100:
                 return JsonResponse({
                     'success': False,
                     'message': _('You have reached the maximum number of students (100). Please contact support.')

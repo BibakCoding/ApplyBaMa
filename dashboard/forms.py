@@ -2,11 +2,12 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import PasswordChangeForm
-from core.models import User, StudentProfile, City
+from core.models import User, StudentProfile, City, Country, Application # Added Country & Application
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
-BASE_INPUT_CLASS = 'ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] focus:border-transparent transition-all bg-white'
+# Added text-gray-800 to ensure text is always readable regardless of global CSS
+BASE_INPUT_CLASS = 'ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] focus:border-transparent transition-all bg-white text-gray-800'
 
 class PersonalInfoForm(forms.ModelForm):
     class Meta:
@@ -42,17 +43,12 @@ class ContactInfoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        # Show ALL countries for profile pages
         self.fields['country'].queryset = Country.objects.all().order_by('name')
 
-        # Start with empty cities or cities for current country
         if 'country' in self.data:
             try:
                 country_id = int(self.data.get('country'))
-                self.fields['city'].queryset = City.objects.filter(
-                    country_id=country_id
-                ).order_by('name')
+                self.fields['city'].queryset = City.objects.filter(country_id=country_id).order_by('name')
             except (ValueError, TypeError):
                 self.fields['city'].queryset = City.objects.none()
         elif self.instance.pk and self.instance.country:
@@ -84,12 +80,6 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         for field in self.fields.values():
             field.widget.attrs.update({'class': BASE_INPUT_CLASS, 'placeholder': _(field.label)})
 
-
-# Add these to your existing dashboard/forms.py
-from core.models import Application, User, StudentProfile
-
-BASE_INPUT_CLASS = 'ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] focus:border-transparent transition-all bg-white'
-
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
@@ -102,15 +92,12 @@ class ApplicationForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        agent = kwargs.pop('agent', None)
+        student_queryset = kwargs.pop('student_queryset', None)
         super().__init__(*args, **kwargs)
-        if agent:
-            # Agent only sees students they are currently managing
-            student_ids = Application.objects.filter(agent=agent).values_list('student_id', flat=True).distinct()
-            self.fields['student'].queryset = User.objects.filter(id__in=student_ids)
+        if student_queryset is not None:
+            self.fields['student'].queryset = User.objects.filter(id__in=student_queryset)
         else:
             self.fields['student'].queryset = User.objects.none()
-
 
 class AddStudentForm(forms.Form):
     first_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'class': BASE_INPUT_CLASS, 'placeholder': _('First Name')}))
@@ -118,6 +105,14 @@ class AddStudentForm(forms.Form):
     username = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class': BASE_INPUT_CLASS, 'placeholder': _('Username')}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': BASE_INPUT_CLASS, 'placeholder': _('Email Address')}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': BASE_INPUT_CLASS, 'placeholder': _('Temporary Password')}))
+
+    # Honeypot field to trap bots
+    website = forms.CharField(required=False, widget=forms.TextInput(attrs={'style': 'display:none;', 'tabindex': '-1', 'autocomplete': 'off'}))
+
+    def clean_website(self):
+        if self.cleaned_data.get('website'):
+            raise ValidationError("Bot detected.")
+        return ""
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
@@ -127,6 +122,11 @@ class AddStudentForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
+        # Block disposable domains to prevent spam/fake testing
+        disposable_domains = ['mailinator.com', 'tempmail.com', '10minutemail.com', 'guerrillamail.com', 'yopmail.com', 'throwaway.email']
+        domain = email.split('@')[-1].lower()
+        if domain in disposable_domains:
+            raise ValidationError(_('Disposable email addresses are not allowed.'))
         if User.objects.filter(email=email).exists():
             raise ValidationError(_('This email is already registered.'))
         return email

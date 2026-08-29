@@ -209,3 +209,95 @@
 </div>
 
 <script src="{% static 'js/pages/profile.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Existing form AJAX submission logic...
+    const forms = document.querySelectorAll('.profile-form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> {% trans "Saving..." %}';
+
+            fetch("{% url 'profile_view' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    setTimeout(() => loadContent('profile'), 1500);
+                } else {
+                    const errorText = data.errors ? data.errors.join('\n') : '{% trans "An error occurred." %}';
+                    showToast(errorText, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            })
+            .catch(error => {
+                showToast('{% trans "Network error. Please try again." %}', 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            });
+        });
+    });
+
+    // 🔥 NEW: Dynamic Country -> City Cascading Dropdown
+    const countrySelect = document.getElementById('id_country');
+    const citySelect = document.getElementById('id_city');
+
+    if (countrySelect && citySelect) {
+        countrySelect.addEventListener('change', function() {
+            const countryId = this.value;
+
+            // Clear existing cities
+            citySelect.innerHTML = '<option value="">---------</option>';
+            if (window.jQuery && $(citySelect).hasClass('select2-hidden-accessible')) {
+                $(citySelect).empty().trigger('change.select2');
+            }
+
+            if (!countryId) return;
+
+            fetch(`{% url 'get_cities_by_country' %}?country_id=${countryId}`, {
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.cities && data.cities.length > 0) {
+                    data.cities.forEach(city => {
+                        const opt = document.createElement('option');
+                        opt.value = city.id;
+                        opt.textContent = city.name;
+                        citySelect.appendChild(opt);
+                    });
+                    // Trigger Select2 update if initialized
+                    if (window.jQuery && $(citySelect).hasClass('select2-hidden-accessible')) {
+                        $(citySelect).trigger('change.select2');
+                    }
+                }
+            })
+            .catch(err => console.error('Error fetching cities:', err));
+        });
+    }
+});
+
+function showToast(message, type) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    const toast = document.createElement('div');
+    toast.className = `p-4 rounded-lg shadow-lg text-white z-50 transition-all duration-300 transform translate-y-0 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+    toast.innerText = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+</script>
