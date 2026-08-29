@@ -122,7 +122,7 @@
         font-size: 0.95rem !important;
         transition: all 0.2s !important;
         background: #fff !important;
-        color: var(--admin-text)
+        color: var(--admin-text) !important;
     }
     input:focus, textarea:focus, select:focus, .vTextField:focus {
         border-color: var(--admin-primary) !important;
@@ -142,5 +142,25 @@
     .messagelist li.success { background: #DCFCE7 !important; color: #15803D !important; border: 1px solid #BBF7D0 !important; }
     .messagelist li.warning { background: #FEF3C7 !important; color: #B45309 !important; border: 1px solid #FDE68A !important; }
     .messagelist li.error { background: #FEE2E2 !important; color: #B91C1C !important; border: 1px solid #FECACA !important; }
+
+
+
+    #container input, #container select, #container textarea,
+    .dashboard #content-main input, .dashboard #content-main select,
+    .form-row input, .form-row select, .form-row textarea {
+        color: #333 !important;
+        background-color: #fff !important;
+        border: 1px solid #ccc !important;
+    }
+
+    /* Fix for Django 3.2+ Dark Mode OS overrides */
+    @media (prefers-color-scheme: dark) {
+        #container input, #container select, #container textarea,
+        .form-row input, .form-row select, .form-row textarea {
+            color: #333 !important;
+            background-color: #fff !important;
+        }
+    }
+
 </style>
 {% endblock %}
