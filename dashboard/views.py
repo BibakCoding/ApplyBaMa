@@ -454,7 +454,13 @@ def program_apply_request(request):
 @login_required
 def programs_search(request):
     q = request.GET.get("q", "")
-    programs = Program.objects.filter(name__icontains=q).select_related
+    programs = Program.objects.filter(name__icontains=q).select_related("university")[
+        :20
+    ]
+    results = [
+        {"id": p.id, "text": f"{p.name} ({p.university.name})"} for p in programs
+    ]
+    return JsonResponse({"results": results})
 
 
 @login_required
