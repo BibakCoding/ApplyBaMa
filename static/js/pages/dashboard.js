@@ -150,10 +150,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const icon = pwdToggle.querySelector("i");
         input.type = input.type === "password" ? "text" : "password";
         if (icon) {
-          icon.classList.replace(
-            input.type === "password" ? "fa-eye" : "fa-eye-slash",
-            input.type === "password" ? "fa-eye" : "fa-eye-slash",
-          );
+          // 🔥 FIX: Correct logic to swap icons
+          if (input.type === "password") {
+            icon.classList.replace("fa-eye-slash", "fa-eye");
+          } else {
+            icon.classList.replace("fa-eye", "fa-eye-slash");
+          }
         }
       }
     }
@@ -202,6 +204,9 @@ document.addEventListener("DOMContentLoaded", function () {
         separateDialCode: true,
         preferredCountries: ["tr", "ir", "de", "us"],
       });
+
+      // 🔥 FIX: Store instance on the DOM element so we can retrieve it later
+      mobileInput.itiInstance = iti;
 
       const fixPlaceholder = () => {
         const countryData = iti.getSelectedCountryData();
@@ -329,11 +334,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function handleProfileSubmit(form) {
     // 🔥 FIX: Save full international mobile number format
     const mobileInput = form.querySelector("#id_mobile");
-    if (mobileInput && window.intlTelInput) {
-      const iti = window.intlTelInput.getInstance(mobileInput);
-      if (iti) {
-        mobileInput.value = iti.getNumber();
-      }
+    if (mobileInput && mobileInput.itiInstance) {
+      mobileInput.value = mobileInput.itiInstance.getNumber();
     }
 
     const formData = new FormData(form);

@@ -762,3 +762,31 @@
 .content-container .bg-white.rounded-xl:hover {
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 }
+
+/* ==========================================================================
+   PROFILE PASSWORD INPUT PADDING & RTL FALLBACKS
+========================================================================== */
+
+.password-input-dash {
+    padding-inline-end: 3rem !important;
+}
+
+/* Explicit RTL Fixes for absolute positioned elements to ensure perfect flipping */
+[dir="ltr"] .password-input-dash {
+    padding-right: 3rem !important;
+}
+[dir="rtl"] .password-input-dash {
+    padding-left: 3rem !important;
+}
+
+[dir="ltr"] .copy-pwd-btn { right: 6.5rem; left: auto; }
+[dir="rtl"] .copy-pwd-btn { left: 6.5rem; right: auto; }
+
+[dir="ltr"] .generate-pwd-btn { right: 3.25rem; left: auto; }
+[dir="rtl"] .generate-pwd-btn { left: 3.25rem; right: auto; }
+
+[dir="ltr"] .pwd-toggle { right: 0.75rem; left: auto; }
+[dir="rtl"] .pwd-toggle { left: 0.75rem; right: auto; }
+
+[dir="ltr"] .pwd-toggle-dash { right: 0.75rem; left: auto; }
+[dir="rtl"] .pwd-toggle-dash { left: 0.75rem; right: auto; }
