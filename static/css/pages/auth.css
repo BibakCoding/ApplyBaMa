@@ -222,7 +222,6 @@ html[dir="rtl"] .auth-lang-switch { right: auto; left: 1.5rem; }
     color: var(--ab-primary) !important;
 }
 
-
 /* ==========================================================================
    AUTH PAGES - REMOVED INLINE STYLES
 ========================================================================== */
@@ -256,6 +255,10 @@ html[dir="rtl"] .auth-lang-switch { right: auto; left: 1.5rem; }
 .password-wrapper .ab-input {
     padding-right: 3rem;
 }
+[dir="rtl"] .password-wrapper .ab-input {
+    padding-right: 0.9rem;
+    padding-left: 3rem;
+}
 
 .pwd-toggle {
     position: absolute;
@@ -273,6 +276,11 @@ html[dir="rtl"] .auth-lang-switch { right: auto; left: 1.5rem; }
 
 .pwd-toggle:hover {
     color: var(--ab-primary);
+}
+
+[dir="rtl"] .pwd-toggle {
+    right: auto;
+    left: 1rem;
 }
 
 .auth-remember-field {

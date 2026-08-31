@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Choose Username" %} | Apply BM{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-brand-panel">
+        <div class="auth-brand-top">
+            <a href="{% url 'main' %}" class="ab-brand">
+                <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="40" height="40">
+                <span>Apply BM</span>
+            </a>
+        </div>
+
+        <div class="auth-brand-hero">
+            <h1 class="font-serif">{% trans "Almost There!" %}</h1>
+            <p>{% trans "Your account is verified! Would you like to customize your username before jumping into your dashboard?" %}</p>
+            <div class="auth-brand-stats">
+                <div class="auth-stat-item"><strong><i class="fas fa-user-circle"></i></strong><span>{% trans "Personalized" %}</span></div>
+                <div class="auth-stat-item"><strong><i class="fas fa-check-double"></i></strong><span>{% trans "Verified" %}</span></div>
+                <div class="auth-stat-item"><strong><i class="fas fa-rocket"></i></strong><span>{% trans "Ready" %}</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-form-panel">
+        <div class="auth-lang-switch">{% include 'partials/language_switcher.html' %}</div>
+        <div class="auth-mobile-logo">
+            <a href="{% url 'main' %}" class="ab-brand">
+                <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="40" height="40">
+                <span>Apply BM</span>
+            </a>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="auth-form-header" style="text-align: center;">
+                <div style="width: 4rem; height: 4rem; margin: 0 auto 1rem auto; background: var(--ab-primary-soft); color: var(--ab-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                    <i class="fas fa-user-edit"></i>
+                </div>
+                <h2 class="font-serif">{% trans "Choose Your Username" %}</h2>
+                <p>{% trans "This is how you'll be known on Apply BM. You can also keep your default one." %}</p>
+            </div>
+
+            <form id="usernameForm" action="{% url 'username_selection' %}" method="post" class="auth-form" novalidate>
+                {% csrf_token %}
+                <div id="usernameNonFieldErrors"></div>
+
+                <div class="ab-field">
+                    <label for="id_username" class="ab-label">{% trans "Username" %}</label>
+                    <input type="text" name="username" id="id_username" class="ab-input"
+                           placeholder="{% trans 'your_username' %}" value="{{ user.username }}" required>
+                </div>
+
+                <button type="submit" name="action" value="save" class="ab-btn ab-btn-primary">{% trans "Save & Continue" %}</button>
+            </form>
+
+            <form action="{% url 'username_selection' %}" method="post" class="auth-form" style="margin-top: 1rem;">
+                {% csrf_token %}
+                <button type="submit" name="action" value="skip" class="ab-btn ab-btn-outline w-full">{% trans "Skip for Now" %}</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

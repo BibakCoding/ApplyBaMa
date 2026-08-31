@@ -9,4 +9,5 @@ urlpatterns = [
     path("resend_code/<int:pk>/", views.resend_code, name="resend_code"),
     path("forget_password/", views.forget_password, name="forget_password"),
     path("change_password/<str:token>/", views.change_password, name="change_password"),
+    path("username-selection/", views.username_selection, name="username_selection"),
 ]

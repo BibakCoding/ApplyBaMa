@@ -133,7 +133,10 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update(
-                {"class": BASE_INPUT_CLASS, "placeholder": _(field.label)}
+                {
+                    "class": BASE_INPUT_CLASS + " password-input-dash",
+                    "placeholder": _(field.label),
+                }
             )
 
 

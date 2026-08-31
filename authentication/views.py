@@ -23,11 +23,8 @@ from .tasks import send_async_email
 
 User = get_user_model()
 
-
-
 def is_ajax(request):
     return request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-
 
 def dispatch_email(subject, template_name, context, to):
     try:
@@ -36,6 +33,13 @@ def dispatch_email(subject, template_name, context, to):
     except:
         return False
 
+def generate_unique_username(base):
+    username = base
+    counter = 1
+    while User.objects.filter(username=username).exists():
+        username = f"{base}{counter}"
+        counter += 1
+    return username
 
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def login_view(request):
@@ -48,11 +52,10 @@ def login_view(request):
         if form.is_valid():
             remember_me = request.POST.get('remember_me')
 
-            # Set session expiry based on remember_me
             if remember_me:
-                request.session.set_expiry(60 * 60 * 24 * 30)  # 30 days
+                request.session.set_expiry(60 * 60 * 24 * 30)
             else:
-                request.session.set_expiry(0)  # Expire when browser closes
+                request.session.set_expiry(0)
 
             auth_login(request, form.user)
             msg = _("Logged in successfully.")
@@ -71,7 +74,6 @@ def login_view(request):
 
     return render(request, "authentication/login.html", {"form": form})
 
-# Register
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def register_view(request):
     if request.user.is_authenticated:
@@ -82,14 +84,16 @@ def register_view(request):
     if request.method == "POST":
         if form.is_valid():
             email = form.cleaned_data["email"]
+            base_username = email.split('@')[0]
+            unique_username = generate_unique_username(base_username)
+
             user, created = User.objects.get_or_create(
-                email=email, defaults={"username": email, "is_active": False}
+                email=email, defaults={"username": unique_username, "is_active": False}
             )
             if created:
                 user.set_password(form.cleaned_data["password1"])
                 user.save()
 
-            # Issue registration code
             vc = VerificationCode.create_registration(user)
 
             dispatch_email(
@@ -119,15 +123,11 @@ def register_view(request):
 
     return render(request, "authentication/register.html", {"form": form})
 
-
-# Logout
 def logout_view(request):
     auth_logout(request)
     messages.success(request, _("You have logged out."))
     return redirect("main")
 
-
-# Confirm Code
 def confirm_code(request, pk):
     if request.user.is_authenticated:
         messages.info(request, _("You are already logged in."))
@@ -164,9 +164,9 @@ def confirm_code(request, pk):
                 auth_login(request, user)
                 msg = _("Account confirmed!")
                 if is_ajax(request):
-                    return JsonResponse({"success": True, "redirect": reverse("dashboard")})
+                    return JsonResponse({"success": True, "redirect": reverse("username_selection")})
                 messages.success(request, msg)
-                return redirect("dashboard")
+                return redirect("username_selection")
 
         errors = form.errors.get_json_data()
         if is_ajax(request):
@@ -182,8 +182,6 @@ def confirm_code(request, pk):
         request, "authentication/confirm_code.html", {"form": form, "user_id": user.pk}
     )
 
-
-# Resend Code
 @ratelimit(key="ip", rate="3/m", method="POST", block=True)
 def resend_code(request, pk):
     if request.user.is_authenticated:
@@ -201,7 +199,6 @@ def resend_code(request, pk):
         messages.error(request, msg)
         return redirect("register")
 
-    # Issue new registration code
     vc = VerificationCode.create_registration(user)
 
     dispatch_email(
@@ -216,10 +213,6 @@ def resend_code(request, pk):
     messages.success(request, msg)
 
     return redirect("confirm_code", pk=pk)
-
-
-# Password Reset Request
-
 
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def forget_password(request):
@@ -261,8 +254,6 @@ def forget_password(request):
 
     return render(request, "authentication/forget_password.html", {"form": form})
 
-
-# Password Change via Token
 def change_password(request, token):
     if request.user.is_authenticated:
         messages.info(request, _("You are already logged in."))
@@ -316,3 +307,34 @@ def change_password(request, token):
                     messages.error(request, f"{form.fields[f].label}: {e['message']}")
 
     return render(request, "authentication/change_password.html", {"form": form})
+
+def username_selection(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    user = request.user
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+        if action == "skip":
+            return redirect("dashboard")
+        elif action == "save":
+            new_username = request.POST.get("username", "").strip()
+            if new_username and new_username != user.username:
+                if User.objects.filter(username=new_username).exclude(pk=user.pk).exists():
+                    msg = _("This username is already taken.")
+                    if is_ajax(request):
+                        return JsonResponse({"success": False, "errors": {"__all__": [{"message": msg}]}}, status=400)
+                    messages.error(request, msg)
+                else:
+                    user.username = new_username
+                    user.save()
+                    msg = _("Username updated successfully.")
+                    if is_ajax(request):
+                        return JsonResponse({"success": True, "redirect": reverse("dashboard"), "message": msg})
+                    messages.success(request, msg)
+                    return redirect("dashboard")
+            else:
+                return redirect("dashboard")
+
+    return render(request, "authentication/username_selection.html")
