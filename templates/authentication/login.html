@@ -1,5 +1,5 @@
-{% extends 'base.html' %}
-{% load i18n static custom_filters %}
+{% extends "base.html" %}
+{% load i18n static %}
 
 {% block title %}{% trans "Login" %} | Apply BM{% endblock %}
 
@@ -61,6 +61,7 @@
                            placeholder="{% trans 'you@example.com or username' %}" value="{{ form.username.value|default_if_none:'' }}" required>
                 </div>
 
+                <!-- 🔥 FIX: Added inline RTL padding to override global 9rem padding for single eye icon -->
                 <div class="ab-field">
                     <div class="auth-password-label-row">
                         <label for="id_password" class="ab-label">{% trans "Password" %}</label>
@@ -68,6 +69,7 @@
                     </div>
                     <div class="password-wrapper">
                         <input type="password" name="password" id="id_password" class="ab-input"
+                               style="padding-inline-end: 3rem;"
                                placeholder="••••••••" required>
                         <button type="button" class="pwd-toggle" data-target="id_password">
                             <i class="fas fa-eye"></i>
@@ -77,7 +79,7 @@
 
                 <div class="ab-field auth-remember-field">
                     <input type="checkbox" id="remember_me" name="remember_me" class="auth-checkbox">
-                    <label for="remember_me" class="auth-remember-label">{% trans "Remember Me" %}</label>
+                    <label for="remember_me" class="ab-label auth-remember-label">{% trans "Remember Me" %}</label>
                 </div>
 
                 <button type="submit" class="ab-btn ab-btn-primary">{% trans "Sign In" %}</button>

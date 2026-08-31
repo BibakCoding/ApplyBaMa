@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
         initProfileScripts();
         initSearchAutocomplete();
         initProgramAutocomplete();
+        initSelect2();
 
         // Update Browser URL
         const cleanParams = params.replace(/^\?/, "");
@@ -193,13 +194,25 @@ document.addEventListener("DOMContentLoaded", function () {
   // 🔥 NEW: Profile Scripts (Intl-Tel-Input & Cascading Dropdowns)
   function initProfileScripts() {
     const mobileInput = document.getElementById("id_mobile");
+    let iti = null;
     if (mobileInput && window.intlTelInput) {
-      window.intlTelInput(mobileInput, {
+      iti = window.intlTelInput(mobileInput, {
         utilsScript:
           "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/js/utils.js",
         separateDialCode: true,
         preferredCountries: ["tr", "ir", "de", "us"],
       });
+
+      const fixPlaceholder = () => {
+        const countryData = iti.getSelectedCountryData();
+        if (countryData.iso2 === "ir") {
+          mobileInput.setAttribute("placeholder", "912 345 6789");
+        } else if (countryData.iso2 === "tr") {
+          mobileInput.setAttribute("placeholder", "501 234 56 78");
+        }
+      };
+      setTimeout(fixPlaceholder, 100);
+      mobileInput.addEventListener("countrychange", fixPlaceholder);
     }
 
     const countrySelect = document.getElementById("id_country");
@@ -247,44 +260,82 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!searchInput || !hiddenSelect || !resultsDiv) return;
 
     let timeout;
+
+    const fetchPrograms = (q) => {
+      fetch(`/dashboard/programs-search/?q=${encodeURIComponent(q || "")}`)
+        .then((r) => r.json())
+        .then((data) => {
+          resultsDiv.innerHTML = "";
+          resultsDiv.classList.remove("hidden");
+          if (data.results.length === 0) {
+            resultsDiv.innerHTML =
+              '<div class="p-2 text-sm text-gray-500">No results found</div>';
+            return;
+          }
+          data.results.forEach((p) => {
+            const div = document.createElement("div");
+            div.className =
+              "p-2 hover:bg-blue-50 cursor-pointer border-b text-sm";
+            div.textContent = p.text;
+            div.onclick = () => {
+              hiddenSelect.innerHTML = `<option value="${p.id}" selected>${p.text}</option>`;
+              searchInput.value = p.text;
+              resultsDiv.classList.add("hidden");
+            };
+            resultsDiv.appendChild(div);
+          });
+        });
+    };
+
+    searchInput.addEventListener("focus", function () {
+      fetchPrograms(this.value);
+    });
+
     searchInput.addEventListener("input", function () {
       clearTimeout(timeout);
       const q = this.value;
-      if (q.length < 2) {
-        resultsDiv.classList.add("hidden");
-        return;
-      }
-
       timeout = setTimeout(() => {
-        fetch(`/dashboard/programs-search/?q=${q}`)
-          .then((r) => r.json())
-          .then((data) => {
-            resultsDiv.innerHTML = "";
-            resultsDiv.classList.remove("hidden");
-            if (data.results.length === 0) {
-              resultsDiv.innerHTML =
-                '<div class="p-2 text-sm text-gray-500">No results found</div>';
-              return;
-            }
-            data.results.forEach((p) => {
-              const div = document.createElement("div");
-              div.className =
-                "p-2 hover:bg-blue-50 cursor-pointer border-b text-sm";
-              div.textContent = p.text;
-              div.onclick = () => {
-                hiddenSelect.innerHTML = `<option value="${p.id}" selected>${p.text}</option>`;
-                searchInput.value = p.text;
-                resultsDiv.classList.add("hidden");
-              };
-              resultsDiv.appendChild(div);
-            });
-          });
+        fetchPrograms(q);
       }, 300);
     });
+
+    document.addEventListener("click", function (e) {
+      if (
+        resultsDiv &&
+        !resultsDiv.contains(e.target) &&
+        e.target !== searchInput
+      ) {
+        resultsDiv.classList.add("hidden");
+      }
+    });
+  }
+
+  // 🔥 NEW: Searchable Select2 for Filters
+  function initSelect2() {
+    if (window.jQuery && typeof window.jQuery.fn.select2 !== "undefined") {
+      window.jQuery(".filter-select").each(function () {
+        if (!window.jQuery(this).hasClass("select2-hidden-accessible")) {
+          window.jQuery(this).select2({
+            allowClear: true,
+            width: "100%",
+            placeholder: " ",
+          });
+        }
+      });
+    }
   }
 
   // --- Handlers ---
   function handleProfileSubmit(form) {
+    // 🔥 FIX: Save full international mobile number format
+    const mobileInput = form.querySelector("#id_mobile");
+    if (mobileInput && window.intlTelInput) {
+      const iti = window.intlTelInput.getInstance(mobileInput);
+      if (iti) {
+        mobileInput.value = iti.getNumber();
+      }
+    }
+
     const formData = new FormData(form);
     const btn = form.querySelector('button[type="submit"]');
     const orig = btn.innerHTML;

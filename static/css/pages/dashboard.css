@@ -14,11 +14,10 @@
     min-height: 100vh;
     background-color: var(--ab-bg, #F3F4F6);
     overflow-x: hidden;
-    /* Prevents horizontal scroll on mobile */
 }
 
 /* ==========================================================================
-   SIDEBAR (Desktop & Mobile)
+   SIDEBAR (Desktop & Mobile) - 🔥 RTL FIX
 ========================================================================== */
 
 .dashboard-sidebar {
@@ -28,7 +27,9 @@
     display: flex;
     flex-direction: column;
     position: fixed;
-    inset: 0 auto 0 0;
+    top: 0;
+    bottom: 0;
+    inset-inline-start: 0; /* 🔥 RTL FIX: Replaced inset: 0 auto 0 0 */
     z-index: 40;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -135,7 +136,6 @@
     flex: 1;
     overflow-y: auto;
     padding: 1.5rem 0;
-    /* Custom Scrollbar for Sidebar */
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
@@ -191,6 +191,10 @@
     transform: translateX(4px);
 }
 
+[dir="rtl"] .nav-link:hover {
+    transform: translateX(-4px); /* 🔥 RTL FIX */
+}
+
 .nav-link.active {
     background: rgba(245, 158, 11, 0.15);
     color: #F59E0B;
@@ -239,7 +243,7 @@
 }
 
 /* ==========================================================================
-   MAIN CONTENT AREA
+   MAIN CONTENT AREA - 🔥 RTL FIX
 ========================================================================== */
 
 .dashboard-main {
@@ -248,6 +252,7 @@
     flex-direction: column;
     min-height: 100vh;
     background: var(--ab-bg, #F9FAFB);
+    margin-inline-start: var(--ab-sidebar-width); /* 🔥 RTL FIX: Replaced margin-left */
 }
 
 .content-container {
@@ -358,8 +363,20 @@
     }
 }
 
+@keyframes auth-slide-in-right { /* 🔥 Added for RTL Desktop Animation */
+    0% {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 /* ==========================================================================
-   RESPONSIVE DESIGN (Mobile vs Desktop)
+   RESPONSIVE DESIGN (Mobile vs Desktop) - 🔥 RTL FIX
 ========================================================================== */
 
 /* --- MOBILE (max-width: 1023px) --- */
@@ -367,13 +384,16 @@
     .dashboard-sidebar {
         transform: translateX(-100%);
     }
+    [dir="rtl"] .dashboard-sidebar { /* 🔥 RTL FIX */
+        transform: translateX(100%);
+    }
 
     .dashboard-sidebar.open {
         transform: translateX(0);
     }
 
     .dashboard-main {
-        margin-left: 0;
+        margin-inline-start: 0; /* 🔥 RTL FIX */
         opacity: 1;
         transform: translateY(0);
     }
@@ -397,9 +417,12 @@
         transform: translateX(0);
         animation: auth-slide-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
+    [dir="rtl"] .dashboard-sidebar { /* 🔥 RTL FIX */
+        animation: auth-slide-in-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
 
     .dashboard-main {
-        margin-left: var(--ab-sidebar-width);
+        margin-inline-start: var(--ab-sidebar-width); /* 🔥 RTL FIX */
         animation: auth-fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
         opacity: 0;
     }
@@ -533,6 +556,10 @@
     transition: transform 0.3s ease;
 }
 
+[dir="rtl"] .view-details-btn:hover i {
+    transform: translateX(-4px); /* 🔥 RTL FIX */
+}
+
 /* ==========================================================================
    MODAL BACKDROP - MATTE/FROSTED EFFECT
 ========================================================================== */
@@ -548,7 +575,7 @@
 
 /* ==========================================================================
    PASSWORD WRAPPER WITH ALL THREE BUTTONS
-   (Copy, Generate, Eye Toggle)
+   (Copy, Generate, Eye Toggle) - 🔥 RTL FIX
 ========================================================================== */
 
 .password-wrapper {
@@ -561,11 +588,10 @@
 .password-wrapper input[type="password"],
 .password-wrapper input[type="text"] {
     width: 100%;
-    padding-right: 9rem !important;
+    padding-inline-end: 9rem !important; /* 🔥 RTL FIX: Replaced padding-right */
     /* Space for all three buttons */
     min-height: 2.9rem;
     padding: 0.7rem 0.9rem;
-    padding-right: 9rem;
     background: var(--ab-surface);
     color: var(--ab-text);
     border: 1px solid var(--ab-border);
@@ -585,7 +611,7 @@
 /* Copy Password Button */
 .copy-pwd-btn {
     position: absolute;
-    right: 6.5rem;
+    inset-inline-end: 6.5rem; /* 🔥 RTL FIX */
     top: 50%;
     transform: translateY(-50%);
     background: #DBEAFE;
@@ -615,7 +641,7 @@
 /* Generate Password Button */
 .generate-pwd-btn {
     position: absolute;
-    right: 3.25rem;
+    inset-inline-end: 3.25rem; /* 🔥 RTL FIX */
     top: 50%;
     transform: translateY(-50%);
     background: #F3F4F6;
@@ -639,7 +665,7 @@
 /* Password Toggle (Eye Icon) */
 .pwd-toggle {
     position: absolute;
-    right: 0.75rem;
+    inset-inline-end: 0.75rem; /* 🔥 RTL FIX */
     top: 50%;
     transform: translateY(-50%);
     background: none;
@@ -655,6 +681,28 @@
 }
 
 .pwd-toggle:hover {
+    color: var(--ab-primary, #1E3A8A);
+}
+
+/* Password Toggle Dashboard Profile (Eye Icon) */
+.pwd-toggle-dash {
+    position: absolute;
+    inset-inline-end: 0.75rem; /* 🔥 RTL FIX */
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #9CA3AF;
+    font-size: 1rem;
+    padding: 0.25rem;
+    transition: color 0.2s ease;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+}
+
+.pwd-toggle-dash:hover {
     color: var(--ab-primary, #1E3A8A);
 }
 
@@ -679,7 +727,7 @@
 #toast-container {
     position: fixed;
     top: 1rem;
-    right: 1rem;
+    inset-inline-end: 1rem; /* 🔥 RTL FIX */
     z-index: 9999;
 }
 
