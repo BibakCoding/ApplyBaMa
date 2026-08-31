@@ -14,11 +14,12 @@
                        name="search"
                        value="{{ filters.search }}"
                        placeholder="{% trans 'Search programs...' %}"
-                       class="search-input ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[42px] text-gray-800">
+                       class="search-input ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
             </div>
+            <!-- 🔥 FIX: Added filter-select class for Select2, changed h-[42px] to h-[46px] for perfect alignment -->
             <div class="min-w-[150px]">
                 <select name="university"
-                        class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[42px] text-gray-800">
+                        class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
                     <option value="">{% trans "All Universities" %}</option>
                     {% for uni in universities_filter %}
                         <option value="{{ uni.id }}"
@@ -30,7 +31,7 @@
             </div>
             <div class="min-w-[150px]">
                 <select name="country"
-                        class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[42px] text-gray-800">
+                        class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
                     <option value="">{% trans "All Countries" %}</option>
                     {% for c in countries_filter %}
                         <option value="{{ c.id }}"
@@ -42,7 +43,7 @@
             </div>
             <div class="min-w-[150px]">
                 <select name="language"
-                        class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[42px] text-gray-800">
+                        class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
                     <option value="">{% trans "All Languages" %}</option>
                     {% for lang in languages %}
                         <option value="{{ lang.id }}"
@@ -54,20 +55,21 @@
             </div>
             <div class="min-w-[150px]">
                 <select name="degree"
-                        class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[42px] text-gray-800">
+                        class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
                     <option value="">{% trans "All Degrees" %}</option>
                     {% for val, label in degrees %}
                         <option value="{{ val }}" {% if filters.degree == val %}selected{% endif %}>{{ label }}</option>
                     {% endfor %}
                 </select>
             </div>
+            <!-- 🔥 FIX: Changed h-[42px] to h-[46px] on buttons to match input height exactly -->
             <div class="flex items-end gap-2">
                 <button type="submit"
-                        class="bg-[var(--ab-primary)] text-white py-2 px-6 rounded-lg hover:opacity-90 transition font-medium shadow-sm h-[42px] flex items-center justify-center">
+                        class="bg-[var(--ab-primary)] text-white py-2 px-6 rounded-lg hover:opacity-90 transition font-medium shadow-sm h-[46px] flex items-center justify-center">
                     <i class="fas fa-filter mr-2"></i> {% trans "Filter" %}
                 </button>
                 <a href="{% url 'export_programs_pdf' %}?{{ request.GET.urlencode }}"
-                   class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition font-medium shadow-sm h-[42px] flex items-center justify-center whitespace-nowrap">
+                   class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition font-medium shadow-sm h-[46px] flex items-center justify-center whitespace-nowrap">
                     <i class="fas fa-file-pdf mr-2"></i> {% trans "PDF" %}
                 </a>
             </div>
@@ -137,12 +139,12 @@
                     {% elif i >= page_obj.number|add:"-2" and i <= page_obj.number|add:"2" %}
                         <button onclick="loadContent('programs', 'page={{ i }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&country={{ filters.country }}&language={{ filters.language }}')"
                                 class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
-                            {{ i }}
+                                {{ i }}
                         </button>
                     {% elif i == 1 or i == page_obj.paginator.num_pages %}
                         <button onclick="loadContent('programs', 'page={{ i }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&country={{ filters.country }}&language={{ filters.language }}')"
                                 class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
-                            {{ i }}
+                                {{ i }}
                         </button>
                     {% elif i == page_obj.number|add:"-3" or i == page_obj.number|add:"3" %}
                         <span class="px-2 py-2 text-gray-400 text-sm">...</span>

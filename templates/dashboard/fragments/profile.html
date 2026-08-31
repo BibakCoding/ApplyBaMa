@@ -20,6 +20,11 @@
                   data-form-type="personal_info">
                 {% csrf_token %}
                 <input type="hidden" name="form_type" value="personal_info">
+                <!-- 🔥 FIX: Added Username Field -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Username" %}</label>
+                    {{ personal_form.username }}
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "First Name" %}</label>
@@ -140,18 +145,10 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Current Password" %}</label>
                     <div style="position: relative;">
                         {{ password_form.old_password }}
+                        <!-- 🔥 FIX: Removed inline right/left styles for RTL support -->
                         <button type="button"
                                 class="pwd-toggle-dash"
-                                data-target="{{ password_form.old_password.auto_id }}"
-                                style="position: absolute;
-                                       right: 0.75rem;
-                                       top: 50%;
-                                       transform: translateY(-50%);
-                                       background: none;
-                                       border: none;
-                                       cursor: pointer;
-                                       color: #9CA3AF;
-                                       font-size: 1rem">
+                                data-target="{{ password_form.old_password.auto_id }}">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
@@ -162,16 +159,7 @@
                         {{ password_form.new_password1 }}
                         <button type="button"
                                 class="pwd-toggle-dash"
-                                data-target="{{ password_form.new_password1.auto_id }}"
-                                style="position: absolute;
-                                       right: 0.75rem;
-                                       top: 50%;
-                                       transform: translateY(-50%);
-                                       background: none;
-                                       border: none;
-                                       cursor: pointer;
-                                       color: #9CA3AF;
-                                       font-size: 1rem">
+                                data-target="{{ password_form.new_password1.auto_id }}">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
@@ -182,16 +170,7 @@
                         {{ password_form.new_password2 }}
                         <button type="button"
                                 class="pwd-toggle-dash"
-                                data-target="{{ password_form.new_password2.auto_id }}"
-                                style="position: absolute;
-                                       right: 0.75rem;
-                                       top: 50%;
-                                       transform: translateY(-50%);
-                                       background: none;
-                                       border: none;
-                                       cursor: pointer;
-                                       color: #9CA3AF;
-                                       font-size: 1rem">
+                                data-target="{{ password_form.new_password2.auto_id }}">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>

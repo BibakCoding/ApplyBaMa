@@ -14,11 +14,12 @@
                        name="search"
                        value="{{ filters.search }}"
                        placeholder="{% trans 'Search by name...' %}"
-                       class="search-input ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[42px] text-gray-800">
+                       class="search-input ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
             </div>
+            <!-- 🔥 FIX: Added filter-select class for Select2, changed h-[42px] to h-[46px] for perfect alignment -->
             <div class="min-w-[150px]">
                 <select name="country"
-                        class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[42px] text-gray-800">
+                        class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
                     <option value="">{% trans "All Countries" %}</option>
                     {% for c in countries %}
                         <option value="{{ c.id }}"
@@ -30,7 +31,7 @@
             </div>
             <div class="min-w-[150px]">
                 <select name="sector"
-                        class="ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[42px] text-gray-800">
+                        class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
                     <option value="">{% trans "All Sectors" %}</option>
                     <option value="public" {% if filters.sector == "public" %}selected{% endif %}>{% trans "Public" %}</option>
                     <option value="private"
@@ -38,13 +39,14 @@
                     <option value="other" {% if filters.sector == "other" %}selected{% endif %}>{% trans "Other" %}</option>
                 </select>
             </div>
+            <!-- 🔥 FIX: Changed h-[42px] to h-[46px] on buttons to match input height exactly -->
             <div class="flex items-end gap-2">
                 <button type="submit"
-                        class="bg-[var(--ab-primary)] text-white py-2 px-6 rounded-lg hover:opacity-90 transition font-medium shadow-sm h-[42px] flex items-center justify-center">
+                        class="bg-[var(--ab-primary)] text-white py-2 px-6 rounded-lg hover:opacity-90 transition font-medium shadow-sm h-[46px] flex items-center justify-center">
                     <i class="fas fa-search mr-2"></i> {% trans "Search" %}
                 </button>
                 <a href="{% url 'export_universities_pdf' %}?{{ request.GET.urlencode }}"
-                   class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition font-medium shadow-sm h-[42px] flex items-center justify-center whitespace-nowrap">
+                   class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition font-medium shadow-sm h-[46px] flex items-center justify-center whitespace-nowrap">
                     <i class="fas fa-file-pdf mr-2"></i> {% trans "PDF" %}
                 </a>
             </div>

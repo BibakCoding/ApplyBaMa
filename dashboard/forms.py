@@ -8,7 +8,8 @@ from core.models import (
     City,
     Country,
     Application,
-)  # Added Country & Application
+    Program,
+)
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
@@ -160,6 +161,15 @@ class ApplicationForm(forms.ModelForm):
             )
         else:
             self.fields["student"].queryset = User.objects.none()
+
+        self.fields["program"].queryset = Program.objects.none()
+
+        if self.data and self.data.get("program"):
+            try:
+                prog_id = int(self.data.get("program"))
+                self.fields["program"].queryset = Program.objects.filter(id=prog_id)
+            except (ValueError, TypeError):
+                pass
 
 
 class AddStudentForm(forms.Form):
