@@ -1,9 +1,8 @@
-# dashboard/views.py
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, Http404
 from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
@@ -71,6 +70,8 @@ def dashboard_content(request, page):
     }
 
     if page not in content_map:
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            raise Http404(_("Page not found."))
         messages.error(request, _("Page not found."))
         return redirect("dashboard")
 

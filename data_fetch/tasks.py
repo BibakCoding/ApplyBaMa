@@ -2,7 +2,9 @@
 
 import decimal
 import time
-
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
 import requests
 import urllib3
 from bs4 import BeautifulSoup
@@ -15,8 +17,6 @@ from selenium.common.exceptions import (
     TimeoutException,
 )
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from core.models import (
@@ -136,9 +136,16 @@ PROG_PAYLOAD_TEMPLATE = {
 def parse_decimal(value_str, default=decimal.Decimal('0.00')):
     """
     Safely parse a string into a Decimal. Returns `default` on failure.
+    Strips commas and currency symbols that would cause InvalidOperation.
     """
     try:
-        return decimal.Decimal(value_str)
+        if not value_str:
+            return default
+        # Remove commas and currency symbols which cause InvalidOperation
+        clean_str = str(value_str).replace(",", "").replace("$", "").strip()
+        if not clean_str:
+            return default
+        return decimal.Decimal(clean_str)
     except Exception:
         return default
 
@@ -262,9 +269,13 @@ def _get_or_create_connect_sid():
     sid = existing.sid
     sess = requests.Session()
     sess.verify = False
-    sess.cookies.set("connect.sid", sid, domain="info.studyfans.com", path="/")
-    sess.headers.update({"User-Agent": "Mozilla/5.0"})
+    sess.headers.update({
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+    })
+    sess.cookies["connect.sid"] = sid
     try:
+        # Visiting the main page or dashboard to check session validity
         r = sess.get(UNIVERSITIES_URL, allow_redirects=False, timeout=10, verify=False)
         if r.status_code == 200:
             return sid
@@ -276,35 +287,122 @@ def _get_or_create_connect_sid():
         return None
 
 
-def _selenium_login_and_store_sid(timeout=20, max_retries=2):
+def _selenium_login_and_store_sid(timeout=45, max_retries=2):
     """
     Use Selenium to log in, capture connect.sid, store in DB, and return it.
+    Includes diagnostic fallbacks if the server rejects the login attempt.
     """
     for attempt in range(1, max_retries + 1):
         driver = None
         try:
             opts = ChromeOptions()
-            opts.add_argument("--headless")
+
+            opts.add_argument("--headless=new")
             opts.add_argument("--disable-gpu")
             opts.add_argument("--no-sandbox")
+            opts.add_argument("--disable-dev-shm-usage")
+            opts.add_argument("--disable-extensions")
+            opts.add_argument("--disable-background-networking")
+            opts.add_argument("--window-size=1920,1080")
+            opts.add_argument("--force-device-scale-factor=1")
             opts.add_argument("--ignore-certificate-errors")
             opts.add_argument("--ignore-ssl-errors")
             opts.add_argument("--disable-web-security")
+            opts.add_argument("--disable-blink-features=AutomationControlled")
+            opts.add_experimental_option("excludeSwitches", ["enable-automation"])
+            opts.add_experimental_option('useAutomationExtension', False)
+
             driver = webdriver.Chrome(options=opts)
 
+            driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+                "source": """
+                    Object.defineProperty(navigator, 'webdriver', {
+                      get: () => undefined
+                    })
+                """
+            })
+
             driver.get(LOGIN_URL)
-            WebDriverWait(driver, 5).until(
-                EC.presence_of_element_located((By.NAME, "email"))
-            )
+            WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.NAME, "email")))
 
-            driver.find_element(By.NAME, "email").send_keys(EMAIL)
-            driver.find_element(By.NAME, "password").send_keys(PASSWORD)
+            # Capture initial state
+            initial_url = driver.current_url
+            initial_sid = None
+            for c in driver.get_cookies():
+                if c['name'] == 'connect.sid':
+                    initial_sid = c['value']
+                    break
+
+            time.sleep(2) # Hydrate
+
+            email_elem = driver.find_element(By.NAME, "email")
+            pwd_elem = driver.find_element(By.NAME, "password")
+
+            email_elem.clear()
+            email_elem.send_keys(EMAIL)
+            pwd_elem.clear()
+            pwd_elem.send_keys(PASSWORD)
+
             time.sleep(1)
-            driver.find_element(By.XPATH, "//button[@type='submit']").click()
 
-            WebDriverWait(driver, timeout).until(
-                lambda d: "/login" not in d.current_url
-            )
+            # Strategy 1: JS Click
+            try:
+                submit_btn = driver.find_element(By.XPATH, "//button[@type='submit']")
+                driver.execute_script("arguments[0].click();", submit_btn)
+            except Exception:
+                pass
+
+            time.sleep(2)
+
+            # Strategy 2: If nothing changed, press ENTER on the password field
+            current_url = driver.current_url
+            current_sid = None
+            for c in driver.get_cookies():
+                if c['name'] == 'connect.sid':
+                    current_sid = c['value']
+                    break
+
+            if current_url == initial_url and current_sid == initial_sid:
+                print("[Selenium] JS Click didn't trigger login. Trying ENTER key...")
+                pwd_elem.send_keys(Keys.RETURN)
+                time.sleep(2)
+
+            # Wait for successful login
+            def login_successful(d):
+                if "/login" not in d.current_url:
+                    return True
+                for c in d.get_cookies():
+                    if c['name'] == 'connect.sid' and c['value'] != initial_sid:
+                        return True
+                return False
+
+            try:
+                WebDriverWait(driver, timeout).until(login_successful)
+                time.sleep(3) # Wait for dashboard XSRF tokens
+            except TimeoutException:
+                # Login failed. Diagnose why.
+                screenshot_path = "login_failed_diagnostic.png"
+                driver.save_screenshot(screenshot_path)
+                print(f"\n[!] Selenium Login FAILED. Screenshot saved to: {screenshot_path}")
+
+                # Extract visible error messages
+                error_msgs = []
+                try:
+                    for selector in [".alert-danger", ".error-message", "[role='alert']", ".invalid-feedback", ".text-red-500", ".text-danger"]:
+                        elements = driver.find_elements(By.CSS_SELECTOR, selector)
+                        for el in elements:
+                            text = el.text.strip()
+                            if text:
+                                error_msgs.append(text)
+                except Exception:
+                    pass
+
+                if error_msgs:
+                    print(f"[!] Server returned errors: {error_msgs}")
+                else:
+                    print("[!] No visible error text found. Check the screenshot for CAPTCHAs or Cloudflare blocks.")
+
+                raise RuntimeError("Login rejected by server. Check diagnostic screenshot.")
 
             cookies = driver.get_cookies()
             driver.quit()
@@ -328,13 +426,10 @@ def _selenium_login_and_store_sid(timeout=20, max_retries=2):
                 except Exception:
                     pass
             if attempt == max_retries:
-                raise RuntimeError(
-                    f"Selenium login failed after {max_retries} attempts: {e}"
-                )
-            time.sleep(2)
+                raise RuntimeError(f"Selenium login failed after {max_retries} attempts: {e}")
+            time.sleep(5)
 
     raise RuntimeError("Unreachable code in _selenium_login_and_store_sid()")
-
 
 def _get_authenticated_session():
     """
@@ -346,378 +441,199 @@ def _get_authenticated_session():
 
     sess = requests.Session()
     sess.verify = False
-    sess.headers.update({"User-Agent": "Mozilla/5.0"})
-    sess.cookies.set("connect.sid", sid, domain="info.studyfans.com", path="/")
+    sess.headers.update({
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Accept-Language": "en-US,en;q=0.9",
+        "X-Requested-With": "XMLHttpRequest"
+    })
+    # Use simple dictionary assignment for the cookie to avoid domain matching quirks in requests
+    sess.cookies["connect.sid"] = sid
+
     return sess
 
 
 @shared_task(bind=True)
 def refresh_universities_and_programs(self):
-    """
-    Celery task (every 20 minutes) that:
-      1) Logs in (or reuses connect.sid).
-      2) Fetches /all-universities, parses HTML → stores structured data.
-      3) Deletes any stale universities.
-      4) Fetches /all-programs, upserts each program.
-      5) Deletes any stale programs.
-    """
     start_time = time.perf_counter()
+
     try:
         session = _get_authenticated_session()
 
-        # ─────────── STEP A: FETCH & SYNC UNIVERSITIES ──────────────────────
+        # ─────────── STEP 1: DOWNLOAD ALL DATA INTO MEMORY ──────────────────
+        # We do ALL network requests first, so we don't hold DB locks while waiting for the internet.
+        all_uni_data = []
+        limit, chunk_size = 7000, 1000
+
+        for start in range(0, limit, chunk_size):
+            payload = {**UNI_PAYLOAD_TEMPLATE, "start": str(start), "length": str(chunk_size)}
+            r = session.post(ALL_UNI_POST_URL, data=payload, headers={"X-Requested-With": "XMLHttpRequest"}, allow_redirects=False, verify=False, timeout=15)
+            if r.status_code != 200: break
+            data_list = r.json().get("data", [])
+            if not data_list: break
+            all_uni_data.extend(data_list)
+            if len(data_list) < chunk_size: break
+
+        all_prog_data = []
+        for start in range(0, limit, chunk_size):
+            payload = {**PROG_PAYLOAD_TEMPLATE, "start": str(start), "length": str(chunk_size)}
+            r = session.post(ALL_PROGS_POST_URL, data=payload, headers={"X-Requested-With": "XMLHttpRequest"}, allow_redirects=False, verify=False, timeout=15)
+            if r.status_code != 200: break
+            data_list = r.json().get("data", [])
+            if not data_list: break
+            all_prog_data.extend(data_list)
+            if len(data_list) < chunk_size: break
+
+        # ─────────── STEP 2: BULK DATABASE WRITES (FAST & ATOMIC) ───────────
         fetched_uni_ids = set()
-        limit = 7000
-        chunk_size = 1000
-
-        for start in range(0, limit, chunk_size):
-            payload = {**UNI_PAYLOAD_TEMPLATE}
-            payload["start"] = str(start)
-            payload["length"] = str(chunk_size)
-
-            headers = {
-                "Accept": "application/json, text/javascript, */*; q=0.01",
-                "X-Requested-With": "XMLHttpRequest",
-                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-                "Origin": "https://info.studyfans.com",
-                "Referer": UNIVERSITIES_URL,
-            }
-
-            r = session.post(
-                ALL_UNI_POST_URL,
-                data=payload,
-                headers=headers,
-                allow_redirects=False,
-                verify=False,
-                timeout=15
-            )
-            if r.status_code == 302:
-                raise RuntimeError(
-                    "Redirected to login when fetching universities—session expired."
-                )
-            if r.status_code != 200:
-                raise RuntimeError(
-                    f"Fetch universities chunk {start} failed: HTTP {r.status_code}"
-                )
-
-            data_list = r.json().get("data", [])
-            if not data_list:
-                break
-
-            for row in data_list:
-                # ─────── Extract country & city external IDs ───────
-                country_ext_id = int(row.get("country.id") or 0)
-                city_ext_id = int(row.get("city.id") or 0)
-
-                uni_ext_id = int(row.get("id") or 0)
-                fetched_uni_ids.add(uni_ext_id)
-
-                country_name = (row.get("country.name") or "").strip()
-                city_name = (row.get("city.name") or "").strip()
-                uni_name = (row.get("name") or "").strip()
-                website = (row.get("website") or "").strip()
-                address = (row.get("campus_address") or "").strip()
-
-                # ─── Upsert Country by external_id → name‐match → create ───
-                if country_ext_id:
-                    try:
-                        country_obj = Country.objects.get(external_id=country_ext_id)
-                        created_country = False
-                    except Country.DoesNotExist:
-                        try:
-                            country_obj = Country.objects.get(name__iexact=country_name)
-                            country_obj.external_id = country_ext_id
-                            country_obj.save()
-                            created_country = False
-                        except Country.DoesNotExist:
-                            country_obj = Country.objects.create(
-                                external_id=country_ext_id,
-                                name=country_name,
-                            )
-                            created_country = True
-                else:
-                    country_obj, created_country = Country.objects.get_or_create(
-                        name__iexact=country_name,
-                        defaults={"name": country_name}
-                    )
-
-                # ─── Upsert City by external_id → name+country → create ───
-                if city_ext_id:
-                    try:
-                        city_obj = City.objects.get(external_id=city_ext_id)
-                        created_city = False
-                    except City.DoesNotExist:
-                        # Try to match an existing city by (country, name)
-                        try:
-                            city_obj = City.objects.get(
-                                country=country_obj,
-                                name=city_name
-                            )
-                            # Assign external_id if not already set
-                            if city_obj.external_id is None:
-                                city_obj.external_id = city_ext_id
-                                city_obj.save()
-                            created_city = False
-                        except City.DoesNotExist:
-                            # Create new—catch IntegrityError if a (country, name) row was added in the meantime
-                            try:
-                                city_obj = City.objects.create(
-                                    external_id=city_ext_id,
-                                    country=country_obj,
-                                    name=city_name,
-                                )
-                                created_city = True
-                            except IntegrityError:
-                                # Another process must have created it, so fetch by (country, name)
-                                city_obj = City.objects.get(
-                                    country=country_obj,
-                                    name=city_name
-                                )
-                                if city_obj.external_id is None:
-                                    city_obj.external_id = city_ext_id
-                                    city_obj.save()
-                                created_city = False
-                else:
-                    city_obj, created_city = City.objects.get_or_create(
-                        country=country_obj,
-                        name=city_name,
-                        defaults={"name": city_name}
-                    )
-
-                # ─── Parse all HTML fragments ───
-                imp_dates_html = (row.get("important_dates") or "").strip()
-                exams_dates_html = (row.get("exams_dates") or "").strip()
-                exams_score_html = (row.get("exams_score") or "").strip()
-                req_docs_html = (row.get("required_documents") or "").strip()
-                deposit_html = (row.get("deposit") or "").strip()
-                bros_disc_html = (row.get("brothers_discount") or "").strip()
-                cash_disc_html = (row.get("cash_discount") or "").strip()
-                inst_html = (row.get("installment_payment") or "").strip()
-                prep_year_html = (row.get("preparatory_year") or "").strip()
-
-                extra_fields_list = row.get("fields", []) or []
-
-                important_dates_parsed = parse_html_table(imp_dates_html)
-                exams_dates_parsed = parse_html_table(exams_dates_html)
-                exams_score_parsed = parse_html_table(exams_score_html)
-                required_documents_parsed = parse_required_documents(req_docs_html)
-                deposit_info_parsed = parse_deposit_info(deposit_html)
-                brothers_discount_parsed = parse_discount(bros_disc_html)
-                cash_discount_parsed = parse_discount(cash_disc_html)
-                installment_parsed = parse_installment(inst_html)
-                preparatory_year_parsed = parse_preparatory_year(prep_year_html)
-
-                parsed_data = {
-                    "important_dates": important_dates_parsed,
-                    "exams_dates": exams_dates_parsed,
-                    "exams_scores": exams_score_parsed,
-                    "required_documents": required_documents_parsed,
-                    "deposit_info": deposit_info_parsed,
-                    "brothers_discount": brothers_discount_parsed,
-                    "cash_discount": cash_discount_parsed,
-                    "installment_payment": installment_parsed,
-                    "preparatory_year": preparatory_year_parsed,
-                    "fields_array": extra_fields_list,
-                }
-
-                # ─── Upsert University by external_id → name → create ───
-                try:
-                    uni_obj = University.objects.get(external_id=uni_ext_id)
-                    created_uni = False
-                except University.DoesNotExist:
-                    try:
-                        uni_obj = University.objects.get(name__iexact=uni_name)
-                        uni_obj.external_id = uni_ext_id
-                        created_uni = False
-                    except University.DoesNotExist:
-                        uni_obj = University.objects.create(
-                            external_id=uni_ext_id,
-                            name=uni_name,
-                            country=country_obj,
-                            city=city_obj,
-                            website=website,
-                            address=address,
-                            parsed_data=parsed_data,
-                        )
-                        created_uni = True
-
-                if not created_uni and uni_obj.external_id != uni_ext_id:
-                    uni_obj.external_id = uni_ext_id
-
-                fields_to_update = {
-                    "country": country_obj,
-                    "city": city_obj,
-                    "website": website,
-                    "address": address,
-                    "parsed_data": parsed_data,
-                }
-                changed = False
-                for field_name, new_val in fields_to_update.items():
-                    old_val = getattr(uni_obj, field_name)
-                    if old_val != new_val:
-                        setattr(uni_obj, field_name, new_val)
-                        changed = True
-
-                if created_uni or changed:
-                    uni_obj.save()
-
-            if len(data_list) < chunk_size:
-                break
-
-        # Delete any universities not returned upstream
-        University.objects.exclude(external_id__in=fetched_uni_ids).delete()
-
-        # ─────────── STEP B: FETCH & SYNC PROGRAMS ──────────────────────────
         fetched_prog_ids = set()
-        limit = 7000
-        chunk_size = 1000
 
-        for start in range(0, limit, chunk_size):
-            payload = {**PROG_PAYLOAD_TEMPLATE}
-            payload["start"] = str(start)
-            payload["length"] = str(chunk_size)
+        # Cache related models in memory to avoid thousands of DB lookups
+        country_cache = {c.name.lower(): c for c in Country.objects.all()}
+        city_cache = {(c.country_id, c.name.lower()): c for c in City.objects.select_related('country').all()}
+        faculty_cache = {f.name.lower(): f for f in Faculty.objects.all()}
+        year_cache = {y.value: y for y in YearOption.objects.all()}
+        term_cache = {t.label: t for t in TermOption.objects.all()}
+        uni_cache = {u.external_id: u for u in University.objects.all() if u.external_id}
+        prog_cache = {p.external_id: p for p in Program.objects.all() if p.external_id}
 
-            cookies_dict = session.cookies.get_dict()
-            csrf_token = None
-            for name, val in cookies_dict.items():
-                if "csrf" in name.lower():
-                    csrf_token = val
-                    break
+        unis_to_update = []
+        progs_to_update = []
+        unis_to_create = []
+        progs_to_create = []
 
-            headers = {
-                "Accept": "application/json, text/javascript, */*; q=0.01",
-                "X-Requested-With": "XMLHttpRequest",
-                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-                "Origin": "https://info.studyfans.com",
-                "Referer": PROGRAMS_URL,
+        # Process Universities
+        for row in all_uni_data:
+            uni_ext_id = int(row.get("id") or 0)
+            if not uni_ext_id: continue
+            fetched_uni_ids.add(uni_ext_id)
+
+            c_name = str(row.get("country.name") or "").strip()
+            ci_name = str(row.get("city.name") or "").strip()
+
+            country_obj = country_cache.get(c_name.lower())
+            if not country_obj:
+                country_obj, _ = Country.objects.get_or_create(name__iexact=c_name, defaults={"name": c_name})
+                country_cache[c_name.lower()] = country_obj
+
+            city_key = (country_obj.id, ci_name.lower())
+            city_obj = city_cache.get(city_key)
+            if not city_obj:
+                city_obj, _ = City.objects.get_or_create(country=country_obj, name__iexact=ci_name, defaults={"name": ci_name})
+                city_cache[city_key] = city_obj
+
+            parsed_data = {
+                "important_dates": parse_html_table(str(row.get("important_dates") or "")),
+                "exams_dates": parse_html_table(str(row.get("exams_dates") or "")),
+                "exams_scores": parse_html_table(str(row.get("exams_score") or "")),
+                "required_documents": parse_required_documents(str(row.get("required_documents") or "")),
+                "deposit_info": parse_deposit_info(str(row.get("deposit") or "")),
+                "brothers_discount": parse_discount(str(row.get("brothers_discount") or "")),
+                "cash_discount": parse_discount(str(row.get("cash_discount") or "")),
+                "installment_payment": parse_installment(str(row.get("installment_payment") or "")),
+                "preparatory_year": parse_preparatory_year(str(row.get("preparatory_year") or "")),
+                "fields_array": row.get("fields", []) or [],
             }
-            if csrf_token:
-                headers["X-XSRF-TOKEN"] = csrf_token
 
-            r = session.post(
-                ALL_PROGS_POST_URL,
-                data=payload,
-                headers=headers,
-                allow_redirects=False,
-                verify=False,
-                timeout=15
-            )
-            if r.status_code == 302:
-                raise RuntimeError(
-                    "Redirected to login when fetching programs—session expired."
-                )
-            if r.status_code != 200:
-                raise RuntimeError(
-                    f"Fetch programs chunk {start} failed: HTTP {r.status_code}"
-                )
+            uni_obj = uni_cache.get(uni_ext_id)
+            if uni_obj:
+                changed = False
+                if uni_obj.country_id != country_obj.id: uni_obj.country = country_obj; changed = True
+                if uni_obj.city_id != city_obj.id: uni_obj.city = city_obj; changed = True
+                if uni_obj.website != str(row.get("website") or ""): uni_obj.website = str(row.get("website") or ""); changed = True
+                if uni_obj.address != str(row.get("campus_address") or ""): uni_obj.address = str(row.get("campus_address") or ""); changed = True
+                if uni_obj.parsed_data != parsed_data: uni_obj.parsed_data = parsed_data; changed = True
+                if not uni_obj.is_active: uni_obj.is_active = True; changed = True
+                if changed: unis_to_update.append(uni_obj)
+            else:
+                unis_to_create.append(University(
+                    external_id=uni_ext_id, name=str(row.get("name") or "").strip(),
+                    country=country_obj, city=city_obj, website=str(row.get("website") or "").strip(),
+                    address=str(row.get("campus_address") or "").strip(), parsed_data=parsed_data, is_active=True
+                ))
 
-            data_list = r.json().get("data", [])
-            if not data_list:
-                break
+        # Process Programs
+        for row in all_prog_data:
+            ext_id = int(row.get("id") or 0)
+            if not ext_id: continue
+            fetched_prog_ids.add(ext_id)
 
-            for row in data_list:
-                ext_id = int(row.get("id") or 0)
-                fetched_prog_ids.add(ext_id)
+            uni_id = int(row.get("university_id") or 0)
+            uni_obj = uni_cache.get(uni_id) or University.objects.filter(external_id=uni_id).first()
+            if not uni_obj: continue
 
-                prog_name = (row.get("program_name") or "").strip()
-                uni_id = int(row.get("university_id") or 0)
-                status_str = (row.get("status") or "").strip().lower()
-                faculty_name = (row.get("faculty_name") or "").strip()
-                degree_name = (row.get("degree_name") or "").strip().lower()
-                years_value = (row.get("years") or "").strip()
-                deposit_fee = (row.get("deposit_fee") or "0").strip()
-                prep_fee = (row.get("prep_school_fee") or "0").strip()
-                cash_fees = (row.get("cash_fees") or "0").strip()
-                semester_fee = (row.get("semester_fee") or "0").strip()
-                deposit = (row.get("deposit") or "0").strip()
-                offer = (row.get("offer") or "0").strip()
+            fac_name = str(row.get("faculty_name") or "").strip()
+            faculty_obj = faculty_cache.get(fac_name.lower())
+            if not faculty_obj:
+                faculty_obj, _ = Faculty.objects.get_or_create(name__iexact=fac_name, defaults={"name": fac_name})
+                faculty_cache[fac_name.lower()] = faculty_obj
 
-                fees_list = row.get("programs_fees", []) or []
-                term_label = None
-                if fees_list:
-                    term_label = (fees_list[0].get("semester") or "").strip()
-
-                status_map = {
-                    'available': Program.StatusChoices.AVAILABLE,
-                    'near_to_close': Program.StatusChoices.NEAR_TO_CLOSE,
-                    'quota_full': Program.StatusChoices.QUOTA_FULL,
-                    'closed': Program.StatusChoices.CLOSED,
-                }
-                prog_status = status_map.get(status_str, Program.StatusChoices.AVAILABLE)
-
-                try:
-                    uni_obj = University.objects.get(external_id=uni_id)
-                except University.DoesNotExist:
-                    continue
-
-                fac_obj, _ = Faculty.objects.get_or_create(
-                    name__iexact=faculty_name,
-                    defaults={"name": faculty_name}
-                )
-
+            years_value = str(row.get("years") or "").strip()
+            year_obj = year_cache.get(years_value)
+            if not year_obj:
                 year_obj, _ = YearOption.objects.get_or_create(value=years_value)
-                if year_obj not in fac_obj.year_options.all():
-                    fac_obj.year_options.add(year_obj)
+                year_cache[years_value] = year_obj
+            if year_obj not in faculty_obj.year_options.all():
+                faculty_obj.year_options.add(year_obj)
 
-                deg_map = {
-                    'associate': 'associate',
-                    'bachelor': 'bachelor',
-                    'master': 'master',
-                    'phd': 'phd',
-                    'integrated_phd': 'integrated_phd',
-                }
-                degree_key = deg_map.get(degree_name, 'bachelor')
+            deg_map = {'associate': 'associate', 'bachelor': 'bachelor', 'master': 'master', 'phd': 'phd', 'integrated_phd': 'integrated_phd'}
+            degree_key = deg_map.get(str(row.get("degree_name") or "").strip().lower(), 'bachelor')
 
-                term_obj = None
+            fees_list = row.get("programs_fees", []) or []
+            term_obj = None
+            if fees_list:
+                term_label = str(fees_list[0].get("semester") or "").strip()
                 if term_label:
-                    term_obj, _ = TermOption.objects.get_or_create(label=term_label)
+                    term_obj = term_cache.get(term_label)
+                    if not term_obj:
+                        term_obj, _ = TermOption.objects.get_or_create(label=term_label)
+                        term_cache[term_label] = term_obj
 
-                try:
-                    prog_obj = Program.objects.get(external_id=ext_id)
-                    created_prog = False
-                except Program.DoesNotExist:
-                    try:
-                        prog_obj = Program.objects.get(
-                            name__iexact=prog_name,
-                            university=uni_obj
-                        )
-                        prog_obj.external_id = ext_id
-                        prog_obj.status = prog_status
-                        prog_obj.faculty = fac_obj
-                        prog_obj.degree = degree_key
-                        prog_obj.duration = years_value
-                        prog_obj.deposit_fee = parse_decimal(deposit_fee)
-                        prog_obj.prep_school_fee = parse_decimal(prep_fee)
-                        prog_obj.cash_fees = parse_decimal(cash_fees)
-                        prog_obj.semester_fee = parse_decimal(semester_fee)
-                        prog_obj.deposit = parse_decimal(deposit)
-                        prog_obj.offer = parse_decimal(offer)
-                        prog_obj.term = term_obj
-                        prog_obj.save()
-                        created_prog = False
-                    except Program.DoesNotExist:
-                        prog_obj = Program.objects.create(
-                            external_id=ext_id,
-                            name=prog_name,
-                            university=uni_obj,
-                            status=prog_status,
-                            faculty=fac_obj,
-                            degree=degree_key,
-                            duration=years_value,
-                            deposit_fee=parse_decimal(deposit_fee),
-                            prep_school_fee=parse_decimal(prep_fee),
-                            cash_fees=parse_decimal(cash_fees),
-                            semester_fee=parse_decimal(semester_fee),
-                            deposit=parse_decimal(deposit),
-                            offer=parse_decimal(offer),
-                            term=term_obj,
-                        )
-                        created_prog = True
+            status_map = {'available': Program.StatusChoices.AVAILABLE, 'near_to_close': Program.StatusChoices.NEAR_TO_CLOSE, 'quota_full': Program.StatusChoices.QUOTA_FULL, 'closed': Program.StatusChoices.CLOSED}
+            prog_status = status_map.get(str(row.get("status") or "").strip().lower(), Program.StatusChoices.AVAILABLE)
 
-            if len(data_list) < chunk_size:
-                break
+            prog_obj = prog_cache.get(ext_id)
+            if prog_obj:
+                changed = False
+                if prog_obj.university_id != uni_obj.id: prog_obj.university = uni_obj; changed = True
+                if prog_obj.status != prog_status: prog_obj.status = prog_status; changed = True
+                if prog_obj.faculty_id != faculty_obj.id: prog_obj.faculty = faculty_obj; changed = True
+                if prog_obj.degree != degree_key: prog_obj.degree = degree_key; changed = True
+                if prog_obj.duration != years_value: prog_obj.duration = years_value; changed = True
+                if prog_obj.deposit_fee != parse_decimal(row.get("deposit_fee", "0")): prog_obj.deposit_fee = parse_decimal(row.get("deposit_fee", "0")); changed = True
+                if prog_obj.prep_school_fee != parse_decimal(row.get("prep_school_fee", "0")): prog_obj.prep_school_fee = parse_decimal(row.get("prep_school_fee", "0")); changed = True
+                if prog_obj.cash_fees != parse_decimal(row.get("cash_fees", "0")): prog_obj.cash_fees = parse_decimal(row.get("cash_fees", "0")); changed = True
+                if prog_obj.semester_fee != parse_decimal(row.get("semester_fee", "0")): prog_obj.semester_fee = parse_decimal(row.get("semester_fee", "0")); changed = True
+                if prog_obj.deposit != parse_decimal(row.get("deposit", "0")): prog_obj.deposit = parse_decimal(row.get("deposit", "0")); changed = True
+                if prog_obj.offer != parse_decimal(row.get("offer", "0")): prog_obj.offer = parse_decimal(row.get("offer", "0")); changed = True
+                if prog_obj.term_id != (term_obj.id if term_obj else None): prog_obj.term = term_obj; changed = True
+                if not prog_obj.is_active: prog_obj.is_active = True; changed = True
+                if changed: progs_to_update.append(prog_obj)
+            else:
+                progs_to_create.append(Program(
+                    external_id=ext_id, name=str(row.get("program_name") or "").strip(),
+                    university=uni_obj, status=prog_status, faculty=faculty_obj, degree=degree_key,
+                    duration=years_value, deposit_fee=parse_decimal(row.get("deposit_fee", "0")),
+                    prep_school_fee=parse_decimal(row.get("prep_school_fee", "0")), cash_fees=parse_decimal(row.get("cash_fees", "0")),
+                    semester_fee=parse_decimal(row.get("semester_fee", "0")), deposit=parse_decimal(row.get("deposit", "0")),
+                    offer=parse_decimal(row.get("offer", "0")), term=term_obj, is_active=True
+                ))
 
-        Program.objects.exclude(external_id__in=fetched_prog_ids).delete()
+        # ─────────── STEP 3: EXECUTE BULK WRITES ────────────────────────────
+        if unis_to_create:
+            University.objects.bulk_create(unis_to_create, ignore_conflicts=True)
+        if unis_to_update:
+            University.objects.bulk_update(unis_to_update, ['country', 'city', 'website', 'address', 'parsed_data', 'is_active'])
+
+        if progs_to_create:
+            Program.objects.bulk_create(progs_to_create, ignore_conflicts=True)
+        if progs_to_update:
+            Program.objects.bulk_update(progs_to_update, ['university', 'status', 'faculty', 'degree', 'duration', 'deposit_fee', 'prep_school_fee', 'cash_fees', 'semester_fee', 'deposit', 'offer', 'term', 'is_active'])
+
+        # ─────────── STEP 4: SOFT DELETE (MARK INACTIVE) ────────────────────
+        # Instead of deleting, we mark anything NOT in the fetched lists as inactive.
+        University.objects.exclude(external_id__in=fetched_uni_ids).filter(is_active=True).update(is_active=False)
+        Program.objects.exclude(external_id__in=fetched_prog_ids).filter(is_active=True).update(is_active=False)
 
         elapsed = time.perf_counter() - start_time
         return {
@@ -728,5 +644,4 @@ def refresh_universities_and_programs(self):
         }
 
     except Exception as exc:
-        # Retry up to 2 more times if something goes wrong
         raise self.retry(exc=exc, countdown=60, max_retries=2)

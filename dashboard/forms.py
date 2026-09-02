@@ -176,7 +176,7 @@ class ApplicationForm(forms.ModelForm):
         if self.data and self.data.get("program"):
             try:
                 prog_id = int(self.data.get("program"))
-                self.fields["program"].queryset = Program.objects.filter(id=prog_id)
+                self.fields["program"].queryset = Program.objects.filter(id=prog_id, is_active=True)
             except (ValueError, TypeError):
                 pass
 

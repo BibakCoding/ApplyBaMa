@@ -66,9 +66,9 @@ class UniversityAdmin(admin.ModelAdmin):
 
 @admin.register(Program)
 class ProgramAdmin(admin.ModelAdmin):
-    list_display = ("name", "university", "faculty", "degree", "duration", "status", "updated_at")
+    list_display = ("name", "is_active", "university", "faculty", "degree", "duration", "status", "updated_at")
     search_fields = ("name", "university__name", "faculty__name")
-    list_filter = ("status", "degree", "university")
+    list_filter = ("status", "is_active", "degree", "university")
     autocomplete_fields = ("university", "faculty", "term")
     ordering = ("name",)
 

@@ -1,163 +1,165 @@
 {% extends "base.html" %}
 {% load i18n static %}
-
-{% block title %}{% trans "Dashboard" %} | Apply BM{% endblock %}
-
+{% block title %}
+    {% trans "Dashboard" %} | Apply BM
+{% endblock %}
 {% block css %}
-{{ block.super }}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/css/intlTelInput.css">
-<link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}">
+    {{ block.super }}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/css/intlTelInput.css">
+    <link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}">
 {% endblock %}
-
 {% block content %}
-<div class="dashboard-wrapper">
-    <!-- Sidebar -->
-    <aside id="sidebar" class="dashboard-sidebar">
-        <!-- Brand Logo -->
-        <div class="sidebar-brand">
-            <a href="{% url 'main' %}" class="ab-brand">
-                <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="36" height="36">
-                <span class="font-serif">Apply BM</span>
-            </a>
-            <button id="sidebarClose" class="sidebar-close-btn md:hidden">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-
-        <!-- User Profile Card -->
-        <div class="sidebar-user-card">
-            <div class="user-avatar">
-                {% if user.profile_image %}
-                    <img src="{{ user.profile_image.url }}" alt="{{ user.username }}">
-                {% else %}
-                    <div class="avatar-placeholder">
-                        <i class="fas fa-user"></i>
-                    </div>
-                {% endif %}
-            </div>
-            <div class="user-info">
-                <p class="user-name">{{ user.get_full_name|default:user.username }}</p>
-                <p class="user-role">
-                    {% if user.user_type == 'agent' %}
-                        {% trans "Agent" %}
-                    {% elif user.user_type == 'company' %}
-                        {% trans "Company" %}
-                    {% else %}
-                        {% trans "Student" %}
-                    {% endif %}
-                </p>
-            </div>
-        </div>
-
-        <!-- Navigation Menu -->
-        <nav class="sidebar-nav">
-            <ul class="nav-list">
-                <!-- Dashboard Home -->
-                <li>
-                    <a href="#" data-page="welcome" class="nav-link active">
-                        <i class="fas fa-home"></i>
-                        <span>{% trans "Dashboard" %}</span>
-                    </a>
-                </li>
-
-                <!-- Profile -->
-                <li>
-                    <a href="#" data-page="profile" class="nav-link">
-                        <i class="fas fa-user"></i>
-                        <span>{% trans "Profile" %}</span>
-                    </a>
-                </li>
-
-                <!-- Universities -->
-                <li>
-                    <a href="#" data-page="universities" class="nav-link">
-                        <i class="fas fa-university"></i>
-                        <span>{% trans "Universities" %}</span>
-                    </a>
-                </li>
-
-                <!-- Programs -->
-                <li>
-                    <a href="#" data-page="programs" class="nav-link">
-                        <i class="fas fa-book-open"></i>
-                        <span>{% trans "Programs" %}</span>
-                    </a>
-                </li>
-
-                <!-- Application Section (Conditional) -->
-                {% if user.user_type == 'company' or user.user_type == 'agent' or user.user_type == 'student' and user.is_representative %}
-                <li class="nav-divider">
-                    <span class="divider-text">{% trans "Applications" %}</span>
-                </li>
-
-                <li>
-                    <a href="#" data-page="new_application" class="nav-link">
-                        <i class="fas fa-file-medical"></i>
-                        <span>{% trans "New Application" %}</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="#" data-page="my_applications" class="nav-link">
-                        <i class="fas fa-folder-open"></i>
-                        <span>{% trans "My Applications" %}</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="#" data-page="my_students" class="nav-link">
-                        <i class="fas fa-users"></i>
-                        <span>{% trans "My Students" %}</span>
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-
-        <!-- Logout -->
-        <div class="sidebar-footer">
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>{% trans "Logout" %}</span>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="dashboard-sidebar">
+            <!-- Brand Logo -->
+            <div class="sidebar-brand">
+                <a href="{% url 'main' %}" class="ab-brand">
+                    <img src="{% static 'images/logo.png' %}"
+                         alt="Apply BM"
+                         width="36"
+                         height="36">
+                    <span class="font-serif">Apply BM</span>
+                </a>
+                <button id="sidebarClose" class="sidebar-close-btn md:hidden">
+                    <i class="fas fa-times"></i>
                 </button>
-            </form>
-        </div>
-    </aside>
-
-    <!-- Mobile Overlay -->
-    <div id="overlay" class="mobile-overlay"></div>
-
-    <!-- Main Content Area -->
-    <main class="dashboard-main">
-        <!-- Mobile Header -->
-        <div class="mobile-header">
-            <button id="sidebarToggle" class="hamburger-btn">
-                <i class="fas fa-bars"></i>
-            </button>
-            <a href="{% url 'main' %}" class="mobile-logo">
-                <img src="{% static 'images/logo.png' %}" alt="Apply BM" width="32" height="32">
-                <span class="font-serif">Apply BM</span>
-            </a>
-        </div>
-
-        <!-- Dynamic Content Container -->
-        <div id="dashboard-content" class="content-container">
-            <!-- Content loaded here via JS -->
-            <div class="content-loading">
-                <div class="spinner"></div>
-                <p>{% trans "Loading..." %}</p>
             </div>
-        </div>
-    </main>
-</div>
+            <!-- User Profile Card -->
+            <div class="sidebar-user-card">
+                <div class="user-avatar">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="{{ user.username }}">
+                    {% else %}
+                        <div class="avatar-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="user-info">
+                    <p class="user-name">{{ user.get_full_name|default:user.username }}</p>
+                    <p class="user-role">
+                        {% if user.user_type == 'agent' %}
+                            {% trans "Agent" %}
+                        {% elif user.user_type == 'company' %}
+                            {% trans "Company" %}
+                        {% else %}
+                            {% trans "Student" %}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <!-- Dashboard Home -->
+                    <li>
+                        <a href="#" data-page="welcome" class="nav-link active">
+                            <i class="fas fa-home"></i>
+                            <span>{% trans "Dashboard" %}</span>
+                        </a>
+                    </li>
+                    <!-- Profile -->
+                    <li>
+                        <a href="#" data-page="profile" class="nav-link">
+                            <i class="fas fa-user"></i>
+                            <span>{% trans "Profile" %}</span>
+                        </a>
+                    </li>
+                    <!-- Universities -->
+                    <li>
+                        <a href="#" data-page="universities" class="nav-link">
+                            <i class="fas fa-university"></i>
+                            <span>{% trans "Universities" %}</span>
+                        </a>
+                    </li>
+                    <!-- Programs -->
+                    <li>
+                        <a href="#" data-page="programs" class="nav-link">
+                            <i class="fas fa-book-open"></i>
+                            <span>{% trans "Programs" %}</span>
+                        </a>
+                    </li>
+                    <!-- Application Section (Conditional) -->
+                    {% if user.user_type == 'company' or user.user_type == 'agent' or user.user_type == 'student' and user.is_representative %}
+                        <li class="nav-divider">
+                            <span class="divider-text">{% trans "Applications" %}</span>
+                        </li>
+                        <li>
+                            <a href="#" data-page="new_application" class="nav-link">
+                                <i class="fas fa-file-medical"></i>
+                                <span>{% trans "New Application" %}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-page="my_applications" class="nav-link">
+                                <i class="fas fa-folder-open"></i>
+                                <span>{% trans "My Applications" %}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-page="my_students" class="nav-link">
+                                <i class="fas fa-users"></i>
+                                <span>{% trans "My Students" %}</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if user.is_staff %}
+                        <li class="nav-divider">
+                            <span class="divider-text">{% trans "Administration" %}</span>
+                        </li>
+                        <li>
+                            <a href="{% url 'admin:index' %}" target="_blank" class="nav-link">
+                                <i class="fas fa-cogs"></i>
+                                <span>{% trans "Admin Panel" %}</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <!-- Logout -->
+            <div class="sidebar-footer">
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>{% trans "Logout" %}</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+        <!-- Mobile Overlay -->
+        <div id="overlay" class="mobile-overlay"></div>
+        <!-- Main Content Area -->
+        <main class="dashboard-main">
+            <!-- Mobile Header -->
+            <div class="mobile-header">
+                <button id="sidebarToggle" class="hamburger-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="{% url 'main' %}" class="mobile-logo">
+                    <img src="{% static 'images/logo.png' %}"
+                         alt="Apply BM"
+                         width="32"
+                         height="32">
+                    <span class="font-serif">Apply BM</span>
+                </a>
+            </div>
+            <!-- Dynamic Content Container -->
+            <div id="dashboard-content" class="content-container">
+                <!-- Content loaded here via JS -->
+                <div class="content-loading">
+                    <div class="spinner"></div>
+                    <p>{% trans "Loading..." %}</p>
+                </div>
+            </div>
+        </main>
+    </div>
 {% endblock %}
-
 {% block js %}
-{{ block.super }}
-
-<script>
+    {{ block.super }}
+    <script>
     window.AppConfig = {
         urls: {
             dashboardContent: "{% url 'dashboard_content' 'PAGE_PLACEHOLDER' %}",
@@ -172,7 +174,8 @@
             reloadPage: "{% trans 'Reload Page' %}"
         }
     };
-</script>
-<script src="{% static 'js/pages/dashboard.js' %}" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/js/intlTelInput.min.js" defer></script>
+    </script>
+    <script src="{% static 'js/pages/dashboard.js' %}" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/js/intlTelInput.min.js"
+            defer></script>
 {% endblock %}
