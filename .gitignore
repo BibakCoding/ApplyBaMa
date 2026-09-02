@@ -53,3 +53,5 @@ htmlcov/
 celerybeat-schedule-shm
 celerybeat-schedule-wal
 requirements.txt
+
+data/
