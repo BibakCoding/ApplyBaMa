@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const contentContainer = document.getElementById("dashboard-content");
   const navLinks = document.querySelectorAll(".nav-link");
 
+  // Sidebar toggle logic for mobile view
   if (sidebarToggle)
     sidebarToggle.addEventListener("click", () => {
       sidebar.classList.add("open");
@@ -20,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     overlay.classList.remove("active");
   }
 
-  // --- SPA Navigation ---
+  // Handles fetching and injecting SPA page fragments into the main dashboard container
   window.loadContent = function (page, params) {
     if (page && page.includes("?")) {
       const parts = page.split("?");
@@ -48,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((html) => {
         contentContainer.innerHTML = html;
 
-        // Update Active Nav
+        // Highlight the active navigation link based on the loaded page
         navLinks.forEach((link) => {
           link.classList.remove("active");
           if (link.getAttribute("data-page") === page)
@@ -57,13 +58,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         closeSidebar();
 
-        // 🔥 TRIGGER PAGE-SPECIFIC SCRIPTS AFTER AJAX LOAD
+        // Initialize page-specific logic after the new DOM elements are injected
         initProfileScripts();
         initSearchAutocomplete();
         initProgramAutocomplete();
         initSelect2();
 
-        // Update Browser URL
+        // Update the browser's address bar to reflect the current SPA state
         const cleanParams = params.replace(/^\?/, "");
         const newUrl =
           window.location.pathname +
@@ -81,6 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   };
 
+  // Attach SPA navigation listeners to all sidebar links
   navLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault();
@@ -88,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // --- Event Delegation: Forms ---
+  // Global event delegation for all forms inside the dynamic dashboard content
   contentContainer.addEventListener("submit", function (e) {
     const form = e.target.closest("form");
     if (!form) return;
@@ -114,9 +116,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // --- Event Delegation: Clicks ---
+  // Global event delegation for dynamic click actions (password toggles, apply buttons, etc.)
   contentContainer.addEventListener("click", function (e) {
-    // Generate Password
     if (
       e.target.id === "generatePwdBtn" ||
       e.target.closest("#generatePwdBtn")
@@ -133,7 +134,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Password Toggles
     const pwdToggle = e.target.closest(".pwd-toggle-dash, .pwd-toggle");
     if (pwdToggle) {
       const targetId = pwdToggle.dataset.target;
@@ -150,7 +150,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const icon = pwdToggle.querySelector("i");
         input.type = input.type === "password" ? "text" : "password";
         if (icon) {
-          // 🔥 FIX: Correct logic to swap icons
           if (input.type === "password") {
             icon.classList.replace("fa-eye-slash", "fa-eye");
           } else {
@@ -160,7 +159,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // Apply Request Button
     const applyBtn = e.target.closest(".apply-request-btn");
     if (applyBtn) {
       const programId = applyBtn.dataset.programId;
@@ -193,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // 🔥 NEW: Profile Scripts (Intl-Tel-Input & Cascading Dropdowns)
+  // Initializes specific UI components (like dropdowns and phone inputs) when a new fragment loads
   function initProfileScripts() {
     const mobileInput = document.getElementById("id_mobile");
     let iti = null;
@@ -205,8 +203,14 @@ document.addEventListener("DOMContentLoaded", function () {
         preferredCountries: ["tr", "ir", "de", "us"],
       });
 
-      // 🔥 FIX: Store instance on the DOM element so we can retrieve it later
       mobileInput.itiInstance = iti;
+
+      // Normalizes international phone formats by stripping leading trunk zeros
+      const removeLeadingZero = () => {
+        if (mobileInput.value.startsWith("0")) {
+          mobileInput.value = mobileInput.value.substring(1);
+        }
+      };
 
       const fixPlaceholder = () => {
         const countryData = iti.getSelectedCountryData();
@@ -216,10 +220,28 @@ document.addEventListener("DOMContentLoaded", function () {
           mobileInput.setAttribute("placeholder", "501 234 56 78");
         }
       };
-      setTimeout(fixPlaceholder, 100);
-      mobileInput.addEventListener("countrychange", fixPlaceholder);
+
+      iti.promise.then(() => {
+        removeLeadingZero();
+        fixPlaceholder();
+      });
+
+      mobileInput.addEventListener("countrychange", () => {
+        setTimeout(removeLeadingZero, 10);
+        fixPlaceholder();
+      });
+
+      mobileInput.addEventListener("input", () => {
+        if (mobileInput.value.startsWith("0")) {
+          const start = mobileInput.selectionStart;
+          const end = mobileInput.selectionEnd;
+          mobileInput.value = mobileInput.value.substring(1);
+          mobileInput.setSelectionRange(Math.max(0, start - 1), Math.max(0, end - 1));
+        }
+      });
     }
 
+    // Cascading dropdown logic for Country -> City selection
     const countrySelect = document.getElementById("id_country");
     const citySelect = document.getElementById("id_city");
     if (countrySelect && citySelect) {
@@ -243,7 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // 🔥 NEW: Search-as-you-Type (Debounced)
+  // Debounced auto-submit for global search inputs to provide a seamless typing experience
   function initSearchAutocomplete() {
     let searchTimeout;
     document.querySelectorAll(".search-input").forEach((input) => {
@@ -252,12 +274,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const form = this.closest("form");
         searchTimeout = setTimeout(() => {
           form.dispatchEvent(new Event("submit", { cancelable: true }));
-        }, 400); // 400ms debounce
+        }, 400);
       });
     });
   }
 
-  // 🔥 NEW: Program AJAX Autocomplete for New Application Page
+  // Fetches matching university programs asynchronously as the user types
   function initProgramAutocomplete() {
     const searchInput = document.getElementById("program-search-input");
     const hiddenSelect = document.getElementById("id_program");
@@ -315,7 +337,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // 🔥 NEW: Searchable Select2 for Filters
+  // Upgrades standard select tags to searchable dropdowns if Select2 is loaded
   function initSelect2() {
     if (window.jQuery && typeof window.jQuery.fn.select2 !== "undefined") {
       window.jQuery(".filter-select").each(function () {
@@ -330,9 +352,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // --- Handlers ---
+  // Processes standard profile settings forms via AJAX to prevent full page reloads
   function handleProfileSubmit(form) {
-    // 🔥 FIX: Save full international mobile number format
     const mobileInput = form.querySelector("#id_mobile");
     if (mobileInput && mobileInput.itiInstance) {
       mobileInput.value = mobileInput.itiInstance.getNumber();
@@ -367,6 +388,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // Serializes filter forms and updates the SPA URL parameters
   function handleFilterSubmit(form) {
     const formData = new FormData(form);
     const params = new URLSearchParams(formData).toString();
@@ -374,6 +396,7 @@ document.addEventListener("DOMContentLoaded", function () {
     loadContent(page, params);
   }
 
+  // General purpose handler for complex dashboard forms (creation, deletion, step updates)
   function handleJsonSubmit(form) {
     if (form.classList.contains("delete-form") && !confirm("Are you sure?"))
       return;
@@ -433,6 +456,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // Manages manual pagination inputs for large data tables
   function handleGoToPage(form) {
     const pageInput = form.querySelector('input[name="goto_page"]');
     const targetPage = parseInt(pageInput.value);
@@ -446,33 +470,41 @@ document.addEventListener("DOMContentLoaded", function () {
     loadContent(section, "page=" + targetPage + (filters ? "&" + filters : ""));
   }
 
+  // Generates and injects non-blocking toast messages securely at the document root
   function showToast(message, type) {
-    let c = document.getElementById("toast-container");
+    let c = document.querySelector("body > #toast-container");
     if (!c) {
+      // Clean up any legacy containers trapped inside dashboard fragments
+      document.querySelectorAll("#toast-container").forEach(el => el.remove());
+
       c = document.createElement("div");
       c.id = "toast-container";
-      c.className = "fixed top-4 right-4 z-50 space-y-3";
+      c.className = "fixed top-6 right-6 z-[9999] space-y-3 pointer-events-none";
       document.body.appendChild(c);
     }
+
     const t = document.createElement("div");
     t.className =
-      "p-4 rounded-lg shadow-lg text-white z-50 transition-all " +
-      (type === "success" ? "bg-green-500" : "bg-red-500");
+      "p-4 rounded-lg shadow-2xl text-white max-w-sm pointer-events-auto transition-all duration-300 ease-out transform translate-x-0 opacity-100 " +
+      (type === "success" ? "bg-green-600" : "bg-red-600");
     t.innerText = message;
     c.appendChild(t);
+
+    // Slide out and fade out animation
     setTimeout(() => {
       t.style.opacity = "0";
+      t.style.transform = "translateX(150%)";
       setTimeout(() => t.remove(), 300);
     }, 3500);
   }
 
-  // --- Browser History ---
+  // Handles native browser back/forward buttons for seamless SPA history navigation
   window.addEventListener("popstate", function () {
     const p = new URLSearchParams(window.location.search);
     loadContent(p.get("page") || "welcome");
   });
 
-  // --- Initial Load ---
+  // Triggers the initial page load based on the current URL parameters
   const p = new URLSearchParams(window.location.search);
   loadContent(p.get("page") || "welcome");
 });
