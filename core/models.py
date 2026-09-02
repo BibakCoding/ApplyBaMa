@@ -11,7 +11,6 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from .utils.image_processing import university_logo_upload_to, compress_image
 
-
 # -----------------------------------------------------------------------------
 # TimestampedModel (abstract base for created/updated timestamps)
 # -----------------------------------------------------------------------------
@@ -21,7 +20,6 @@ class TimeStampedModel(models.Model):
 
     class Meta:
         abstract = True
-
 
 # -----------------------------------------------------------------------------
 # File validation functions
@@ -34,7 +32,6 @@ def validate_image_file_extension(value):
             _("Unsupported file extension. Allowed: .jpg, .jpeg, .png, .gif, .webp")
         )
 
-
 def validate_document_file_extension(value):
     valid_extensions = [".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png"]
     ext = os.path.splitext(value.name)[1].lower()
@@ -45,7 +42,6 @@ def validate_document_file_extension(value):
             )
         )
 
-
 # -----------------------------------------------------------------------------
 # File path generators
 # -----------------------------------------------------------------------------
@@ -55,13 +51,11 @@ def user_profile_image_path(instance, filename):
     ext = os.path.splitext(filename)[1]
     return f"profile_images/{instance.username}/{random_name}{ext}"
 
-
 def application_document_upload_to(instance, filename):
     """Generate path for application documents"""
     random_name = get_random_string(length=16)
     ext = os.path.splitext(filename)[1]
     return f"application_documents/{instance.application_name}/{random_name}{ext}"
-
 
 # -----------------------------------------------------------------------------
 # Lookup tables
@@ -90,7 +84,6 @@ class Country(TimeStampedModel):
     def __str__(self):
         return self.name or ""
 
-
 # ---------------------------------------------------------------------------
 # City (now with external_id)
 # ---------------------------------------------------------------------------
@@ -112,13 +105,11 @@ class City(TimeStampedModel):
     def __str__(self):
         return f"{self.name}, {self.country.name}"
 
-
 class TermOption(TimeStampedModel):
     label = models.CharField(max_length=50)
 
     def __str__(self):
         return self.label
-
 
 class YearOption(TimeStampedModel):
     VALUE_CHOICES = [
@@ -139,7 +130,6 @@ class YearOption(TimeStampedModel):
     def __str__(self):
         return self.get_value_display()
 
-
 class Faculty(TimeStampedModel):
     name = models.CharField(max_length=200)
     year_options = models.ManyToManyField(
@@ -153,7 +143,6 @@ class Faculty(TimeStampedModel):
 
     def __str__(self):
         return self.name
-
 
 class University(TimeStampedModel):
     SECTOR_CHOICES = [
@@ -231,7 +220,6 @@ class University(TimeStampedModel):
                 compress_image(self.logo)
         super().save(*args, **kwargs)
 
-
 class Program(TimeStampedModel):
     class StatusChoices(models.TextChoices):
         AVAILABLE = "available", _("Available")
@@ -295,10 +283,11 @@ class Program(TimeStampedModel):
     term = models.ForeignKey(
         TermOption, on_delete=models.SET_NULL, null=True, blank=True
     )
+    language = models.CharField(max_length=50, blank=True, help_text=_("Language of instruction, e.g. English, Turkish"))
+    currency = models.CharField(max_length=10, blank=True, help_text=_("Currency code, e.g. USD, EUR, TRY"))
 
     def __str__(self):
         return f"{self.name} @ {self.university.name}"
-
 
 # -----------------------------------------------------------------------------
 # Custom User + Profiles
@@ -386,7 +375,6 @@ class CompanyProfile(TimeStampedModel):
     def __str__(self):
         return self.company_name
 
-
 class AgentProfile(TimeStampedModel):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="agent_profile"
@@ -397,7 +385,6 @@ class AgentProfile(TimeStampedModel):
 
     def __str__(self):
         return f"{self.user.get_full_name()} (Agent of {self.agency.company_name})"
-
 
 class StudentProfile(TimeStampedModel):
     STAGE_CHOICES = [
@@ -422,7 +409,6 @@ class StudentProfile(TimeStampedModel):
 
     def __str__(self):
         return f"{self.user.get_full_name()} – {self.stage}"
-
 
 # -----------------------------------------------------------------------------
 # Application
@@ -504,7 +490,6 @@ class Application(TimeStampedModel):
     def get_absolute_url(self):
         return reverse("application_detail", args=[self.pk])
 
-
 # 1. Global Site Settings (Singleton - managed by admin)
 class SiteSettings(models.Model):
     whatsapp_number = models.CharField(max_length=20, default="+905344615317")
@@ -529,7 +514,6 @@ class SiteSettings(models.Model):
     def __str__(self):
         return "Global Site Settings"
 
-
 # 2. How It Works Steps (Dynamic number of steps)
 class HowItWorksStep(models.Model):
     order = models.PositiveIntegerField(
@@ -549,7 +533,6 @@ class HowItWorksStep(models.Model):
     def __str__(self):
         return f"Step {self.order}: {self.title}"
 
-
 # 3. Document Requirements
 class DocumentRequirement(models.Model):
     LEVEL_CHOICES = [
@@ -567,7 +550,6 @@ class DocumentRequirement(models.Model):
 
     def __str__(self):
         return f"{self.get_level_display()} - {self.title}"
-
 
 # 4. Success Stories
 class SuccessStory(models.Model):
