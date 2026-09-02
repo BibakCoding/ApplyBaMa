@@ -499,6 +499,8 @@ def _export_data_to_file():
             "deposit": str(prog.deposit),
             "offer": str(prog.offer) if prog.offer else None,
             "term": prog.term.label if prog.term else None,
+            "language": prog.language,
+            "currency": prog.currency,
         })
 
     with open(file_path, 'w', encoding='utf-8') as f:
@@ -622,6 +624,9 @@ def refresh_universities_and_programs(self):
                 faculty_cache[fac_name.lower()] = faculty_obj
 
             years_value = str(row.get("years") or "").strip()
+            language_name = str(row.get("language_name") or "").strip()
+            currency_name = str(row.get("currency_name") or "").strip().upper()
+
             year_obj = year_cache.get(years_value)
             if not year_obj:
                 year_obj, _ = YearOption.objects.get_or_create(value=years_value)
@@ -660,6 +665,8 @@ def refresh_universities_and_programs(self):
                 if prog_obj.deposit != parse_decimal(row.get("deposit", "0")): prog_obj.deposit = parse_decimal(row.get("deposit", "0")); changed = True
                 if prog_obj.offer != parse_decimal(row.get("offer", "0")): prog_obj.offer = parse_decimal(row.get("offer", "0")); changed = True
                 if prog_obj.term_id != (term_obj.id if term_obj else None): prog_obj.term = term_obj; changed = True
+                if prog_obj.language != language_name: prog_obj.language = language_name; changed = True
+                if prog_obj.currency != currency_name: prog_obj.currency = currency_name; changed = True
                 if not prog_obj.is_active: prog_obj.is_active = True; changed = True
                 if changed: progs_to_update.append(prog_obj)
             else:
@@ -669,7 +676,7 @@ def refresh_universities_and_programs(self):
                     duration=years_value, deposit_fee=parse_decimal(row.get("deposit_fee", "0")),
                     prep_school_fee=parse_decimal(row.get("prep_school_fee", "0")), cash_fees=parse_decimal(row.get("cash_fees", "0")),
                     semester_fee=parse_decimal(row.get("semester_fee", "0")), deposit=parse_decimal(row.get("deposit", "0")),
-                    offer=parse_decimal(row.get("offer", "0")), term=term_obj, is_active=True
+                    offer=parse_decimal(row.get("offer", "0")), term=term_obj, language=language_name, currency=currency_name, is_active=True
                 ))
 
         # ─────────── STEP 3: EXECUTE BULK WRITES ────────────────────────────
@@ -681,7 +688,7 @@ def refresh_universities_and_programs(self):
         if progs_to_create:
             Program.objects.bulk_create(progs_to_create, ignore_conflicts=True)
         if progs_to_update:
-            Program.objects.bulk_update(progs_to_update, ['university', 'status', 'faculty', 'degree', 'duration', 'deposit_fee', 'prep_school_fee', 'cash_fees', 'semester_fee', 'deposit', 'offer', 'term', 'is_active'])
+            Program.objects.bulk_update(progs_to_update, ['university', 'status', 'faculty', 'degree', 'duration', 'deposit_fee', 'prep_school_fee', 'cash_fees', 'semester_fee', 'deposit', 'offer', 'term', 'language', 'currency', 'is_active'])
 
         # ─────────── STEP 4: SOFT DELETE (MARK INACTIVE) ────────────────────
         # Instead of deleting, we mark anything NOT in the fetched lists as inactive.
