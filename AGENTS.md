@@ -59,12 +59,12 @@ ApplyBaMa/
 
 Before considering a task complete:
 
-- Run `python manage.py check`
-- Run relevant tests.
-- Validate affected frontend JavaScript where practical.
-- Review the final git diff.
-
-Never claim a task is complete without verification.
+- Perform static/code-level validation of the affected code.
+- Check for syntax, import, template, URL, and logical inconsistencies where possible.
+- If the execution environment provides command execution, run `python manage.py check` and relevant tests.
+- If command execution is unavailable, never claim that commands or tests were executed.
+- Clearly distinguish static analysis from actual test execution.
+- Review the final changes for regressions and unintended modifications.
 
 ## 5. CODE COMMENTS
 
