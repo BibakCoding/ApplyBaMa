@@ -52,9 +52,15 @@ from core.models import (
 def parse_decimal(value_str, default=decimal.Decimal('0.00')):
     """
     Safely parse a string into a Decimal. Returns `default` on failure or empty.
+    Strips commas and currency symbols that would cause InvalidOperation.
     """
     try:
-        return decimal.Decimal(value_str)
+        if not value_str:
+            return default
+        clean_str = str(value_str).replace(",", "").replace("$", "").strip()
+        if not clean_str:
+            return default
+        return decimal.Decimal(clean_str)
     except Exception:
         return default
 
@@ -167,7 +173,7 @@ def import_program_record(record):
     fees_array = record.get("programs_fees", [])
     if fees_array and isinstance(fees_array, list):
         first_fee = fees_array[0]
-        term_label = first_fee.get("semester", "").strip()  # e.g. "2025 Full Semester"
+        term_label = str(first_fee.get("semester") or "").strip()  # e.g. "2025 Full Semester"
     term_obj = None
     if term_label:
         term_obj, _ = TermOption.objects.get_or_create(label=term_label)
@@ -203,7 +209,7 @@ def import_program_record(record):
 
         # status – we can infer from programs_fees[0]["status"] if it exists
         if fees_array:
-            raw_status = first_fee.get("status", "").strip().lower()
+            raw_status = str(first_fee.get("status") or "").strip().lower()
             status_map = {
                 'available': Program.StatusChoices.AVAILABLE,
                 'near_to_close': Program.StatusChoices.NEAR_TO_CLOSE,

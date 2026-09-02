@@ -44,6 +44,9 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
       .then((r) => {
         if (!r.ok) throw new Error("Network error");
+        // Fragment requests must never inject the full dashboard layout
+        // (e.g. login/permission redirects), which would nest a second sidebar
+        if (r.redirected) throw new Error("Page not available");
         return r.text();
       })
       .then((html) => {
@@ -82,11 +85,17 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   };
 
-  // Attach SPA navigation listeners to all sidebar links
+  // Attach SPA navigation listeners to sidebar links. Links without
+  // data-page (e.g. the admin panel shortcut) keep default navigation.
   navLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
+      const page = this.getAttribute("data-page");
+      if (!page) {
+        closeSidebar();
+        return;
+      }
       e.preventDefault();
-      loadContent(this.getAttribute("data-page"));
+      loadContent(page);
     });
   });
 

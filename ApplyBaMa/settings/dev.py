@@ -21,14 +21,14 @@ ALLOWED_HOSTS = [
     ".serveo.net",
 ]
 
-# CSRF_TRUSTED_ORIGINS = [
-#     'https://4d496648d3bc84.lhr.life/',
-#     'https://913aae4061c026.lhr.life/',
-#     'https://*.lhr.life',
-#     'https://*.serveo.net',
-#     'http://localhost:2345',
-#     'http://127.0.0.1:2345'
-# ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://4d496648d3bc84.lhr.life/",
+    "https://913aae4061c026.lhr.life/",
+    "https://*.lhr.life",
+    "https://*.serveo.net",
+    "http://localhost:2345",
+    "http://127.0.0.1:2345",
+]
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # SESSION_COOKIE_SECURE = False
 # CSRF_COOKIE_SECURE = False
@@ -39,6 +39,9 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+        "OPTIONS": {
+            "timeout": 30,  # Wait up to 30 seconds for the lock to release
+        },
     }
 }
 

@@ -172,6 +172,8 @@ class University(TimeStampedModel):
         unique=True, null=True, blank=True, help_text=_("ID from info.studyfans.com")
     )
 
+    is_active = models.BooleanField(default=True, help_text="Uncheck to hide from public site while preserving applications.")
+
     name = models.CharField(max_length=255, unique=True)
     country = models.ForeignKey(
         Country,
@@ -248,6 +250,8 @@ class Program(TimeStampedModel):
     external_id = models.IntegerField(
         unique=True, null=True, blank=True, help_text=_("ID from info.studyfans.com")
     )
+
+    is_active = models.BooleanField(default=True, help_text="Uncheck to hide from public site while preserving applications.")
 
     name = models.CharField(max_length=255)
     status = models.CharField(
