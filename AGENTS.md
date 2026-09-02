@@ -41,3 +41,40 @@ ApplyBaMa/
 │       ├── base.js          # Global utilities (CSRF, API calls)
 │       └── pages/           # Page-specific JS (dashboard.js, login.js, etc.)
 └── locale/                  # i18n translation files (en, ar, fa, tr)
+
+
+## 3. DEVELOPMENT RULES
+
+- Preserve existing architecture and conventions.
+- Prefer reusing existing functionality over creating duplicates.
+- Avoid unrelated refactoring.
+- Do not introduce new dependencies without justification.
+- Keep business logic out of templates.
+- Follow existing authentication and permission patterns.
+- Follow existing frontend patterns for the dashboard SPA.
+- Keep page-specific JavaScript in static/js/pages/.
+- Use existing global utilities from static/js/base.js when applicable.
+
+## 4. VALIDATION
+
+Before considering a task complete:
+
+- Run `python manage.py check`
+- Run relevant tests.
+- Validate affected frontend JavaScript where practical.
+- Review the final git diff.
+
+Never claim a task is complete without verification.
+
+## 5. CODE COMMENTS
+
+Do not add comments describing changes made by the AI.
+
+Do not write comments such as:
+- "Added..."
+- "Changed..."
+- "Updated..."
+- "New..."
+- "Modified..."
+
+Comments should explain non-obvious logic, business rules, or important technical decisions.
