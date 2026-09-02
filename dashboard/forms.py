@@ -13,7 +13,7 @@ from core.models import (
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
-# Added text-gray-800 to ensure text is always readable regardless of global CSS
+# Base class styling for consistent UI across all forms
 BASE_INPUT_CLASS = "ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] focus:border-transparent transition-all bg-white text-gray-800"
 
 
@@ -21,7 +21,6 @@ class PersonalInfoForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
-            "username",
             "first_name",
             "last_name",
             "gender",
@@ -30,9 +29,6 @@ class PersonalInfoForm(forms.ModelForm):
             "mother_name",
         ]
         widgets = {
-            "username": forms.TextInput(
-                attrs={"class": BASE_INPUT_CLASS, "placeholder": _("Username")}
-            ),
             "first_name": forms.TextInput(
                 attrs={"class": BASE_INPUT_CLASS, "placeholder": _("First Name")}
             ),
@@ -51,7 +47,17 @@ class PersonalInfoForm(forms.ModelForm):
             ),
         }
 
-    # ✅ FIX: This MUST be outside the Meta class (same indentation as 'class Meta:')
+
+class UsernameForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["username"]
+        widgets = {
+            "username": forms.TextInput(
+                attrs={"class": BASE_INPUT_CLASS, "placeholder": _("Username")}
+            ),
+        }
+
     def clean_username(self):
         username = self.cleaned_data.get("username")
         if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
@@ -226,7 +232,6 @@ class AddStudentForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
-        # Block disposable domains to prevent spam/fake testing
         disposable_domains = [
             "mailinator.com",
             "tempmail.com",

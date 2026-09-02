@@ -31,8 +31,8 @@ from .forms import (
     CustomPasswordChangeForm,
     ApplicationForm,
     AddStudentForm,
+    UsernameForm,
 )
-
 
 def get_managed_students(user):
     """Returns student IDs managed by an Agent or a Company's agents."""
@@ -54,7 +54,6 @@ def get_managed_students(user):
         except Exception:
             return []
     return []
-
 
 @login_required
 def dashboard_content(request, page):
@@ -99,6 +98,7 @@ def dashboard_content(request, page):
         context["contact_form"] = ContactInfoForm(instance=user)
         context["image_form"] = ProfileImageForm(instance=user)
         context["password_form"] = CustomPasswordChangeForm(user=user)
+        context["username_form"] = UsernameForm(instance=user)
         context["student_form"] = (
             StudentProfileForm(instance=student_profile) if student_profile else None
         )
@@ -227,11 +227,9 @@ def dashboard_content(request, page):
 
     return render(request, content_map[page], context=context)
 
-
 @login_required
 def dashboard_main(request):
     return render(request, "dashboard/main.html", context={"user": request.user})
-
 
 @login_required
 def get_cities_by_country(request):
@@ -244,7 +242,6 @@ def get_cities_by_country(request):
         except Exception as e:
             return JsonResponse({"cities": [], "error": str(e)})
     return JsonResponse({"cities": []})
-
 
 @login_required
 def profile_view(request):
@@ -260,6 +257,13 @@ def profile_view(request):
         if form.is_valid():
             form.save()
             return _success_response(_("Personal information updated successfully."))
+        return _form_error_response(form)
+
+    elif form_type == "username":
+        form = UsernameForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return _success_response(_("Username updated successfully."))
         return _form_error_response(form)
 
     elif form_type == "contact_info":
@@ -293,10 +297,8 @@ def profile_view(request):
 
     return JsonResponse({"success": False, "errors": [_("Invalid form type.")]})
 
-
 def _success_response(message):
     return JsonResponse({"success": True, "message": str(message)})
-
 
 def _form_error_response(form):
     errors = []
@@ -304,7 +306,6 @@ def _form_error_response(form):
         for error in error_list:
             errors.append(f"{field.replace('_', ' ').title()}: {error}")
     return JsonResponse({"success": False, "errors": errors})
-
 
 @login_required
 def application_action(request, pk):
@@ -326,17 +327,14 @@ def application_action(request, pk):
 
     return JsonResponse({"success": False, "message": "Invalid action."})
 
-
 @login_required
 def generate_password(request):
     alphabet = string.ascii_letters + string.digits + string.punctuation
     password = "".join(secrets.choice(alphabet) for i in range(12))
     return JsonResponse({"password": password})
 
-
 @login_required
 def submit_new_application(request):
-    # Allowed for both AGENT and COMPANY
     if request.method == "POST" and request.user.user_type in [
         User.UserType.AGENT,
         User.UserType.COMPANY,
@@ -360,12 +358,10 @@ def submit_new_application(request):
             return JsonResponse({"success": False, "errors": form.errors})
     return JsonResponse({"success": False, "message": _("Invalid request.")})
 
-
 @login_required
 @ratelimit(key="ip", rate="10/h", method="POST", block=True)
 @ratelimit(key="user", rate="5/h", method="POST", block=True)
 def submit_add_student(request):
-    # Allowed for both AGENT and COMPANY
     if request.method == "POST" and request.user.user_type in [
         User.UserType.AGENT,
         User.UserType.COMPANY,
@@ -398,7 +394,6 @@ def submit_add_student(request):
         else:
             return JsonResponse({"success": False, "errors": form.errors})
     return JsonResponse({"success": False, "message": _("Invalid request.")})
-
 
 @login_required
 def program_apply_request(request):
@@ -450,7 +445,6 @@ def program_apply_request(request):
 
     return JsonResponse({"success": False, "message": str(_("Invalid request."))})
 
-
 @login_required
 def programs_search(request):
     q = request.GET.get("q", "")
@@ -462,12 +456,9 @@ def programs_search(request):
     ]
     return JsonResponse({"results": results})
 
-
 @login_required
 def export_universities_pdf(request):
     qs = University.objects.all().select_related("country", "city")
-
-    # Apply same filters as dashboard_content for universities
     search_query = request.GET.get("search", "")
     country_id = request.GET.get("country", "")
     sector = request.GET.get("sector", "")
@@ -490,14 +481,11 @@ def export_universities_pdf(request):
         return HttpResponse("We had some errors with the PDF generation.", status=500)
     return response
 
-
 @login_required
 def export_programs_pdf(request):
     qs = Program.objects.all().select_related(
         "university", "university__country", "university__city", "faculty"
     )
-
-    # Apply same filters as dashboard_content for programs
     search_query = request.GET.get("search", "")
     university_id = request.GET.get("university", "")
     degree = request.GET.get("degree", "")
