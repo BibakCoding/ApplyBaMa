@@ -78,3 +78,16 @@ Do not write comments such as:
 - "Modified..."
 
 Comments should explain non-obvious logic, business rules, or important technical decisions.
+
+## 6. WORKFLOW
+
+For each task:
+
+1. Inspect the repository and identify relevant files.
+2. Read the relevant files and trace dependencies as needed.
+3. Make the smallest correct set of changes.
+4. Run appropriate validation.
+5. Review the final git diff.
+6. Report all completed, incomplete, or blocked tasks.
+
+Do not scan the entire repository unless the task genuinely requires it.
