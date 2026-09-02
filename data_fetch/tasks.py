@@ -1,6 +1,8 @@
 # data_fetch/tasks.py
 
 import decimal
+import json
+import os
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -132,7 +134,6 @@ PROG_PAYLOAD_TEMPLATE = {
     "search[regex]": "false",
 }
 
-
 def parse_decimal(value_str, default=decimal.Decimal('0.00')):
     """
     Safely parse a string into a Decimal. Returns `default` on failure.
@@ -148,7 +149,6 @@ def parse_decimal(value_str, default=decimal.Decimal('0.00')):
         return decimal.Decimal(clean_str)
     except Exception:
         return default
-
 
 def parse_html_table(html: str) -> dict:
     """
@@ -174,7 +174,6 @@ def parse_html_table(html: str) -> dict:
             result[key] = val
     return result
 
-
 def parse_required_documents(html: str) -> list:
     """
     Given the raw HTML for 'required_documents', which contains <ol><li>…</li>…,
@@ -190,7 +189,6 @@ def parse_required_documents(html: str) -> list:
         if text:
             docs.append(text)
     return docs
-
 
 def parse_deposit_info(html: str) -> dict:
     """
@@ -212,7 +210,6 @@ def parse_deposit_info(html: str) -> dict:
                 deposits[label] = amount
     return deposits
 
-
 def parse_discount(html: str) -> str:
     """
     Returns the plain text of a discount HTML block (only one <p> or so).
@@ -222,7 +219,6 @@ def parse_discount(html: str) -> str:
     soup = BeautifulSoup(html, "html.parser")
     return soup.get_text(separator=" ", strip=True)
 
-
 def parse_installment(html: str) -> str:
     """
     Returns the plain text for 'installment_payment' html.
@@ -231,7 +227,6 @@ def parse_installment(html: str) -> str:
         return ""
     soup = BeautifulSoup(html, "html.parser")
     return soup.get_text(separator=" ", strip=True)
-
 
 def parse_preparatory_year(html: str) -> dict:
     """
@@ -255,7 +250,6 @@ def parse_preparatory_year(html: str) -> dict:
             if field_label and value:
                 prep[field_label] = value
     return prep
-
 
 def _get_or_create_connect_sid():
     """
@@ -285,7 +279,6 @@ def _get_or_create_connect_sid():
     except requests.RequestException:
         existing.delete()
         return None
-
 
 def _selenium_login_and_store_sid(timeout=45, max_retries=2):
     """
@@ -452,6 +445,66 @@ def _get_authenticated_session():
 
     return sess
 
+def _export_data_to_file():
+    """
+    Exports all active universities and programs to a JSON file
+    located at BASE_DIR / 'data' / 'export.json'.
+    Safely handles Decimal types and missing ForeignKey relationships.
+    """
+    data_dir = os.path.join(settings.BASE_DIR, 'data')
+    os.makedirs(data_dir, exist_ok=True)
+    file_path = os.path.join(data_dir, 'export.json')
+
+    universities = University.objects.filter(is_active=True).select_related('country', 'city')
+    programs = Program.objects.filter(is_active=True).select_related('university', 'faculty', 'term')
+
+    export_data = {
+        "last_updated": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "universities_count": universities.count(),
+        "programs_count": programs.count(),
+        "universities": [],
+        "programs": []
+    }
+
+    for uni in universities:
+        export_data["universities"].append({
+            "id": uni.id,
+            "external_id": uni.external_id,
+            "name": uni.name,
+            "country": uni.country.name if uni.country else None,
+            "city": uni.city.name if uni.city else None,
+            "website": uni.website,
+            "address": uni.address,
+            "logo": uni.logo.url if uni.logo else None,
+            "parsed_data": uni.parsed_data,
+            "sector": uni.sector,
+            "founded_in": uni.founded_in,
+        })
+
+    for prog in programs:
+        export_data["programs"].append({
+            "id": prog.id,
+            "external_id": prog.external_id,
+            "name": prog.name,
+            "university_id": prog.university.id,
+            "university_name": prog.university.name,
+            "faculty": prog.faculty.name if prog.faculty else None,
+            "degree": prog.degree,
+            "duration": prog.duration,
+            "status": prog.status,
+            "deposit_fee": str(prog.deposit_fee),
+            "prep_school_fee": str(prog.prep_school_fee),
+            "cash_fees": str(prog.cash_fees),
+            "semester_fee": str(prog.semester_fee) if prog.semester_fee else None,
+            "deposit": str(prog.deposit),
+            "offer": str(prog.offer) if prog.offer else None,
+            "term": prog.term.label if prog.term else None,
+        })
+
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(export_data, f, ensure_ascii=False, indent=4)
+
+    return file_path
 
 @shared_task(bind=True)
 def refresh_universities_and_programs(self):
@@ -635,11 +688,16 @@ def refresh_universities_and_programs(self):
         University.objects.exclude(external_id__in=fetched_uni_ids).filter(is_active=True).update(is_active=False)
         Program.objects.exclude(external_id__in=fetched_prog_ids).filter(is_active=True).update(is_active=False)
 
+        # ─────────── STEP 5: EXPORT TO FILE ─────────────────────────────────
+        # Save a clean JSON dump of all active data to BASE_DIR / 'data' / export.json
+        file_path = _export_data_to_file()
+
         elapsed = time.perf_counter() - start_time
         return {
             "status": "success",
             "universities_fetched": len(fetched_uni_ids),
             "programs_fetched": len(fetched_prog_ids),
+            "exported_to": file_path,
             "elapsed_seconds": round(elapsed, 2),
         }
 
