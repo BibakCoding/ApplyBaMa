@@ -497,7 +497,7 @@
 }
 
 /* Force white text ONLY on solid primary/blue backgrounds */
-.dashboard-main button[class*="bg-[var(--ab-primary)]"]:not([style*="transparent"]),
+.dashboard-main button[class*="bg-[var(--ab-primary)]"]:not([style*="transparent"], [class*="view-details-btn"]),
 .dashboard-main button.bg-blue-500,
 .dashboard-main button.bg-blue-600 {
     color: #ffffff !important;
