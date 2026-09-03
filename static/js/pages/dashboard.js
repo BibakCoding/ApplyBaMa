@@ -274,20 +274,73 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Debounced auto-submit for global search inputs to provide a seamless typing experience
+  // Fetches search results dynamically and provides a rich dropdown experience
   function initSearchAutocomplete() {
     let searchTimeout;
-    document.querySelectorAll(".search-input").forEach((input) => {
+    const searchInputs = document.querySelectorAll(".search-input");
+
+    searchInputs.forEach((input) => {
+      const resultsDiv = input.nextElementSibling;
+      if (!resultsDiv || !resultsDiv.classList.contains("search-results")) return;
+
+      const isProgramSearch = input.placeholder && input.placeholder.toLowerCase().includes("program");
+      const url = isProgramSearch
+        ? window.AppConfig.urls.programsSearch || "/dashboard/programs-search/"
+        : window.AppConfig.urls.universitiesSearch || "/dashboard/universities-search/";
+
+      const fetchResults = (q) => {
+        fetch(`${url}?q=${encodeURIComponent(q || "")}`)
+          .then((r) => r.json())
+          .then((data) => {
+            resultsDiv.innerHTML = "";
+            resultsDiv.classList.remove("hidden");
+            if (data.results.length === 0) {
+              resultsDiv.innerHTML =
+                '<div class="p-2 text-sm text-gray-500">No results found</div>';
+              return;
+            }
+            data.results.forEach((p) => {
+              const div = document.createElement("div");
+              div.className =
+                "p-2 hover:bg-blue-50 cursor-pointer border-b text-sm text-gray-700";
+              div.textContent = p.text;
+              div.onclick = () => {
+                input.value = p.text;
+                resultsDiv.classList.add("hidden");
+                const form = input.closest("form");
+                if (form) {
+                  form.dispatchEvent(new Event("submit", { cancelable: true }));
+                }
+              };
+              resultsDiv.appendChild(div);
+            });
+          });
+      };
+
+      input.addEventListener("focus", function () {
+        fetchResults(this.value);
+      });
+
       input.addEventListener("input", function () {
         clearTimeout(searchTimeout);
-        const form = this.closest("form");
+        const q = this.value;
         searchTimeout = setTimeout(() => {
-          form.dispatchEvent(new Event("submit", { cancelable: true }));
-        }, 400);
+          fetchResults(q);
+        }, 300);
+      });
+
+      document.addEventListener("click", function (e) {
+        if (
+          resultsDiv &&
+          !resultsDiv.contains(e.target) &&
+          e.target !== input
+        ) {
+          resultsDiv.classList.add("hidden");
+        }
       });
     });
   }
-
+  
   // Fetches matching university programs asynchronously as the user types
   function initProgramAutocomplete() {
     const searchInput = document.getElementById("program-search-input");

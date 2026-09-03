@@ -1,8 +1,9 @@
+# dashboard/views.py
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponse, Http404
+from django.http import JsonResponse, HttpResponse
 from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
@@ -21,6 +22,7 @@ from core.models import (
     Program,
     Country,
     City,
+    Faculty,
 )
 from .forms import (
     PersonalInfoForm,
@@ -32,6 +34,7 @@ from .forms import (
     AddStudentForm,
     UsernameForm,
 )
+
 
 def get_managed_students(user):
     """Returns student IDs managed by an Agent or a Company's agents."""
@@ -54,6 +57,7 @@ def get_managed_students(user):
             return []
     return []
 
+
 @login_required
 def dashboard_content(request, page):
     """Handles GET requests to render SPA fragments"""
@@ -70,8 +74,6 @@ def dashboard_content(request, page):
     }
 
     if page not in content_map:
-        if request.headers.get("x-requested-with") == "XMLHttpRequest":
-            raise Http404(_("Page not found."))
         messages.error(request, _("Page not found."))
         return redirect("dashboard")
 
@@ -105,10 +107,13 @@ def dashboard_content(request, page):
         )
 
     elif page == "universities":
-        qs = University.objects.all().select_related("country", "city")
+        qs = University.objects.all().select_related("country", "city").prefetch_related("faculties")
         search_query = request.GET.get("search", "")
         country_id = request.GET.get("country", "")
         sector = request.GET.get("sector", "")
+        city_id = request.GET.get("city", "")
+        faculty_id = request.GET.get("faculty", "")
+        sort = request.GET.get("sort", "")
 
         if search_query:
             qs = qs.filter(name__icontains=search_query)
@@ -116,6 +121,21 @@ def dashboard_content(request, page):
             qs = qs.filter(country_id=country_id)
         if sector:
             qs = qs.filter(sector=sector)
+        if city_id:
+            qs = qs.filter(city_id=city_id)
+        if faculty_id:
+            qs = qs.filter(faculties__id=faculty_id)
+
+        if sort == "name_desc":
+            qs = qs.order_by("-name")
+        elif sort == "country_asc":
+            qs = qs.order_by("country__name")
+        elif sort == "founded_asc":
+            qs = qs.order_by("founded_in")
+        elif sort == "founded_desc":
+            qs = qs.order_by("-founded_in")
+        else:
+            qs = qs.order_by("name")
 
         paginator = Paginator(qs, 12)
         page_number = request.GET.get("page")
@@ -127,22 +147,41 @@ def dashboard_content(request, page):
             .distinct()
             .order_by("name")
         )
+        cities_with_universities = (
+            City.objects.filter(universities__isnull=False)
+            .distinct()
+            .order_by("name")
+        )
+        faculties_with_universities = (
+            Faculty.objects.filter(universities__isnull=False)
+            .distinct()
+            .order_by("name")
+        )
         context["countries"] = countries_with_universities
+        context["cities"] = cities_with_universities
+        context["faculties"] = faculties_with_universities
         context["filters"] = {
             "search": search_query,
             "country": country_id,
             "sector": sector,
+            "city": city_id,
+            "faculty": faculty_id,
+            "sort": sort,
         }
 
     elif page == "programs":
         qs = Program.objects.all().select_related(
-            "university", "university__country", "faculty"
+            "university", "university__country", "university__city", "faculty"
         )
         search_query = request.GET.get("search", "")
         university_id = request.GET.get("university", "")
         degree = request.GET.get("degree", "")
         country_id = request.GET.get("country", "")
         language_id = request.GET.get("language", "")
+        city_id = request.GET.get("city", "")
+        faculty_id = request.GET.get("faculty", "")
+        status = request.GET.get("status", "")
+        sort = request.GET.get("sort", "")
 
         if search_query:
             qs = qs.filter(name__icontains=search_query)
@@ -153,7 +192,24 @@ def dashboard_content(request, page):
         if country_id:
             qs = qs.filter(university__country_id=country_id)
         if language_id:
-            qs = qs.filter(university__available_languages__id=language_id)
+            qs = qs.filter(language=language_id)
+        if city_id:
+            qs = qs.filter(university__city_id=city_id)
+        if faculty_id:
+            qs = qs.filter(faculty_id=faculty_id)
+        if status:
+            qs = qs.filter(status=status)
+
+        if sort == "name_desc":
+            qs = qs.order_by("-name")
+        elif sort == "university_asc":
+            qs = qs.order_by("university__name")
+        elif sort == "fee_asc":
+            qs = qs.order_by("cash_fees")
+        elif sort == "fee_desc":
+            qs = qs.order_by("-cash_fees")
+        else:
+            qs = qs.order_by("name")
 
         paginator = Paginator(qs, 12)
         page_number = request.GET.get("page")
@@ -166,18 +222,34 @@ def dashboard_content(request, page):
             .distinct()
             .order_by("name")
         )
-        context["languages"] = (
-            Country.objects.filter(language_universities__isnull=False)
+        context["cities_filter"] = (
+            City.objects.filter(universities__isnull=False)
             .distinct()
             .order_by("name")
         )
+        context["faculties_filter"] = (
+            Faculty.objects.filter(programs__isnull=False)
+            .distinct()
+            .order_by("name")
+        )
+        context["languages"] = (
+            Program.objects.exclude(language="")
+            .values_list("language", flat=True)
+            .distinct()
+            .order_by("language")
+        )
         context["degrees"] = Program.DEGREE_CHOICES
+        context["statuses"] = Program.StatusChoices.choices
         context["filters"] = {
             "search": search_query,
             "university": university_id,
             "degree": degree,
             "country": country_id,
             "language": language_id,
+            "city": city_id,
+            "faculty": faculty_id,
+            "status": status,
+            "sort": sort,
         }
 
     elif page == "university_detail":
@@ -228,9 +300,11 @@ def dashboard_content(request, page):
 
     return render(request, content_map[page], context=context)
 
+
 @login_required
 def dashboard_main(request):
     return render(request, "dashboard/main.html", context={"user": request.user})
+
 
 @login_required
 def get_cities_by_country(request):
@@ -243,6 +317,7 @@ def get_cities_by_country(request):
         except Exception as e:
             return JsonResponse({"cities": [], "error": str(e)})
     return JsonResponse({"cities": []})
+
 
 @login_required
 def profile_view(request):
@@ -298,8 +373,10 @@ def profile_view(request):
 
     return JsonResponse({"success": False, "errors": [_("Invalid form type.")]})
 
+
 def _success_response(message):
     return JsonResponse({"success": True, "message": str(message)})
+
 
 def _form_error_response(form):
     errors = []
@@ -307,6 +384,7 @@ def _form_error_response(form):
         for error in error_list:
             errors.append(f"{field.replace('_', ' ').title()}: {error}")
     return JsonResponse({"success": False, "errors": errors})
+
 
 @login_required
 def application_action(request, pk):
@@ -328,11 +406,13 @@ def application_action(request, pk):
 
     return JsonResponse({"success": False, "message": "Invalid action."})
 
+
 @login_required
 def generate_password(request):
     alphabet = string.ascii_letters + string.digits + string.punctuation
     password = "".join(secrets.choice(alphabet) for i in range(12))
     return JsonResponse({"password": password})
+
 
 @login_required
 def submit_new_application(request):
@@ -358,6 +438,7 @@ def submit_new_application(request):
         else:
             return JsonResponse({"success": False, "errors": form.errors})
     return JsonResponse({"success": False, "message": _("Invalid request.")})
+
 
 @login_required
 @ratelimit(key="ip", rate="10/h", method="POST", block=True)
@@ -395,6 +476,7 @@ def submit_add_student(request):
         else:
             return JsonResponse({"success": False, "errors": form.errors})
     return JsonResponse({"success": False, "message": _("Invalid request.")})
+
 
 @login_required
 def program_apply_request(request):
@@ -446,23 +528,34 @@ def program_apply_request(request):
 
     return JsonResponse({"success": False, "message": str(_("Invalid request."))})
 
+
+@login_required
+def universities_search(request):
+    q = request.GET.get("q", "")
+    universities = University.objects.filter(name__icontains=q).order_by("name")[:20]
+    results = [{"id": u.id, "text": u.name} for u in universities]
+    return JsonResponse({"results": results})
+
+
 @login_required
 def programs_search(request):
     q = request.GET.get("q", "")
-    programs = Program.objects.filter(name__icontains=q).select_related("university")[
-        :20
-    ]
+    programs = Program.objects.filter(name__icontains=q).select_related("university").order_by("name")[:20]
     results = [
         {"id": p.id, "text": f"{p.name} ({p.university.name})"} for p in programs
     ]
     return JsonResponse({"results": results})
 
+
 @login_required
 def export_universities_pdf(request):
-    qs = University.objects.all().select_related("country", "city")
+    qs = University.objects.all().select_related("country", "city").prefetch_related("faculties")
     search_query = request.GET.get("search", "")
     country_id = request.GET.get("country", "")
     sector = request.GET.get("sector", "")
+    city_id = request.GET.get("city", "")
+    faculty_id = request.GET.get("faculty", "")
+    sort = request.GET.get("sort", "")
 
     if search_query:
         qs = qs.filter(name__icontains=search_query)
@@ -470,6 +563,21 @@ def export_universities_pdf(request):
         qs = qs.filter(country_id=country_id)
     if sector:
         qs = qs.filter(sector=sector)
+    if city_id:
+        qs = qs.filter(city_id=city_id)
+    if faculty_id:
+        qs = qs.filter(faculties__id=faculty_id)
+
+    if sort == "name_desc":
+        qs = qs.order_by("-name")
+    elif sort == "country_asc":
+        qs = qs.order_by("country__name")
+    elif sort == "founded_asc":
+        qs = qs.order_by("founded_in")
+    elif sort == "founded_desc":
+        qs = qs.order_by("-founded_in")
+    else:
+        qs = qs.order_by("name")
 
     template = get_template("dashboard/pdf_export.html")
     html = template.render({"data": qs, "title": "Universities", "request": request})
@@ -481,6 +589,7 @@ def export_universities_pdf(request):
     if pisa_status.err:
         return HttpResponse("We had some errors with the PDF generation.", status=500)
     return response
+
 
 @login_required
 def export_programs_pdf(request):
@@ -494,6 +603,8 @@ def export_programs_pdf(request):
     country_id = request.GET.get("country", "")
     city_id = request.GET.get("city", "")
     language_id = request.GET.get("language", "")
+    faculty_id = request.GET.get("faculty", "")
+    sort = request.GET.get("sort", "")
 
     if search_query:
         qs = qs.filter(name__icontains=search_query)
@@ -508,7 +619,20 @@ def export_programs_pdf(request):
     if city_id:
         qs = qs.filter(university__city_id=city_id)
     if language_id:
-        qs = qs.filter(university__available_languages__id=language_id)
+        qs = qs.filter(language=language_id)
+    if faculty_id:
+        qs = qs.filter(faculty_id=faculty_id)
+
+    if sort == "name_desc":
+        qs = qs.order_by("-name")
+    elif sort == "university_asc":
+        qs = qs.order_by("university__name")
+    elif sort == "fee_asc":
+        qs = qs.order_by("cash_fees")
+    elif sort == "fee_desc":
+        qs = qs.order_by("-cash_fees")
+    else:
+        qs = qs.order_by("name")
 
     template = get_template("dashboard/pdf_export.html")
     html = template.render({"data": qs, "title": "Programs", "request": request})
