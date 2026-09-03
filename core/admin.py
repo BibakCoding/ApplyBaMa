@@ -60,9 +60,8 @@ class UniversityAdmin(admin.ModelAdmin):
     list_display = ("name", "country", "city", "sector", "show_on_homepage", "founded_in", "updated_at")
     search_fields = ("name", "country__name", "city__name")
     list_filter = ("sector", "country", "show_on_homepage")   # ← homepage toggle filter
-    filter_horizontal = ("faculties", "available_languages")
+    filter_horizontal = ("faculties",)
     ordering = ("name",)
-
 
 @admin.register(Program)
 class ProgramAdmin(admin.ModelAdmin):

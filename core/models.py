@@ -220,6 +220,22 @@ class University(TimeStampedModel):
                 compress_image(self.logo)
         super().save(*args, **kwargs)
 
+
+    @property
+    def programs_count(self):
+        return self.programs.count()
+
+    @property
+    def starting_fee(self):
+        # Get the minimum valid display price across all programs
+        prices = [p.display_price for p in self.programs.all() if p.display_price > 0]
+        return min(prices) if prices else 0
+
+    @property
+    def available_languages(self):
+        # Return a unique list of languages offered by the university's programs
+        return list(set(p.language for p in self.programs.all() if p.language))
+
 class Program(TimeStampedModel):
     class StatusChoices(models.TextChoices):
         AVAILABLE = "available", _("Available")
@@ -285,6 +301,29 @@ class Program(TimeStampedModel):
     )
     language = models.CharField(max_length=50, blank=True, help_text=_("Language of instruction, e.g. English, Turkish"))
     currency = models.CharField(max_length=10, blank=True, help_text=_("Currency code, e.g. USD, EUR, TRY"))
+
+    @property
+    def original_price(self):
+        # The main fee is usually prep_school_fee or cash_fees, but we check all to be safe
+        fees = [
+            self.prep_school_fee or 0,
+            self.cash_fees or 0,
+            self.deposit_fee or 0,
+            self.semester_fee or 0,
+        ]
+        valid_fees = [f for f in fees if f > 0]
+        return max(valid_fees) if valid_fees else 0
+
+    @property
+    def display_price(self):
+        # If there is a valid offer (discount), use it as the display price
+        if self.offer and self.offer > 0 and self.original_price > self.offer:
+            return self.offer
+        return self.original_price
+
+    @property
+    def is_discounted(self):
+        return bool(self.offer and self.offer > 0 and self.original_price > self.offer)
 
     def __str__(self):
         return f"{self.name} @ {self.university.name}"
