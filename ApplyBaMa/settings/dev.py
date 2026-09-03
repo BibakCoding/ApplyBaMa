@@ -15,19 +15,23 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "[::1]",
     "0.0.0.0",
-    "4d496648d3bc84.lhr.life",
-    "913aae4061c026.lhr.life",
     ".lhr.life",
     ".serveo.net",
+    ".serveousercontent.com",
+    ".trycloudflare.com",
+    ".pinggy.net",
+    ".pinggy-free.link",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://4d496648d3bc84.lhr.life/",
-    "https://913aae4061c026.lhr.life/",
     "https://*.lhr.life",
     "https://*.serveo.net",
+    "https://*.serveousercontent.com",
+    "https://*.pinggy.net",
+    "https://*.pinggy-free.link",
     "http://localhost:2345",
     "http://127.0.0.1:2345",
+    "https://*.trycloudflare.com",
 ]
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # SESSION_COOKIE_SECURE = False
