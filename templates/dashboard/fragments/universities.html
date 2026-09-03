@@ -72,7 +72,7 @@
     <!-- Results Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
         {% for uni in page_obj %}
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
                 <div class="h-32 bg-gray-50 flex items-center justify-center border-b border-gray-100">
                     {% if uni.logo %}
                         <img src="{{ uni.logo.url }}" alt="{{ uni.name }}" class="max-h-24 max-w-[80%] object-contain">
@@ -80,8 +80,8 @@
                         <i class="fas fa-university text-4xl text-gray-300"></i>
                     {% endif %}
                 </div>
-                <div class="p-5">
-                    <h3 class="text-lg font-bold mb-2 font-serif line-clamp-1">
+                <div class="p-5 flex flex-col flex-grow">
+                    <h3 class="text-lg font-bold mb-2 font-serif line-clamp-1 min-h-[1.75rem]">
                         <a href="#" onclick="loadContent('university_detail?id={{ uni.pk }}'); return false;" class="text-gray-800 hover:text-[var(--ab-primary)] transition-colors">{{ uni.name }}</a>
                     </h3>
                     <p class="text-sm text-[var(--ab-muted)] mb-4 flex items-center">
@@ -89,6 +89,7 @@
                         {% if uni.city %}{{ uni.city.name }},{% endif %}
                         {{ uni.country.name|default:_("Unknown") }}
                     </p>
+
                     <div class="flex items-center justify-between text-xs mb-4">
                         <span class="px-2 py-1 rounded-full {% if uni.sector == 'public' %}bg-blue-100 text-blue-800 {% elif uni.sector == 'private' %}bg-purple-100 text-purple-800 {% else %}bg-gray-100 text-gray-800{% endif %}">
                             {{ uni.get_sector_display }}
@@ -97,7 +98,27 @@
                             <span class="text-gray-500">{% trans "Est." %} {{ uni.founded_in }}</span>
                         {% endif %}
                     </div>
-                    <button onclick="loadContent('university_detail?id={{ uni.pk }}')" class="view-details-btn w-full text-center text-sm font-medium rounded-lg py-2">
+
+                    <div class="border-t border-gray-100 pt-4 mb-4 mt-auto text-sm space-y-2">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-graduation-cap w-5 text-gray-400 mr-2"></i>
+                            <span>{{ uni.programs_count }} {% trans "Available Programs" %}</span>
+                        </div>
+                        {% if uni.starting_fee > 0 %}
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-tag w-5 text-gray-400 mr-2"></i>
+                            <span>{% trans "Starting from:" %} <span class="font-semibold text-[var(--ab-primary)]">{{ uni.starting_fee|floatformat:0 }}</span></span>
+                        </div>
+                        {% endif %}
+                        {% if uni.available_languages %}
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-language w-5 text-gray-400 mr-2"></i>
+                            <span class="line-clamp-1">{{ uni.available_languages|join:", " }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <button onclick="loadContent('university_detail?id={{ uni.pk }}')" class="view-details-btn w-full text-center text-sm font-medium rounded-lg py-2 bg-gray-50 text-[var(--ab-primary)] hover:bg-[var(--ab-primary)] hover:text-white transition-colors border border-gray-200">
                         {% trans "View Details" %} <i class="fas fa-arrow-right ml-1"></i>
                     </button>
                 </div>

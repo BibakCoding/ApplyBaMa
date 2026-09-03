@@ -102,29 +102,54 @@
                         <span class="px-3 py-1 text-xs font-semibold rounded-full {% if prog.status == 'available' %}bg-green-100 text-green-800 {% elif prog.status == 'near_to_close' %}bg-yellow-100 text-yellow-800 {% else %}bg-red-100 text-red-800{% endif %}">
                             {{ prog.get_status_display }}
                         </span>
-                        <span class="text-xs text-gray-400 uppercase tracking-wide font-bold">{{ prog.get_degree_display }}</span>
+                        <span class="text-xs text-gray-500 uppercase tracking-wide font-bold bg-gray-100 px-2 py-1 rounded">{{ prog.get_degree_display }}</span>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-800 mb-1 font-serif line-clamp-2">{{ prog.name }}</h3>
-                    <p class="text-sm text-[var(--ab-primary)] font-medium mb-4">
-                        <i class="fas fa-university mr-1"></i>
-                        <a href="#" onclick="loadContent('university_detail?id={{ prog.university.pk }}'); return false;" class="hover:underline">{{ prog.university.name }}</a>
+                    <h3 class="text-lg font-bold text-gray-800 mb-1 font-serif line-clamp-2 min-h-[3.5rem]">{{ prog.name }}</h3>
+                    <p class="text-sm text-[var(--ab-primary)] font-medium mb-4 flex items-center">
+                        <i class="fas fa-university mr-2"></i>
+                        <a href="#" onclick="loadContent('university_detail?id={{ prog.university.pk }}'); return false;" class="hover:underline line-clamp-1">{{ prog.university.name }}</a>
                     </p>
                 </div>
-                <div class="border-t border-gray-100 pt-4 mt-auto">
-                    <div class="grid grid-cols-2 gap-4 text-sm mb-4">
-                        <div>
-                            <span class="block text-xs text-gray-400 uppercase mb-1">{% trans "Duration" %}</span>
-                            <span class="font-semibold text-gray-700">{{ prog.duration|default:"-" }} {% trans "Years" %}</span>
-                        </div>
-                        <div>
-                            <span class="block text-xs text-gray-400 uppercase mb-1">{% trans "Total Fee" %}</span>
-                            <span class="font-semibold text-gray-700">${{ prog.cash_fees|floatformat:0 }}</span>
-                        </div>
+
+                <div class="grid grid-cols-2 gap-x-4 gap-y-3 text-sm mb-4 border-t border-gray-100 pt-4">
+                    <div class="flex items-center text-gray-600">
+                        <i class="fas fa-clock w-5 text-gray-400 mr-2"></i>
+                        <span>{{ prog.duration|default:"-" }} {% trans "Years" %}</span>
                     </div>
-                    <button class="apply-request-btn w-full bg-[var(--ab-primary)] text-white py-2 px-4 rounded-lg hover:opacity-90 transition text-sm font-medium" data-program-id="{{ prog.pk }}">
-                        <i class="fas fa-paper-plane mr-1"></i> {% trans "Apply Request" %}
-                    </button>
+                    <div class="flex items-center text-gray-600">
+                        <i class="fas fa-language w-5 text-gray-400 mr-2"></i>
+                        <span>{{ prog.language|default:"-" }}</span>
+                    </div>
+                    {% if prog.deposit_fee and prog.deposit_fee > 0 %}
+                    <div class="flex items-center text-gray-600 col-span-2">
+                        <i class="fas fa-hand-holding-usd w-5 text-gray-400 mr-2"></i>
+                        <span>{% trans "Deposit:" %} {{ prog.deposit_fee|floatformat:0 }} {{ prog.currency|default:"USD" }}</span>
+                    </div>
+                    {% endif %}
                 </div>
+
+                <div class="border-t border-gray-100 pt-4 mt-auto mb-4">
+                    <span class="block text-xs text-gray-400 uppercase mb-2">{% trans "Tuition Fee" %}</span>
+                    {% if prog.is_discounted %}
+                        <div class="flex items-baseline gap-2 flex-wrap">
+                            <span class="font-bold text-[var(--ab-primary)] text-xl">{{ prog.display_price|floatformat:0 }} <span class="text-sm font-medium text-gray-500">{{ prog.currency|default:"USD" }}</span></span>
+                            <span class="text-sm text-gray-400 line-through">{{ prog.original_price|floatformat:0 }}</span>
+                            <span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full font-bold">{% trans "Discount" %}</span>
+                        </div>
+                    {% else %}
+                        <span class="font-bold text-[var(--ab-primary)] text-xl">
+                            {% if prog.display_price > 0 %}
+                                {{ prog.display_price|floatformat:0 }} <span class="text-sm font-medium text-gray-500">{{ prog.currency|default:"USD" }}</span>
+                            {% else %}
+                                <span class="text-green-600 text-sm font-semibold">{% trans "Contact for Fee" %}</span>
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <button class="apply-request-btn w-full bg-[var(--ab-primary)] text-white py-2.5 px-4 rounded-lg hover:opacity-90 transition text-sm font-medium shadow-sm">
+                    <i class="fas fa-paper-plane mr-2"></i> {% trans "Apply Request" %}
+                </button>
             </div>
         {% empty %}
             <div class="col-span-full text-center py-12 bg-white rounded-xl border border-gray-100">

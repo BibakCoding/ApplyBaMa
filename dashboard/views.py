@@ -107,7 +107,7 @@ def dashboard_content(request, page):
         )
 
     elif page == "universities":
-        qs = University.objects.all().select_related("country", "city").prefetch_related("faculties")
+        qs = University.objects.all().select_related("country", "city").prefetch_related("faculties", "programs")
         search_query = request.GET.get("search", "")
         country_id = request.GET.get("country", "")
         sector = request.GET.get("sector", "")
@@ -128,12 +128,12 @@ def dashboard_content(request, page):
 
         if sort == "name_desc":
             qs = qs.order_by("-name")
-        elif sort == "country_asc":
-            qs = qs.order_by("country__name")
-        elif sort == "founded_asc":
-            qs = qs.order_by("founded_in")
-        elif sort == "founded_desc":
-            qs = qs.order_by("-founded_in")
+        elif sort == "university_asc":
+            qs = qs.order_by("university__name")
+        elif sort == "fee_asc":
+            qs = qs.order_by("prep_school_fee", "cash_fees")
+        elif sort == "fee_desc":
+            qs = qs.order_by("-prep_school_fee", "-cash_fees")
         else:
             qs = qs.order_by("name")
 
@@ -549,7 +549,7 @@ def programs_search(request):
 
 @login_required
 def export_universities_pdf(request):
-    qs = University.objects.all().select_related("country", "city").prefetch_related("faculties")
+    qs = University.objects.all().select_related("country", "city").prefetch_related("faculties", "programs")
     search_query = request.GET.get("search", "")
     country_id = request.GET.get("country", "")
     sector = request.GET.get("sector", "")
