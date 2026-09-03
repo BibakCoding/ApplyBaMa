@@ -9,45 +9,62 @@
         <form id="uniFilterForm"
               onsubmit="handleUniFilter(event)"
               class="flex flex-wrap items-end gap-4">
-            <div class="flex-1 min-w-[200px]">
+            <div class="flex-1 min-w-[180px] relative">
                 <input type="text"
                        name="search"
                        value="{{ filters.search }}"
                        placeholder="{% trans 'Search by name...' %}"
-                       class="search-input ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
+                       class="search-input ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800"
+                       autocomplete="off">
+                <div class="search-results bg-white border border-gray-200 rounded-lg mt-1 max-h-60 overflow-y-auto shadow-lg absolute w-full z-10 hidden"></div>
             </div>
-            <!-- 🔥 FIX: Added filter-select class for Select2, changed h-[42px] to h-[46px] for perfect alignment -->
-            <div class="min-w-[150px]">
-                <select name="country"
-                        class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
+            <div class="flex-1 min-w-[180px]">
+                <select name="country" class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
                     <option value="">{% trans "All Countries" %}</option>
                     {% for c in countries %}
-                        <option value="{{ c.id }}"
-                                {% if filters.country == c.id|stringformat:"s" %}selected{% endif %}>
-                            {{ c.name }}
-                        </option>
+                        <option value="{{ c.id }}" {% if filters.country == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="min-w-[150px]">
-                <select name="sector"
-                        class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
+            <div class="flex-1 min-w-[180px]">
+                <select name="city" class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
+                    <option value="">{% trans "All Cities" %}</option>
+                    {% for c in cities %}
+                        <option value="{{ c.id }}" {% if filters.city == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex-1 min-w-[180px]">
+                <select name="sector" class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
                     <option value="">{% trans "All Sectors" %}</option>
                     <option value="public" {% if filters.sector == "public" %}selected{% endif %}>{% trans "Public" %}</option>
-                    <option value="private"
-                            {% if filters.sector == "private" %}selected{% endif %}>{% trans "Private" %}</option>
+                    <option value="private" {% if filters.sector == "private" %}selected{% endif %}>{% trans "Private" %}</option>
                     <option value="other" {% if filters.sector == "other" %}selected{% endif %}>{% trans "Other" %}</option>
                 </select>
             </div>
-            <!-- 🔥 FIX: Changed h-[42px] to h-[46px] on buttons to match input height exactly -->
+            <div class="flex-1 min-w-[180px]">
+                <select name="faculty" class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
+                    <option value="">{% trans "All Faculties" %}</option>
+                    {% for f in faculties %}
+                        <option value="{{ f.id }}" {% if filters.faculty == f.id|stringformat:"s" %}selected{% endif %}>{{ f.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex-1 min-w-[180px]">
+                <select name="sort" class="filter-select ab-input w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
+                    <option value="">{% trans "Sort By" %}</option>
+                    <option value="name_desc" {% if filters.sort == "name_desc" %}selected{% endif %}>{% trans "Name (Z-A)" %}</option>
+                    <option value="country_asc" {% if filters.sort == "country_asc" %}selected{% endif %}>{% trans "Country (A-Z)" %}</option>
+                    <option value="founded_asc" {% if filters.sort == "founded_asc" %}selected{% endif %}>{% trans "Founded (Oldest)" %}</option>
+                    <option value="founded_desc" {% if filters.sort == "founded_desc" %}selected{% endif %}>{% trans "Founded (Newest)" %}</option>
+                </select>
+            </div>
             <div class="flex items-end gap-2">
-                <button type="submit"
-                        class="bg-[var(--ab-primary)] text-white py-2 px-6 rounded-lg hover:opacity-90 transition font-medium shadow-sm h-[46px] flex items-center justify-center">
+                <button type="submit" class="bg-[var(--ab-primary)] text-white py-2 px-6 rounded-lg hover:opacity-90 transition font-medium shadow-sm h-[46px] flex items-center justify-center">
                     <i class="fas fa-search mr-2"></i> {% trans "Search" %}
                 </button>
-                <a href="{% url 'export_universities_pdf' %}?{{ request.GET.urlencode }}"
-                   class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition font-medium shadow-sm h-[46px] flex items-center justify-center whitespace-nowrap">
-                    <i class="fas fa-file-pdf mr-2"></i> {% trans "PDF" %}
+                <a href="{% url 'export_universities_pdf' %}?{{ request.GET.urlencode }}" class="bg-gradient-to-r from-slate-700 to-slate-900 text-white py-2 px-5 rounded-lg hover:shadow-lg hover:from-slate-800 hover:to-black transition-all font-medium h-[46px] flex items-center justify-center whitespace-nowrap">
+                    <i class="fas fa-file-pdf mr-2"></i> {% trans "Export PDF" %}
                 </a>
             </div>
         </form>
@@ -58,18 +75,14 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                 <div class="h-32 bg-gray-50 flex items-center justify-center border-b border-gray-100">
                     {% if uni.logo %}
-                        <img src="{{ uni.logo.url }}"
-                             alt="{{ uni.name }}"
-                             class="max-h-24 max-w-[80%] object-contain">
+                        <img src="{{ uni.logo.url }}" alt="{{ uni.name }}" class="max-h-24 max-w-[80%] object-contain">
                     {% else %}
                         <i class="fas fa-university text-4xl text-gray-300"></i>
                     {% endif %}
                 </div>
                 <div class="p-5">
                     <h3 class="text-lg font-bold mb-2 font-serif line-clamp-1">
-                        <a href="#"
-                           onclick="loadContent('university_detail?id={{ uni.pk }}'); return false;"
-                           class="text-gray-800 hover:text-[var(--ab-primary)] transition-colors">{{ uni.name }}</a>
+                        <a href="#" onclick="loadContent('university_detail?id={{ uni.pk }}'); return false;" class="text-gray-800 hover:text-[var(--ab-primary)] transition-colors">{{ uni.name }}</a>
                     </h3>
                     <p class="text-sm text-[var(--ab-muted)] mb-4 flex items-center">
                         <i class="fas fa-map-marker-alt mr-2 text-[var(--ab-primary)]"></i>
@@ -84,8 +97,7 @@
                             <span class="text-gray-500">{% trans "Est." %} {{ uni.founded_in }}</span>
                         {% endif %}
                     </div>
-                    <button onclick="loadContent('university_detail?id={{ uni.pk }}')"
-                            class="view-details-btn w-full text-center text-sm font-medium rounded-lg py-2">
+                    <button onclick="loadContent('university_detail?id={{ uni.pk }}')" class="view-details-btn w-full text-center text-sm font-medium rounded-lg py-2">
                         {% trans "View Details" %} <i class="fas fa-arrow-right ml-1"></i>
                     </button>
                 </div>
@@ -102,13 +114,10 @@
         <div class="flex flex-col items-center gap-4 mt-8">
             <div class="flex items-center gap-2 flex-wrap justify-center">
                 {% if page_obj.has_previous %}
-                    <button onclick="loadContent('universities', 'page=1&search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}')"
-                            class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm"
-                            title="{% trans 'First' %}">
+                    <button onclick="loadContent('universities', 'page=1&search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}&city={{ filters.city }}&faculty={{ filters.faculty }}&sort={{ filters.sort }}')" class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm" title="{% trans 'First' %}">
                         <i class="fas fa-angle-double-left"></i>
                     </button>
-                    <button onclick="loadContent('universities', 'page={{ page_obj.previous_page_number }}&search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}')"
-                            class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
+                    <button onclick="loadContent('universities', 'page={{ page_obj.previous_page_number }}&search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}&city={{ filters.city }}&faculty={{ filters.faculty }}&sort={{ filters.sort }}')" class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
                         <i class="fas fa-chevron-left mr-1"></i> {% trans "Prev" %}
                     </button>
                 {% endif %}
@@ -116,49 +125,29 @@
                     {% if page_obj.number == i %}
                         <span class="px-4 py-2 rounded-lg bg-[var(--ab-primary)] text-white font-bold shadow-sm text-sm">{{ i }}</span>
                     {% elif i >= page_obj.number|add:"-2" and i <= page_obj.number|add:"2" %}
-                        <button onclick="loadContent('universities', 'page={{ i }}&search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}')"
-                                class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
-                            {{ i }}
-                        </button>
+                        <button onclick="loadContent('universities', 'page={{ i }}&search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}&city={{ filters.city }}&faculty={{ filters.faculty }}&sort={{ filters.sort }}')" class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">{{ i }}</button>
                     {% elif i == 1 or i == page_obj.paginator.num_pages %}
-                        <button onclick="loadContent('universities', 'page={{ i }}&search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}')"
-                                class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
-                            {{ i }}
-                        </button>
+                        <button onclick="loadContent('universities', 'page={{ i }}&search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}&city={{ filters.city }}&faculty={{ filters.faculty }}&sort={{ filters.sort }}')" class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">{{ i }}</button>
                     {% elif i == page_obj.number|add:"-3" or i == page_obj.number|add:"3" %}
                         <span class="px-2 py-2 text-gray-400 text-sm">...</span>
                     {% endif %}
                 {% endfor %}
                 {% if page_obj.has_next %}
-                    <button onclick="loadContent('universities', 'page={{ page_obj.next_page_number }}&search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}')"
-                            class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
+                    <button onclick="loadContent('universities', 'page={{ page_obj.next_page_number }}&search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}&city={{ filters.city }}&faculty={{ filters.faculty }}&sort={{ filters.sort }}')" class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
                         {% trans "Next" %} <i class="fas fa-chevron-right ml-1"></i>
                     </button>
-                    <button onclick="loadContent('universities', 'page={{ page_obj.paginator.num_pages }}&search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}')"
-                            class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm"
-                            title="{% trans 'Last' %}">
+                    <button onclick="loadContent('universities', 'page={{ page_obj.paginator.num_pages }}&search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}&city={{ filters.city }}&faculty={{ filters.faculty }}&sort={{ filters.sort }}')" class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm" title="{% trans 'Last' %}">
                         <i class="fas fa-angle-double-right"></i>
                     </button>
                 {% endif %}
             </div>
-            <form id="goToPageForm"
-                  data-section="universities"
-                  data-max-page="{{ page_obj.paginator.num_pages }}"
-                  data-filters="search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}"
-                  class="flex items-center gap-2 text-sm text-gray-600">
+            <form id="goToPageForm" data-section="universities" data-max-page="{{ page_obj.paginator.num_pages }}" data-filters="search={{ filters.search }}&country={{ filters.country }}&sector={{ filters.sector }}&city={{ filters.city }}&faculty={{ filters.faculty }}&sort={{ filters.sort }}" class="flex items-center gap-2 text-sm text-gray-600">
                 {% csrf_token %}
                 <span>{% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}</span>
                 <span class="mx-1">|</span>
                 <label>{% trans "Go to" %}:</label>
-                <input type="number"
-                       name="goto_page"
-                       min="1"
-                       max="{{ page_obj.paginator.num_pages }}"
-                       class="w-16 px-2 py-1 border border-gray-300 rounded-lg text-center text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)]">
-                <button type="submit"
-                        class="px-3 py-1 bg-[var(--ab-primary)] text-white rounded-lg text-sm hover:opacity-90 transition">
-                    {% trans "Go" %}
-                </button>
+                <input type="number" name="goto_page" min="1" max="{{ page_obj.paginator.num_pages }}" class="w-16 px-2 py-1 border border-gray-300 rounded-lg text-center text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)]">
+                <button type="submit" class="px-3 py-1 bg-[var(--ab-primary)] text-white rounded-lg text-sm hover:opacity-90 transition">{% trans "Go" %}</button>
             </form>
         </div>
     {% endif %}

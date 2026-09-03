@@ -25,6 +25,7 @@ urlpatterns = [
     ),
     path("get-cities/", views.get_cities_by_country, name="get_cities_by_country"),
     path("programs-search/", views.programs_search, name="programs_search"),
+    path("universities-search/", views.universities_search, name="universities_search"),
     path(
         "export/universities/",
         views.export_universities_pdf,
