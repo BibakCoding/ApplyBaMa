@@ -245,7 +245,10 @@ document.addEventListener("DOMContentLoaded", function () {
           const start = mobileInput.selectionStart;
           const end = mobileInput.selectionEnd;
           mobileInput.value = mobileInput.value.substring(1);
-          mobileInput.setSelectionRange(Math.max(0, start - 1), Math.max(0, end - 1));
+          mobileInput.setSelectionRange(
+            Math.max(0, start - 1),
+            Math.max(0, end - 1),
+          );
         }
       });
     }
@@ -281,12 +284,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     searchInputs.forEach((input) => {
       const resultsDiv = input.nextElementSibling;
-      if (!resultsDiv || !resultsDiv.classList.contains("search-results")) return;
+      if (!resultsDiv || !resultsDiv.classList.contains("search-results"))
+        return;
 
-      const isProgramSearch = input.placeholder && input.placeholder.toLowerCase().includes("program");
+      const isProgramSearch =
+        input.placeholder &&
+        input.placeholder.toLowerCase().includes("program");
       const url = isProgramSearch
         ? window.AppConfig.urls.programsSearch || "/dashboard/programs-search/"
-        : window.AppConfig.urls.universitiesSearch || "/dashboard/universities-search/";
+        : window.AppConfig.urls.universitiesSearch ||
+          "/dashboard/universities-search/";
 
       const fetchResults = (q) => {
         fetch(`${url}?q=${encodeURIComponent(q || "")}`)
@@ -340,7 +347,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
-  
+
   // Fetches matching university programs asynchronously as the user types
   function initProgramAutocomplete() {
     const searchInput = document.getElementById("program-search-input");
@@ -537,11 +544,14 @@ document.addEventListener("DOMContentLoaded", function () {
     let c = document.querySelector("body > #toast-container");
     if (!c) {
       // Clean up any legacy containers trapped inside dashboard fragments
-      document.querySelectorAll("#toast-container").forEach(el => el.remove());
+      document
+        .querySelectorAll("#toast-container")
+        .forEach((el) => el.remove());
 
       c = document.createElement("div");
       c.id = "toast-container";
-      c.className = "fixed top-6 right-6 z-[9999] space-y-3 pointer-events-none";
+      c.className =
+        "fixed top-6 right-6 z-[9999] space-y-3 pointer-events-none";
       document.body.appendChild(c);
     }
 

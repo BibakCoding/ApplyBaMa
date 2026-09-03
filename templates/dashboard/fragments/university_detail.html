@@ -89,36 +89,34 @@
                         </span>
                         <span class="text-xs text-gray-400 uppercase tracking-wide font-bold">{{ prog.get_degree_display }}</span>
                     </div>
-                    <h3 class="text-base font-bold text-gray-800 mb-2 font-serif line-clamp-2">{{ prog.name }}</h3>
+                    <h3 class="text-base font-bold text-gray-800 mb-2 font-serif line-clamp-2 min-h-[3rem]">{{ prog.name }}</h3>
                     {% if prog.faculty %}
                     <p class="text-sm text-[var(--ab-muted)] mb-3"><i class="fas fa-layer-group mr-1"></i> {{ prog.faculty.name }}</p>
                     {% endif %}
                 </div>
 
-                <div class="border-t border-gray-100 pt-4 mt-auto">
-                    <div class="grid grid-cols-2 gap-3 text-sm mb-4">
-                        <div>
-                            <span class="block text-xs text-gray-400 uppercase mb-1">{% trans "Duration" %}</span>
-                            <span class="font-semibold text-gray-700">{{ prog.duration|default:"-" }} {% trans "Years" %}</span>
+                <div class="border-t border-gray-100 pt-4 mt-auto mb-4">
+                    <span class="block text-xs text-gray-400 uppercase mb-2">{% trans "Tuition Fee" %}</span>
+
+                    {% if prog.is_discounted %}
+                        <div class="flex items-baseline gap-2 flex-wrap mb-3">
+                            <span class="font-bold text-[var(--ab-primary)] text-xl">{{ prog.display_price|floatformat:0 }} <span class="text-sm font-medium text-gray-500">{{ prog.currency|default:"USD" }}</span></span>
+                            <span class="text-sm text-gray-400 line-through">{{ prog.original_price|floatformat:0 }}</span>
+                            <span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full font-bold">{% trans "Discount" %}</span>
                         </div>
-                        <div>
-                            <span class="block text-xs text-gray-400 uppercase mb-1">{% trans "Total Fee" %}</span>
-                            <span class="font-semibold text-gray-700">${{ prog.cash_fees|floatformat:0 }}</span>
+                    {% else %}
+                        <div class="mb-3">
+                            <span class="font-bold text-[var(--ab-primary)] text-xl">
+                                {% if prog.display_price > 0 %}
+                                    {{ prog.display_price|floatformat:0 }} <span class="text-sm font-medium text-gray-500">{{ prog.currency|default:"USD" }}</span>
+                                {% else %}
+                                    <span class="text-green-600 text-sm font-semibold">{% trans "Contact for Fee" %}</span>
+                                {% endif %}
+                            </span>
                         </div>
-                        {% if prog.offer %}
-                        <div>
-                            <span class="block text-xs text-gray-400 uppercase mb-1">{% trans "Scholarship" %}</span>
-                            <span class="font-semibold text-green-600">${{ prog.offer|floatformat:0 }}</span>
-                        </div>
-                        {% endif %}
-                        {% if prog.semester_fee %}
-                        <div>
-                            <span class="block text-xs text-gray-400 uppercase mb-1">{% trans "Per Semester" %}</span>
-                            <span class="font-semibold text-gray-700">${{ prog.semester_fee|floatformat:0 }}</span>
-                        </div>
-                        {% endif %}
-                    </div>
-                    <button class="apply-request-btn w-full bg-[var(--ab-primary)] text-white py-2 px-4 rounded-lg hover:opacity-90 transition text-sm font-medium"
+                    {% endif %}
+
+                    <button class="apply-request-btn w-full bg-[var(--ab-primary)] text-white py-2.5 px-4 rounded-lg hover:opacity-90 transition text-sm font-medium shadow-sm"
                             data-program-id="{{ prog.pk }}">
                         <i class="fas fa-paper-plane mr-1"></i> {% trans "Apply Request" %}
                     </button>
