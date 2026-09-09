@@ -8,6 +8,15 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/css/intlTelInput.css">
     <link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}">
+    <style>
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+        .badge-pulse {
+            animation: pulse-badge 1.5s infinite;
+        }
+    </style>
 {% endblock %}
 {% block content %}
     <div class="dashboard-wrapper">

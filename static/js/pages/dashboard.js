@@ -124,6 +124,9 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (form.id === "sendNotificationForm") {
       e.preventDefault();
       handleSendNotification(form);
+    } else if (form.id === "editNotificationForm") {
+      e.preventDefault();
+      handleEditNotification(form);
     } else if (form.id === "goToPageForm") {
       e.preventDefault();
       handleGoToPage(form);
@@ -202,6 +205,22 @@ document.addEventListener("DOMContentLoaded", function () {
             ? '<i class="fas fa-check mr-1"></i> Sent!'
             : '<i class="fas fa-paper-plane mr-1"></i> Apply Request';
         });
+    }
+
+    // Edit Notification Modal Controls
+    if (e.target.closest(".edit-notif-btn")) {
+        const btn = e.target.closest(".edit-notif-btn");
+        document.getElementById("editNotifId").value = btn.dataset.id;
+        document.getElementById("editNotifTitle").value = btn.dataset.title;
+        document.getElementById("editNotifMessage").value = btn.dataset.message;
+        document.getElementById("editNotifType").value = btn.dataset.type;
+        document.getElementById("editNotifModal").classList.remove("hidden");
+    }
+    if (e.target.id === "closeEditModalBtn" || e.target.closest("#closeEditModalBtn")) {
+        document.getElementById("editNotifModal").classList.add("hidden");
+    }
+    if (e.target.id === "editNotifModal") {
+        document.getElementById("editNotifModal").classList.add("hidden");
     }
   });
 
@@ -427,166 +446,222 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function initNotificationsScripts() {
-    const recipientSelect = document.getElementById("recipientTypeSelect");
-    const specificSection = document.getElementById("specificUsersSection");
     const searchInput = document.getElementById("userSearchInput");
-    const searchResults = document.getElementById("searchResults");
+    const userListContainer = document.getElementById("userListContainer");
     const selectedList = document.getElementById("selectedUsersList");
     const userIdsInput = document.getElementById("userIdsInput");
 
-    if (!recipientSelect) return;
+    if (!userListContainer) return;
 
-    let selectedUsers = new Set();
+    let allUsersData = { default: [], company: [], agent: [] };
+    let selectedUsers = new Map(); // id -> {username, full_name}
 
-    const updateSelectedUI = () => {
-      userIdsInput.value = Array.from(selectedUsers).join(",");
-      selectedList.innerHTML = "";
-      selectedUsers.forEach((id) => {
-        const chip = document.createElement("span");
-        chip.className = "px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm flex items-center space-x-2";
-        const span = document.createElement("span");
-        span.textContent = `ID: ${id}`;
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "text-blue-600 hover:text-red-600";
-        btn.innerHTML = '<i class="fas fa-times"></i>';
-        btn.onclick = () => {
-          selectedUsers.delete(id.toString());
-          updateSelectedUI();
-          const cb = searchResults ? searchResults.querySelector(`input.user-checkbox[value="${id}"]`) : null;
-          if (cb) cb.checked = false;
-        };
-        chip.appendChild(span);
-        chip.appendChild(btn);
-        selectedList.appendChild(chip);
-      });
+    const fetchAndRenderUsers = (q = "") => {
+        fetch(`${window.AppConfig.urls.searchUsers}?q=${encodeURIComponent(q)}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        .then(r => r.json())
+        .then(data => {
+            allUsersData = data;
+            renderUserList();
+        });
     };
 
-    const renderSearchResults = (data) => {
-      searchResults.innerHTML = "";
-      const groups = { default: "Students", company: "Company", agent: "Agents" };
-      let hasResults = false;
+    const renderUserList = () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        userListContainer.innerHTML = "";
 
-      for (const [groupKey, label] of Object.entries(groups)) {
-        if (data[groupKey] && data[groupKey].length > 0) {
-          hasResults = true;
-          const groupDiv = document.createElement("div");
-          groupDiv.className = "mb-2";
+        const groups = [
+            { key: "default", label: "Students (Default)", color: "blue" },
+            { key: "company", label: "Company Users", color: "purple" },
+            { key: "agent", label: "Agents", color: "green" }
+        ];
 
-          const header = document.createElement("div");
-          header.className = "font-semibold text-sm text-gray-700 border-b mb-1 pb-1";
-          header.textContent = label;
-          groupDiv.appendChild(header);
+        let filteredData = {};
+        let totalFiltered = 0;
+        for (let g of groups) {
+            let users = (allUsersData[g.key] || []).filter(u =>
+                !searchTerm ||
+                u.username.toLowerCase().includes(searchTerm) ||
+                (u.full_name && u.full_name.toLowerCase().includes(searchTerm))
+            );
+            filteredData[g.key] = users;
+            totalFiltered += users.length;
+        }
 
-          data[groupKey].forEach((user) => {
-            const div = document.createElement("div");
-            div.className = "flex items-center p-2 hover:bg-gray-50 rounded";
+        if (totalFiltered === 0) {
+            userListContainer.innerHTML = '<p class="text-sm text-gray-500 p-2">No users found.</p>';
+            return;
+        }
 
-            const cb = document.createElement("input");
-            cb.type = "checkbox";
-            cb.className = "user-checkbox mr-2";
-            cb.value = user.id;
-            cb.dataset.username = user.username;
-            cb.dataset.fullname = user.full_name;
-            if (selectedUsers.has(user.id.toString())) cb.checked = true;
+        // Master "All Users" header
+        const allUsersHeader = document.createElement("div");
+        allUsersHeader.className = "flex items-center p-2 bg-gray-200 rounded-t font-semibold text-gray-800 border-b";
 
-            cb.onchange = () => {
-              if (cb.checked) {
-                selectedUsers.add(user.id.toString());
-              } else {
-                selectedUsers.delete(user.id.toString());
-              }
-              updateSelectedUI();
+        const masterCb = document.createElement("input");
+        masterCb.type = "checkbox";
+        masterCb.className = "mr-3 h-4 w-4 text-blue-600 rounded";
+        masterCb.id = "masterSelectAll";
+
+        let allVisibleIds = [];
+        for(let k in filteredData) filteredData[k].forEach(u => allVisibleIds.push(u.id.toString()));
+        masterCb.checked = allVisibleIds.length > 0 && allVisibleIds.every(id => selectedUsers.has(id));
+        masterCb.indeterminate = !masterCb.checked && allVisibleIds.some(id => selectedUsers.has(id));
+
+        masterCb.onchange = () => {
+            if (masterCb.checked) {
+                allVisibleIds.forEach(id => {
+                    let u = findUserById(id);
+                    if(u) selectedUsers.set(id, u);
+                });
+            } else {
+                allVisibleIds.forEach(id => selectedUsers.delete(id));
+            }
+            updateSelectedUI();
+            renderUserList(); // Re-render to update group checkboxes
+        };
+
+        const masterLabel = document.createElement("label");
+        masterLabel.htmlFor = "masterSelectAll";
+        masterLabel.className = "cursor-pointer flex-1";
+        masterLabel.textContent = "Select All Users";
+
+        const masterCount = document.createElement("span");
+        masterCount.className = "text-sm font-normal text-gray-500";
+        masterCount.textContent = `(${totalFiltered} users)`;
+
+        allUsersHeader.appendChild(masterCb);
+        allUsersHeader.appendChild(masterLabel);
+        allUsersHeader.appendChild(masterCount);
+        userListContainer.appendChild(allUsersHeader);
+
+        // Groups
+        groups.forEach(g => {
+            if (filteredData[g.key].length === 0) return;
+
+            const groupDiv = document.createElement("div");
+            groupDiv.className = "border-b last:border-b-0";
+
+            const groupHeader = document.createElement("div");
+            groupHeader.className = `flex items-center p-2 bg-${g.color}-50 hover:bg-${g.color}-100 transition-colors`;
+
+            const groupCb = document.createElement("input");
+            groupCb.type = "checkbox";
+            groupCb.className = `group-cb mr-3 h-4 w-4 text-${g.color}-600 rounded`;
+            groupCb.dataset.group = g.key;
+
+            let groupIds = filteredData[g.key].map(u => u.id.toString());
+            groupCb.checked = groupIds.every(id => selectedUsers.has(id));
+            groupCb.indeterminate = !groupCb.checked && groupIds.some(id => selectedUsers.has(id));
+
+            groupCb.onchange = () => {
+                if (groupCb.checked) {
+                    groupIds.forEach(id => {
+                        let u = findUserById(id);
+                        if(u) selectedUsers.set(id, u);
+                    });
+                } else {
+                    groupIds.forEach(id => selectedUsers.delete(id));
+                }
+                updateSelectedUI();
+                renderUserList(); // Re-render to update master checkbox and other group checkboxes
             };
 
-            const labelEl = document.createElement("label");
-            labelEl.className = "text-sm text-gray-800 cursor-pointer";
-            labelEl.textContent = `${user.username} ${user.full_name ? `(${user.full_name})` : ""}`;
+            const groupLabel = document.createElement("label");
+            groupLabel.className = "font-medium text-gray-700 cursor-pointer flex-1";
+            groupLabel.textContent = g.label;
 
-            div.appendChild(cb);
-            div.appendChild(labelEl);
-            groupDiv.appendChild(div);
-          });
-          searchResults.appendChild(groupDiv);
-        }
-      }
+            groupHeader.appendChild(groupCb);
+            groupHeader.appendChild(groupLabel);
+            groupDiv.appendChild(groupHeader);
 
-      if (!hasResults) {
-        searchResults.innerHTML = '<p class="text-sm text-gray-500 p-2">No users found.</p>';
-      }
-      searchResults.classList.remove("hidden");
+            const userList = document.createElement("div");
+            userList.className = "pl-8 pr-2 py-1 space-y-1";
+
+            filteredData[g.key].forEach(user => {
+                const userDiv = document.createElement("div");
+                userDiv.className = "flex items-center p-1 hover:bg-gray-50 rounded user-row visible";
+
+                const cb = document.createElement("input");
+                cb.type = "checkbox";
+                cb.className = "user-checkbox mr-2 h-4 w-4 text-gray-600 rounded visible";
+                cb.value = user.id;
+                cb.dataset.username = user.username;
+                cb.dataset.fullname = user.full_name || "";
+                cb.checked = selectedUsers.has(user.id.toString());
+
+                cb.onchange = () => {
+                    if (cb.checked) {
+                        selectedUsers.set(user.id.toString(), { username: user.username, full_name: user.full_name });
+                    } else {
+                        selectedUsers.delete(user.id.toString());
+                    }
+                    updateSelectedUI();
+                    renderUserList(); // Re-render to update group and master checkboxes
+                };
+
+                const label = document.createElement("label");
+                label.className = "text-sm text-gray-800 cursor-pointer flex-1";
+                label.innerHTML = `<span class="font-medium">${user.username}</span> ${user.full_name ? `<span class="text-gray-500 text-xs">(${user.full_name})</span>` : ""}`;
+
+                userDiv.appendChild(cb);
+                userDiv.appendChild(label);
+                userList.appendChild(userDiv);
+            });
+
+            groupDiv.appendChild(userList);
+            userListContainer.appendChild(groupDiv);
+        });
     };
 
-    recipientSelect.addEventListener("change", function () {
-      if (this.value === "specific") {
-        specificSection.classList.remove("hidden");
-      } else {
-        specificSection.classList.add("hidden");
-      }
-    });
+    const findUserById = (id) => {
+        for (let key in allUsersData) {
+            let u = allUsersData[key].find(x => x.id.toString() === id);
+            if (u) return { username: u.username, full_name: u.full_name };
+        }
+        return null;
+    };
+
+    const updateSelectedUI = () => {
+        userIdsInput.value = Array.from(selectedUsers.keys()).join(",");
+        selectedList.innerHTML = "";
+        if (selectedUsers.size === 0) {
+            selectedList.innerHTML = '<span class="text-sm text-gray-400">No users selected.</span>';
+            return;
+        }
+        selectedUsers.forEach((userData, id) => {
+            const chip = document.createElement("span");
+            chip.className = "px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm flex items-center space-x-2";
+            const span = document.createElement("span");
+            span.textContent = userData.full_name || userData.username;
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "text-blue-600 hover:text-red-600";
+            btn.innerHTML = '<i class="fas fa-times"></i>';
+            btn.onclick = () => {
+                selectedUsers.delete(id);
+                updateSelectedUI();
+                renderUserList(); // Re-render to uncheck the box and update headers
+            };
+            chip.appendChild(span);
+            chip.appendChild(btn);
+            selectedList.appendChild(chip);
+        });
+    };
 
     if (searchInput) {
-      let timeout;
-      searchInput.addEventListener("input", function () {
-        clearTimeout(timeout);
-        const q = this.value;
-        timeout = setTimeout(() => {
-          fetch(`${window.AppConfig.urls.searchUsers}?q=${encodeURIComponent(q)}`, {
-            headers: { "X-Requested-With": "XMLHttpRequest" }
-          })
-            .then((r) => r.json())
-            .then((data) => renderSearchResults(data));
-        }, 300);
-      });
-      searchInput.addEventListener("focus", function () {
-        if (this.value) {
-          fetch(`${window.AppConfig.urls.searchUsers}?q=${encodeURIComponent(this.value)}`, {
-            headers: { "X-Requested-With": "XMLHttpRequest" }
-          })
-            .then((r) => r.json())
-            .then((data) => renderSearchResults(data));
-        } else {
-          searchResults.classList.remove("hidden");
-          if (searchResults.innerHTML === "") {
-             searchResults.innerHTML = '<p class="text-sm text-gray-500 p-2">Start typing to search...</p>';
-          }
-        }
-      });
+        let timeout;
+        searchInput.addEventListener("input", function () {
+            clearTimeout(timeout);
+            const q = this.value;
+            timeout = setTimeout(() => {
+                fetchAndRenderUsers(q);
+            }, 300);
+        });
     }
 
-    document.addEventListener("click", function (e) {
-      if (searchResults && !searchResults.contains(e.target) && e.target !== searchInput) {
-        searchResults.classList.add("hidden");
-      }
-    });
-
-    document.querySelectorAll(".group-checkbox").forEach((cb) => {
-      cb.addEventListener("change", function () {
-        const group = this.dataset.group;
-        fetch(`${window.AppConfig.urls.getGroupUsers}?group=${group}`, {
-          headers: { "X-Requested-With": "XMLHttpRequest" }
-        })
-          .then((r) => r.json())
-          .then((data) => {
-            if (data.ids) {
-              if (cb.checked) {
-                data.ids.forEach((id) => selectedUsers.add(id.toString()));
-              } else {
-                data.ids.forEach((id) => selectedUsers.delete(id.toString()));
-              }
-              updateSelectedUI();
-              if (searchResults) {
-                searchResults.querySelectorAll(".user-checkbox").forEach((ucb) => {
-                  if (data.ids.includes(parseInt(ucb.value))) {
-                    ucb.checked = cb.checked;
-                  }
-                });
-              }
-            }
-          });
-      });
-    });
-
+    // Initial load
+    fetchAndRenderUsers();
     updateSelectedUI();
   }
 
@@ -673,8 +748,10 @@ document.addEventListener("DOMContentLoaded", function () {
           if (data.count > 0) {
             badge.textContent = data.count;
             badge.classList.remove("hidden");
+            badge.classList.add("badge-pulse");
           } else {
             badge.classList.add("hidden");
+            badge.classList.remove("badge-pulse");
           }
         }
       });
@@ -682,15 +759,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function handleSendNotification(form) {
     const formData = new FormData(form);
-    const recipientType = formData.get("recipient_type");
-    if (recipientType === "specific") {
-      const userIds = document.getElementById("userIdsInput").value;
-      if (!userIds) {
-        showToast("Please select at least one user.", "error");
-        return;
-      }
-      formData.append("user_ids", userIds);
+    const userIds = document.getElementById("userIdsInput").value;
+    if (!userIds) {
+      showToast("Please select at least one user.", "error");
+      return;
     }
+    // recipient_type is already set to "specific" in the hidden input
 
     const csrfToken = form.querySelector("[name=csrfmiddlewaretoken]").value;
     const btn = form.querySelector('button[type="submit"]');
@@ -716,6 +790,38 @@ document.addEventListener("DOMContentLoaded", function () {
           showToast(data.message || "Error sending notification.", "error");
         }
       });
+  }
+
+  function handleEditNotification(form) {
+    const formData = new FormData(form);
+    const id = formData.get("notif_id");
+    formData.delete("notif_id");
+
+    const csrfToken = form.querySelector("[name=csrfmiddlewaretoken]").value;
+    const btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Updating...';
+
+    fetch(`/dashboard/notifications/update/${id}/`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": csrfToken
+      }
+    })
+    .then(r => r.json())
+    .then(data => {
+        btn.disabled = false;
+        btn.innerHTML = "Update";
+        if (data.success) {
+            showToast(data.message, "success");
+            document.getElementById("editNotifModal").classList.add("hidden");
+            setTimeout(() => loadContent("notifications"), 500);
+        } else {
+            showToast(data.message || "Error updating notification.", "error");
+        }
+    });
   }
 
   // Processes standard profile settings forms via AJAX to prevent full page reloads

@@ -15,60 +15,33 @@
             <textarea name="message" rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Notification Type" %}</label>
-                <select name="notification_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    {% for value, label in notification_types %}
-                        <option value="{{ value }}">{{ label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Target Group" %}</label>
-                <select id="recipientTypeSelect" name="recipient_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    {% for value, label in recipient_types %}
-                        <option value="{{ value }}">{{ label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Notification Type" %}</label>
+            <select name="notification_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                {% for value, label in notification_types %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
         </div>
 
-        <div id="specificUsersSection" class="hidden border-t pt-4">
-            <h3 class="text-lg font-semibold text-gray-800 mb-3">{% trans "Select Specific Users" %}</h3>
+        <div class="border-t pt-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">{% trans "Select Recipients" %}</h3>
 
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Search Users" %}</label>
                 <input type="text" id="userSearchInput" placeholder="{% trans 'Type username or name...' %}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div class="flex items-center bg-gray-50 p-2 rounded-lg">
-                    <input type="checkbox" id="selectAllUsers" class="mr-2 group-checkbox" data-group="all">
-                    <label for="selectAllUsers" class="text-sm font-medium text-gray-700">{% trans "Select All Users" %}</label>
-                </div>
-                <div class="flex items-center bg-blue-50 p-2 rounded-lg">
-                    <input type="checkbox" id="selectDefaultUsers" class="mr-2 group-checkbox" data-group="default">
-                    <label for="selectDefaultUsers" class="text-sm font-medium text-gray-700">{% trans "Select All Students" %}</label>
-                </div>
-                <div class="flex items-center bg-purple-50 p-2 rounded-lg">
-                    <input type="checkbox" id="selectCompanyUsers" class="mr-2 group-checkbox" data-group="company">
-                    <label for="selectCompanyUsers" class="text-sm font-medium text-gray-700">{% trans "Select All Company" %}</label>
-                </div>
-                <div class="flex items-center bg-green-50 p-2 rounded-lg">
-                    <input type="checkbox" id="selectAgentUsers" class="mr-2 group-checkbox" data-group="agent">
-                    <label for="selectAgentUsers" class="text-sm font-medium text-gray-700">{% trans "Select All Agents" %}</label>
-                </div>
+            <div id="userListContainer" class="max-h-96 overflow-y-auto border border-gray-200 rounded-lg p-2 space-y-2 bg-gray-50">
+                <!-- Populated by JS -->
+                <div class="text-center text-gray-500 p-4">{% trans "Loading users..." %}</div>
             </div>
 
-            <div id="searchResults" class="max-h-64 overflow-y-auto border border-gray-200 rounded-lg p-2 space-y-4 hidden">
-                <!-- Search results populated by JS -->
-            </div>
-
-            <div id="selectedUsersList" class="mt-4 flex flex-wrap gap-2">
+            <div id="selectedUsersList" class="mt-4 flex flex-wrap gap-2 min-h-[40px]">
                 <!-- Selected users chips -->
             </div>
             <input type="hidden" name="user_ids" id="userIdsInput" value="">
+            <input type="hidden" name="recipient_type" value="specific">
         </div>
 
         <div class="flex justify-end">
@@ -87,7 +60,6 @@
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{% trans "Title" %}</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{% trans "Type" %}</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{% trans "Target" %}</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{% trans "Recipients" %}</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{% trans "Date" %}</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{% trans "Actions" %}</th>
@@ -107,10 +79,16 @@
                             {{ n.get_notification_type_display }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ n.get_recipient_type_display }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ n.recipients.count }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ n.created_at|date:"Y-m-d H:i" }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-3">
+                        <button type="button" class="edit-notif-btn text-blue-600 hover:text-blue-900"
+                                data-id="{{ n.pk }}"
+                                data-title="{{ n.title }}"
+                                data-message="{{ n.message }}"
+                                data-type="{{ n.notification_type }}">
+                            {% trans "Edit" %}
+                        </button>
                         <form class="delete-form inline" action="{% url 'delete_notification' n.pk %}" method="POST">
                             {% csrf_token %}
                             <button type="submit" class="text-red-600 hover:text-red-900">{% trans "Delete" %}</button>
@@ -119,10 +97,43 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">{% trans "No notifications sent yet." %}</td>
+                    <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">{% trans "No notifications sent yet." %}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Edit Notification Modal -->
+<div id="editNotifModal" class="fixed inset-0 bg-transparent hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 relative border border-gray-200">
+        <button type="button" id="closeEditModalBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+            <i class="fas fa-times"></i>
+        </button>
+        <h3 class="text-xl font-bold text-gray-900 mb-4">{% trans "Edit Notification" %}</h3>
+        <form id="editNotificationForm" class="space-y-4">
+            {% csrf_token %}
+            <input type="hidden" name="notif_id" id="editNotifId">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Title" %}</label>
+                <input type="text" name="title" id="editNotifTitle" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Message" %}</label>
+                <textarea name="message" id="editNotifMessage" rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Notification Type" %}</label>
+                <select name="notification_type" id="editNotifType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    {% for value, label in notification_types %}
+                        <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex justify-end pt-2">
+                <button type="submit" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700">{% trans "Update" %}</button>
+            </div>
+        </form>
     </div>
 </div>

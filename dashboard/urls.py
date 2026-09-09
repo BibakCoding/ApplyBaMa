@@ -41,4 +41,5 @@ urlpatterns = [
     path("notifications/mark-read/<int:pk>/", views.mark_notification_read, name="mark_notification_read"),
     path("notifications/delete/<int:pk>/", views.delete_notification, name="delete_notification"),
     path("notifications/detail/<int:pk>/", views.notification_detail, name="notification_detail"),
+    path("notifications/update/<int:pk>/", views.update_notification, name="update_notification"),
 ]

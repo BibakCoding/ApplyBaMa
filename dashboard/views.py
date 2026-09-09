@@ -24,8 +24,9 @@ from core.models import (
     Country,
     City,
     Faculty,
+    Notification,
+    NotificationRecipient
 )
-from core.models import Notification, NotificationRecipient
 from .forms import (
     PersonalInfoForm,
     ContactInfoForm,
@@ -786,7 +787,7 @@ def search_users_for_notification(request):
         from django.db.models import Q
         users = users.filter(Q(username__icontains=q) | Q(first_name__icontains=q) | Q(last_name__icontains=q))
 
-    users = users.distinct()[:50]
+    users = users.distinct()
 
     result = {
         "default": [],
@@ -839,6 +840,33 @@ def delete_notification(request, pk):
         n = Notification.objects.get(pk=pk, sender=request.user)
         n.delete()
         return JsonResponse({"success": True, "message": _("Notification deleted.")})
+    except Notification.DoesNotExist:
+        return JsonResponse({"success": False, "message": _("Not found.")})
+
+
+@login_required
+def update_notification(request, pk):
+    if request.method != "POST":
+        return JsonResponse({"success": False, "message": _("Invalid request.")})
+    if not (request.user.is_staff or request.user.is_superuser):
+        return JsonResponse({"success": False, "message": _("Permission denied.")})
+    try:
+        n = Notification.objects.get(pk=pk, sender=request.user)
+        title = request.POST.get("title")
+        message = request.POST.get("message")
+        n_type = request.POST.get("notification_type")
+        if not title or not message or not n_type:
+            return JsonResponse({"success": False, "message": _("All fields are required.")})
+
+        n.title = title
+        n.message = message
+        n.notification_type = n_type
+        n.save()
+
+        # Reset read status for all recipients so they see the updated message
+        NotificationRecipient.objects.filter(notification=n).update(is_read=False, read_at=None)
+
+        return JsonResponse({"success": True, "message": _("Notification updated successfully!")})
     except Notification.DoesNotExist:
         return JsonResponse({"success": False, "message": _("Not found.")})
 
