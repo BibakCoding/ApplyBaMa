@@ -66,6 +66,8 @@ document.addEventListener("DOMContentLoaded", function () {
         initSearchAutocomplete();
         initProgramAutocomplete();
         initSelect2();
+        initNotificationsScripts();
+        initMyNotificationsScripts();
 
         // Update the browser's address bar to reflect the current SPA state
         const cleanParams = params.replace(/^\?/, "");
@@ -119,6 +121,9 @@ document.addEventListener("DOMContentLoaded", function () {
     ) {
       e.preventDefault();
       handleJsonSubmit(form);
+    } else if (form.id === "sendNotificationForm") {
+      e.preventDefault();
+      handleSendNotification(form);
     } else if (form.id === "goToPageForm") {
       e.preventDefault();
       handleGoToPage(form);
@@ -421,6 +426,298 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function initNotificationsScripts() {
+    const recipientSelect = document.getElementById("recipientTypeSelect");
+    const specificSection = document.getElementById("specificUsersSection");
+    const searchInput = document.getElementById("userSearchInput");
+    const searchResults = document.getElementById("searchResults");
+    const selectedList = document.getElementById("selectedUsersList");
+    const userIdsInput = document.getElementById("userIdsInput");
+
+    if (!recipientSelect) return;
+
+    let selectedUsers = new Set();
+
+    const updateSelectedUI = () => {
+      userIdsInput.value = Array.from(selectedUsers).join(",");
+      selectedList.innerHTML = "";
+      selectedUsers.forEach((id) => {
+        const chip = document.createElement("span");
+        chip.className = "px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm flex items-center space-x-2";
+        const span = document.createElement("span");
+        span.textContent = `ID: ${id}`;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "text-blue-600 hover:text-red-600";
+        btn.innerHTML = '<i class="fas fa-times"></i>';
+        btn.onclick = () => {
+          selectedUsers.delete(id.toString());
+          updateSelectedUI();
+          const cb = searchResults ? searchResults.querySelector(`input.user-checkbox[value="${id}"]`) : null;
+          if (cb) cb.checked = false;
+        };
+        chip.appendChild(span);
+        chip.appendChild(btn);
+        selectedList.appendChild(chip);
+      });
+    };
+
+    const renderSearchResults = (data) => {
+      searchResults.innerHTML = "";
+      const groups = { default: "Students", company: "Company", agent: "Agents" };
+      let hasResults = false;
+
+      for (const [groupKey, label] of Object.entries(groups)) {
+        if (data[groupKey] && data[groupKey].length > 0) {
+          hasResults = true;
+          const groupDiv = document.createElement("div");
+          groupDiv.className = "mb-2";
+
+          const header = document.createElement("div");
+          header.className = "font-semibold text-sm text-gray-700 border-b mb-1 pb-1";
+          header.textContent = label;
+          groupDiv.appendChild(header);
+
+          data[groupKey].forEach((user) => {
+            const div = document.createElement("div");
+            div.className = "flex items-center p-2 hover:bg-gray-50 rounded";
+
+            const cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.className = "user-checkbox mr-2";
+            cb.value = user.id;
+            cb.dataset.username = user.username;
+            cb.dataset.fullname = user.full_name;
+            if (selectedUsers.has(user.id.toString())) cb.checked = true;
+
+            cb.onchange = () => {
+              if (cb.checked) {
+                selectedUsers.add(user.id.toString());
+              } else {
+                selectedUsers.delete(user.id.toString());
+              }
+              updateSelectedUI();
+            };
+
+            const labelEl = document.createElement("label");
+            labelEl.className = "text-sm text-gray-800 cursor-pointer";
+            labelEl.textContent = `${user.username} ${user.full_name ? `(${user.full_name})` : ""}`;
+
+            div.appendChild(cb);
+            div.appendChild(labelEl);
+            groupDiv.appendChild(div);
+          });
+          searchResults.appendChild(groupDiv);
+        }
+      }
+
+      if (!hasResults) {
+        searchResults.innerHTML = '<p class="text-sm text-gray-500 p-2">No users found.</p>';
+      }
+      searchResults.classList.remove("hidden");
+    };
+
+    recipientSelect.addEventListener("change", function () {
+      if (this.value === "specific") {
+        specificSection.classList.remove("hidden");
+      } else {
+        specificSection.classList.add("hidden");
+      }
+    });
+
+    if (searchInput) {
+      let timeout;
+      searchInput.addEventListener("input", function () {
+        clearTimeout(timeout);
+        const q = this.value;
+        timeout = setTimeout(() => {
+          fetch(`${window.AppConfig.urls.searchUsers}?q=${encodeURIComponent(q)}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+          })
+            .then((r) => r.json())
+            .then((data) => renderSearchResults(data));
+        }, 300);
+      });
+      searchInput.addEventListener("focus", function () {
+        if (this.value) {
+          fetch(`${window.AppConfig.urls.searchUsers}?q=${encodeURIComponent(this.value)}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+          })
+            .then((r) => r.json())
+            .then((data) => renderSearchResults(data));
+        } else {
+          searchResults.classList.remove("hidden");
+          if (searchResults.innerHTML === "") {
+             searchResults.innerHTML = '<p class="text-sm text-gray-500 p-2">Start typing to search...</p>';
+          }
+        }
+      });
+    }
+
+    document.addEventListener("click", function (e) {
+      if (searchResults && !searchResults.contains(e.target) && e.target !== searchInput) {
+        searchResults.classList.add("hidden");
+      }
+    });
+
+    document.querySelectorAll(".group-checkbox").forEach((cb) => {
+      cb.addEventListener("change", function () {
+        const group = this.dataset.group;
+        fetch(`${window.AppConfig.urls.getGroupUsers}?group=${group}`, {
+          headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.ids) {
+              if (cb.checked) {
+                data.ids.forEach((id) => selectedUsers.add(id.toString()));
+              } else {
+                data.ids.forEach((id) => selectedUsers.delete(id.toString()));
+              }
+              updateSelectedUI();
+              if (searchResults) {
+                searchResults.querySelectorAll(".user-checkbox").forEach((ucb) => {
+                  if (data.ids.includes(parseInt(ucb.value))) {
+                    ucb.checked = cb.checked;
+                  }
+                });
+              }
+            }
+          });
+      });
+    });
+
+    updateSelectedUI();
+  }
+
+  function initMyNotificationsScripts() {
+    const modal = document.getElementById("notificationModal");
+    const modalContent = document.getElementById("modalContent");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const markAllBtn = document.getElementById("markAllReadBtn");
+
+    if (!modal) return;
+
+    document.querySelectorAll(".notification-item").forEach((item) => {
+      item.addEventListener("click", function () {
+        const id = this.dataset.id;
+        fetch(`/dashboard/notifications/detail/${id}/`, {
+          headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.success) {
+              let typeBadge = "";
+              if (data.type === "success") typeBadge = '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Success</span>';
+              else if (data.type === "warning") typeBadge = '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Warning</span>';
+              else if (data.type === "error") typeBadge = '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Error</span>';
+              else if (data.type === "info") typeBadge = '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Info</span>';
+              else typeBadge = '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Reminder</span>';
+
+              modalContent.innerHTML = `
+                <div class="mb-4">${typeBadge}</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">${data.title}</h3>
+                <p class="text-gray-600 mb-4 whitespace-pre-wrap">${data.message}</p>
+                <p class="text-sm text-gray-500">${data.date}</p>
+              `;
+              modal.classList.remove("hidden");
+
+              const dot = item.querySelector(".w-3.h-3.bg-blue-600");
+              if (dot) dot.remove();
+              item.classList.remove("bg-blue-50", "border-blue-200");
+              item.classList.add("bg-gray-50", "border-gray-200");
+
+              updateUnreadBadge();
+            }
+          });
+      });
+    });
+
+    if (closeModalBtn) {
+      closeModalBtn.addEventListener("click", () => modal.classList.add("hidden"));
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.classList.add("hidden");
+      });
+    }
+
+    if (markAllBtn) {
+      markAllBtn.addEventListener("click", function () {
+        const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+        fetch(window.AppConfig.urls.markAllRead, {
+          method: "POST",
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRFToken": csrfToken
+          }
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.success) {
+              showToast("All notifications marked as read.", "success");
+              setTimeout(() => loadContent("my_notifications"), 500);
+            }
+          });
+      });
+    }
+  }
+
+  function updateUnreadBadge() {
+    if (!window.AppConfig.urls.unreadCount) return;
+    fetch(window.AppConfig.urls.unreadCount, {
+      headers: { "X-Requested-With": "XMLHttpRequest" }
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        const badge = document.getElementById("notifBadge");
+        if (badge) {
+          if (data.count > 0) {
+            badge.textContent = data.count;
+            badge.classList.remove("hidden");
+          } else {
+            badge.classList.add("hidden");
+          }
+        }
+      });
+  }
+
+  function handleSendNotification(form) {
+    const formData = new FormData(form);
+    const recipientType = formData.get("recipient_type");
+    if (recipientType === "specific") {
+      const userIds = document.getElementById("userIdsInput").value;
+      if (!userIds) {
+        showToast("Please select at least one user.", "error");
+        return;
+      }
+      formData.append("user_ids", userIds);
+    }
+
+    const csrfToken = form.querySelector("[name=csrfmiddlewaretoken]").value;
+    const btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
+
+    fetch(window.AppConfig.urls.sendNotification, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": csrfToken
+      }
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        btn.disabled = false;
+        btn.innerHTML = "Send Notification";
+        if (data.success) {
+          showToast(data.message, "success");
+          setTimeout(() => loadContent("notifications"), 500);
+        } else {
+          showToast(data.message || "Error sending notification.", "error");
+        }
+      });
+  }
+
   // Processes standard profile settings forms via AJAX to prevent full page reloads
   function handleProfileSubmit(form) {
     const mobileInput = form.querySelector("#id_mobile");
@@ -579,4 +876,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Triggers the initial page load based on the current URL parameters
   const p = new URLSearchParams(window.location.search);
   loadContent(p.get("page") || "welcome");
+
+  // Initialize unread count polling
+  updateUnreadBadge();
+  setInterval(updateUnreadBadge, 30000);
 });

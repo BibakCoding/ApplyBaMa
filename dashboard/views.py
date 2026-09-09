@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.conf import settings
+from django.utils import timezone
 import secrets
 import string
 from django.template.loader import get_template
@@ -24,6 +25,7 @@ from core.models import (
     City,
     Faculty,
 )
+from core.models import Notification, NotificationRecipient
 from .forms import (
     PersonalInfoForm,
     ContactInfoForm,
@@ -72,6 +74,8 @@ def dashboard_content(request, page):
         "my_students": "dashboard/fragments/my_students.html",
         "application_detail": "dashboard/fragments/application_detail.html",
         "university_detail": "dashboard/fragments/university_detail.html",
+        "notifications": "dashboard/fragments/notifications.html",
+        "my_notifications": "dashboard/fragments/my_notifications.html",
     }
 
     if page not in content_map:
@@ -297,6 +301,17 @@ def dashboard_content(request, page):
             context["app"] = app
         else:
             return redirect("dashboard")
+
+    elif page == "notifications":
+        if not (request.user.is_staff or request.user.is_superuser):
+            messages.error(request, _("You do not have permission to access this page."))
+            return redirect("dashboard")
+        context["sent_notifications"] = Notification.objects.filter(sender=request.user).order_by("-created_at")
+        context["notification_types"] = Notification.NotificationType.choices
+        context["recipient_types"] = Notification.RecipientType.choices
+
+    elif page == "my_notifications":
+        context["received_notifications"] = NotificationRecipient.objects.filter(user=request.user).select_related("notification").order_by("-notification__created_at")
 
     return render(request, content_map[page], context=context)
 
@@ -661,3 +676,192 @@ def export_programs_pdf(request):
     if pisa_status.err:
         return HttpResponse("We had some errors with the PDF generation.", status=500)
     return response
+
+
+@login_required
+def notifications_page(request):
+    if not (request.user.is_staff or request.user.is_superuser):
+        messages.error(request, _("Permission denied."))
+        return redirect("dashboard")
+    sent_notifications = Notification.objects.filter(sender=request.user).order_by("-created_at")
+    context = {
+        "user": request.user,
+        "sent_notifications": sent_notifications,
+        "notification_types": Notification.NotificationType.choices,
+        "recipient_types": Notification.RecipientType.choices,
+    }
+    return render(request, "dashboard/fragments/notifications.html", context)
+
+
+@login_required
+def my_notifications_page(request):
+    received = NotificationRecipient.objects.filter(user=request.user).select_related("notification").order_by("-notification__created_at")
+    context = {
+        "user": request.user,
+        "received_notifications": received,
+    }
+    return render(request, "dashboard/fragments/my_notifications.html", context)
+
+
+@login_required
+def get_unread_notification_count(request):
+    count = NotificationRecipient.objects.filter(user=request.user, is_read=False).count()
+    return JsonResponse({"count": count})
+
+
+@login_required
+def send_notification(request):
+    if request.method != "POST":
+        return JsonResponse({"success": False, "message": _("Invalid request.")})
+    if not (request.user.is_staff or request.user.is_superuser):
+        return JsonResponse({"success": False, "message": _("Permission denied.")})
+
+    title = request.POST.get("title")
+    message = request.POST.get("message")
+    n_type = request.POST.get("notification_type")
+    r_type = request.POST.get("recipient_type")
+    user_ids = request.POST.get("user_ids", "")
+
+    if not title or not message or not n_type or not r_type:
+        return JsonResponse({"success": False, "message": _("All fields are required.")})
+
+    if r_type == Notification.RecipientType.SPECIFIC_USERS and not user_ids:
+        return JsonResponse({"success": False, "message": _("Please select at least one user.")})
+
+    notification = Notification.objects.create(
+        title=title,
+        message=message,
+        notification_type=n_type,
+        recipient_type=r_type,
+        sender=request.user,
+    )
+
+    if r_type == Notification.RecipientType.SPECIFIC_USERS:
+        ids = [int(i) for i in user_ids.split(",") if i.isdigit()]
+        recipients_qs = User.objects.filter(id__in=ids)
+    else:
+        recipients_qs = notification.get_recipients_queryset()
+
+    nr_objects = [
+        NotificationRecipient(notification=notification, user=user)
+        for user in recipients_qs
+    ]
+    if nr_objects:
+        NotificationRecipient.objects.bulk_create(nr_objects, ignore_conflicts=True)
+
+    return JsonResponse({"success": True, "message": _("Notification sent successfully!")})
+
+
+@login_required
+def mark_notification_read(request, pk):
+    if request.method != "POST":
+        return JsonResponse({"success": False, "message": _("Invalid request.")})
+    try:
+        nr = NotificationRecipient.objects.get(notification_id=pk, user=request.user)
+        if not nr.is_read:
+            nr.is_read = True
+            nr.read_at = timezone.now()
+            nr.save()
+        return JsonResponse({"success": True})
+    except NotificationRecipient.DoesNotExist:
+        return JsonResponse({"success": False, "message": _("Not found.")})
+
+
+@login_required
+def mark_all_notifications_read(request):
+    if request.method != "POST":
+        return JsonResponse({"success": False, "message": _("Invalid request.")})
+    NotificationRecipient.objects.filter(user=request.user, is_read=False).update(is_read=True, read_at=timezone.now())
+    return JsonResponse({"success": True})
+
+
+@login_required
+def search_users_for_notification(request):
+    if not (request.user.is_staff or request.user.is_superuser):
+        return JsonResponse({"success": False, "message": _("Permission denied.")}, status=403)
+
+    q = request.GET.get("q", "").strip()
+    users = User.objects.filter(is_active=True)
+    if q:
+        from django.db.models import Q
+        users = users.filter(Q(username__icontains=q) | Q(first_name__icontains=q) | Q(last_name__icontains=q))
+
+    users = users.distinct()[:50]
+
+    result = {
+        "default": [],
+        "company": [],
+        "agent": []
+    }
+    for u in users:
+        user_data = {
+            "id": u.id,
+            "username": u.username,
+            "full_name": u.get_full_name()
+        }
+        if u.user_type in result:
+            result[u.user_type].append(user_data)
+        else:
+            result["default"].append(user_data)
+
+    return JsonResponse(result)
+
+
+@login_required
+def get_group_user_ids(request):
+    if not (request.user.is_staff or request.user.is_superuser):
+        return JsonResponse({"success": False, "message": _("Permission denied.")}, status=403)
+
+    group = request.GET.get("group", "")
+    users = User.objects.filter(is_active=True)
+    if group == "default":
+        users = users.filter(user_type="default")
+    elif group == "company":
+        users = users.filter(user_type="company")
+    elif group == "agent":
+        users = users.filter(user_type="agent")
+    elif group == "all":
+        pass
+    else:
+        users = User.objects.none()
+
+    ids = list(users.values_list("id", flat=True))
+    return JsonResponse({"ids": ids})
+
+
+@login_required
+def delete_notification(request, pk):
+    if request.method != "POST":
+        return JsonResponse({"success": False, "message": _("Invalid request.")})
+    if not (request.user.is_staff or request.user.is_superuser):
+        return JsonResponse({"success": False, "message": _("Permission denied.")})
+    try:
+        n = Notification.objects.get(pk=pk, sender=request.user)
+        n.delete()
+        return JsonResponse({"success": True, "message": _("Notification deleted.")})
+    except Notification.DoesNotExist:
+        return JsonResponse({"success": False, "message": _("Not found.")})
+
+
+@login_required
+def notification_detail(request, pk):
+    try:
+        nr = NotificationRecipient.objects.get(notification_id=pk, user=request.user)
+        if not nr.is_read:
+            nr.is_read = True
+            nr.read_at = timezone.now()
+            nr.save()
+        n = nr.notification
+    except NotificationRecipient.DoesNotExist:
+        if request.user.is_staff or request.user.is_superuser:
+            n = get_object_or_404(Notification, pk=pk)
+        else:
+            return JsonResponse({"success": False, "message": _("Not found.")}, status=404)
+
+    return JsonResponse({
+        "success": True,
+        "title": n.title,
+        "message": n.message,
+        "type": n.notification_type,
+        "date": n.created_at.strftime("%Y-%m-%d %H:%M")
+    })

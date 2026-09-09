@@ -67,6 +67,14 @@
                             <span>{% trans "Profile" %}</span>
                         </a>
                     </li>
+                    <!-- Notifications -->
+                    <li>
+                        <a href="#" data-page="my_notifications" class="nav-link">
+                            <i class="fas fa-bell"></i>
+                            <span>{% trans "My Notifications" %}</span>
+                            <span id="notifBadge" class="ml-2 px-2 py-0.5 text-xs font-bold text-white bg-red-500 rounded-full hidden"></span>
+                        </a>
+                    </li>
                     <!-- Universities -->
                     <li>
                         <a href="#" data-page="universities" class="nav-link">
@@ -108,6 +116,12 @@
                     {% if user.is_staff %}
                         <li class="nav-divider">
                             <span class="divider-text">{% trans "Administration" %}</span>
+                        </li>
+                        <li>
+                            <a href="#" data-page="notifications" class="nav-link">
+                                <i class="fas fa-bullhorn"></i>
+                                <span>{% trans "Send Notifications" %}</span>
+                            </a>
                         </li>
                         <li>
                             <a href="{% url 'admin:index' %}" target="_blank" class="nav-link">
@@ -167,7 +181,13 @@
             generatePassword: "{% url 'generate_password' %}",
             programApplyRequest: "{% url 'program_apply_request' %}",
             programsSearch: "{% url 'programs_search' %}",
-            universitiesSearch: "{% url 'universities_search' %}"
+            universitiesSearch: "{% url 'universities_search' %}",
+            sendNotification: "{% url 'send_notification' %}",
+            searchUsers: "{% url 'search_users_for_notification' %}",
+            getGroupUsers: "{% url 'get_group_user_ids' %}",
+            unreadCount: "{% url 'unread_notification_count' %}",
+            markAllRead: "{% url 'mark_all_notifications_read' %}",
+            markRead: "/dashboard/notifications/mark-read/"
         },
         translations: {
             loadingContent: "{% trans 'Loading content...' %}",
