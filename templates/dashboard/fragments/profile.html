@@ -6,7 +6,6 @@
             {% trans "Manage your personal information, contact details, and security settings." %}
         </p>
     </div>
-
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Personal Information Card -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
@@ -55,21 +54,19 @@
                 </button>
             </form>
         </div>
-
         <!-- Identity & Profile Photo Card (Combined) -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center font-serif">
                 <i class="fas fa-user-circle text-[var(--ab-primary)] mr-2"></i> {% trans "Identity & Profile Photo" %}
             </h2>
-
-            <!-- Profile Image Form -->
+            <!-- Combined Identity Form -->
             <form method="POST"
                   action="{% url 'profile_view' %}"
                   enctype="multipart/form-data"
-                  class="space-y-4 profile-form mb-6 pb-6 border-b border-gray-100"
-                  data-form-type="profile_image">
+                  class="space-y-4 profile-form"
+                  data-form-type="identity_profile">
                 {% csrf_token %}
-                <input type="hidden" name="form_type" value="profile_image">
+                <input type="hidden" name="form_type" value="identity_profile">
                 <div class="flex items-center space-x-4 mb-4">
                     {% if user.profile_image %}
                         <img src="{{ user.profile_image.url }}"
@@ -85,31 +82,17 @@
                         <p class="text-xs text-[var(--ab-muted)]">{% trans "JPG, PNG or GIF. Max size 2MB." %}</p>
                     </div>
                 </div>
-                {{ image_form.profile_image }}
-                <button type="submit"
-                        class="w-full bg-[var(--ab-primary)] text-white py-2.5 px-4 rounded-lg hover:opacity-90 transition font-medium shadow-sm">
-                    {% trans "Update Photo" %}
-                </button>
-            </form>
-
-            <!-- Username Form -->
-            <form method="POST"
-                  action="{% url 'profile_view' %}"
-                  class="space-y-4 profile-form"
-                  data-form-type="username">
-                {% csrf_token %}
-                <input type="hidden" name="form_type" value="username">
+                {{ identity_form.profile_image }}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Username" %}</label>
-                    {{ username_form.username }}
+                    {{ identity_form.username }}
                 </div>
                 <button type="submit"
                         class="w-full bg-[var(--ab-primary)] text-white py-2.5 px-4 rounded-lg hover:opacity-90 transition font-medium mt-4 shadow-sm">
-                    {% trans "Update Username" %}
+                    {% trans "Update Identity & Photo" %}
                 </button>
             </form>
         </div>
-
         <!-- Contact Information Card -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center font-serif">
@@ -145,7 +128,6 @@
                 </button>
             </form>
         </div>
-
         <!-- Password Change Card -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center font-serif">
@@ -196,7 +178,6 @@
                 </button>
             </form>
         </div>
-
         <!-- Student Profile Card (Conditional) -->
         {% if student_form %}
             <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow lg:col-span-2">

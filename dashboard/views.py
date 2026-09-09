@@ -33,6 +33,7 @@ from .forms import (
     ApplicationForm,
     AddStudentForm,
     UsernameForm,
+    IdentityProfileForm,
 )
 
 
@@ -102,12 +103,17 @@ def dashboard_content(request, page):
         context["image_form"] = ProfileImageForm(instance=user)
         context["password_form"] = CustomPasswordChangeForm(user=user)
         context["username_form"] = UsernameForm(instance=user)
+        context["identity_form"] = IdentityProfileForm(instance=user)
         context["student_form"] = (
             StudentProfileForm(instance=student_profile) if student_profile else None
         )
 
     elif page == "universities":
-        qs = University.objects.all().select_related("country", "city").prefetch_related("faculties", "programs")
+        qs = (
+            University.objects.all()
+            .select_related("country", "city")
+            .prefetch_related("faculties", "programs")
+        )
         search_query = request.GET.get("search", "")
         country_id = request.GET.get("country", "")
         sector = request.GET.get("sector", "")
@@ -148,9 +154,7 @@ def dashboard_content(request, page):
             .order_by("name")
         )
         cities_with_universities = (
-            City.objects.filter(universities__isnull=False)
-            .distinct()
-            .order_by("name")
+            City.objects.filter(universities__isnull=False).distinct().order_by("name")
         )
         faculties_with_universities = (
             Faculty.objects.filter(universities__isnull=False)
@@ -223,14 +227,10 @@ def dashboard_content(request, page):
             .order_by("name")
         )
         context["cities_filter"] = (
-            City.objects.filter(universities__isnull=False)
-            .distinct()
-            .order_by("name")
+            City.objects.filter(universities__isnull=False).distinct().order_by("name")
         )
         context["faculties_filter"] = (
-            Faculty.objects.filter(programs__isnull=False)
-            .distinct()
-            .order_by("name")
+            Faculty.objects.filter(programs__isnull=False).distinct().order_by("name")
         )
         context["languages"] = (
             Program.objects.exclude(language="")
@@ -333,6 +333,15 @@ def profile_view(request):
         if form.is_valid():
             form.save()
             return _success_response(_("Personal information updated successfully."))
+        return _form_error_response(form)
+
+    elif form_type == "identity_profile":
+        form = IdentityProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return _success_response(
+                _("Identity and profile photo updated successfully.")
+            )
         return _form_error_response(form)
 
     elif form_type == "username":
@@ -540,7 +549,11 @@ def universities_search(request):
 @login_required
 def programs_search(request):
     q = request.GET.get("q", "")
-    programs = Program.objects.filter(name__icontains=q).select_related("university").order_by("name")[:20]
+    programs = (
+        Program.objects.filter(name__icontains=q)
+        .select_related("university")
+        .order_by("name")[:20]
+    )
     results = [
         {"id": p.id, "text": f"{p.name} ({p.university.name})"} for p in programs
     ]
@@ -549,7 +562,11 @@ def programs_search(request):
 
 @login_required
 def export_universities_pdf(request):
-    qs = University.objects.all().select_related("country", "city").prefetch_related("faculties", "programs")
+    qs = (
+        University.objects.all()
+        .select_related("country", "city")
+        .prefetch_related("faculties", "programs")
+    )
     search_query = request.GET.get("search", "")
     country_id = request.GET.get("country", "")
     sector = request.GET.get("sector", "")

@@ -48,6 +48,28 @@ class PersonalInfoForm(forms.ModelForm):
         }
 
 
+class IdentityProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["username", "profile_image"]
+        widgets = {
+            "username": forms.TextInput(
+                attrs={"class": BASE_INPUT_CLASS, "placeholder": _("Username")}
+            ),
+            "profile_image": forms.FileInput(
+                attrs={
+                    "class": "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-[var(--ab-primary)] hover:file:bg-blue-100"
+                }
+            ),
+        }
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
+            raise ValidationError(_("This username is already taken."))
+        return username
+
+
 class UsernameForm(forms.ModelForm):
     class Meta:
         model = User
@@ -176,7 +198,9 @@ class ApplicationForm(forms.ModelForm):
         if self.data and self.data.get("program"):
             try:
                 prog_id = int(self.data.get("program"))
-                self.fields["program"].queryset = Program.objects.filter(id=prog_id, is_active=True)
+                self.fields["program"].queryset = Program.objects.filter(
+                    id=prog_id, is_active=True
+                )
             except (ValueError, TypeError):
                 pass
 
