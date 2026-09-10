@@ -845,6 +845,25 @@ def delete_notification(request, pk):
 
 
 @login_required
+def get_notification_recipients(request, pk):
+    if not (request.user.is_staff or request.user.is_superuser):
+        return JsonResponse({"success": False, "message": _("Permission denied.")}, status=403)
+    try:
+        n = Notification.objects.get(pk=pk, sender=request.user)
+        recipients = n.recipients.all()
+        users = []
+        for r in recipients:
+            users.append({
+                "id": r.id,
+                "username": r.username,
+                "full_name": r.get_full_name()
+            })
+        return JsonResponse({"success": True, "users": users})
+    except Notification.DoesNotExist:
+        return JsonResponse({"success": False, "message": _("Not found.")}, status=404)
+
+
+@login_required
 def update_notification(request, pk):
     if request.method != "POST":
         return JsonResponse({"success": False, "message": _("Invalid request.")})
@@ -855,15 +874,34 @@ def update_notification(request, pk):
         title = request.POST.get("title")
         message = request.POST.get("message")
         n_type = request.POST.get("notification_type")
+        user_ids = request.POST.get("user_ids", "")
+
         if not title or not message or not n_type:
             return JsonResponse({"success": False, "message": _("All fields are required.")})
 
         n.title = title
         n.message = message
         n.notification_type = n_type
+        n.recipient_type = Notification.RecipientType.SPECIFIC_USERS
         n.save()
 
-        # Reset read status for all recipients so they see the updated message
+        # Sync recipients
+        current_recipient_ids = set(NotificationRecipient.objects.filter(notification=n).values_list("user_id", flat=True))
+        new_recipient_ids = set(int(i) for i in user_ids.split(",") if i.isdigit())
+
+        # Add new
+        to_add = new_recipient_ids - current_recipient_ids
+        if to_add:
+            users_to_add = User.objects.filter(id__in=to_add)
+            nr_objects = [NotificationRecipient(notification=n, user=u, is_read=False, read_at=None) for u in users_to_add]
+            NotificationRecipient.objects.bulk_create(nr_objects, ignore_conflicts=True)
+
+        # Remove old
+        to_remove = current_recipient_ids - new_recipient_ids
+        if to_remove:
+            NotificationRecipient.objects.filter(notification=n, user_id__in=to_remove).delete()
+
+        # Reset read status for ALL current recipients so they see the updated message
         NotificationRecipient.objects.filter(notification=n).update(is_read=False, read_at=None)
 
         return JsonResponse({"success": True, "message": _("Notification updated successfully!")})

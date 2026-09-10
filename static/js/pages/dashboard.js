@@ -210,11 +210,34 @@ document.addEventListener("DOMContentLoaded", function () {
     // Edit Notification Modal Controls
     if (e.target.closest(".edit-notif-btn")) {
         const btn = e.target.closest(".edit-notif-btn");
-        document.getElementById("editNotifId").value = btn.dataset.id;
+        const id = btn.dataset.id;
+        document.getElementById("editNotifId").value = id;
         document.getElementById("editNotifTitle").value = btn.dataset.title;
         document.getElementById("editNotifMessage").value = btn.dataset.message;
         document.getElementById("editNotifType").value = btn.dataset.type;
+
         document.getElementById("editNotifModal").classList.remove("hidden");
+
+        // Fetch current recipients to populate the edit modal
+        fetch(window.AppConfig.urls.getNotifRecipients + id + "/", {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                let initialSelected = new Map();
+                data.users.forEach(u => {
+                    initialSelected.set(u.id.toString(), { username: u.username, full_name: u.full_name });
+                });
+                initNotificationsScripts({
+                    searchInputId: "editUserSearchInput",
+                    listContainerId: "editUserListContainer",
+                    selectedListId: "editSelectedUsersList",
+                    userIdsInputId: "editUserIdsInput",
+                    initialSelected: initialSelected
+                });
+            }
+        });
     }
     if (e.target.id === "closeEditModalBtn" || e.target.closest("#closeEditModalBtn")) {
         document.getElementById("editNotifModal").classList.add("hidden");
@@ -445,16 +468,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function initNotificationsScripts() {
-    const searchInput = document.getElementById("userSearchInput");
-    const userListContainer = document.getElementById("userListContainer");
-    const selectedList = document.getElementById("selectedUsersList");
-    const userIdsInput = document.getElementById("userIdsInput");
+  function initNotificationsScripts(config = {}) {
+    const searchInputId = config.searchInputId || "userSearchInput";
+    const listContainerId = config.listContainerId || "userListContainer";
+    const selectedListId = config.selectedListId || "selectedUsersList";
+    const userIdsInputId = config.userIdsInputId || "userIdsInput";
+    const initialSelected = config.initialSelected || new Map();
+
+    const searchInput = document.getElementById(searchInputId);
+    const userListContainer = document.getElementById(listContainerId);
+    const selectedList = document.getElementById(selectedListId);
+    const userIdsInput = document.getElementById(userIdsInputId);
 
     if (!userListContainer) return;
 
     let allUsersData = { default: [], company: [], agent: [] };
-    let selectedUsers = new Map(); // id -> {username, full_name}
+    let selectedUsers = new Map(initialSelected);
 
     const fetchAndRenderUsers = (q = "") => {
         fetch(`${window.AppConfig.urls.searchUsers}?q=${encodeURIComponent(q)}`, {
@@ -468,7 +497,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     const renderUserList = () => {
-        const searchTerm = searchInput.value.toLowerCase();
+        const searchTerm = searchInput ? searchInput.value.toLowerCase() : "";
         userListContainer.innerHTML = "";
 
         const groups = [
@@ -500,8 +529,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const masterCb = document.createElement("input");
         masterCb.type = "checkbox";
-        masterCb.className = "mr-3 h-4 w-4 text-blue-600 rounded";
-        masterCb.id = "masterSelectAll";
+        masterCb.className = "mr-3 h-4 w-4 text-[#1E3A8A] rounded";
+        masterCb.id = "masterSelectAll_" + listContainerId;
 
         let allVisibleIds = [];
         for(let k in filteredData) filteredData[k].forEach(u => allVisibleIds.push(u.id.toString()));
@@ -518,11 +547,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 allVisibleIds.forEach(id => selectedUsers.delete(id));
             }
             updateSelectedUI();
-            renderUserList(); // Re-render to update group checkboxes
+            renderUserList();
         };
 
         const masterLabel = document.createElement("label");
-        masterLabel.htmlFor = "masterSelectAll";
+        masterLabel.htmlFor = masterCb.id;
         masterLabel.className = "cursor-pointer flex-1";
         masterLabel.textContent = "Select All Users";
 
@@ -535,7 +564,6 @@ document.addEventListener("DOMContentLoaded", function () {
         allUsersHeader.appendChild(masterCount);
         userListContainer.appendChild(allUsersHeader);
 
-        // Groups
         groups.forEach(g => {
             if (filteredData[g.key].length === 0) return;
 
@@ -564,7 +592,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     groupIds.forEach(id => selectedUsers.delete(id));
                 }
                 updateSelectedUI();
-                renderUserList(); // Re-render to update master checkbox and other group checkboxes
+                renderUserList();
             };
 
             const groupLabel = document.createElement("label");
@@ -597,7 +625,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         selectedUsers.delete(user.id.toString());
                     }
                     updateSelectedUI();
-                    renderUserList(); // Re-render to update group and master checkboxes
+                    renderUserList();
                 };
 
                 const label = document.createElement("label");
@@ -641,7 +669,7 @@ document.addEventListener("DOMContentLoaded", function () {
             btn.onclick = () => {
                 selectedUsers.delete(id);
                 updateSelectedUI();
-                renderUserList(); // Re-render to uncheck the box and update headers
+                renderUserList();
             };
             chip.appendChild(span);
             chip.appendChild(btn);
@@ -693,7 +721,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="mb-4">${typeBadge}</div>
                 <h3 class="text-xl font-bold text-gray-900 mb-2">${data.title}</h3>
                 <p class="text-gray-600 mb-4 whitespace-pre-wrap">${data.message}</p>
-                <p class="text-sm text-gray-500">${data.date}</p>
+                <p class="text-sm text-gray-500"><i class="far fa-clock mr-1"></i>${data.date}</p>
               `;
               modal.classList.remove("hidden");
 
@@ -782,7 +810,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((r) => r.json())
       .then((data) => {
         btn.disabled = false;
-        btn.innerHTML = "Send Notification";
+        btn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Send';
         if (data.success) {
           showToast(data.message, "success");
           setTimeout(() => loadContent("notifications"), 500);
@@ -797,12 +825,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const id = formData.get("notif_id");
     formData.delete("notif_id");
 
+    // Ensure user_ids is included even if empty
+    const userIds = document.getElementById("editUserIdsInput").value;
+    formData.set("user_ids", userIds);
+
     const csrfToken = form.querySelector("[name=csrfmiddlewaretoken]").value;
     const btn = form.querySelector('button[type="submit"]');
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Updating...';
 
-    fetch(`/dashboard/notifications/update/${id}/`, {
+    fetch(window.AppConfig.urls.updateNotification + id + "/", {
       method: "POST",
       body: formData,
       headers: {
@@ -813,7 +845,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(r => r.json())
     .then(data => {
         btn.disabled = false;
-        btn.innerHTML = "Update";
+        btn.innerHTML = '<i class="fas fa-save mr-2"></i>Update';
         if (data.success) {
             showToast(data.message, "success");
             document.getElementById("editNotifModal").classList.add("hidden");

@@ -2,12 +2,14 @@
 <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">{% trans "My Notifications" %}</h2>
-        <button id="markAllReadBtn" class="text-sm text-blue-600 hover:text-blue-800 font-medium">{% trans "Mark all as read" %}</button>
+        <button id="markAllReadBtn" class="px-4 py-2 text-sm font-medium text-[#1E3A8A] border border-[#1E3A8A] rounded-lg hover:bg-[#1E3A8A] hover:!text-white transition-all duration-200">
+            <i class="fas fa-check-double mr-1"></i> {% trans "Mark all as read" %}
+        </button>
     </div>
 
     <div class="space-y-4">
         {% for nr in received_notifications %}
-        <div class="p-4 border rounded-lg transition-colors {% if not nr.is_read %}bg-blue-50 border-blue-200 hover:bg-blue-100{% else %}bg-gray-50 border-gray-200 hover:bg-gray-100{% endif %} cursor-pointer notification-item" data-id="{{ nr.notification.id }}">
+        <div class="p-4 border rounded-lg transition-all duration-200 hover:shadow-md {% if not nr.is_read %}bg-blue-50 border-blue-200{% else %}bg-gray-50 border-gray-200{% endif %} cursor-pointer notification-item" data-id="{{ nr.notification.id }}">
             <div class="flex justify-between items-start">
                 <div class="flex-1">
                     <div class="flex items-center space-x-2 mb-1">
@@ -22,10 +24,10 @@
                         <h3 class="text-lg font-semibold text-gray-900 {% if not nr.is_read %}font-bold{% endif %}">{{ nr.notification.title }}</h3>
                     </div>
                     <p class="text-gray-600 text-sm">{{ nr.notification.message|truncatechars:100 }}</p>
-                    <p class="text-xs text-gray-500 mt-2">{{ nr.notification.created_at|date:"Y-m-d H:i" }}</p>
+                    <p class="text-xs text-gray-500 mt-2"><i class="far fa-clock mr-1"></i>{{ nr.notification.created_at|date:"Y-m-d H:i" }}</p>
                 </div>
                 {% if not nr.is_read %}
-                <span class="w-3 h-3 bg-blue-600 rounded-full"></span>
+                <span class="w-3 h-3 bg-blue-600 rounded-full animate-pulse"></span>
                 {% endif %}
             </div>
         </div>
@@ -35,9 +37,9 @@
     </div>
 </div>
 
-<div id="notificationModal" class="fixed inset-0 bg-transparent hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 relative border border-gray-200">
-        <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+<div id="notificationModal" class="fixed inset-0 bg-opacity-50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4 transition-opacity duration-300">
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 relative border border-gray-200 transform transition-all duration-300">
+        <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
             <i class="fas fa-times"></i>
         </button>
         <div id="modalContent">

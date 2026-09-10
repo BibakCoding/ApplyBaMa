@@ -196,7 +196,9 @@
             getGroupUsers: "{% url 'get_group_user_ids' %}",
             unreadCount: "{% url 'unread_notification_count' %}",
             markAllRead: "{% url 'mark_all_notifications_read' %}",
-            markRead: "/dashboard/notifications/mark-read/"
+            markRead: "/dashboard/notifications/mark-read/",
+            updateNotification: "{% url 'update_notification' 0 %}".replace('0/', ''),
+            getNotifRecipients: "{% url 'get_notification_recipients' 0 %}".replace('0/', '')
         },
         translations: {
             loadingContent: "{% trans 'Loading content...' %}",
