@@ -13,8 +13,8 @@ venv.bak/
 
 # Django Specific
 *.log
-db.sqlite3
-db.sqlite3-journal
+*.sqlite3
+*.sqlite3-*
 media/
 staticfiles/
 *.pot
@@ -33,10 +33,11 @@ staticfiles/
 .DS_Store
 Thumbs.db
 
-# Celery & Redis
-celerybeat-schedule
+# Celery & Redis runtime state
+celerybeat-schedule*
 celerybeat.pid
 dump.rdb
+*.rdb
 
 # Node (Tailwind)
 node_modules/
@@ -50,8 +51,9 @@ htmlcov/
 **/migrations/*.py
 !**/migrations/__init__.py
 
-celerybeat-schedule-shm
-celerybeat-schedule-wal
 requirements.txt
+
+# Temporary secret-redaction files
+.secret-replacements.txt
 
 data/
