@@ -49,7 +49,9 @@ jobs:
         run: python manage.py check
 
       - name: Apply migrations
-        run: python manage.py migrate --noinput
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate --noinput
 
       - name: Run tests
         run: python manage.py test --verbosity=2
