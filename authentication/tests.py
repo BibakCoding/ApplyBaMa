@@ -9,6 +9,7 @@ from core.models import User
 
 from .forms import ChangePasswordForm, LoginForm, RegisterForm
 from .models import VerificationCode
+from core.utils.jwt_auth import JWTManager, authenticate_with_jwt
 
 
 class VerificationCodeTests(TestCase):
@@ -104,10 +105,13 @@ class AuthenticationViewTests(TestCase):
 		)
 
 		self.assertEqual(response.status_code, 200)
-		self.assertJSONEqual(
-			response.content,
-			{"success": True, "message": "Logged in successfully.", "redirect": reverse("dashboard")},
-		)
+		data = response.json()
+		self.assertTrue(data["success"])
+		self.assertEqual(data["redirect"], reverse("dashboard"))
+		# Check JWT tokens are returned
+		self.assertIn("access", data)
+		self.assertIn("refresh", data)
+		self.assertIn("user", data)
 
 	@patch("authentication.views.dispatch_email", return_value=True)
 	def test_registration_ajax_creates_inactive_user_and_code(self, dispatch_email):
@@ -136,3 +140,188 @@ class AuthenticationViewTests(TestCase):
 
 		self.assertEqual(response.status_code, 302)
 		self.assertEqual(response.url, reverse("login"))
+
+
+class JWTManagerTests(TestCase):
+	def setUp(self):
+		self.user = User.objects.create_user(
+			username="student",
+			email="student@example.com",
+			password="StrongPassword123!",
+			is_active=True,
+		)
+
+	def test_create_access_token_returns_valid_jwt(self):
+		access_token = JWTManager.create_access_token(self.user)
+		self.assertIsInstance(access_token, str)
+		self.assertTrue(access_token.count('.') == 2)  # JWT format: header.payload.signature
+
+	def test_create_refresh_token_returns_valid_jwt(self):
+		refresh_token = JWTManager.create_refresh_token(self.user)
+		self.assertIsInstance(refresh_token, str)
+		self.assertTrue(refresh_token.count('.') == 2)
+
+	def test_verify_token_returns_payload(self):
+		access_token = JWTManager.create_access_token(self.user)
+		payload = JWTManager.verify_token(access_token, token_type='access')
+
+		self.assertEqual(payload['user_id'], self.user.id)
+		self.assertEqual(payload['email'], self.user.email)
+		self.assertEqual(payload['user_type'], self.user.user_type)
+		self.assertEqual(payload['token_type'], 'access')
+
+	def test_get_user_from_token_returns_user(self):
+		access_token = JWTManager.create_access_token(self.user)
+		user = JWTManager.get_user_from_token(access_token)
+
+		self.assertEqual(user, self.user)
+
+	def test_get_user_from_invalid_token_returns_none(self):
+		user = JWTManager.get_user_from_token('invalid.token.here')
+		self.assertIsNone(user)
+
+	def test_refresh_access_token_creates_new_token(self):
+		refresh_token = JWTManager.create_refresh_token(self.user)
+		new_access = JWTManager.refresh_access_token(refresh_token)
+
+		self.assertIsInstance(new_access, str)
+		self.assertNotEqual(new_access, refresh_token)
+
+		# Verify new token is valid
+		payload = JWTManager.verify_token(new_access, token_type='access')
+		self.assertEqual(payload['user_id'], self.user.id)
+
+	def test_wrong_token_type_raises_error(self):
+		access_token = JWTManager.create_access_token(self.user)
+		with self.assertRaises(Exception):
+			JWTManager.verify_token(access_token, token_type='refresh')
+
+	def test_expired_token_raises_error(self):
+		# Create token with very short expiration
+		import jwt
+		from datetime import datetime, timedelta
+
+		payload = {
+			'user_id': self.user.id,
+			'email': self.user.email,
+			'user_type': self.user.user_type,
+			'exp': datetime.utcnow() - timedelta(hours=1),  # Expired
+			'iat': datetime.utcnow() - timedelta(hours=2),
+			'token_type': 'access',
+		}
+		expired_token = jwt.encode(payload, JWTManager.SECRET_KEY, algorithm=JWTManager.ALGORITHM)
+
+		with self.assertRaises(jwt.ExpiredSignatureError):
+			JWTManager.verify_token(expired_token)
+
+	def test_authenticate_with_jwt_returns_user_tuple(self):
+		access_token = JWTManager.create_access_token(self.user)
+		user, _ = authenticate_with_jwt(access_token)
+
+		self.assertEqual(user, self.user)
+
+	def test_inactive_user_token_returns_none(self):
+		self.user.is_active = False
+		self.user.save()
+
+		access_token = JWTManager.create_access_token(self.user)
+		user = JWTManager.get_user_from_token(access_token)
+
+		self.assertIsNone(user)
+
+
+@override_settings(RATELIMIT_ENABLE=False)
+class JWTAuthAPITests(TestCase):
+	def setUp(self):
+		self.user = User.objects.create_user(
+			username="student",
+			email="student@example.com",
+			password="StrongPassword123!",
+			is_active=True,
+		)
+
+	def test_obtain_token_with_valid_credentials(self):
+		response = self.client.post(
+			reverse('api-token-obtain'),
+			data='{"username": "student@example.com", "password": "StrongPassword123!"}',
+			content_type='application/json',
+		)
+
+		self.assertEqual(response.status_code, 200)
+		data = response.json()
+		self.assertIn('access', data)
+		self.assertIn('refresh', data)
+		self.assertIn('user', data)
+		self.assertEqual(data['user']['email'], self.user.email)
+
+	def test_obtain_token_with_invalid_credentials(self):
+		response = self.client.post(
+			reverse('api-token-obtain'),
+			data='{"username": "student@example.com", "password": "wrongpassword"}',
+			content_type='application/json',
+		)
+
+		self.assertEqual(response.status_code, 401)
+		data = response.json()
+		self.assertIn('error', data)
+
+	def test_obtain_token_with_missing_credentials(self):
+		response = self.client.post(
+			reverse('api-token-obtain'),
+			data='{}',
+			content_type='application/json',
+		)
+
+		self.assertEqual(response.status_code, 400)
+		data = response.json()
+		self.assertIn('error', data)
+
+	def test_refresh_token_with_valid_refresh_token(self):
+		refresh_token = JWTManager.create_refresh_token(self.user)
+
+		response = self.client.post(
+			reverse('api-token-refresh'),
+			data=f'{{"refresh": "{refresh_token}"}}',
+			content_type='application/json',
+		)
+
+		self.assertEqual(response.status_code, 200)
+		data = response.json()
+		self.assertIn('access', data)
+		self.assertIn('user', data)
+
+	def test_refresh_token_with_invalid_token(self):
+		response = self.client.post(
+			reverse('api-token-refresh'),
+			data='{"refresh": "invalid.token.here"}',
+			content_type='application/json',
+		)
+
+		self.assertEqual(response.status_code, 401)
+		data = response.json()
+		self.assertIn('error', data)
+
+	def test_verify_token_with_valid_token(self):
+		access_token = JWTManager.create_access_token(self.user)
+
+		response = self.client.post(
+			reverse('api-token-verify'),
+			data=f'{{"token": "{access_token}"}}',
+			content_type='application/json',
+		)
+
+		self.assertEqual(response.status_code, 200)
+		data = response.json()
+		self.assertTrue(data['valid'])
+		self.assertIn('user', data)
+
+	def test_verify_token_with_invalid_token(self):
+		response = self.client.post(
+			reverse('api-token-verify'),
+			data='{"token": "invalid.token.here"}',
+			content_type='application/json',
+		)
+
+		self.assertEqual(response.status_code, 200)
+		data = response.json()
+		self.assertFalse(data['valid'])

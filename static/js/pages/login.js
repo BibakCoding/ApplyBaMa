@@ -41,6 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!res.ok) throw res;
             const json = await res.json();
+
+            // Store JWT tokens if returned (for API access)
+            if (json.access && json.refresh && window.JWTAuth) {
+                JWTAuth.storeTokens(json.access, json.refresh, json.user);
+            }
+
             notyf.success(json.message);
             setTimeout(() => window.location = json.redirect, 500);
         } catch (errResp) {
@@ -49,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 json = await errResp.json();
             } catch {
-                notyf.error("{{ _('Unexpected server response.')|escapejs }}");
+                notyf.error("Unexpected server response.");
                 console.error("Non-JSON response:", errResp);
                 return;
             }

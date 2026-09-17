@@ -20,6 +20,7 @@ from .forms import (
 )
 from .models import VerificationCode
 from .tasks import send_async_email
+from core.utils.jwt_auth import JWTManager
 
 User = get_user_model()
 
@@ -50,6 +51,7 @@ def login_view(request):
     form = LoginForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
+            user = form.user
             remember_me = request.POST.get('remember_me')
 
             if remember_me:
@@ -57,12 +59,31 @@ def login_view(request):
             else:
                 request.session.set_expiry(0)
 
-            auth_login(request, form.user)
+            # Log in the user (session-based)
+            auth_login(request, user)
+
             msg = _("Logged in successfully.")
+
+            # Generate JWT tokens for API authentication
+            access_token = JWTManager.create_access_token(user)
+            refresh_token = JWTManager.create_refresh_token(user)
+
             if is_ajax(request):
-                return JsonResponse(
-                    {"success": True, "message": msg, "redirect": reverse("dashboard")}
-                )
+                return JsonResponse({
+                    "success": True,
+                    "message": msg,
+                    "redirect": reverse("dashboard"),
+                    "access": access_token,
+                    "refresh": refresh_token,
+                    "user": {
+                        "id": user.id,
+                        "email": user.email,
+                        "username": user.username,
+                        "user_type": user.user_type,
+                        "first_name": user.first_name or "",
+                        "last_name": user.last_name or "",
+                    }
+                })
             messages.success(request, msg)
             return redirect("dashboard")
 
