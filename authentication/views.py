@@ -21,6 +21,7 @@ from .forms import (
 from .models import VerificationCode
 from .tasks import send_async_email
 from core.utils.jwt_auth import JWTManager
+from core.utils.notifications import send_welcome_notification
 
 User = get_user_model()
 
@@ -183,6 +184,10 @@ def confirm_code(request, pk):
                 user.is_active = True
                 user.save()
                 auth_login(request, user)
+
+                # Send welcome notification
+                send_welcome_notification(user)
+
                 msg = _("Account confirmed!")
                 if is_ajax(request):
                     return JsonResponse({"success": True, "redirect": reverse("username_selection")})
