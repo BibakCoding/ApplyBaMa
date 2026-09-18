@@ -57,3 +57,4 @@ requirements.txt
 .secret-replacements.txt
 
 data/
+.freebuff/

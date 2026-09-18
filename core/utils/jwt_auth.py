@@ -28,7 +28,8 @@ class JWTManager:
     """
 
     # Secret key from Django settings, fallback to SECRET_KEY
-    SECRET_KEY = getattr(settings, 'JWT_SECRET_KEY', settings.SECRET_KEY)
+    # Use None fallback first, then 'or' to handle explicit None value
+    SECRET_KEY = getattr(settings, 'JWT_SECRET_KEY', None) or settings.SECRET_KEY
 
     # Token expiration times (in hours)
     ACCESS_TOKEN_LIFETIME = getattr(settings, 'JWT_ACCESS_TOKEN_LIFETIME', 24)  # 24 hours
