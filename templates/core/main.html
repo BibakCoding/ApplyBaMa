@@ -40,15 +40,15 @@
             {% endif %}
 
             <!-- Mobile Hamburger Button -->
-            <button id="mobile-menu-btn" class="lg:hidden p-2 text-2xl text-gray-700" aria-label="Menu">
-                <i class="fas fa-bars"></i>
+            <button id="mobile-menu-btn" class="lg:hidden p-2 text-2xl text-gray-700" aria-label="{% trans 'Menu' %}" aria-controls="mobile-menu" aria-expanded="false">
+                <i class="fas fa-bars" id="mobile-menu-icon"></i>
             </button>
         </div>
     </div>
 
     <!-- Mobile Dropdown Menu -->
-    <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-200 shadow-lg">
-        <nav class="ab-container py-4 flex flex-col gap-2">
+    <div id="mobile-menu" class="ab-navbar-mobile">
+        <nav class="ab-container flex flex-col gap-2">
             <a href="#why" class="ab-nav-link w-full text-left">{% trans "Why Us" %}</a>
             <a href="#how" class="ab-nav-link w-full text-left">{% trans "How It Works" %}</a>
             <a href="#documents" class="ab-nav-link w-full text-left">{% trans "Documents" %}</a>
@@ -335,9 +335,13 @@
     {{ block.super }}
     <script>
     window.AppConfig = {
-        urls: { register: "{% url 'register' %}" },
+        isLoggedIn: {% if user.is_authenticated %}true{% else %}false{% endif %},
+        urls: {
+            register: "{% url 'register' %}",
+            dashboard: "{% url 'dashboard' %}"
+        },
         translations: {
-            searchInfo: "{% trans 'Create your free account to see programs matching your search.' %}",
+            searchInfo: "{% trans 'Registration is required to see programs matching your search.' %}",
             newsletterSuccess: "{% trans 'Thank you! You are on the scholarship alerts list.' %}"
         }
     };

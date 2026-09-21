@@ -65,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
         initProfileScripts();
         initSearchAutocomplete();
         initProgramAutocomplete();
-        initSelect2();
         initNotificationsScripts();
         initMyNotificationsScripts();
 
@@ -451,21 +450,6 @@ document.addEventListener("DOMContentLoaded", function () {
         resultsDiv.classList.add("hidden");
       }
     });
-  }
-
-  // Upgrades standard select tags to searchable dropdowns if Select2 is loaded
-  function initSelect2() {
-    if (window.jQuery && typeof window.jQuery.fn.select2 !== "undefined") {
-      window.jQuery(".filter-select").each(function () {
-        if (!window.jQuery(this).hasClass("select2-hidden-accessible")) {
-          window.jQuery(this).select2({
-            allowClear: true,
-            width: "100%",
-            placeholder: " ",
-          });
-        }
-      });
-    }
   }
 
   function initNotificationsScripts(config = {}) {
@@ -1008,12 +992,20 @@ document.addEventListener("DOMContentLoaded", function () {
   // Handles native browser back/forward buttons for seamless SPA history navigation
   window.addEventListener("popstate", function () {
     const p = new URLSearchParams(window.location.search);
-    loadContent(p.get("page") || "welcome");
+    const page = p.get("page") || "welcome";
+    p.delete("page");
+    loadContent(page, p.toString());
   });
 
   // Triggers the initial page load based on the current URL parameters
   const p = new URLSearchParams(window.location.search);
-  loadContent(p.get("page") || "welcome");
+
+  // Filters carried over from the home-page hero search are applied by the
+  // server (dashboard_main redirects here with ?page=programs&country=…),
+  // so the query string alone already describes the first page to load.
+  const initialPage = p.get("page") || "welcome";
+  p.delete("page");
+  loadContent(initialPage, p.toString());
 
   // Initialize unread count polling
   updateUnreadBadge();

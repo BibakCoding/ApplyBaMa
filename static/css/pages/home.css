@@ -103,6 +103,18 @@
     padding: 1rem;
     gap: 0.5rem;
     box-shadow: var(--ab-shadow-md);
+
+    /* Overlay the page instead of growing the header. The parent <header> is
+       position: sticky, so an in-flow menu makes the sticky block ~400px tall
+       and pins it over the content while scrolling. Absolute keeps the header
+       at its natural height and turns the menu into a true dropdown. */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: calc(100vh - 4.25rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .ab-navbar-mobile.active {

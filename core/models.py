@@ -576,7 +576,7 @@ class SiteSettings(models.Model):
     )  # Translatable
     hero_subtitle = models.CharField(max_length=500, blank=True)  # Translatable
     hero_background_image = models.ImageField(
-        upload_to="home/", default="home/hero.jpg"
+        upload_to="home/", default="static/images/home/hero.jpg"
     )
 
     class Meta:

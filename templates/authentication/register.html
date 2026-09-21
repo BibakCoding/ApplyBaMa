@@ -82,7 +82,7 @@
             </form>
 
             <div class="auth-links">
-                <p>{% trans "Already have an account?" %} <a href="{% url 'login' %}">{% trans "Sign In" %}</a></p>
+                <p>{% trans "Already have an account?" %} <a href="{% url 'login' %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">{% trans "Sign In" %}</a></p>
             </div>
         </div>
     </div>

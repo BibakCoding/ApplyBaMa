@@ -6,7 +6,8 @@ settings to maintain compatibility with existing authentication.
 """
 
 # JWT Secret Key (use Django's SECRET_KEY as fallback)
-JWT_SECRET_KEY = None  # Will use settings.SECRET_KEY by default
+# NOTE: The actual value is resolved in JWTManager class using getattr with 'or' fallback
+JWT_SECRET_KEY = None  # Will be resolved at runtime to settings.SECRET_KEY
 
 # Token expiration times (in hours)
 JWT_ACCESS_TOKEN_LIFETIME = 24  # 24 hours

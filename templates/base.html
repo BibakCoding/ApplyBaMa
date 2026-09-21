@@ -17,9 +17,6 @@
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         {% block css %}
             <link rel="stylesheet" href="{% static 'css/base.css' %}">
-            <!-- Select2 for searchable dropdowns -->
-            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
-                  rel="stylesheet" />
         {% endblock %}
         <link rel="stylesheet" href="{% static 'vendor/notyf/notyf.min.css' %}">
         <link rel="stylesheet"
@@ -29,6 +26,24 @@
         <script src="{% static 'vendor/notyf/notyf.min.js' %}" defer></script>
     </head>
     <body class="bg-gray-50">
+        <script>
+            /* Carries a hero search across the register/login detour.
+               Set by the home page's hero search as a query string
+               ("page=programs&country=tr&degree=master"); the dashboard view
+               consumes it server-side, so it survives every redirect and any
+               tab. The browser expires it after COOKIE_MAX_AGE seconds, which
+               stops a half-finished search from hijacking a later login. */
+            window.PendingSearch = {
+                COOKIE: 'pending_program_search',
+                COOKIE_MAX_AGE: 300,
+                set: function (query) {
+                    try {
+                        document.cookie = this.COOKIE + '=' + encodeURIComponent(query) +
+                            '; path=/; max-age=' + this.COOKIE_MAX_AGE + '; samesite=lax';
+                    } catch (e) {}
+                }
+            };
+        </script>
         <div id="ab-scroll-progress"></div>
         {% block header %}{% endblock %}
         {% block content %}{% endblock %}
@@ -103,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{% static 'js/base.js' %}" defer></script>
     <script src="{% static 'js/jwt-auth.js' %}" defer></script>
 {% endblock %}

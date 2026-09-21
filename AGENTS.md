@@ -19,12 +19,27 @@ The application contains a highly customized **Single Page Application (SPA) das
 * **Backend:** Django 5.2, Python 3.10+
 * **Frontend:** Vanilla JavaScript
 * **Styling:** Tailwind CSS via CDN
-* **Frontend Libraries:** Select2, intlTelInput, Notyf
+* **Frontend Libraries:** intlTelInput, Notyf (Select2/jQuery were removed — see §7)
 * **Database:** SQLite for development, PostgreSQL/MySQL for production
 * **Background Tasks:** Celery
 * **Data Collection:** Selenium, Requests, BeautifulSoup
 * **Internationalization:** Django i18n, modeltranslation, Rosetta, LocaleMiddleware
 * **Languages:** English, Arabic, Persian, Turkish
+
+### Local Development Test Account
+
+A pre-seeded account exists in the local development database for live verification of authenticated flows (dashboard SPA, hero-search redirect, permission-gated UI):
+
+| Field | Value |
+|---|---|
+| Username | `admin` |
+| Password | `adminadmin` |
+| Flags | `is_superuser = True`, `is_staff = True` |
+| `user_type` | `company` (this account also exercises the company/agent branch) |
+
+Use it to verify changes through the real login flow instead of `force_login()` when a task requires the browser-level experience (SPA fragments, redirects, cookie/session behaviour).
+
+**Scope and safety:** this account belongs to the local SQLite development database only. Never reuse this password anywhere real, never provision it in a production or staging environment, and do not assume it exists after a database reset (`migrate` on an empty DB will not create it). If a task needs credentials outside local development, read them from environment variables — never from this file.
 
 ---
 
@@ -347,9 +362,9 @@ Use the project's existing notification system rather than introducing another l
 
 ### Select2
 
-Searchable dashboard `<select>` elements may rely on the existing Select2 initialization mechanism.
+Select2 (and jQuery) were **removed** from this project. Dashboard `<select>` filters are native HTML selects styled by the project's own CSS.
 
-Before changing a select element, inspect how Select2 is initialized and reinitialized after fragment loading.
+Do not reintroduce Select2 or jQuery. If searchable dropdowns become a requirement, evaluate a dependency-free alternative deliberately rather than restoring the old broken Select2 setup (which required jQuery that was never loaded and therefore never initialized).
 
 ### Phone Inputs
 

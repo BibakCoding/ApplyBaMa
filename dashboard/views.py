@@ -3,6 +3,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.http import JsonResponse, HttpResponse
 from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
@@ -11,6 +12,7 @@ from django.conf import settings
 from django.utils import timezone
 import secrets
 import string
+from urllib.parse import parse_qs, unquote, urlencode
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django_ratelimit.decorators import ratelimit
@@ -60,6 +62,18 @@ def get_managed_students(user):
         except Exception:
             return []
     return []
+
+
+# Country slugs used by the home-page hero search (see templates/core/main.html),
+# mapped to actual Country names in the database. Dashboard filters use numeric
+# country ids, so hero selections must be resolved before filtering. When adding
+# a new option to the hero dropdown, add its slug here.
+HERO_COUNTRY_SLUGS = {
+    "tr": "Turkey",
+    "de": "Germany",
+    "ge": "Georgia",
+    "nc": "KKTC",  # Northern Cyprus
+}
 
 
 @login_required
@@ -185,7 +199,16 @@ def dashboard_content(request, page):
         search_query = request.GET.get("search", "")
         university_id = request.GET.get("university", "")
         degree = request.GET.get("degree", "")
-        country_id = request.GET.get("country", "")
+        country_raw = request.GET.get("country", "")
+        if country_raw and not country_raw.isdigit():
+            # Hero search sends a slug (e.g. "tr"); resolve it to a Country id.
+            # Unresolved slugs are ignored rather than breaking the filter.
+            country_obj = Country.objects.filter(
+                name__iexact=HERO_COUNTRY_SLUGS.get(country_raw, country_raw)
+            ).first()
+            country_id = str(country_obj.pk) if country_obj else ""
+        else:
+            country_id = country_raw
         language_id = request.GET.get("language", "")
         city_id = request.GET.get("city", "")
         faculty_id = request.GET.get("faculty", "")
@@ -317,9 +340,41 @@ def dashboard_content(request, page):
     return render(request, content_map[page], context=context)
 
 
+# Cookie written by the home-page hero search (static/js/pages/home.js) so the
+# selected filters survive the register/login detour. The browser drops it
+# after PENDING_SEARCH_MAX_AGE seconds.
+PENDING_SEARCH_COOKIE = "pending_program_search"
+
+
 @login_required
 def dashboard_main(request):
-    return render(request, "dashboard/main.html", context={"user": request.user})
+    """Renders the dashboard shell.
+
+    A search started on the home page (possibly carried across register/login)
+    opens the matching Programs list instead of the default landing page. The
+    carried filters are applied exactly once: the cookie is always cleared, and
+    only the two hero keys are honoured, so it cannot select another page.
+    """
+    pending = request.COOKIES.get(PENDING_SEARCH_COOKIE)
+
+    if pending and not request.GET.get("page"):
+        # The cookie is written by encodeURIComponent(), and Django hands
+        # cookie values over still percent-encoded: decode before parsing.
+        selected = parse_qs(unquote(pending))
+        params = {"page": "programs"}
+        for key in ("country", "degree"):
+            value = (selected.get(key) or [""])[0]
+            if value:
+                params[key] = value
+        response = redirect(f"{reverse('dashboard')}?{urlencode(params)}")
+    else:
+        response = render(
+            request, "dashboard/main.html", context={"user": request.user}
+        )
+
+    if pending:
+        response.delete_cookie(PENDING_SEARCH_COOKIE, path="/")
+    return response
 
 
 @login_required
