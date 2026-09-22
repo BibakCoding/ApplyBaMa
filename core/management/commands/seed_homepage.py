@@ -1,5 +1,11 @@
+from django.contrib.staticfiles import finders
+from django.core.files import File
 from django.core.management.base import BaseCommand
 from core.models import SiteSettings, HowItWorksStep, DocumentRequirement, SuccessStory, University, Country
+
+# Placeholder photo used for every seeded story (see static/images/home/).
+SEED_STORY_IMAGE = "images/home/success-stories-seed.jpg"
+SEED_STORY_FILE = "success-stories-seed.jpg"
 
 # Hardcoded translations for the seed data (EN -> FA, TR, AR)
 TRANSLATIONS = {
@@ -154,22 +160,54 @@ class Command(BaseCommand):
 
         # 6. Success Stories
         SuccessStory.objects.all().delete()
-        uni = University.objects.filter(name__iexact="Bahçeşehir University").first()
-        if not uni:
-             uni = University.objects.create(name="Bahçeşehir University", country=country, show_on_homepage=True)
+
+        # Each sample story points at a different real university from the
+        # catalogue, so the three cards don't read as one template repeated.
+        # The name is matched against existing rows first; a row is only created
+        # when the university is genuinely absent.
+        def story_university(name):
+            found = University.objects.filter(name__iexact=name).first()
+            if found:
+                return found
+            return University.objects.create(name=name, country=country, show_on_homepage=True)
 
         stories_data = [
-            ("Sara M.", "Iran", uni, "Master", "From my first WhatsApp message to my acceptance letter, everything took less than two months.", "https://instagram.com"),
-            ("Ahmed K.", "Iraq", uni, "Bachelor", "The team prepared my documents and kept me updated on WhatsApp at every single step.", "https://instagram.com"),
-            ("Fatima R.", "Afghanistan", uni, "Master", "I never thought studying in Turkey would be this smooth. Fully guided, fully honest.", "https://instagram.com"),
+            ("Sara M.", "Iran", story_university("Bahçeşehir University"), "Master", "From my first WhatsApp message to my acceptance letter, everything took less than two months.", "https://instagram.com"),
+            ("Ahmed K.", "Iraq", story_university("Medipol University"), "Bachelor", "The team prepared my documents and kept me updated on WhatsApp at every single step.", "https://instagram.com"),
+            ("Fatima R.", "Afghanistan", story_university("Aydın University"), "Master", "I never thought studying in Turkey would be this smooth. Fully guided, fully honest.", "https://instagram.com"),
         ]
+        # Seeded stories share one placeholder photo so the cards never render
+        # empty. Real photos uploaded through the admin replace it per story;
+        # a story without an image falls back to the initial avatar in the template.
+        seed_image_path = finders.find(SEED_STORY_IMAGE)
+        if not seed_image_path:
+            self.stdout.write(self.style.WARNING(
+                f'   ⚠️  {SEED_STORY_IMAGE} not found — stories will fall back to initial avatars.'
+            ))
+        shared_image_name = None
         for name, origin, dest, level, quote, url in stories_data:
-            SuccessStory.objects.create(
+            story = SuccessStory.objects.create(
                 name=name, origin_country=origin, destination_university=dest, degree_level=level, quote=quote, instagram_video_url=url, is_published=True,
                 origin_country_fa=t(origin, "fa"), origin_country_tr=t(origin, "tr"), origin_country_ar=t(origin, "ar"),
                 degree_level_fa=t(level, "fa"), degree_level_tr=t(level, "tr"), degree_level_ar=t(level, "ar"),
                 quote_fa=t(quote, "fa"), quote_tr=t(quote, "tr"), quote_ar=t(quote, "ar")
             )
+            if seed_image_path:
+                if shared_image_name is None:
+                    target = f"success_stories/{SEED_STORY_FILE}"
+                    # Keep repeated seed runs from piling up copies in MEDIA_ROOT.
+                    if story.image.storage.exists(target):
+                        story.image.storage.delete(target)
+                    with open(seed_image_path, "rb") as fh:
+                        shared_image_name = story.image.save(
+                            SEED_STORY_FILE, File(fh), save=True
+                        )
+                else:
+                    story.image.name = shared_image_name
+                    # Already stored: without this Django treats the FieldFile as
+                    # uncommitted and writes another physical copy per story.
+                    story.image._committed = True
+                    story.save(update_fields=["image"])
         self.stdout.write(self.style.SUCCESS('   ✅ Success Stories translated and created.'))
 
         self.stdout.write(self.style.SUCCESS('\n🎉 Successfully seeded and translated all homepage data instantly! Refresh your browser.'))

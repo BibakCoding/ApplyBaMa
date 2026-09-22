@@ -737,6 +737,12 @@
     justify-content: center;
 }
 
+/* A real photo takes the avatar's place when the story has one */
+.home-story-avatar--photo {
+    object-fit: cover;
+    background: var(--ab-surface-2);
+}
+
 .home-story-quote {
     color: var(--ab-muted);
     font-size: 0.95rem;

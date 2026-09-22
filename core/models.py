@@ -633,6 +633,12 @@ class SuccessStory(models.Model):
     destination_university = models.ForeignKey("University", on_delete=models.CASCADE)
     degree_level = models.CharField(max_length=50)  # Translatable
     quote = models.TextField()  # Translatable
+    image = models.ImageField(
+        upload_to="success_stories/",
+        blank=True,
+        null=True,
+        help_text="Student photo for the homepage story card. Falls back to an initial avatar when empty.",
+    )
     instagram_video_url = models.URLField(
         blank=True, null=True, help_text="Link to the Instagram video"
     )

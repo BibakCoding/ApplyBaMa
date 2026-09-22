@@ -285,7 +285,16 @@
                     {% for story in stories %}
                         <div class="ab-card home-story fade-in-up">
                             <div class="home-story-top">
-                                <span class="home-story-avatar">{{ story.name|first }}</span>
+                                {% if story.image %}
+                                    <img src="{{ story.image.url }}"
+                                         alt="{{ story.name }}"
+                                         class="home-story-avatar home-story-avatar--photo"
+                                         width="88"
+                                         height="88"
+                                         loading="lazy">
+                                {% else %}
+                                    <span class="home-story-avatar">{{ story.name|first }}</span>
+                                {% endif %}
                                 <div>
                                     <h4>{{ story.name }}</h4>
                                     <p>{{ story.origin_country }} → {{ story.destination_university.name }}</p>
