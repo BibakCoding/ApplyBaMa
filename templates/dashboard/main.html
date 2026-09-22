@@ -5,8 +5,7 @@
 {% endblock %}
 {% block css %}
     {{ block.super }}
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/css/intlTelInput.css">
+    <link rel="stylesheet" href="{% static 'vendor/intl-tel-input/css/intlTelInput.css' %}">
     <link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}">
     <style>
         @keyframes pulse-badge {
@@ -184,6 +183,7 @@
     {{ block.super }}
     <script>
     window.AppConfig = {
+        staticUrl: "{% static '' %}",
         urls: {
             dashboardContent: "{% url 'dashboard_content' 'PAGE_PLACEHOLDER' %}",
             logout: "{% url 'logout' %}",
@@ -209,6 +209,5 @@
     };
     </script>
     <script src="{% static 'js/pages/dashboard.js' %}" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/js/intlTelInput.min.js"
-            defer></script>
+    <script src="{% static 'vendor/intl-tel-input/js/intlTelInput.min.js' %}" defer></script>
 {% endblock %}

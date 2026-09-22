@@ -252,8 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let iti = null;
     if (mobileInput && window.intlTelInput) {
       iti = window.intlTelInput(mobileInput, {
-        utilsScript:
-          "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/js/utils.js",
+        utilsScript: window.AppConfig.staticUrl + "vendor/intl-tel-input/js/utils.js",
         separateDialCode: true,
         preferredCountries: ["tr", "ir", "de", "us"],
       });

@@ -6,6 +6,11 @@ The purpose of this file is to help AI agents understand the project's architect
 
 **Important:** This document is architectural guidance, not a replacement for reading the source code. When implementing a task, always verify relevant behavior against the actual repository.
 
+**Standing instruction — deliver work to GitHub.** On finishing any task, commit the changes
+and push them to the repository as part of the task itself; do not wait to be asked. Commit
+**only** the files the task changed, and never push unverified work. Full rules in
+[§12 Phase 9](#phase-9--commit-and-push).
+
 ---
 
 ## 1. REPOSITORY CONTEXT
@@ -18,8 +23,8 @@ The application contains a highly customized **Single Page Application (SPA) das
 
 * **Backend:** Django 5.2, Python 3.10+
 * **Frontend:** Vanilla JavaScript
-* **Styling:** Tailwind CSS via CDN
-* **Frontend Libraries:** intlTelInput, Notyf (Select2/jQuery were removed — see §7)
+* **Styling:** Tailwind CSS, compiled locally with PostCSS into `static/css/output.css` (see §7 "Static Assets & Styling")
+* **Frontend Libraries:** intlTelInput, Notyf — all served from `static/vendor/` (Select2/jQuery were removed — see §7)
 * **Database:** SQLite for development, PostgreSQL/MySQL for production
 * **Background Tasks:** Celery
 * **Data Collection:** Selenium, Requests, BeautifulSoup
@@ -374,6 +379,34 @@ Before changing a phone input, inspect the initialization code and all assumptio
 
 Do not change these assumptions without updating the corresponding JavaScript.
 
+The widget's `utilsScript` is resolved from `window.AppConfig.staticUrl` (exposed in the dashboard shell), **not** from a CDN — keep it that way when touching `dashboard.js`.
+
+### Static Assets & Styling
+
+Everything the frontend needs is served from this repository. **No page may reference an
+external CDN** (jsdelivr, cdnjs, unpkg, Google Fonts, …); a `curl` against any page should
+show zero third-party requests.
+
+* **Tailwind is compiled, not loaded from a browser build.** `templates/base.html` links
+  `{% static 'css/output.css' %}`. Edit styles by changing templates/markup and then
+  rebuilding:
+
+  ```bash
+  npm install        # once per checkout (node_modules is not committed)
+  npm run build:css  # postcss static/css/input.css -> static/css/output.css
+  ```
+
+  `output.css` is committed, so **after changing any template or JS that adds/removes
+  Tailwind utility classes you must re-run `npm run build:css`** — otherwise the new
+  classes are simply absent from the served stylesheet. Never reintroduce
+  `@tailwindcss/browser` or any runtime Tailwind CDN.
+* **Vendored libraries live under `static/vendor/`** (`fontawesome/`, `intl-tel-input/`,
+  `notyf/`). Keep each vendor's internal folder layout intact — their CSS resolves fonts
+  and images with relative paths (`../webfonts/`, `../img/`). When upgrading a vendored
+  library, its CSS *and* its font/image payload must be copied together, or you get silent
+  404s (the intl-tel-input flag sprite `img/flags.png` is the classic example: without it
+  the flags render blank and the browser logs a 404).
+
 ---
 
 ## 8. DJANGO FORMS & TEMPLATES
@@ -680,6 +713,30 @@ Before reporting completion, verify:
 * All modified/new files can be provided as complete final files.
 
 If a task could not be completed, explicitly report it as incomplete instead of claiming success.
+
+### Phase 9 — Commit and Push
+
+**Every completed task must be committed and pushed to GitHub when the work finishes.** This
+is a standing instruction from the repository owner — do not wait to be asked.
+
+Rules for this phase:
+
+* Commit and push **only after** the task is verified (Phase 8). Never push broken or
+  unverified work just to satisfy this rule.
+* The repository is **public**. Never commit secrets, `.env` files, tokens, dumps, or any
+  credential other than the local development test account documented above.
+* Stage **only the files your task actually changed** — never `git add -A` / `git add .`,
+  because other agents and the owner may be editing the same checkout.
+* Write a message that explains **why** the change was made, following the existing history
+  style. Do not use vague subjects such as "Update" or "Fix".
+* Check the current branch before pushing (`git rev-parse --abbrev-ref HEAD`) and push to the
+  branch you actually worked on (`git push origin <branch>`).
+* New assets must be added explicitly: untracked files in `static/vendor/`, new images, and
+  generated CSS are easy to forget and will silently break a fresh clone.
+* If a required artifact is gitignored (for example migrations under `core/migrations/`),
+  say so in the final report instead of silently leaving the repository in a state that
+  cannot be rebuilt from a clone.
+* Report the commit hash and the branch that was pushed.
 
 ---
 
