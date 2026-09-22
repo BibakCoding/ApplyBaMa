@@ -353,6 +353,40 @@ Because dashboard elements are dynamically inserted, direct event listeners atta
 
 Prefer the project's existing event-delegation approach.
 
+There is exactly **one** way the dashboard navigates between fragments. The markup declares the
+destination and never the code; `dashboard.js` holds a single delegated click listener that owns
+the behaviour:
+
+```html
+<!-- simple navigation -->
+<button data-page="profile">…</button>
+
+<!-- navigation with parameters (page key and params are separate attributes) -->
+<button data-page="university_detail" data-page-params="id={{ uni.pk }}">…</button>
+
+<!-- modal open/close, also declarative -->
+<button data-modal-open="addStudentModal">…</button>
+```
+
+Rules:
+
+* **Never write `onclick="loadContent(…)"` or any other inline handler**, in a sidebar link or a
+  fragment. Fragments are injected with `innerHTML`, so inline handlers bypass the delegated
+  listener, duplicate navigation logic, and require `script-src 'unsafe-inline'` in any future
+  Content-Security-Policy — which would break every trigger at once.
+* Keep the **page key identical** to the key in the `dashboard_content` view's `content_map`;
+  `data-page="profile"` loads `?page=profile` and updates the URL and history.
+* Form submission is delegated too: `contentContainer` listens for `submit` and dispatches on
+  `form.id` / form classes. Adding an inline `onsubmit` alongside it means both fire, and a
+  handler that does not exist (which this project has shipped) throws on every submit.
+* A card that cannot be a `<button>` for layout reasons needs `role="button" tabindex="0"`;
+  the delegated keydown listener activates it with Enter/Space.
+* **Pagination links must not re-list the active filters.** Fragments use
+  `{% filter_params filters as filters_qs %}` (see `core/templatetags/custom_filters.py`),
+  which serializes the current filters once with a leading `&`:
+  `data-page-params="page={{ i }}{{ filters_qs }}"`. A renamed filter then needs one change, not one
+  per page button.
+
 ### CSRF
 
 The global base template exposes the CSRF token to JavaScript.

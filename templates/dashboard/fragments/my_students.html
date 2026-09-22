@@ -5,7 +5,7 @@
             <h1 class="text-3xl font-bold text-[var(--ab-text)] font-serif">{% trans "My Students" %}</h1>
             <p class="text-[var(--ab-muted)] mt-2">{% trans "Manage the students you are representing." %}</p>
         </div>
-        <button onclick="document.getElementById('addStudentModal').classList.remove('hidden')"
+        <button data-modal-open="addStudentModal"
                 class="bg-[var(--ab-primary)] text-white px-4 py-2 rounded-lg hover:opacity-90 transition shadow-sm flex items-center">
             <i class="fas fa-user-plus mr-2"></i> {% trans "Add New Student" %}
         </button>
@@ -27,7 +27,7 @@
                         <td class="px-6 py-4 text-gray-600">{{ student.email }}</td>
                         <td class="px-6 py-4 text-gray-600">{{ student.student_applications.count }}</td>
                         <td class="px-6 py-4">
-                            <button onclick="loadContent('my_applications')"
+                            <button data-page="my_applications"
                                     class="text-[var(--ab-primary)] hover:underline text-sm font-medium">
                                 {% trans "View Applications" %}
                             </button>
@@ -49,12 +49,11 @@
 <div id="addStudentModal"
      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
     <!-- Matte backdrop overlay -->
-    <div class="modal-backdrop"
-         onclick="document.getElementById('addStudentModal').classList.add('hidden')"></div>
+    <div class="modal-backdrop" data-modal-close="addStudentModal"></div>
     <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 animate-[auth-fade-in-up_0.4s_ease-out] relative z-10">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-xl font-bold text-gray-800 font-serif">{% trans "Add New Student" %}</h2>
-            <button onclick="document.getElementById('addStudentModal').classList.add('hidden')"
+            <button data-modal-close="addStudentModal"
                     class="text-gray-400 hover:text-gray-600">
                 <i class="fas fa-times text-xl"></i>
             </button>

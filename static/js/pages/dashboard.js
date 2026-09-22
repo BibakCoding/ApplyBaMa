@@ -86,18 +86,51 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   };
 
-  // Attach SPA navigation listeners to sidebar links. Links without
-  // data-page (e.g. the admin panel shortcut) keep default navigation.
-  navLinks.forEach((link) => {
-    link.addEventListener("click", function (e) {
-      const page = this.getAttribute("data-page");
-      if (!page) {
-        closeSidebar();
-        return;
-      }
-      e.preventDefault();
-      loadContent(page);
-    });
+  // Single delegated listener for every SPA navigation trigger in the app:
+  // sidebar links AND buttons inside fragments, which are injected with
+  // innerHTML and therefore cannot be wired up individually. The markup only
+  // declares the destination (`data-page`, plus optional `data-page-params`)
+  // and this handler decides how to load it — no inline onclick handlers.
+  document.addEventListener("click", function (e) {
+    const target = e.target instanceof Element ? e.target : null;
+    if (!target) return;
+
+    // Modal open/close triggers stay declarative too.
+    const modalTrigger = target.closest("[data-modal-open], [data-modal-close]");
+    if (modalTrigger) {
+      const isOpen = modalTrigger.hasAttribute("data-modal-open");
+      const modalId = modalTrigger.getAttribute(
+        isOpen ? "data-modal-open" : "data-modal-close"
+      );
+      const dialog = modalId ? document.getElementById(modalId) : null;
+      if (dialog) dialog.classList.toggle("hidden", !isOpen);
+      return;
+    }
+
+    // Any click inside the sidebar (including a link without data-page, such as
+    // the admin panel shortcut) means the mobile drawer should not stay open.
+    if (target.closest("#sidebar")) closeSidebar();
+
+    const trigger = target.closest("[data-page]");
+    if (!trigger) return;
+
+    e.preventDefault();
+    loadContent(
+      trigger.getAttribute("data-page"),
+      trigger.getAttribute("data-page-params") || ""
+    );
+  });
+
+  // Card-style triggers are div/span elements carrying role="button" (a card
+  // cannot be wrapped in a <button> without breaking its layout), so they need
+  // Enter/Space activation to be reachable from the keyboard.
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+    const target = e.target instanceof Element ? e.target : null;
+    if (!target) return;
+    if (!target.matches('[role="button"][data-page]')) return;
+    e.preventDefault();
+    target.click();
   });
 
   // Global event delegation for all forms inside the dynamic dashboard content

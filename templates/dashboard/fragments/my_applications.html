@@ -6,7 +6,7 @@
             <p class="text-[var(--ab-muted)] mt-2">{% trans "Track the progress of your university applications." %}</p>
         </div>
         {% if user.user_type == 'agent' %}
-        <button onclick="loadContent('new_application')" class="bg-[var(--ab-primary)] text-white px-4 py-2 rounded-lg hover:opacity-90 transition shadow-sm flex items-center">
+        <button data-page="new_application" class="bg-[var(--ab-primary)] text-white px-4 py-2 rounded-lg hover:opacity-90 transition shadow-sm flex items-center">
             <i class="fas fa-plus mr-2"></i> {% trans "New Application" %}
         </button>
         {% endif %}
@@ -14,7 +14,9 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for app in applications %}
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-1" onclick="loadContent('application_detail?id={{ app.pk }}')">
+        <div role="button" tabindex="0"
+             data-page="application_detail" data-page-params="id={{ app.pk }}"
+             class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-1">
             <div class="flex justify-between items-start mb-4">
                 <span class="px-3 py-1 text-xs font-semibold rounded-full
                     {% if app.status == 'finished' %}bg-green-100 text-green-800

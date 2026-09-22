@@ -1,4 +1,4 @@
-{% load i18n static %}
+{% load i18n static custom_filters %}
 <div class="max-w-6xl mx-auto animate-[auth-fade-in-up_0.6s_ease-out]">
     <div class="mb-8 border-l-4 border-[var(--ab-primary)] pl-4">
         <h1 class="text-3xl font-bold text-[var(--ab-text)] font-serif">{% trans "Programs" %}</h1>
@@ -6,8 +6,9 @@
     </div>
     <!-- Search & Filter Bar -->
     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
+        <!-- Submitting this form is handled by the delegated submit listener in
+             dashboard.js (see form.id === "progFilterForm"); no inline handler. -->
         <form id="progFilterForm"
-              onsubmit="handleProgFilter(event)"
               class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="relative md:col-span-3">
@@ -144,7 +145,8 @@
                     <p class="text-sm text-[var(--ab-primary)] font-medium mb-4 flex items-center">
                         <i class="fas fa-university mr-2"></i>
                         <a href="#"
-                           onclick="loadContent('university_detail?id={{ prog.university.pk }}'); return false;"
+                           data-page="university_detail"
+                           data-page-params="id={{ prog.university.pk }}"
                            class="hover:underline line-clamp-1">{{ prog.university.name }}</a>
                     </p>
                 </div>
@@ -195,15 +197,18 @@
     </div>
     <!-- Modern Pagination -->
     {% if page_obj.has_other_pages %}
+        {# Serialized once so a renamed filter never has to be chased through
+           every page button below. Already carries a leading "&". #}
+        {% filter_params filters as filters_qs %}
         <div class="flex flex-col items-center gap-4 mt-8">
             <div class="flex items-center gap-2 flex-wrap justify-center">
                 {% if page_obj.has_previous %}
-                    <button onclick="loadContent('programs', 'page=1&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&country={{ filters.country }}&city={{ filters.city }}&language={{ filters.language }}&faculty={{ filters.faculty }}&status={{ filters.status }}&sort={{ filters.sort }}')"
+                    <button data-page="programs" data-page-params="page=1{{ filters_qs }}"
                             class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm"
                             title="{% trans 'First' %}">
                         <i class="fas fa-angle-double-left"></i>
                     </button>
-                    <button onclick="loadContent('programs', 'page={{ page_obj.previous_page_number }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&country={{ filters.country }}&city={{ filters.city }}&language={{ filters.language }}&faculty={{ filters.faculty }}&status={{ filters.status }}&sort={{ filters.sort }}')"
+                    <button data-page="programs" data-page-params="page={{ page_obj.previous_page_number }}{{ filters_qs }}"
                             class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
                         <i class="fas fa-chevron-left mr-1"></i> {% trans "Prev" %}
                     </button>
@@ -212,12 +217,12 @@
                     {% if page_obj.number == i %}
                         <span class="px-4 py-2 rounded-lg bg-[var(--ab-primary)] text-white font-bold shadow-sm text-sm">{{ i }}</span>
                     {% elif i >= page_obj.number|add:"-2" and i <= page_obj.number|add:"2" %}
-                        <button onclick="loadContent('programs', 'page={{ i }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&country={{ filters.country }}&city={{ filters.city }}&language={{ filters.language }}&faculty={{ filters.faculty }}&status={{ filters.status }}&sort={{ filters.sort }}')"
+                        <button data-page="programs" data-page-params="page={{ i }}{{ filters_qs }}"
                                 class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
                             {{ i }}
                         </button>
                     {% elif i == 1 or i == page_obj.paginator.num_pages %}
-                        <button onclick="loadContent('programs', 'page={{ i }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&country={{ filters.country }}&city={{ filters.city }}&language={{ filters.language }}&faculty={{ filters.faculty }}&status={{ filters.status }}&sort={{ filters.sort }}')"
+                        <button data-page="programs" data-page-params="page={{ i }}{{ filters_qs }}"
                                 class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
                             {{ i }}
                         </button>
@@ -226,11 +231,11 @@
                     {% endif %}
                 {% endfor %}
                 {% if page_obj.has_next %}
-                    <button onclick="loadContent('programs', 'page={{ page_obj.next_page_number }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&country={{ filters.country }}&city={{ filters.city }}&language={{ filters.language }}&faculty={{ filters.faculty }}&status={{ filters.status }}&sort={{ filters.sort }}')"
+                    <button data-page="programs" data-page-params="page={{ page_obj.next_page_number }}{{ filters_qs }}"
                             class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
                         {% trans "Next" %} <i class="fas fa-chevron-right ml-1"></i>
                     </button>
-                    <button onclick="loadContent('programs', 'page={{ page_obj.paginator.num_pages }}&search={{ filters.search }}&university={{ filters.university }}&degree={{ filters.degree }}&country={{ filters.country }}&city={{ filters.city }}&language={{ filters.language }}&faculty={{ filters.faculty }}&status={{ filters.status }}&sort={{ filters.sort }}')"
+                    <button data-page="programs" data-page-params="page={{ page_obj.paginator.num_pages }}{{ filters_qs }}"
                             class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm"
                             title="{% trans 'Last' %}">
                         <i class="fas fa-angle-double-right"></i>
