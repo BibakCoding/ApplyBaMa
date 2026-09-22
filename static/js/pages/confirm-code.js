@@ -1,7 +1,7 @@
 // confirm-code.js
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('confirmForm');
-    const notyf = new Notyf({duration: 4000, dismissible: true, position: {x: 'right', y: 'top'}});  // Notyf usage :contentReference[oaicite:5]{index=5}
+    // Toasts come from the single notifier configured in base.html.
     const nonField = document.getElementById('confirmNonFieldErrors');
     const inputs = Array.from({length: 6}, (_, i) => document.getElementById(`code${i + 1}`));
 
@@ -35,14 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Redirect on success
             window.location = json.redirect;
         } catch (resp) {
-            const {errors = {}} = await resp.json();  // structured errors :contentReference[oaicite:6]{index=6}
+            const {errors = {}} = await resp.json();
             // Non-field errors (__all__)
             (errors.__all__ || []).forEach(obj => {
                 const p = document.createElement('p');
                 p.className = 'mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded error-msg';
                 p.innerText = obj.message;
                 nonField.appendChild(p);
-                notyf.error(obj.message);
+                window.notify(obj.message, 'error');
             });
             // Field errors
             Object.entries(errors).forEach(([field, arr]) => {
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     p.className = 'mt-1 text-sm text-red-500 error-msg';
                     p.innerText = obj.message;
                     nonField.appendChild(p);
-                    notyf.error(obj.message);
+                    window.notify(obj.message, 'error');
                 });
             });
         }

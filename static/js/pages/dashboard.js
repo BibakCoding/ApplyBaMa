@@ -957,35 +957,19 @@ document.addEventListener("DOMContentLoaded", function () {
     loadContent(section, "page=" + targetPage + (filters ? "&" + filters : ""));
   }
 
-  // Generates and injects non-blocking toast messages securely at the document root
+  // Non-blocking toast. Delegates to the single notifier configured in
+  // base.html so the dashboard shows exactly the same notifications (position,
+  // colours, icons, durations) as every other page, instead of maintaining a
+  // second, competing toast implementation.
+  // Kept as a named function because it still has many call sites here.
   function showToast(message, type) {
-    let c = document.querySelector("body > #toast-container");
-    if (!c) {
-      // Clean up any legacy containers trapped inside dashboard fragments
-      document
-        .querySelectorAll("#toast-container")
-        .forEach((el) => el.remove());
-
-      c = document.createElement("div");
-      c.id = "toast-container";
-      c.className =
-        "fixed top-6 right-6 z-[9999] space-y-3 pointer-events-none";
-      document.body.appendChild(c);
+    if (typeof window.notify === "function") {
+      window.notify(message, type);
+      return;
     }
-
-    const t = document.createElement("div");
-    t.className =
-      "p-4 rounded-lg shadow-2xl text-white max-w-sm pointer-events-auto transition-all duration-300 ease-out transform translate-x-0 opacity-100 " +
-      (type === "success" ? "bg-green-600" : "bg-red-600");
-    t.innerText = message;
-    c.appendChild(t);
-
-    // Slide out and fade out animation
-    setTimeout(() => {
-      t.style.opacity = "0";
-      t.style.transform = "translateX(150%)";
-      setTimeout(() => t.remove(), 300);
-    }, 3500);
+    // Defensive fallback only: a missing notifier must never swallow a message
+    // the user needs to see.
+    console.log("[" + (type || "info") + "] " + message);
   }
 
   // Handles native browser back/forward buttons for seamless SPA history navigation

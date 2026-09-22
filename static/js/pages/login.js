@@ -1,11 +1,7 @@
 // login.js
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("loginForm");
-    const notyf = new Notyf({
-        duration: 4000,
-        dismissible: true,
-        position: {x: 'right', y: 'top'}
-    });
+    // Toasts come from the single notifier configured in base.html.
     const nonFieldEl = document.getElementById("loginNonFieldErrors");
 
 
@@ -47,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 JWTAuth.storeTokens(json.access, json.refresh, json.user);
             }
 
-            notyf.success(json.message);
+            window.notify(json.message, "success");
             setTimeout(() => window.location = json.redirect, 500);
         } catch (errResp) {
             // attempt JSON parse, else fallback
@@ -55,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 json = await errResp.json();
             } catch {
-                notyf.error("Unexpected server response.");
+                window.notify("Unexpected server response.", "error");
                 console.error("Non-JSON response:", errResp);
                 return;
             }
@@ -69,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     p.className = "mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded error-msg";
                     p.innerText = item.message;
                     nonFieldEl.appendChild(p);
-                    notyf.error(item.message);
+                    window.notify(item.message, "error");
                 });
             }
 
@@ -83,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     p.innerText = item.message;
                     input.insertAdjacentElement("afterend", p);
                     const labelText = form.elements[field].labels[0].innerText;
-                    notyf.error(`${labelText}: ${item.message}`);
+                    window.notify(`${labelText}: ${item.message}`, "error");
                 });
             });
         }

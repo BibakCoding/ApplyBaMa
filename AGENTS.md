@@ -365,6 +365,32 @@ Do not introduce a second CSRF strategy.
 
 Use the project's existing notification system rather than introducing another library.
 
+**There is exactly one notifier, configured in `templates/base.html`.** Every page extends that
+template, so the single Notyf instance (`window.notyf`) and its entry point
+(`window.notify(message, type)`) are available everywhere.
+
+```javascript
+window.notify("Saved successfully", "success");
+window.notify(data.errors, "error");   // array, or a "a\\nb" string, shows one toast per item
+```
+
+Rules:
+
+* **Never write `new Notyf(...)` in a page script or a fragment.** A local instance ignores the
+  shared configuration (position, colours, icons, durations) and is how the project ended up
+  with eight competing instances and a hand-rolled toast container in the dashboard.
+* `window.notify(message, type)` never throws, so it is safe to call it before a redirect or
+  after a form submission that already succeeded. Types: `success` | `info` (5s),
+  `warning` (7s), `error` (8s); unknown types fall back to `info`, and `danger`/`warn` are
+  accepted aliases.
+* **Static JS is never rendered as a template.** Files under `static/js/` are served verbatim
+  by the staticfiles app, so Django tags written inside them reach the browser as literal
+  text (`{{ … }}` shows up as a toast, a `{% url %}` tag becomes a broken redirect). Strings a
+  script needs must be published from `templates/base.html` — see `window.I18N` — or passed
+  through a `data-` attribute on the element the script works with.
+* Server-side `django.contrib.messages` are rendered by `base.html` through the same helper,
+  so a flash message needs no extra frontend code.
+
 ### Select2
 
 Select2 (and jQuery) were **removed** from this project. Dashboard `<select>` filters are native HTML selects styled by the project's own CSS.

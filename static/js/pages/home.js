@@ -109,18 +109,12 @@
       // and is applied once they reach the dashboard. A failing notification
       // must never block the redirect, hence the try/catch.
       try {
-        if (typeof Notyf !== "undefined") {
-          const notyf = new Notyf({
-            duration: 4000,
-            position: { x: "right", y: "top" },
-          });
-          notyf.open({
-            type: "info",
-            message:
-              t.searchInfo ||
-              "Registration is required to see programs matching your search.",
-          });
-        }
+        // Toast comes from the single notifier configured in base.html.
+        window.notify(
+          t.searchInfo ||
+            "Registration is required to see programs matching your search.",
+          "info",
+        );
       } catch (e) {}
       setTimeout(() => {
         window.location.href =
@@ -134,15 +128,10 @@
     document.querySelectorAll("[data-newsletter]").forEach((form) => {
       form.addEventListener("submit", (e) => {
         e.preventDefault();
-        if (typeof Notyf !== "undefined") {
-          const notyf = new Notyf({
-            duration: 4000,
-            position: { x: "right", y: "top" },
-          });
-          notyf.success(
-            t.newsletterSuccess || "Thank you! You are on the list.",
-          );
-        }
+        window.notify(
+          t.newsletterSuccess || "Thank you! You are on the list.",
+          "success",
+        );
         form.reset();
       });
     });

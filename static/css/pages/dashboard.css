@@ -723,13 +723,8 @@
    ADDITIONAL UTILITIES
 ========================================================================== */
 
-/* Toast container for dashboard notifications */
-#toast-container {
-    position: fixed;
-    top: 1rem;
-    inset-inline-end: 1rem; /* 🔥 RTL FIX */
-    z-index: 9999;
-}
+/* Toast styling is owned by Notyf (configured in templates/base.html) — the
+   dashboard no longer has its own toast container, so no rules are needed here. */
 
 /* Fade in animation for dynamically loaded content */
 @keyframes fadeIn {

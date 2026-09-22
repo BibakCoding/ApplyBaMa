@@ -1,7 +1,7 @@
 // change-password.js
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('changeForm');
-    const notyf = new Notyf({duration: 5000, dismissible: true, position: {x: 'right', y: 'top'}});
+    // Toasts come from the single notifier configured in base.html.
     const fields = ['code', 'pw1', 'pw2'];
 
     form.addEventListener('submit', async e => {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
 
             if (res.ok && data.success) {
-                notyf.success(data.message);
+                window.notify(data.message, 'success');
                 setTimeout(() => window.location.href = data.redirect, 800);
             } else {
                 // field errors
@@ -40,11 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 // non-field
                 if (data.errors && data.errors.__all__) {
-                    data.errors.__all__.forEach(err => notyf.error(err.message));
+                    data.errors.__all__.forEach(err => window.notify(err.message, 'error'));
                 }
             }
         } catch (err) {
-            notyf.error('{{ _("An unexpected error occurred.") }}');
+            window.notify(
+                (window.I18N && window.I18N.unexpectedError) || "An unexpected error occurred.",
+                'error'
+            );
             console.error(err);
         }
     });

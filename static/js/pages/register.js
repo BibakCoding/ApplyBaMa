@@ -16,9 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const form = document.getElementById("registerForm");
-    const notyf = new Notyf({
-        duration: 10000, dismissible: true, position: {x: 'right', y: 'top'}
-    });
+    // Toasts come from the single notifier configured in base.html.
     const nonFieldDiv = document.getElementById("nonFieldErrors");
 
     form.addEventListener("submit", async e => {
@@ -48,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     p.className = "mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded error-msg";
                     p.innerText = item.message;
                     nonFieldDiv.appendChild(p);
-                    notyf.error(item.message);
+                    window.notify(item.message, "error");
                 });
             }
 
@@ -61,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     p.className = "mt-1 text-sm text-red-500 error-msg";
                     p.innerText = item.message;
                     input.insertAdjacentElement("afterend", p);
-                    notyf.error(`${form.elements[field].labels[0].innerText}: ${item.message}`);
+                    window.notify(`${form.elements[field].labels[0].innerText}: ${item.message}`, "error");
                 });
             }
         }

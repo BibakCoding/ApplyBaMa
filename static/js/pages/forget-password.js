@@ -1,7 +1,7 @@
 // forget-password.js
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('forgetForm');
-    const notyf = new Notyf({duration: 3000, dismissible: true, position: {x: 'right', y: 'top'}});
+    // Toasts come from the single notifier configured in base.html.
     const emailInput = document.getElementById('id_email');
     const emailError = document.getElementById('emailError');
 
@@ -25,9 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
 
             if (res.ok && data.success) {
-                notyf.success(data.message);
-                // Optionally redirect after a delay
-                setTimeout(() => window.location.href = data.redirect || '{% url "main" %}', 4000);
+                window.notify(data.message, 'success');
+                // The fallback comes from the form's data attribute: this file is
+                // served as a static asset, so a Django url tag written here
+                // would be delivered to the browser as literal text.
+                setTimeout(() => window.location.href = data.redirect || form.dataset.redirect || '/', 4000);
             } else {
                 // Show field errors or non-field errors
                 if (data.errors && data.errors.email) {
@@ -35,11 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     emailError.classList.remove('hidden');
                 }
                 if (data.errors && data.errors.__all__) {
-                    data.errors.__all__.forEach(err => notyf.error(err.message));
+                    data.errors.__all__.forEach(err => window.notify(err.message, 'error'));
                 }
             }
         } catch (err) {
-            notyf.error('{{ _("An unexpected error occurred.") }}');
+            window.notify(
+                (window.I18N && window.I18N.unexpectedError) || "An unexpected error occurred.",
+                'error'
+            );
             console.error(err);
         }
     });
