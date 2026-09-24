@@ -1,23 +1,20 @@
 {# templates/partials/language_switcher.html #}
 {% load i18n static custom_filters %}
 {% get_current_language as CURRENT_LANGUAGE %}
+{% get_available_languages as LANGUAGES %}
 <div class="flex justify-center">
-  <div class="language-switcher flex space-x-2">
-    <a href="{{ request.path|translate_path:'en' }}" title="English"
-       class="p-1 rounded {% if CURRENT_LANGUAGE == 'en' %}bg-gray-200{% endif %}">
-      <img src="{% static 'images/flag-en.png' %}" alt="English" class="w-6 h-4">
+  <div class="language-switcher flex space-x-2" role="group" aria-label="{% trans 'Choose language' %}">
+    {% for lang_code, lang_name in LANGUAGES %}
+      {% if lang_code == CURRENT_LANGUAGE %}
+        <a href="{{ request.path|translate_path:lang_code }}" title="{{ lang_name }}"
+           aria-current="true"
+           class="p-1 rounded bg-gray-200">
+      {% else %}
+        <a href="{{ request.path|translate_path:lang_code }}" title="{{ lang_name }}"
+           class="p-1 rounded">
+      {% endif %}
+      <img src="{% static 'images/flag-'|add:lang_code|add:'.png' %}" alt="{{ lang_name }}" class="w-6 h-4">
     </a>
-    <a href="{{ request.path|translate_path:'fa' }}" title="Persian"
-       class="p-1 rounded {% if CURRENT_LANGUAGE == 'fa' %}bg-gray-200{% endif %}">
-      <img src="{% static 'images/flag-fa.png' %}" alt="Persian" class="w-6 h-4">
-    </a>
-    <a href="{{ request.path|translate_path:'tr' }}" title="Turkish"
-       class="p-1 rounded {% if CURRENT_LANGUAGE == 'tr' %}bg-gray-200{% endif %}">
-      <img src="{% static 'images/flag-tr.png' %}" alt="Turkish" class="w-6 h-4">
-    </a>
-    <a href="{{ request.path|translate_path:'ar' }}" title="Arabic"
-       class="p-1 rounded {% if CURRENT_LANGUAGE == 'ar' %}bg-gray-200{% endif %}">
-      <img src="{% static 'images/flag-ar.png' %}" alt="Arabic" class="w-6 h-4">
-    </a>
+    {% endfor %}
   </div>
 </div>

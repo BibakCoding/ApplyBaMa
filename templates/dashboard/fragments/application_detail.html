@@ -7,7 +7,7 @@
     <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
         <div class="flex justify-between items-start mb-8">
             <div>
-                <h1 class="text-3xl font-bold text-[var(--ab-text)] font-serif">{% trans "Application Details" %}</h1>
+                <h2 class="text-3xl font-bold text-[var(--ab-text)] font-serif">{% trans "Application Details" %}</h2>
                 <p class="text-[var(--ab-muted)] mt-1">{% trans "Code" %}: <strong>#{{ app.application_name }}</strong></p>
             </div>
             <form method="POST" action="{% url 'application_action' app.pk %}" class="delete-form">

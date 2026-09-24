@@ -2,9 +2,9 @@
 <div class="max-w-6xl mx-auto animate-[auth-fade-in-up_0.6s_ease-out]">
     <!-- Welcome Header -->
     <div class="mb-10">
-        <h1 class="text-4xl font-bold text-[var(--ab-text)] font-serif mb-2">
+        <h2 class="text-4xl font-bold text-[var(--ab-text)] font-serif mb-2">
             {% trans "Welcome" %}, {{ user.get_full_name|default:user.username }}!
-        </h1>
+        </h2>
         <p class="text-lg text-[var(--ab-muted)]">{% trans "Here's an overview of your dashboard and quick actions." %}</p>
     </div>
     <!-- Stats Grid -->

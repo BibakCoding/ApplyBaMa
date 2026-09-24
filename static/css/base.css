@@ -504,6 +504,12 @@ html[lang="ar"] body, html[lang="fa"] body { letter-spacing: 0; }
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        /* Entrance animations carry delays (e.g. the auth panels start 0.2s
+           in with a forwards fill); with only the durations zeroed, an element
+           would hold its invisible 0% keyframe for the whole delay and then
+           pop in. Zero the delays too so content is immediately visible. */
+        animation-delay: 0s !important;
+        transition-delay: 0s !important;
     }
 }
 

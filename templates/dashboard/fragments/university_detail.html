@@ -14,14 +14,14 @@
             {% endif %}
         </div>
         <div class="p-8">
-            <h1 class="text-3xl font-bold text-[var(--ab-text)] font-serif mb-3">{{ uni.name }}</h1>
+            <h2 class="text-3xl font-bold text-[var(--ab-text)] font-serif mb-3">{{ uni.name }}</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
                         <i class="fas fa-map-marker-alt text-[var(--ab-primary)]"></i>
                     </div>
                     <div>
-                        <span class="block text-xs text-gray-400 uppercase">{% trans "Location" %}</span>
+                        <span class="block text-xs text-gray-600 uppercase">{% trans "Location" %}</span>
                         <span class="text-sm font-medium text-gray-700">{% if uni.city %}{{ uni.city.name }}, {% endif %}{{ uni.country.name|default:"-" }}</span>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                         <i class="fas fa-building text-purple-600"></i>
                     </div>
                     <div>
-                        <span class="block text-xs text-gray-400 uppercase">{% trans "Sector" %}</span>
+                        <span class="block text-xs text-gray-600 uppercase">{% trans "Sector" %}</span>
                         <span class="text-sm font-medium text-gray-700">{{ uni.get_sector_display }}</span>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                         <i class="fas fa-calendar text-green-600"></i>
                     </div>
                     <div>
-                        <span class="block text-xs text-gray-400 uppercase">{% trans "Founded" %}</span>
+                        <span class="block text-xs text-gray-600 uppercase">{% trans "Founded" %}</span>
                         <span class="text-sm font-medium text-gray-700">{{ uni.founded_in|default:"-" }}</span>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                         <i class="fas fa-globe text-yellow-600"></i>
                     </div>
                     <div>
-                        <span class="block text-xs text-gray-400 uppercase">{% trans "Website" %}</span>
+                        <span class="block text-xs text-gray-600 uppercase">{% trans "Website" %}</span>
                         {% if uni.website %}
                             <a href="{{ uni.website }}" target="_blank" class="text-sm font-medium text-[var(--ab-primary)] hover:underline">{% trans "Visit" %} <i class="fas fa-external-link-alt text-xs"></i></a>
                         {% else %}
@@ -72,7 +72,7 @@
         <h2 class="text-2xl font-bold text-[var(--ab-text)] font-serif mb-6 flex items-center">
             <i class="fas fa-book-open text-[var(--ab-primary)] mr-3"></i>
             {% trans "Programs & Scholarships" %}
-            <span class="ml-3 text-sm font-normal text-gray-400 bg-gray-100 px-3 py-1 rounded-full">{{ programs|length }}</span>
+            <span class="ml-3 text-sm font-normal text-gray-600 bg-gray-100 px-3 py-1 rounded-full">{{ programs|length }}</span>
         </h2>
 
         {% if programs %}
@@ -87,7 +87,7 @@
                             {% else %}bg-red-100 text-red-800{% endif %}">
                             {{ prog.get_status_display }}
                         </span>
-                        <span class="text-xs text-gray-400 uppercase tracking-wide font-bold">{{ prog.get_degree_display }}</span>
+                        <span class="text-xs text-gray-600 uppercase tracking-wide font-bold">{{ prog.get_degree_display }}</span>
                     </div>
                     <h3 class="text-base font-bold text-gray-800 mb-2 font-serif line-clamp-2 min-h-[3rem]">{{ prog.name }}</h3>
                     {% if prog.faculty %}
@@ -96,12 +96,12 @@
                 </div>
 
                 <div class="border-t border-gray-100 pt-4 mt-auto mb-4">
-                    <span class="block text-xs text-gray-400 uppercase mb-2">{% trans "Tuition Fee" %}</span>
+                    <span class="block text-xs text-gray-600 uppercase mb-2">{% trans "Tuition Fee" %}</span>
 
                     {% if prog.is_discounted %}
                         <div class="flex items-baseline gap-2 flex-wrap mb-3">
                             <span class="font-bold text-[var(--ab-primary)] text-xl">{{ prog.display_price|floatformat:0 }} <span class="text-sm font-medium text-gray-500">{{ prog.currency|default:"USD" }}</span></span>
-                            <span class="text-sm text-gray-400 line-through">{{ prog.original_price|floatformat:0 }}</span>
+                            <span class="text-sm text-gray-600 line-through">{{ prog.original_price|floatformat:0 }}</span>
                             <span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full font-bold">{% trans "Discount" %}</span>
                         </div>
                     {% else %}
