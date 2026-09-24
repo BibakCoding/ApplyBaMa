@@ -48,10 +48,14 @@ jobs:
       - name: Run Django system checks
         run: python manage.py check
 
-      - name: Apply migrations
-        run: |
-          python manage.py makemigrations
-          python manage.py migrate --noinput
+      # The migrations are committed, so this must fail rather than regenerate:
+      # running plain `makemigrations` here silently built a schema nobody else
+      # had, which is how a model change could ship without its migration.
+      - name: Check migrations are committed
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Apply migrations from scratch
+        run: python manage.py migrate --noinput
 
       - name: Run tests
         run: python manage.py test --verbosity=2
