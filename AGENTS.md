@@ -584,6 +584,15 @@ Never treat all templates as interchangeable.
 
 ### Internationalization
 
+**Translation is part of every change, not a final pass.** Whenever a task adds or alters
+user-facing text, that same task must:
+
+1. wrap every new string for translation (`{% trans %}` in templates, `gettext`/lazy
+   variants in Python, the `window.I18N` bridge or `data-i18n-*` attributes in JavaScript);
+2. regenerate the `.po` files for **all four locales** (en, fa, tr, ar) with `makemessages`
+   so Rosetta can fill them;
+3. leave no hard-coded English in fragments, page scripts, or email templates.
+
 User-facing text should follow the project's existing i18n system.
 
 Before adding user-facing strings, inspect how the surrounding code handles translations.
@@ -806,6 +815,12 @@ before implementing the change.
 
 ### Phase 5 — Implement
 
+**Translate at every stage, never at the end.** Any user-facing string a task adds or
+changes is translated in the same task — wrapped (`{% trans %}` / `gettext` on the server,
+`window.I18N` or a `data-i18n-*` bridge in JavaScript), `.po` files regenerated for all four
+locales, and Rosetta-filled translations treated as part of the work, not a follow-up. A task
+that ships English-only strings is an incomplete task.
+
 Implement all requested tasks while:
 
 * Preserving architecture
@@ -844,6 +859,10 @@ python manage.py check
 ```
 
 and relevant tests.
+
+For user-facing strings, validate that they are translatable: run `makemessages` (or
+`makemigrations`-style dry checks for JS via `--domain=djangojs`) and confirm no task-added
+string remains unwrapped.
 
 If command execution is **not** available, perform static validation only.
 
