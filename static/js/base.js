@@ -84,11 +84,27 @@
       return cookieValue;
     },
 
+    /* The token for an AJAX request, in order of reliability:
+
+         1. a form's hidden input -- present whenever the caller is a form;
+         2. the meta tag base.html renders on every page -- the only source
+            that exists on a page with no form at all (an anonymous visitor on
+            a marketing page, for example);
+         3. the csrftoken cookie, which normally yields nothing because
+            CSRF_COOKIE_HTTPONLY is on and JavaScript cannot read it. It stays
+            last so this keeps working if that setting is ever relaxed.
+
+       Returning "" rather than null keeps the type stable for callers. */
     getCsrfToken: function () {
       const csrfInput = document.querySelector(
         'input[name="csrfmiddlewaretoken"]',
       );
-      return csrfInput ? csrfInput.value : ApplyBaMa.getCookie("csrftoken");
+      return (
+        (csrfInput && csrfInput.value) ||
+        window.CSRF_TOKEN ||
+        ApplyBaMa.getCookie("csrftoken") ||
+        ""
+      );
     },
   };
 

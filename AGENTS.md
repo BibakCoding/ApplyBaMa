@@ -411,11 +411,18 @@ Rules:
 
 ### CSRF
 
-The global base template exposes the CSRF token to JavaScript.
+The global base template exposes the CSRF token to JavaScript, and
+`window.ApplyBaMa.getCsrfToken()` is the one way to read it (a form's hidden input, then the
+`csrf-token` meta tag, then the cookie).
 
 All state-changing AJAX requests must follow the project's existing CSRF mechanism.
 
 Do not introduce a second CSRF strategy.
+
+**Never read the `csrftoken` cookie directly.** `CSRF_COOKIE_HTTPONLY = True` in the dev settings,
+so JavaScript cannot see it — only the meta tag and form inputs carry the token. A cookie-based
+read returns null and turns every AJAX POST on a form-less page (an anonymous visitor on a
+marketing page, say) into a silent 403.
 
 ### Notifications
 
