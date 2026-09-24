@@ -807,3 +807,40 @@
 
 [dir="ltr"] .pwd-toggle-dash { right: 0.75rem; left: auto; }
 [dir="rtl"] .pwd-toggle-dash { left: 0.75rem; right: auto; }
+
+/* ==========================================================================
+   List-page sort select (Programs / Universities)
+   The select keeps the shared filter styling from the template; this only
+   adds the custom chevron (the native one is removed by appearance-none)
+   and flips the leading icon and padding in RTL.
+   ========================================================================== */
+.sort-select {
+    /* appearance is set here rather than relying on the appearance-none
+       utility: the utility and this rule have equal specificity, and whichever
+       loads last would otherwise decide whether the native chevron shows. */
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    padding-right: 2rem;
+}
+
+.sort-select-wrap {
+    position: relative;
+}
+
+.sort-select-wrap .sort-icon {
+    left: 0.875rem;
+}
+
+[dir="rtl"] .sort-select-wrap .sort-icon {
+    left: auto;
+    right: 0.875rem;
+}
+
+[dir="rtl"] .sort-select-wrap .sort-select {
+    padding-left: 2rem;
+    padding-right: 0;
+    background-position: left 0.75rem center;
+}

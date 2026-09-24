@@ -13,6 +13,17 @@ from django.utils import timezone
 import secrets
 import string
 from urllib.parse import parse_qs, unquote, urlencode
+from decimal import Decimal
+
+from django.db.models import (
+    Case,
+    DecimalField,
+    F,
+    IntegerField,
+    Value,
+    When,
+)
+from django.db.models.functions import Coalesce, Greatest
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django_ratelimit.decorators import ratelimit
@@ -153,12 +164,13 @@ def dashboard_content(request, page):
 
         if sort == "name_desc":
             qs = qs.order_by("-name")
-        elif sort == "university_asc":
-            qs = qs.order_by("university__name")
-        elif sort == "fee_asc":
-            qs = qs.order_by("prep_school_fee", "cash_fees")
-        elif sort == "fee_desc":
-            qs = qs.order_by("-prep_school_fee", "-cash_fees")
+        elif sort == "country_asc":
+            qs = qs.order_by("country__name", "name")
+        elif sort == "founded_asc":
+            # founded_in is nullable: nulls last so "unknown" never leads the list
+            qs = qs.order_by(F("founded_in").asc(nulls_last=True), "name")
+        elif sort == "founded_desc":
+            qs = qs.order_by(F("founded_in").desc(nulls_last=True), "name")
         else:
             qs = qs.order_by("name")
 
@@ -235,11 +247,46 @@ def dashboard_content(request, page):
         if sort == "name_desc":
             qs = qs.order_by("-name")
         elif sort == "university_asc":
-            qs = qs.order_by("university__name")
-        elif sort == "fee_asc":
-            qs = qs.order_by("cash_fees")
-        elif sort == "fee_desc":
-            qs = qs.order_by("-cash_fees")
+            qs = qs.order_by("university__name", "name")
+        elif sort in ("fee_asc", "fee_desc"):
+            # The cards display display_price -- the offer when one applies, the
+            # highest fee otherwise -- so "Fee" must rank by that same value.
+            # Ordering by cash_fees alone put a discounted program in the wrong
+            # place and ignored every other fee field.
+            zero = Value(
+                Decimal("0"),
+                output_field=DecimalField(max_digits=12, decimal_places=2),
+            )
+            qs = qs.annotate(
+                original_fee=Greatest(
+                    Coalesce(F("prep_school_fee"), zero),
+                    Coalesce(F("cash_fees"), zero),
+                    Coalesce(F("deposit_fee"), zero),
+                    Coalesce(F("semester_fee"), zero),
+                )
+            ).annotate(
+                display_fee=Case(
+                    When(
+                        offer__gt=0,
+                        original_fee__gt=F("offer"),
+                        then=F("offer"),
+                    ),
+                    default=F("original_fee"),
+                    output_field=DecimalField(max_digits=12, decimal_places=2),
+                ),
+            )
+            if sort == "fee_asc":
+                # "Contact for Fee" (0) is not a price: real fees lead, cheapest
+                # first, and unknown-fee programs close the list instead of it.
+                qs = qs.annotate(
+                    fee_rank=Case(
+                        When(display_fee__gt=0, then=Value(0)),
+                        default=Value(1),
+                        output_field=IntegerField(),
+                    )
+                ).order_by("fee_rank", "display_fee", "name")
+            else:
+                qs = qs.order_by("-display_fee", "name")
         else:
             qs = qs.order_by("name")
 

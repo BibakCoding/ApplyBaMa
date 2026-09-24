@@ -67,39 +67,46 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div>
-                    <select name="sort"
-                            class="filter-select ab-input w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800">
-                        <option value="">{% trans "Sort By" %}</option>
+            </div>
+            <!-- Toolbar: sorting sits on its own row, opposite the actions,
+                 instead of pretending to be one of the data filters above. -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-gray-100">
+                <div class="sort-select-wrap">
+                    <label for="uniSort" class="sr-only">{% trans "Sort by" %}</label>
+                    <i class="sort-icon fas fa-sort pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
+                       aria-hidden="true"></i>
+                    <select id="uniSort"
+                            name="sort"
+                            class="sort-select filter-auto-submit filter-select ab-input w-52 pl-10 pr-8 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ab-primary)] bg-white h-[46px] text-gray-800 appearance-none">
+                        <option value="" {% if not filters.sort %}selected{% endif %}>{% trans "Sort: Name (A-Z)" %}</option>
                         <option value="name_desc"
                                 {% if filters.sort == "name_desc" %}selected{% endif %}>
-                            {% trans "Name (Z-A)" %}
+                            {% trans "Sort: Name (Z-A)" %}
                         </option>
                         <option value="country_asc"
                                 {% if filters.sort == "country_asc" %}selected{% endif %}>
-                            {% trans "Country (A-Z)" %}
+                            {% trans "Sort: Country (A-Z)" %}
                         </option>
                         <option value="founded_asc"
                                 {% if filters.sort == "founded_asc" %}selected{% endif %}>
-                            {% trans "Founded (Oldest)" %}
+                            {% trans "Sort: Founded (Oldest First)" %}
                         </option>
                         <option value="founded_desc"
                                 {% if filters.sort == "founded_desc" %}selected{% endif %}>
-                            {% trans "Founded (Newest)" %}
+                            {% trans "Sort: Founded (Newest First)" %}
                         </option>
                     </select>
                 </div>
-            </div>
-            <!-- Buttons Row -->
-            <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="submit"
-                        class="bg-[var(--ab-primary)] text-white py-2.5 px-6 rounded-lg hover:opacity-90 transition font-medium shadow-sm flex items-center justify-center">
-                    <i class="fas fa-search mr-2"></i> {% trans "Search" %}
-                </button>
-                <a href="{% url 'export_universities_pdf' %}?{{ request.GET.urlencode }}"
-                   class="bg-gradient-to-r from-slate-700 to-slate-900 !text-white py-2.5 px-5 rounded-lg hover:shadow-lg hover:from-slate-800 hover:to-black transition-all font-medium flex items-center justify-center whitespace-nowrap">
-                    <i class="fas fa-file-pdf mr-2"></i> {% trans "Export PDF" %}
-                </a>
+                <div class="flex items-center gap-3">
+                    <button type="submit"
+                            class="bg-[var(--ab-primary)] text-white py-2.5 px-6 rounded-lg hover:opacity-90 transition font-medium shadow-sm flex items-center justify-center">
+                        <i class="fas fa-search mr-2"></i> {% trans "Search" %}
+                    </button>
+                    <a href="{% url 'export_universities_pdf' %}?{{ request.GET.urlencode }}"
+                       class="bg-gradient-to-r from-slate-700 to-slate-900 !text-white py-2.5 px-5 rounded-lg hover:shadow-lg hover:from-slate-800 hover:to-black transition-all font-medium flex items-center justify-center whitespace-nowrap">
+                        <i class="fas fa-file-pdf mr-2"></i> {% trans "Export PDF" %}
+                    </a>
+                </div>
             </div>
         </form>
     </div>

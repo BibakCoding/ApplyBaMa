@@ -30,7 +30,18 @@
         <script src="{% static 'vendor/notyf/notyf.min.js' %}" defer></script>
     </head>
     <body class="bg-gray-50"
-          data-i18n-unexpected-error="{% trans 'An unexpected error occurred.' %}">
+          data-i18n-unexpected-error="{% trans 'An unexpected error occurred.' %}"
+          {# Sort labels for the list pages' selects; carried here because files
+             under static/ are never rendered as templates. #}
+          data-i18n-sort-placeholder="{% trans 'Sort By' %}"
+          data-i18n-sort-name-asc="{% trans 'Sort: Name (A-Z)' %}"
+          data-i18n-sort-name-desc="{% trans 'Sort: Name (Z-A)' %}"
+          data-i18n-sort-university-asc="{% trans 'Sort: University (A-Z)' %}"
+          data-i18n-sort-country-asc="{% trans 'Sort: Country (A-Z)' %}"
+          data-i18n-sort-fee-asc="{% trans 'Sort: Fee (Low to High)' %}"
+          data-i18n-sort-fee-desc="{% trans 'Sort: Fee (High to Low)' %}"
+          data-i18n-sort-founded-asc="{% trans 'Sort: Founded (Oldest First)' %}"
+          data-i18n-sort-founded-desc="{% trans 'Sort: Founded (Newest First)' %}">
         <div id="ab-scroll-progress"></div>
 
         {% comment %}

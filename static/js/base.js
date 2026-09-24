@@ -46,6 +46,25 @@
     unexpectedError:
       document.body.dataset.i18nUnexpectedError ||
       "An unexpected error occurred.",
+    /* Sort labels, re-applied to the list pages' selects after each fragment
+       injection. Options are re-keyed server-side on change, so the visible
+       text has to keep matching the translated set rendered into base.html. */
+    sortLabels: {
+      "": document.body.dataset.i18nSortPlaceholder || "Sort By",
+      name_asc: document.body.dataset.i18nSortNameAsc || "Sort: Name (A-Z)",
+      name_desc: document.body.dataset.i18nSortNameDesc || "Sort: Name (Z-A)",
+      university_asc:
+        document.body.dataset.i18nSortUniversityAsc || "Sort: University (A-Z)",
+      country_asc:
+        document.body.dataset.i18nSortCountryAsc || "Sort: Country (A-Z)",
+      fee_asc: document.body.dataset.i18nSortFeeAsc || "Sort: Fee (Low to High)",
+      fee_desc:
+        document.body.dataset.i18nSortFeeDesc || "Sort: Fee (High to Low)",
+      founded_asc:
+        document.body.dataset.i18nSortFoundedAsc || "Sort: Founded (Oldest First)",
+      founded_desc:
+        document.body.dataset.i18nSortFoundedDesc || "Sort: Founded (Newest First)",
+    },
   };
 
   const ApplyBaMa = {

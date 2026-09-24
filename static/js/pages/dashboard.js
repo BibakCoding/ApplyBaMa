@@ -165,6 +165,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  // Sort selects carry .filter-auto-submit and apply on change: sorting is a
+  // view concern, not a filter that needs a second click to confirm. Delegated
+  // like the submit listener above, so it keeps working on freshly injected
+  // fragments.
+  contentContainer.addEventListener("change", function (e) {
+    const select = e.target.closest("select.filter-auto-submit");
+    if (!select) return;
+    applySortLabel(select);
+    const form = select.closest("form");
+    if (!form) return;
+    if (form.id === "uniFilterForm" || form.id === "progFilterForm") {
+      handleFilterSubmit(form);
+    }
+  });
+
   // Global event delegation for dynamic click actions (password toggles, apply buttons, etc.)
   contentContainer.addEventListener("click", function (e) {
     if (
@@ -914,6 +929,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const params = new URLSearchParams(formData).toString();
     const page = form.id === "uniFilterForm" ? "universities" : "programs";
     loadContent(page, params);
+  }
+
+  // The server renders option labels for the active language; when a sort
+  // changes without a submit, its new label must still come from the same
+  // translated set, so it is applied from window.I18N instead of being read
+  // back out of the old DOM.
+  function applySortLabel(select) {
+    const labels = window.I18N && window.I18N.sortLabels;
+    if (!labels) return;
+    const value = select.value || "";
+    if (labels[value]) {
+      const option = select.selectedOptions[0];
+      if (option) option.textContent = labels[value];
+    }
   }
 
   // General purpose handler for complex dashboard forms (creation, deletion, step updates)
