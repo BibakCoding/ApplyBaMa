@@ -196,11 +196,33 @@
     });
   }
 
+  /* ---------- Hero Image Fallback ---------- */
+  function initHeroFallback() {
+    const heroImg = document.querySelector(".home-hero-bg[data-fallback-src]");
+    if (!heroImg) return;
+
+    const fallbackSrc = heroImg.getAttribute("data-fallback-src");
+
+    const applyFallback = () => {
+      // Remove first so the fallback's own error can never loop.
+      heroImg.removeAttribute("data-fallback-src");
+      heroImg.src = fallbackSrc;
+    };
+
+    heroImg.addEventListener("error", applyFallback);
+
+    // This deferred script can run after the image already failed.
+    if (heroImg.complete && heroImg.naturalWidth === 0) {
+      applyFallback();
+    }
+  }
+
   /* ---------- Initialize Everything on Page Load ---------- */
   window.ApplyBaMa.ready(() => {
     initScrollAnimations();
     initCounters();
     initSearch();
     initNewsletter();
+    initHeroFallback();
   });
 })();

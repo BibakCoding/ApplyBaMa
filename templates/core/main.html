@@ -72,14 +72,15 @@
     <section class="ab-hero home-hero">
         <div class="home-hero-bg-wrapper">
             {% if settings and settings.hero_background_image %}
-                <!-- Added onerror fallback to fix the 404 issue from the database default -->
+                <!-- The database value can point at a missing file; home.js
+                     (initHeroFallback) swaps in data-fallback-src on error. -->
                 <img src="{{ settings.hero_background_image.url }}"
                      alt=""
                      class="home-hero-bg"
                      width="1600"
                      height="1000"
                      loading="eager"
-                     onerror="this.onerror=null; this.src='{% static 'images/home/hero.jpg' %}';">
+                     data-fallback-src="{% static 'images/home/hero.jpg' %}">
             {% else %}
                 <img src="{% static 'images/home/hero.jpg' %}"
                      alt=""
