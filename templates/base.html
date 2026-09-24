@@ -78,7 +78,11 @@
     <script src="{% static 'js/notify.js' %}" defer></script>
     <script src="{% static 'js/app-config.js' %}" defer></script>
     <script src="{% static 'js/base.js' %}" defer></script>
-    <script src="{% static 'js/jwt-auth.js' %}" defer></script>
+    {% comment %}
+    jwt-auth.js is NOT global: only the login flow stores tokens (login.js)
+    and the dashboard is the SPA surface where they may be consumed. Pages
+    that need it add it in their own js block after block.super.
+    {% endcomment %}
 {% endblock %}
     </body>
 </html>

@@ -177,6 +177,7 @@
     core.context_processors.app_config and published by app-config.js from the
     data block in base.html, so the URL list is not duplicated per page.
     {% endcomment %}
+    <script src="{% static 'js/jwt-auth.js' %}" defer></script>
     <script src="{% static 'js/pages/dashboard.js' %}" defer></script>
     <script src="{% static 'vendor/intl-tel-input/js/intlTelInput.min.js' %}" defer></script>
 {% endblock %}

@@ -95,5 +95,6 @@
 
 {% block js %}
     {{ block.super }}
+    <script src="{% static 'js/jwt-auth.js' %}" defer></script>
     <script src="{% static 'js/pages/login.js' %}" defer></script>
 {% endblock %}
