@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 00:49+0330\n"
+"POT-Creation-Date: 2026-09-25 01:24+0330\n"
 "PO-Revision-Date: 2026-08-27 03:43+0000\n"
 "Last-Translator:   <a@g.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,8 +173,8 @@ msgid "Password Reset"
 msgstr "بازیابی رمز عبور"
 
 #: .\authentication\views.py:92 .\authentication\views.py:149
-#: .\authentication\views.py:211 .\authentication\views.py:273
-#: .\authentication\views.py:305 .\authentication\views.py:344
+#: .\authentication\views.py:218 .\authentication\views.py:280
+#: .\authentication\views.py:317 .\authentication\views.py:358
 msgid "You are already logged in."
 msgstr "شما قبلاً وارد شده‌اید."
 
@@ -186,71 +186,70 @@ msgstr "با موفقیت وارد شدید."
 msgid "Your Confirmation Code"
 msgstr "کد تأیید شما"
 
-#: .\authentication\views.py:176
+#: .\authentication\views.py:183
 msgid "We sent you an email that includes verification code."
 msgstr "ایمیلی شامل کد تأیید برای شما ارسال کردیم."
 
-#: .\authentication\views.py:206
+#: .\authentication\views.py:213
 msgid "You have logged out."
 msgstr "شما از حساب کاربری خود خارج شدید."
 
-#: .\authentication\views.py:220
+#: .\authentication\views.py:227
 msgid "This confirmation page is no longer valid."
 msgstr "این صفحه تأیید دیگر معتبر نیست."
 
-#: .\authentication\views.py:234
+#: .\authentication\views.py:241
 msgid "Your code has expired."
 msgstr "کد شما منقضی شده است."
 
-#: .\authentication\views.py:236
+#: .\authentication\views.py:243
 msgid "Invalid confirmation code."
 msgstr "کد تأیید نامعتبر است."
 
-#: .\authentication\views.py:247
+#: .\authentication\views.py:254
 msgid "Account confirmed!"
 msgstr "حساب کاربری تأیید شد!"
 
-#: .\authentication\views.py:278
+#: .\authentication\views.py:285
 msgid "User not found or already active."
 msgstr "کاربر یافت نشد یا قبلاً فعال شده است."
 
-#: .\authentication\views.py:290
+#: .\authentication\views.py:297
 msgid "Your new Confirmation Code"
 msgstr "کد تأیید جدید شما"
 
-#: .\authentication\views.py:295
+#: .\authentication\views.py:307
 msgid "A fresh confirmation code has been sent."
 msgstr "یک کد تأیید جدید ارسال شد."
 
-#: .\authentication\views.py:318 .\templates\emails\reset_password.html:8
-#: .\templates\emails\reset_password.html:62
+#: .\authentication\views.py:330
 msgid "Reset Your Password"
 msgstr "بازیابی رمز عبور"
 
-#: .\authentication\views.py:327
+#: .\authentication\views.py:341
 msgid "If that email is registered, you’ll receive reset instructions."
 msgstr "اگر آن ایمیل ثبت شده باشد، دستورالعمل‌های بازیابی را دریافت خواهید کرد."
 
-#: .\authentication\views.py:355
+#: .\authentication\views.py:369
 msgid "Invalid or expired reset link."
 msgstr "لینک بازیابی نامعتبر یا منقضی شده است."
 
-#: .\authentication\views.py:368
+#: .\authentication\views.py:382
 msgid "Invalid verification code."
 msgstr "کد تأیید نامعتبر است."
 
-#: .\authentication\views.py:375
+#: .\authentication\views.py:389
 msgid "Password updated successfully."
 msgstr "رمز عبور با موفقیت به‌روزرسانی شد."
 
-#: .\authentication\views.py:410 .\dashboard\forms.py:69
+#: .\authentication\views.py:424 .\dashboard\forms.py:69
 #: .\dashboard\forms.py:86 .\dashboard\forms.py:256
 #, fuzzy
 #| msgid "Username is already taken."
 msgid "This username is already taken."
 msgstr "این نام کاربری قبلاً گرفته شده است."
 
-#: .\authentication\views.py:417 .\dashboard\views.py:469
+#: .\authentication\views.py:431 .\dashboard\views.py:469
 #, fuzzy
 #| msgid "Password updated successfully."
 msgid "Username updated successfully."
@@ -518,12 +517,12 @@ msgid "Associate & Bachelor"
 msgstr "کاردانی و کارشناسی"
 
 #: .\core\models.py:614 .\core\templatetags\custom_filters.py:50
-#: .\templates\core\main.html:117
+#: .\templates\core\main.html:118
 msgid "Master"
 msgstr "کارشناسی ارشد"
 
 #: .\core\models.py:615 .\core\templatetags\custom_filters.py:51
-#: .\templates\core\main.html:118
+#: .\templates\core\main.html:119
 msgid "PhD"
 msgstr "دکتری"
 
@@ -667,7 +666,11 @@ msgid ""
 "dream university and program. Explore our dashboard to search universities, "
 "browse programs, and start your application. If you need any assistance, "
 "feel free to contact our support team."
-msgstr "از ثبت‌نام شما در ApplyBaMa سپاسگزاریم! ما اینجاییم تا کمک کنیم دانشگاه و رشتهٔ مورد نظرتان را پیدا کنید. در داشبورد می‌توانید دانشگاه‌ها را جست‌وجو کنید، رشته‌ها را مرور کنید و درخواست خود را شروع کنید. اگر به کمکی نیاز داشتید، با تیم پشتیبانی ما تماس بگیرید."
+msgstr ""
+"از ثبت‌نام شما در ApplyBaMa سپاسگزاریم! ما اینجاییم تا کمک کنیم دانشگاه و "
+"رشتهٔ مورد نظرتان را پیدا کنید. در داشبورد می‌توانید دانشگاه‌ها را جست‌وجو کنید، "
+"رشته‌ها را مرور کنید و درخواست خود را شروع کنید. اگر به کمکی نیاز داشتید، با "
+"تیم پشتیبانی ما تماس بگیرید."
 
 #: .\dashboard\forms.py:33 .\dashboard\forms.py:212
 #: .\templates\dashboard\fragments\my_students.html:67
@@ -800,7 +803,8 @@ msgstr "درخواست نامعتبر است."
 msgid ""
 "You have reached the maximum number of students (100). Please contact "
 "support."
-msgstr "به حداکثر تعداد دانشجویان (۱۰۰) رسیده‌اید. لطفاً با پشتیبانی تماس بگیرید."
+msgstr ""
+"به حداکثر تعداد دانشجویان (۱۰۰) رسیده‌اید. لطفاً با پشتیبانی تماس بگیرید."
 
 #: .\dashboard\views.py:601
 msgid "Student added successfully."
@@ -1119,9 +1123,9 @@ msgid "Countries"
 msgstr "کشورها"
 
 #: .\templates\authentication\login.html:34
-#: .\templates\emails\reset_password.html:69
+#: .\templates\emails\base_email.html:66
 msgid "All rights reserved."
-msgstr "تمامی حقوق محفوظ است."
+msgstr "همه حقوق محفوظ است."
 
 #: .\templates\authentication\login.html:50
 msgid "Welcome Back"
@@ -1165,7 +1169,7 @@ msgstr ""
 "پروفایل خود را در چند ثانیه ایجاد کنید. بورس‌های تحصیلی را کشف کنید، مدارک "
 "خود را مدیریت کنید و در دانشگاه‌های برتر پذیرش بگیرید."
 
-#: .\templates\authentication\register.html:26 .\templates\core\main.html:188
+#: .\templates\authentication\register.html:26 .\templates\core\main.html:189
 msgid "Certified Agents"
 msgstr "نمایندگان معتبر"
 
@@ -1199,7 +1203,9 @@ msgstr "نام کاربری"
 msgid ""
 "Your account is verified! Would you like to customize your username before "
 "jumping into your dashboard?"
-msgstr "حساب شما تأیید شد! آیا مایلید پیش از ورود به داشبورد، نام کاربری خود را شخصی‌سازی کنید؟"
+msgstr ""
+"حساب شما تأیید شد! آیا مایلید پیش از ورود به داشبورد، نام کاربری خود را "
+"شخصی‌سازی کنید؟"
 
 #: .\templates\authentication\username_selection.html:25
 msgid "Personalized"
@@ -1218,7 +1224,9 @@ msgstr "ایمیل یا نام کاربری"
 #: .\templates\authentication\username_selection.html:47
 msgid ""
 "This is how you'll be known on Apply BM. You can also keep your default one."
-msgstr "این نامی است که شما با آن در Apply BM شناخته می‌شوید. همچنین می‌توانید نام پیش‌فرض خود را نگه دارید."
+msgstr ""
+"این نامی است که شما با آن در Apply BM شناخته می‌شوید. همچنین می‌توانید نام "
+"پیش‌فرض خود را نگه دارید."
 
 #: .\templates\authentication\username_selection.html:59
 #, fuzzy
@@ -1242,43 +1250,43 @@ msgstr "ثبت‌نام بورس تحصیلی"
 msgid "An unexpected error occurred."
 msgstr "خطای غیرمنتظره‌ای رخ داد."
 
-#: .\templates\base.html:37
+#: .\templates\base.html:36
 msgid "Sort By"
 msgstr "مرتب‌سازی بر اساس"
 
-#: .\templates\base.html:38 .\templates\dashboard\fragments\programs.html:111
+#: .\templates\base.html:37 .\templates\dashboard\fragments\programs.html:111
 #: .\templates\dashboard\fragments\universities.html:81
 msgid "Sort: Name (A-Z)"
 msgstr "ترتیب: نام (الف-ی)"
 
-#: .\templates\base.html:39 .\templates\dashboard\fragments\programs.html:114
+#: .\templates\base.html:38 .\templates\dashboard\fragments\programs.html:114
 #: .\templates\dashboard\fragments\universities.html:84
 msgid "Sort: Name (Z-A)"
 msgstr "ترتیب: نام (ی-الف)"
 
-#: .\templates\base.html:40 .\templates\dashboard\fragments\programs.html:118
+#: .\templates\base.html:39 .\templates\dashboard\fragments\programs.html:118
 msgid "Sort: University (A-Z)"
 msgstr "ترتیب: دانشگاه (الف-ی)"
 
-#: .\templates\base.html:41
+#: .\templates\base.html:40
 #: .\templates\dashboard\fragments\universities.html:88
 msgid "Sort: Country (A-Z)"
 msgstr "ترتیب: کشور (الف-ی)"
 
-#: .\templates\base.html:42 .\templates\dashboard\fragments\programs.html:120
+#: .\templates\base.html:41 .\templates\dashboard\fragments\programs.html:120
 msgid "Sort: Fee (Low to High)"
 msgstr "ترتیب: شهریه (کم به زیاد)"
 
-#: .\templates\base.html:43 .\templates\dashboard\fragments\programs.html:123
+#: .\templates\base.html:42 .\templates\dashboard\fragments\programs.html:123
 msgid "Sort: Fee (High to Low)"
 msgstr "ترتیب: شهریه (زیاد به کم)"
 
-#: .\templates\base.html:44
+#: .\templates\base.html:43
 #: .\templates\dashboard\fragments\universities.html:92
 msgid "Sort: Founded (Oldest First)"
 msgstr "ترتیب: سال تأسیس (قدیمی‌ترین)"
 
-#: .\templates\base.html:45
+#: .\templates\base.html:44
 #: .\templates\dashboard\fragments\universities.html:96
 msgid "Sort: Founded (Newest First)"
 msgstr "ترتیب: سال تأسیس (جدیدترین)"
@@ -1321,67 +1329,67 @@ msgstr "شروع کنید"
 msgid "Menu"
 msgstr "منو"
 
-#: .\templates\core\main.html:95
+#: .\templates\core\main.html:96
 msgid "Trusted by 1000+ students worldwide"
 msgstr "مورد اعتماد بیش از ۱۰۰۰ دانشجو در سراسر جهان"
 
-#: .\templates\core\main.html:97
+#: .\templates\core\main.html:98
 msgid "Unlock Your Fully Funded Future."
 msgstr "آینده کاملاً تأمین‌شده خود را کشف کنید."
 
-#: .\templates\core\main.html:99
+#: .\templates\core\main.html:100
 msgid "Your trusted bridge to education abroad."
 msgstr "پل مطمئن شما به سوی آموزش در خارج از کشور."
 
-#: .\templates\core\main.html:104 .\templates\core\main.html:105
+#: .\templates\core\main.html:105 .\templates\core\main.html:106
 msgid "Destination Country"
 msgstr "کشور مقصد"
 
-#: .\templates\core\main.html:106
+#: .\templates\core\main.html:107
 msgid "Turkey"
 msgstr "ترکیه"
 
-#: .\templates\core\main.html:107
+#: .\templates\core\main.html:108
 msgid "Germany"
 msgstr "آلمان"
 
-#: .\templates\core\main.html:108
+#: .\templates\core\main.html:109
 msgid "Georgia"
 msgstr "گرجستان"
 
-#: .\templates\core\main.html:109
+#: .\templates\core\main.html:110
 msgid "Northern Cyprus"
 msgstr "قبرس شمالی"
 
-#: .\templates\core\main.html:113 .\templates\core\main.html:114
+#: .\templates\core\main.html:114 .\templates\core\main.html:115
 msgid "Degree Level"
 msgstr "مقطع تحصیلی"
 
-#: .\templates\core\main.html:115
+#: .\templates\core\main.html:116
 msgid "Associate"
 msgstr "کاردانی"
 
-#: .\templates\core\main.html:116
+#: .\templates\core\main.html:117
 msgid "Bachelor"
 msgstr "کارشناسی"
 
-#: .\templates\core\main.html:121
+#: .\templates\core\main.html:122
 msgid "Search Programs"
 msgstr "جستجوی برنامه‌ها"
 
-#: .\templates\core\main.html:128
+#: .\templates\core\main.html:129
 msgid "Scroll down"
 msgstr "پایین بروید"
 
-#: .\templates\core\main.html:136
+#: .\templates\core\main.html:137
 msgid "Our students study at"
 msgstr "دانشجویان ما در این دانشگاه‌ها تحصیل می‌کنند"
 
-#: .\templates\core\main.html:158
+#: .\templates\core\main.html:159
 msgid "Why Students Choose Apply BM"
 msgstr "چرا دانشجویان Apply BM را انتخاب می‌کنند"
 
-#: .\templates\core\main.html:160
+#: .\templates\core\main.html:161
 msgid ""
 "More than a platform — a personal team that walks with you from first "
 "message to first day of class."
@@ -1389,26 +1397,26 @@ msgstr ""
 "بیشتر از یک پلتفرم — یک تیم شخصی که از اولین پیام تا اولین روز کلاس در کنار "
 "شماست."
 
-#: .\templates\core\main.html:167
+#: .\templates\core\main.html:168
 msgid "Our consultant guiding a student"
 msgstr "مشاور ما در حال راهنمایی یک دانشجو"
 
-#: .\templates\core\main.html:172
+#: .\templates\core\main.html:173
 msgid "3+ Years of Trust"
 msgstr "بیش از ۳ سال اعتماد"
 
-#: .\templates\core\main.html:181
+#: .\templates\core\main.html:182
 msgid "Verified Programs"
 msgstr "برنامه‌های تأییدشده"
 
-#: .\templates\core\main.html:182
+#: .\templates\core\main.html:183
 msgid ""
 "Every university, program and deadline is manually verified by our academic "
 "team."
 msgstr ""
 "هر دانشگاه، برنامه و مهلت زمانی به‌صورت دستی توسط تیم آکادمیک ما تأیید می‌شود."
 
-#: .\templates\core\main.html:189
+#: .\templates\core\main.html:190
 msgid ""
 "Vetted representatives and company managers handle your file from start to "
 "finish."
@@ -1416,11 +1424,11 @@ msgstr ""
 "نمایندگان و مدیران شرکت‌های بررسی‌شده، پرونده شما را از ابتدا تا انتها مدیریت "
 "می‌کنند."
 
-#: .\templates\core\main.html:195
+#: .\templates\core\main.html:196
 msgid "WhatsApp Guidance"
 msgstr "راهنمایی از طریق واتس‌اپ"
 
-#: .\templates\core\main.html:196
+#: .\templates\core\main.html:197
 msgid ""
 "One tap opens a ready-made WhatsApp message to our manager — no waiting, no "
 "confusion."
@@ -1428,57 +1436,57 @@ msgstr ""
 "با یک ضربه، یک پیام واتس‌اپ آماده به مدیر ما باز می‌شود — بدون انتظار، بدون "
 "سردرگمی."
 
-#: .\templates\core\main.html:202
+#: .\templates\core\main.html:203
 msgid "One Dashboard"
 msgstr "یک داشبورد"
 
-#: .\templates\core\main.html:203
+#: .\templates\core\main.html:204
 msgid ""
 "Documents, application steps and your acceptance letter — tracked in one "
 "place."
 msgstr "مدارک، مراحل درخواست و نامه پذیرش شما — همه در یک مکان پیگیری می‌شوند."
 
-#: .\templates\core\main.html:214
+#: .\templates\core\main.html:215
 msgid "Your Journey to Acceptance"
 msgstr "سفر شما به سوی پذیرش"
 
-#: .\templates\core\main.html:215
+#: .\templates\core\main.html:216
 msgid "Hover over the steps to see how we guide you."
 msgstr "برای دیدن نحوه راهنمایی ما، ماوس را روی مراحل نگه دارید."
 
-#: .\templates\core\main.html:244
+#: .\templates\core\main.html:245
 msgid "Prepare Your Documents"
 msgstr "مدارک خود را آماده کنید"
 
-#: .\templates\core\main.html:245
+#: .\templates\core\main.html:246
 msgid "Know exactly what you need before you start — no surprises."
 msgstr "دقیقاً بدانید قبل از شروع به چه چیزی نیاز دارید — بدون غافلگیری."
 
-#: .\templates\core\main.html:281
+#: .\templates\core\main.html:282
 msgid "Real Students. Real Acceptances."
 msgstr "دانشجویان واقعی. پذیرش‌های واقعی."
 
-#: .\templates\core\main.html:282
+#: .\templates\core\main.html:283
 msgid "Watch their own words on our Instagram — unedited and honest."
 msgstr "سخنان خودشان را در اینستاگرام ما ببینید — بدون ویرایش و صادقانه."
 
-#: .\templates\core\main.html:310
+#: .\templates\core\main.html:311
 msgid "Watch Story"
 msgstr "تماشای استوری"
 
-#: .\templates\core\main.html:321
+#: .\templates\core\main.html:322
 msgid "See More Stories on Instagram"
 msgstr "مشاهده داستان‌های بیشتر در اینستاگرام"
 
-#: .\templates\core\main.html:331
+#: .\templates\core\main.html:332
 msgid "Still have questions?"
 msgstr "هنوز سوالی دارید؟"
 
-#: .\templates\core\main.html:332
+#: .\templates\core\main.html:333
 msgid "Our managers reply within minutes on WhatsApp — in your language."
 msgstr "مدیران ما در عرض چند دقیقه در واتس‌اپ پاسخ می‌دهند — به زبان شما."
 
-#: .\templates\core\main.html:338
+#: .\templates\core\main.html:339
 msgid "Chat on WhatsApp"
 msgstr "گفتگو در واتس‌اپ"
 
@@ -2165,51 +2173,127 @@ msgstr "پنل مدیریت"
 msgid "Loading..."
 msgstr "در حال بارگذاری..."
 
-#: .\templates\emails\reset_password.html:53
-msgid "You recently requested to reset your password for your"
-msgstr "شما اخیراً درخواست بازیابی رمز عبور برای"
+#: .\templates\emails\confirmation_code.html:4
+#: .\templates\emails\confirmation_code.html:10
+msgid "Confirm your email address"
+msgstr "آدرس ایمیل خود را تأیید کنید"
 
-#: .\templates\emails\reset_password.html:55
-msgid "account."
-msgstr "حساب کاربری خود را داده‌اید."
+#: .\templates\emails\confirmation_code.html:6
+msgid "Your confirmation code is inside. It expires in 15 minutes."
+msgstr "کد تأیید شما در این ایمیل است و ۱۵ دقیقه اعتبار دارد."
 
+#: .\templates\emails\confirmation_code.html:13
+#: .\templates\emails\reset_password.html:13
+msgid "Hello,"
+msgstr "سلام،"
+
+#: .\templates\emails\confirmation_code.html:16
+#, python-format
+msgid ""
+"Thanks for signing up for %(site_name)s. Enter the code below to confirm "
+"your email address and finish creating your account."
+msgstr "از ثبت‌نام شما در %(site_name)s سپاسگزاریم. برای تأیید آدرس ایمیل و تکمیل ساخت حساب، کد زیر را وارد کنید."
+
+#: .\templates\emails\confirmation_code.html:20
+msgid "Your confirmation code"
+msgstr "کد تأیید شما"
+
+#: .\templates\emails\confirmation_code.html:29
+msgid "This code is valid for 15 minutes."
+msgstr "این کد ۱۵ دقیقه اعتبار دارد."
+
+#: .\templates\emails\confirmation_code.html:34
+msgid ""
+"If you didn't create an account, you can safely ignore this email — no "
+"account will be activated."
+msgstr "اگر حسابی نساخته‌اید، می‌توانید این ایمیل را نادیده بگیرید؛ هیچ حسابی فعال نخواهد شد."
+
+#: .\templates\emails\confirmation_code.html:38
+msgid "Welcome aboard,"
+msgstr "خوش آمدید،"
+
+#: .\templates\emails\confirmation_code.html:40
 #: .\templates\emails\reset_password.html:58
-msgid ""
-"Click the button below and enter the following code to reset your password. "
-"This link and code are valid for 15 minutes."
-msgstr ""
-"روی دکمه زیر کلیک کنید و کد زیر را برای بازیابی رمز عبور خود وارد کنید. این "
-"لینک و کد به مدت ۱۵ دقیقه معتبر هستند."
-
-#: .\templates\emails\reset_password.html:60
-msgid "Verification Code:"
-msgstr "کد تأیید:"
-
-#: .\templates\emails\reset_password.html:64
-msgid ""
-"If the button above does not work, copy and paste the following link into "
-"your browser:"
-msgstr ""
-"اگر دکمه بالا کار نمی‌کند، لینک زیر را کپی کرده و در مرورگر خود جای‌گذاری کنید:"
-
-#: .\templates\emails\reset_password.html:66
-msgid "If you did not request a password reset, please ignore this email."
-msgstr ""
-"اگر درخواست بازیابی رمز عبور نداده‌اید، لطفاً این ایمیل را نادیده بگیرید."
-
-#: .\templates\emails\reset_password.html:67
-msgid "Thank you,"
-msgstr "با تشکر،"
-
-#: .\templates\emails\reset_password.html:67
 msgid "Team"
 msgstr "تیم"
+
+#: .\templates\emails\confirmation_code.html:46
+#, python-format
+msgid ""
+"You received this email because this address was used to sign up for "
+"%(site_name)s."
+msgstr "این ایمیل را دریافت کرده‌اید زیرا این آدرس برای ثبت‌نام در %(site_name)s استفاده شده است."
+
+#: .\templates\emails\reset_password.html:4
+#: .\templates\emails\reset_password.html:10
+msgid "Reset your password"
+msgstr "بازیابی رمز عبور"
+
+#: .\templates\emails\reset_password.html:6
+msgid "Reset your password — the button and code expire in 15 minutes."
+msgstr "رمز عبور خود را بازیابی کنید — دکمه و کد ۱۵ دقیقه اعتبار دارند."
+
+#: .\templates\emails\reset_password.html:16
+#, python-format
+msgid ""
+"We received a request to reset the password for your %(site_name)s account. "
+"Continue below to choose a new password."
+msgstr "درخواستی برای بازیابی رمز عبور حساب %(site_name)s شما دریافت کردیم. برای انتخاب رمز عبور جدید ادامه دهید."
+
+#: .\templates\emails\reset_password.html:24
+msgid "Choose a new password"
+msgstr "انتخاب رمز عبور جدید"
+
+#: .\templates\emails\reset_password.html:31
+msgid "Or enter this code on the reset page"
+msgstr "یا این کد را در صفحه بازیابی وارد کنید"
+
+#: .\templates\emails\reset_password.html:40
+msgid "The button and this code are valid for 15 minutes and can be used once."
+msgstr "دکمه و این کد ۱۵ دقیقه اعتبار دارند و فقط یک‌بار قابل استفاده‌اند."
+
+#: .\templates\emails\reset_password.html:44
+msgid "If the button doesn't work, copy and paste this link into your browser:"
+msgstr "اگر دکمه کار نکرد، این پیوند را در مرورگر خود کپی کنید:"
+
+#: .\templates\emails\reset_password.html:52
+msgid ""
+"If you didn't request a password reset, you can ignore this email — your "
+"password will not change."
+msgstr "اگر درخواست بازیابی رمز عبور نداده‌اید، این ایمیل را نادیده بگیرید — رمز عبور شما تغییر نمی‌کند."
+
+#: .\templates\emails\reset_password.html:56
+msgid "Thank you,"
+msgstr "با سپاس،"
+
+#: .\templates\emails\reset_password.html:64
+#, python-format
+msgid ""
+"You received this email because a password reset was requested for your "
+"%(site_name)s account."
+msgstr "این ایمیل را دریافت کرده‌اید زیرا برای حساب %(site_name)s شما درخواست بازیابی رمز عبور شده است."
 
 #: .\templates\partials\language_switcher.html:6
 #, fuzzy
 #| msgid "Language"
 msgid "Choose language"
 msgstr "زبان"
+
+#~ msgid "You recently requested to reset your password for your"
+#~ msgstr "شما اخیراً درخواست بازیابی رمز عبور برای"
+
+#~ msgid "account."
+#~ msgstr "حساب کاربری خود را داده‌اید."
+
+#~ msgid ""
+#~ "Click the button below and enter the following code to reset your "
+#~ "password. This link and code are valid for 15 minutes."
+#~ msgstr ""
+#~ "روی دکمه زیر کلیک کنید و کد زیر را برای بازیابی رمز عبور خود وارد کنید. "
+#~ "این لینک و کد به مدت ۱۵ دقیقه معتبر هستند."
+
+#~ msgid "Verification Code:"
+#~ msgstr "کد تأیید:"
 
 #~ msgid "Generate"
 #~ msgstr "تولید"

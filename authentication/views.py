@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme, urlencode
-from django.utils.translation import gettext as _
+from django.utils.translation import get_language, gettext as _
 from django_ratelimit.decorators import ratelimit
 
 from .forms import (
@@ -168,7 +168,14 @@ def register_view(request):
             dispatch_email(
                 subject=_("Your Confirmation Code"),
                 template_name="emails/confirmation_code.html",
-                context={"code": vc.code, "site_name": "Apply Ba Ma"},
+                context={
+                    "code": vc.code,
+                    "site_name": "Apply Ba Ma",
+                    # The email renders in a Celery worker where the request
+                    # language is gone, so it travels with the message.
+                    "language": get_language(),
+                    "site_url": request.build_absolute_uri("/"),
+                },
                 to=[email],
             )
 
@@ -289,7 +296,12 @@ def resend_code(request, pk):
     dispatch_email(
         subject=_("Your new Confirmation Code"),
         template_name="emails/confirmation_code.html",
-        context={"code": vc.code, "site_name": "Apply Ba Ma"},
+        context={
+            "code": vc.code,
+            "site_name": "Apply Ba Ma",
+            "language": get_language(),
+            "site_url": request.build_absolute_uri("/"),
+        },
         to=[user.email],
     )
     msg = _("A fresh confirmation code has been sent.")
@@ -321,6 +333,8 @@ def forget_password(request):
                     "site_name": "Apply Ba Ma",
                     "reset_url": reset_url,
                     "code": vc.code,
+                    "language": get_language(),
+                    "site_url": request.build_absolute_uri("/"),
                 },
                 to=[email],
             )

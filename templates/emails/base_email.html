@@ -1,0 +1,78 @@
+{% load i18n %}
+{% get_current_language as EMAIL_LANGUAGE %}
+{% get_current_language_bidi as EMAIL_BIDI %}<!DOCTYPE html>
+<html lang="{{ EMAIL_LANGUAGE }}" dir="{% if EMAIL_BIDI %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+    <meta name="x-apple-disable-message-reformatting">
+    <title>{% block title %}{{ site_name }}{% endblock %}</title>
+    <style>
+        /* Progressive enhancement only: every rule here is duplicated inline,
+           because many mail clients strip this block entirely and inline styles
+           are the only reliable mechanism in email. */
+        body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+        table { border-collapse: collapse !important; }
+        a { text-decoration: underline; }
+        .ab-btn a { text-decoration: none !important; }
+        @media only screen and (max-width: 620px) {
+            .ab-card { width: 100% !important; }
+            .ab-pad { padding-left: 20px !important; padding-right: 20px !important; }
+            .ab-code { font-size: 26px !important; letter-spacing: 4px !important; }
+        }
+    </style>
+</head>
+<body style="margin:0; padding:0; background-color:#F1F5F9;">
+
+    {# Hidden preview text: what inboxes show next to the subject line. #}
+    <div style="display:none; font-size:1px; color:#F1F5F9; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;" aria-hidden="true">{% block preheader %}{% endblock %}</div>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F1F5F9;">
+        <tr>
+            <td align="center" style="padding:24px 12px;">
+
+                <table role="presentation" class="ab-card" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px;">
+
+                    {# Brand header #}
+                    <tr>
+                        <td class="ab-pad" style="background-color:#1E3A8A; padding:22px 28px; border-radius:8px 8px 0 0;">
+                            <span style="font-family:'Playfair Display', Georgia, 'Times New Roman', serif; font-size:22px; font-weight:700; color:#FFFFFF; letter-spacing:0.4px;">{{ site_name }}</span>
+                        </td>
+                    </tr>
+                    {# Accent rule (brand amber) #}
+                    <tr>
+                        <td style="background-color:#F59E0B; height:4px; line-height:4px; font-size:0;">&nbsp;</td>
+                    </tr>
+
+                    {# Main content #}
+                    <tr>
+                        <td class="ab-pad" style="padding:28px 28px 4px 28px; font-family:'Noto Sans', -apple-system, 'Segoe UI', Roboto, Arial, 'Vazirmatn', Tahoma, sans-serif; font-size:15px; line-height:24px; color:#334155; {% if EMAIL_BIDI %}text-align:right; direction:rtl;{% else %}text-align:left; direction:ltr;{% endif %}">
+                            {% block content %}{% endblock %}
+                        </td>
+                    </tr>
+
+                    {# Footer #}
+                    <tr>
+                        <td class="ab-pad" style="padding:18px 28px 24px 28px; background-color:#F8FAFC; border-top:1px solid #E2E8F0; border-radius:0 0 8px 8px; font-family:'Noto Sans', -apple-system, 'Segoe UI', Roboto, Arial, 'Vazirmatn', Tahoma, sans-serif; font-size:12px; line-height:18px; color:#475569; {% if EMAIL_BIDI %}text-align:right; direction:rtl;{% else %}text-align:left; direction:ltr;{% endif %}">
+                            {% block footer_reason %}{% endblock %}
+                            {% if site_url %}
+                                <p style="margin:0 0 8px 0;">
+                                    <a href="{{ site_url }}" style="color:#1E3A8A; text-decoration:underline;">{{ site_url }}</a>
+                                </p>
+                            {% endif %}
+                            <p style="margin:0; color:#475569;">
+                                &copy; {% now "Y" %} {{ site_name }}. {% trans "All rights reserved." %}
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

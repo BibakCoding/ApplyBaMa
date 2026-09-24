@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 00:49+0330\n"
+"POT-Creation-Date: 2026-09-25 01:24+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,8 +174,8 @@ msgid "Password Reset"
 msgstr "Şifre Sıfırlama"
 
 #: .\authentication\views.py:92 .\authentication\views.py:149
-#: .\authentication\views.py:211 .\authentication\views.py:273
-#: .\authentication\views.py:305 .\authentication\views.py:344
+#: .\authentication\views.py:218 .\authentication\views.py:280
+#: .\authentication\views.py:317 .\authentication\views.py:358
 msgid "You are already logged in."
 msgstr "Zaten giriş yapmış durumdasınız."
 
@@ -187,71 +187,70 @@ msgstr "Başarıyla giriş yapıldı."
 msgid "Your Confirmation Code"
 msgstr "Onay Kodunuz"
 
-#: .\authentication\views.py:176
+#: .\authentication\views.py:183
 msgid "We sent you an email that includes verification code."
 msgstr "Doğrulama kodunu içeren bir e-posta gönderdik."
 
-#: .\authentication\views.py:206
+#: .\authentication\views.py:213
 msgid "You have logged out."
 msgstr "Çıkış yaptınız."
 
-#: .\authentication\views.py:220
+#: .\authentication\views.py:227
 msgid "This confirmation page is no longer valid."
 msgstr "Bu onay sayfası artık geçerli değil."
 
-#: .\authentication\views.py:234
+#: .\authentication\views.py:241
 msgid "Your code has expired."
 msgstr "Kodunuzun süresi doldu."
 
-#: .\authentication\views.py:236
+#: .\authentication\views.py:243
 msgid "Invalid confirmation code."
 msgstr "Geçersiz onay kodu."
 
-#: .\authentication\views.py:247
+#: .\authentication\views.py:254
 msgid "Account confirmed!"
 msgstr "Hesap onaylandı!"
 
-#: .\authentication\views.py:278
+#: .\authentication\views.py:285
 msgid "User not found or already active."
 msgstr "Kullanıcı bulunamadı veya zaten aktif."
 
-#: .\authentication\views.py:290
+#: .\authentication\views.py:297
 msgid "Your new Confirmation Code"
 msgstr "Yeni Onay Kodunuz"
 
-#: .\authentication\views.py:295
+#: .\authentication\views.py:307
 msgid "A fresh confirmation code has been sent."
 msgstr "Yeni bir onay kodu gönderildi."
 
-#: .\authentication\views.py:318 .\templates\emails\reset_password.html:8
-#: .\templates\emails\reset_password.html:62
+#: .\authentication\views.py:330
 msgid "Reset Your Password"
 msgstr "Şifrenizi Sıfırlayın"
 
-#: .\authentication\views.py:327
+#: .\authentication\views.py:341
 msgid "If that email is registered, you’ll receive reset instructions."
 msgstr "Bu e-posta kayıtlıysa, sıfırlama talimatlarını alacaksınız."
 
-#: .\authentication\views.py:355
+#: .\authentication\views.py:369
 msgid "Invalid or expired reset link."
 msgstr "Geçersiz veya süresi dolmuş sıfırlama bağlantısı."
 
-#: .\authentication\views.py:368
+#: .\authentication\views.py:382
 msgid "Invalid verification code."
 msgstr "Geçersiz doğrulama kodu."
 
-#: .\authentication\views.py:375
+#: .\authentication\views.py:389
 msgid "Password updated successfully."
 msgstr "Şifre başarıyla güncellendi."
 
-#: .\authentication\views.py:410 .\dashboard\forms.py:69
+#: .\authentication\views.py:424 .\dashboard\forms.py:69
 #: .\dashboard\forms.py:86 .\dashboard\forms.py:256
 #, fuzzy
 #| msgid "Username is already taken."
 msgid "This username is already taken."
 msgstr "Kullanıcı adı zaten alınmış."
 
-#: .\authentication\views.py:417 .\dashboard\views.py:469
+#: .\authentication\views.py:431 .\dashboard\views.py:469
 #, fuzzy
 #| msgid "Password updated successfully."
 msgid "Username updated successfully."
@@ -521,12 +520,12 @@ msgid "Associate & Bachelor"
 msgstr "Ön Lisans ve Lisans"
 
 #: .\core\models.py:614 .\core\templatetags\custom_filters.py:50
-#: .\templates\core\main.html:117
+#: .\templates\core\main.html:118
 msgid "Master"
 msgstr "Yüksek Lisans"
 
 #: .\core\models.py:615 .\core\templatetags\custom_filters.py:51
-#: .\templates\core\main.html:118
+#: .\templates\core\main.html:119
 msgid "PhD"
 msgstr "Doktora"
 
@@ -670,7 +669,11 @@ msgid ""
 "dream university and program. Explore our dashboard to search universities, "
 "browse programs, and start your application. If you need any assistance, "
 "feel free to contact our support team."
-msgstr "ApplyBaMa'a kaydolduğunuz için teşekkürler! Hayalinizdeki üniversiteyi ve programı bulmanıza yardımcı olmak için buradayız. Panelimizde üniversite arayabilir, programlara göz atabilir ve başvurunuza başlayabilirsiniz. Yardıma ihtiyacınız olursa destek ekibimizle iletişime geçmekten çekinmeyin."
+msgstr ""
+"ApplyBaMa'a kaydolduğunuz için teşekkürler! Hayalinizdeki üniversiteyi ve "
+"programı bulmanıza yardımcı olmak için buradayız. Panelimizde üniversite "
+"arayabilir, programlara göz atabilir ve başvurunuza başlayabilirsiniz. "
+"Yardıma ihtiyacınız olursa destek ekibimizle iletişime geçmekten çekinmeyin."
 
 #: .\dashboard\forms.py:33 .\dashboard\forms.py:212
 #: .\templates\dashboard\fragments\my_students.html:67
@@ -803,7 +806,8 @@ msgstr "Geçersiz istek."
 msgid ""
 "You have reached the maximum number of students (100). Please contact "
 "support."
-msgstr "Maksimum öğrenci sayısına (100) ulaştınız. Lütfen destekle iletişime geçin."
+msgstr ""
+"Maksimum öğrenci sayısına (100) ulaştınız. Lütfen destekle iletişime geçin."
 
 #: .\dashboard\views.py:601
 msgid "Student added successfully."
@@ -1122,7 +1126,7 @@ msgid "Countries"
 msgstr "Ülkeler"
 
 #: .\templates\authentication\login.html:34
-#: .\templates\emails\reset_password.html:69
+#: .\templates\emails\base_email.html:66
 msgid "All rights reserved."
 msgstr "Tüm hakları saklıdır."
 
@@ -1168,7 +1172,7 @@ msgstr ""
 "Profilinizi saniyeler içinde oluşturun. Bursları keşfedin, belgelerinizi "
 "yönetin ve en iyi üniversitelere kabul alın."
 
-#: .\templates\authentication\register.html:26 .\templates\core\main.html:188
+#: .\templates\authentication\register.html:26 .\templates\core\main.html:189
 msgid "Certified Agents"
 msgstr "Sertifikalı Temsilciler"
 
@@ -1202,7 +1206,9 @@ msgstr "Kullanıcı Adı"
 msgid ""
 "Your account is verified! Would you like to customize your username before "
 "jumping into your dashboard?"
-msgstr "Hesabınız doğrulandı! Panele geçmeden önce kullanıcı adınızı özelleştirmek ister misiniz?"
+msgstr ""
+"Hesabınız doğrulandı! Panele geçmeden önce kullanıcı adınızı özelleştirmek "
+"ister misiniz?"
 
 #: .\templates\authentication\username_selection.html:25
 msgid "Personalized"
@@ -1221,7 +1227,9 @@ msgstr "E-posta veya Kullanıcı Adı"
 #: .\templates\authentication\username_selection.html:47
 msgid ""
 "This is how you'll be known on Apply BM. You can also keep your default one."
-msgstr "Apply BM'de bu isimle tanınacaksınız. Ayrıca varsayılan isminizi koruyabilirsiniz."
+msgstr ""
+"Apply BM'de bu isimle tanınacaksınız. Ayrıca varsayılan isminizi "
+"koruyabilirsiniz."
 
 #: .\templates\authentication\username_selection.html:59
 #, fuzzy
@@ -1245,43 +1253,43 @@ msgstr "Burs Kaydı"
 msgid "An unexpected error occurred."
 msgstr "Beklenmeyen bir hata oluştu."
 
-#: .\templates\base.html:37
+#: .\templates\base.html:36
 msgid "Sort By"
 msgstr "Sıralama ölçütü"
 
-#: .\templates\base.html:38 .\templates\dashboard\fragments\programs.html:111
+#: .\templates\base.html:37 .\templates\dashboard\fragments\programs.html:111
 #: .\templates\dashboard\fragments\universities.html:81
 msgid "Sort: Name (A-Z)"
 msgstr "Sırala: Ad (A-Z)"
 
-#: .\templates\base.html:39 .\templates\dashboard\fragments\programs.html:114
+#: .\templates\base.html:38 .\templates\dashboard\fragments\programs.html:114
 #: .\templates\dashboard\fragments\universities.html:84
 msgid "Sort: Name (Z-A)"
 msgstr "Sırala: Ad (Z-A)"
 
-#: .\templates\base.html:40 .\templates\dashboard\fragments\programs.html:118
+#: .\templates\base.html:39 .\templates\dashboard\fragments\programs.html:118
 msgid "Sort: University (A-Z)"
 msgstr "Sırala: Üniversite (A-Z)"
 
-#: .\templates\base.html:41
+#: .\templates\base.html:40
 #: .\templates\dashboard\fragments\universities.html:88
 msgid "Sort: Country (A-Z)"
 msgstr "Sırala: Ülke (A-Z)"
 
-#: .\templates\base.html:42 .\templates\dashboard\fragments\programs.html:120
+#: .\templates\base.html:41 .\templates\dashboard\fragments\programs.html:120
 msgid "Sort: Fee (Low to High)"
 msgstr "Sırala: Ücret (Düşükten Yükseğe)"
 
-#: .\templates\base.html:43 .\templates\dashboard\fragments\programs.html:123
+#: .\templates\base.html:42 .\templates\dashboard\fragments\programs.html:123
 msgid "Sort: Fee (High to Low)"
 msgstr "Sırala: Ücret (Yüksekten Düşüğe)"
 
-#: .\templates\base.html:44
+#: .\templates\base.html:43
 #: .\templates\dashboard\fragments\universities.html:92
 msgid "Sort: Founded (Oldest First)"
 msgstr "Sırala: Kuruluş (En Eskisi Önce)"
 
-#: .\templates\base.html:45
+#: .\templates\base.html:44
 #: .\templates\dashboard\fragments\universities.html:96
 msgid "Sort: Founded (Newest First)"
 msgstr "Sırala: Kuruluş (En Yenisi Önce)"
@@ -1324,67 +1332,67 @@ msgstr "Başlayın"
 msgid "Menu"
 msgstr "Menü"
 
-#: .\templates\core\main.html:95
+#: .\templates\core\main.html:96
 msgid "Trusted by 1000+ students worldwide"
 msgstr "Dünya çapında 1000+ öğrenci tarafından güveniliyor"
 
-#: .\templates\core\main.html:97
+#: .\templates\core\main.html:98
 msgid "Unlock Your Fully Funded Future."
 msgstr "Tam Burslu Geleceğinizin Kilidini Açın."
 
-#: .\templates\core\main.html:99
+#: .\templates\core\main.html:100
 msgid "Your trusted bridge to education abroad."
 msgstr "Yurtdışı eğitimi için güvenilir köprünüz."
 
-#: .\templates\core\main.html:104 .\templates\core\main.html:105
+#: .\templates\core\main.html:105 .\templates\core\main.html:106
 msgid "Destination Country"
 msgstr "Hedef Ülke"
 
-#: .\templates\core\main.html:106
+#: .\templates\core\main.html:107
 msgid "Turkey"
 msgstr "Türkiye"
 
-#: .\templates\core\main.html:107
+#: .\templates\core\main.html:108
 msgid "Germany"
 msgstr "Almanya"
 
-#: .\templates\core\main.html:108
+#: .\templates\core\main.html:109
 msgid "Georgia"
 msgstr "Gürcistan"
 
-#: .\templates\core\main.html:109
+#: .\templates\core\main.html:110
 msgid "Northern Cyprus"
 msgstr "Kuzey Kıbrıs"
 
-#: .\templates\core\main.html:113 .\templates\core\main.html:114
+#: .\templates\core\main.html:114 .\templates\core\main.html:115
 msgid "Degree Level"
 msgstr "Derece Seviyesi"
 
-#: .\templates\core\main.html:115
+#: .\templates\core\main.html:116
 msgid "Associate"
 msgstr "Ön Lisans"
 
-#: .\templates\core\main.html:116
+#: .\templates\core\main.html:117
 msgid "Bachelor"
 msgstr "Lisans"
 
-#: .\templates\core\main.html:121
+#: .\templates\core\main.html:122
 msgid "Search Programs"
 msgstr "Programları Ara"
 
-#: .\templates\core\main.html:128
+#: .\templates\core\main.html:129
 msgid "Scroll down"
 msgstr "Aşağı kaydır"
 
-#: .\templates\core\main.html:136
+#: .\templates\core\main.html:137
 msgid "Our students study at"
 msgstr "Öğrencilerimiz şurada okuyor"
 
-#: .\templates\core\main.html:158
+#: .\templates\core\main.html:159
 msgid "Why Students Choose Apply BM"
 msgstr "Öğrenciler Neden Apply BM'i Seçiyor"
 
-#: .\templates\core\main.html:160
+#: .\templates\core\main.html:161
 msgid ""
 "More than a platform — a personal team that walks with you from first "
 "message to first day of class."
@@ -1392,19 +1400,19 @@ msgstr ""
 "Bir platformdan fazlası — ilk mesajdan sınıfın ilk gününe kadar sizinle "
 "yürüyen kişisel bir ekip."
 
-#: .\templates\core\main.html:167
+#: .\templates\core\main.html:168
 msgid "Our consultant guiding a student"
 msgstr "Öğrenciye yol gösteren danışmanımız"
 
-#: .\templates\core\main.html:172
+#: .\templates\core\main.html:173
 msgid "3+ Years of Trust"
 msgstr "3+ Yıllık Güven"
 
-#: .\templates\core\main.html:181
+#: .\templates\core\main.html:182
 msgid "Verified Programs"
 msgstr "Doğrulanmış Programlar"
 
-#: .\templates\core\main.html:182
+#: .\templates\core\main.html:183
 msgid ""
 "Every university, program and deadline is manually verified by our academic "
 "team."
@@ -1412,18 +1420,18 @@ msgstr ""
 "Her üniversite, program ve son başvuru tarihi akademik ekibimiz tarafından "
 "manuel olarak doğrulanır."
 
-#: .\templates\core\main.html:189
+#: .\templates\core\main.html:190
 msgid ""
 "Vetted representatives and company managers handle your file from start to "
 "finish."
 msgstr ""
 "Denenmiş temsilciler ve şirket yöneticileri dosyanızı baştan sona yönetir."
 
-#: .\templates\core\main.html:195
+#: .\templates\core\main.html:196
 msgid "WhatsApp Guidance"
 msgstr "WhatsApp Rehberliği"
 
-#: .\templates\core\main.html:196
+#: .\templates\core\main.html:197
 msgid ""
 "One tap opens a ready-made WhatsApp message to our manager — no waiting, no "
 "confusion."
@@ -1431,60 +1439,60 @@ msgstr ""
 "Tek dokunuşla yöneticimize hazır bir WhatsApp mesajı açılır — bekleme yok, "
 "kafa karışıklığı yok."
 
-#: .\templates\core\main.html:202
+#: .\templates\core\main.html:203
 msgid "One Dashboard"
 msgstr "Tek Dashboard"
 
-#: .\templates\core\main.html:203
+#: .\templates\core\main.html:204
 msgid ""
 "Documents, application steps and your acceptance letter — tracked in one "
 "place."
 msgstr ""
 "Belgeler, başvuru adımları ve kabul mektubunuz — tek bir yerde takip edilir."
 
-#: .\templates\core\main.html:214
+#: .\templates\core\main.html:215
 msgid "Your Journey to Acceptance"
 msgstr "Kabul Yolculuğunuz"
 
-#: .\templates\core\main.html:215
+#: .\templates\core\main.html:216
 msgid "Hover over the steps to see how we guide you."
 msgstr "Sizi nasıl yönlendirdiğimizi görmek için adımların üzerine gelin."
 
-#: .\templates\core\main.html:244
+#: .\templates\core\main.html:245
 msgid "Prepare Your Documents"
 msgstr "Belgelerinizi Hazırlayın"
 
-#: .\templates\core\main.html:245
+#: .\templates\core\main.html:246
 msgid "Know exactly what you need before you start — no surprises."
 msgstr ""
 "Başlamadan önce tam olarak neye ihtiyacınız olduğunu bilin — sürpriz yok."
 
-#: .\templates\core\main.html:281
+#: .\templates\core\main.html:282
 msgid "Real Students. Real Acceptances."
 msgstr "Gerçek Öğrenciler. Gerçek Kabuller."
 
-#: .\templates\core\main.html:282
+#: .\templates\core\main.html:283
 msgid "Watch their own words on our Instagram — unedited and honest."
 msgstr "Instagram'da kendi ağızlarından dinleyin — düzenlenmemiş ve dürüst."
 
-#: .\templates\core\main.html:310
+#: .\templates\core\main.html:311
 msgid "Watch Story"
 msgstr "Hikayeyi İzle"
 
-#: .\templates\core\main.html:321
+#: .\templates\core\main.html:322
 msgid "See More Stories on Instagram"
 msgstr "Instagram'da Daha Fazla Hikaye Gör"
 
-#: .\templates\core\main.html:331
+#: .\templates\core\main.html:332
 msgid "Still have questions?"
 msgstr "Hala sorularınız mı var?"
 
-#: .\templates\core\main.html:332
+#: .\templates\core\main.html:333
 msgid "Our managers reply within minutes on WhatsApp — in your language."
 msgstr ""
 "Yöneticilerimiz WhatsApp'ta dakikalar içinde — kendi dilinizde yanıt verir."
 
-#: .\templates\core\main.html:338
+#: .\templates\core\main.html:339
 msgid "Chat on WhatsApp"
 msgstr "WhatsApp'ta Sohbet Et"
 
@@ -2170,53 +2178,127 @@ msgstr "Yönetici Paneli"
 msgid "Loading..."
 msgstr "Yükleniyor..."
 
-#: .\templates\emails\reset_password.html:53
-msgid "You recently requested to reset your password for your"
-msgstr "Şifrenizi sıfırlamak için yakın zamanda istekte bulundunuz:"
+#: .\templates\emails\confirmation_code.html:4
+#: .\templates\emails\confirmation_code.html:10
+msgid "Confirm your email address"
+msgstr "E-posta adresinizi doğrulayın"
 
-#: .\templates\emails\reset_password.html:55
-msgid "account."
-msgstr "hesabı."
+#: .\templates\emails\confirmation_code.html:6
+msgid "Your confirmation code is inside. It expires in 15 minutes."
+msgstr "Doğrulama kodunuz bu e-postada. 15 dakika geçerlidir."
 
+#: .\templates\emails\confirmation_code.html:13
+#: .\templates\emails\reset_password.html:13
+msgid "Hello,"
+msgstr "Merhaba,"
+
+#: .\templates\emails\confirmation_code.html:16
+#, python-format
+msgid ""
+"Thanks for signing up for %(site_name)s. Enter the code below to confirm "
+"your email address and finish creating your account."
+msgstr "%(site_name)s'a kaydolduğunuz için teşekkürler. E-posta adresinizi doğrulamak ve hesabınızı oluşturmayı tamamlamak için aşağıdaki kodu girin."
+
+#: .\templates\emails\confirmation_code.html:20
+msgid "Your confirmation code"
+msgstr "Doğrulama kodunuz"
+
+#: .\templates\emails\confirmation_code.html:29
+msgid "This code is valid for 15 minutes."
+msgstr "Bu kod 15 dakika geçerlidir."
+
+#: .\templates\emails\confirmation_code.html:34
+msgid ""
+"If you didn't create an account, you can safely ignore this email — no "
+"account will be activated."
+msgstr "Hesap oluşturmadıysanız bu e-postayı yok sayabilirsiniz — hiçbir hesap etkinleştirilmez."
+
+#: .\templates\emails\confirmation_code.html:38
+msgid "Welcome aboard,"
+msgstr "Aramıza hoş geldiniz,"
+
+#: .\templates\emails\confirmation_code.html:40
 #: .\templates\emails\reset_password.html:58
+msgid "Team"
+msgstr "Ekibi"
+
+#: .\templates\emails\confirmation_code.html:46
+#, python-format
 msgid ""
-"Click the button below and enter the following code to reset your password. "
-"This link and code are valid for 15 minutes."
-msgstr ""
-"Şifrenizi sıfırlamak için aşağıdaki butona tıklayın ve şu kodu girin. Bu "
-"bağlantı ve kod 15 dakika boyunca geçerlidir."
+"You received this email because this address was used to sign up for "
+"%(site_name)s."
+msgstr "Bu e-postayı, bu adres %(site_name)s için kaydolurken kullanıldığı için aldınız."
 
-#: .\templates\emails\reset_password.html:60
-msgid "Verification Code:"
-msgstr "Doğrulama Kodu:"
+#: .\templates\emails\reset_password.html:4
+#: .\templates\emails\reset_password.html:10
+msgid "Reset your password"
+msgstr "Şifrenizi sıfırlayın"
 
-#: .\templates\emails\reset_password.html:64
+#: .\templates\emails\reset_password.html:6
+msgid "Reset your password — the button and code expire in 15 minutes."
+msgstr "Şifrenizi sıfırlayın — düğme ve kod 15 dakika içinde geçersiz olur."
+
+#: .\templates\emails\reset_password.html:16
+#, python-format
 msgid ""
-"If the button above does not work, copy and paste the following link into "
-"your browser:"
-msgstr ""
-"Yukarıdaki buton çalışmazsa, aşağıdaki bağlantıyı kopyalayıp tarayıcınıza "
-"yapıştırın:"
+"We received a request to reset the password for your %(site_name)s account. "
+"Continue below to choose a new password."
+msgstr "%(site_name)s hesabınızın şifresini sıfırlama isteği aldık. Yeni bir şifre belirlemek için devam edin."
 
-#: .\templates\emails\reset_password.html:66
-msgid "If you did not request a password reset, please ignore this email."
-msgstr ""
-"Şifre sıfırlama isteğinde bulunmadıysanız, lütfen bu e-postayı dikkate "
-"almayın."
+#: .\templates\emails\reset_password.html:24
+msgid "Choose a new password"
+msgstr "Yeni bir şifre belirle"
 
-#: .\templates\emails\reset_password.html:67
+#: .\templates\emails\reset_password.html:31
+msgid "Or enter this code on the reset page"
+msgstr "Veya bu kodu sıfırlama sayfasına girin"
+
+#: .\templates\emails\reset_password.html:40
+msgid "The button and this code are valid for 15 minutes and can be used once."
+msgstr "Düğme ve bu kod 15 dakika geçerlidir ve bir kez kullanılabilir."
+
+#: .\templates\emails\reset_password.html:44
+msgid "If the button doesn't work, copy and paste this link into your browser:"
+msgstr "Düğme çalışmazsa bu bağlantıyı kopyalayıp tarayıcınıza yapıştırın:"
+
+#: .\templates\emails\reset_password.html:52
+msgid ""
+"If you didn't request a password reset, you can ignore this email — your "
+"password will not change."
+msgstr "Şifre sıfırlama talebinde bulunmadıysanız bu e-postayı yok sayabilirsiniz — şifreniz değişmez."
+
+#: .\templates\emails\reset_password.html:56
 msgid "Thank you,"
 msgstr "Teşekkürler,"
 
-#: .\templates\emails\reset_password.html:67
-msgid "Team"
-msgstr "Ekibi"
+#: .\templates\emails\reset_password.html:64
+#, python-format
+msgid ""
+"You received this email because a password reset was requested for your "
+"%(site_name)s account."
+msgstr "Bu e-postayı, %(site_name)s hesabınız için şifre sıfırlama talep edildiği için aldınız."
 
 #: .\templates\partials\language_switcher.html:6
 #, fuzzy
 #| msgid "Language"
 msgid "Choose language"
 msgstr "Dil"
+
+#~ msgid "You recently requested to reset your password for your"
+#~ msgstr "Şifrenizi sıfırlamak için yakın zamanda istekte bulundunuz:"
+
+#~ msgid "account."
+#~ msgstr "hesabı."
+
+#~ msgid ""
+#~ "Click the button below and enter the following code to reset your "
+#~ "password. This link and code are valid for 15 minutes."
+#~ msgstr ""
+#~ "Şifrenizi sıfırlamak için aşağıdaki butona tıklayın ve şu kodu girin. Bu "
+#~ "bağlantı ve kod 15 dakika boyunca geçerlidir."
+
+#~ msgid "Verification Code:"
+#~ msgstr "Doğrulama Kodu:"
 
 #~ msgid "Generate"
 #~ msgstr "Oluştur"
