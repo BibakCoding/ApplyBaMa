@@ -1,4 +1,5 @@
-from django.conf import settings
+from urllib.parse import unquote
+
 from django.test import TestCase
 from django.urls import reverse
 
@@ -23,7 +24,20 @@ class DashboardAccessTests(TestCase):
 		response = self.client.get(reverse("dashboard"))
 
 		self.assertEqual(response.status_code, 302)
-		self.assertTrue(response.url.startswith(settings.LOGIN_URL))
+		# LOGIN_URL is a URL name rather than a path, so compare against the
+		# resolved route and confirm the target survives as ?next=.
+		self.assertTrue(response.url.startswith(reverse("login")))
+		self.assertIn("next=", response.url)
+
+	def test_deep_link_survives_the_login_bounce(self):
+		response = self.client.get(reverse("dashboard"), {"page": "profile"})
+
+		self.assertEqual(response.status_code, 302)
+		# The requested page travels to the login form as ?next=, so the user is
+		# returned to it instead of landing on the default dashboard page.
+		self.assertIn(
+			unquote(reverse("dashboard") + "?page=profile"), unquote(response.url)
+		)
 
 	def test_student_cannot_open_restricted_dashboard_page(self):
 		self.client.force_login(self.student)

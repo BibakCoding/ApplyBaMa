@@ -99,6 +99,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "core.User"
 PASSWORD_RESET_TIMEOUT = 1 * 60 * 60
 
+# Destination for @login_required, as a URL *name* rather than a path: the
+# login route lives under i18n_patterns, so a hardcoded "/auth/login/" would
+# lose its language prefix. Django appends the requested URL as ?next=, which
+# the auth views feed back into their redirects so dashboard deep links
+# (?page=profile, ?page=my_applications, ...) survive the round-trip.
+LOGIN_URL = "login"
+
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"

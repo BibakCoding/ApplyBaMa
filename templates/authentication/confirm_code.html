@@ -49,6 +49,8 @@
 
             <form id="confirmForm" action="{% url 'confirm_code' pk=user_id %}" method="post" class="auth-form" novalidate>
                 {% csrf_token %}
+                {# Carried on to the username step, which finally opens the original deep link. #}
+                <input type="hidden" name="next" value="{{ next }}">
                 <div id="confirmNonFieldErrors"></div>
 
                 <div class="auth-code-boxes">
@@ -62,8 +64,8 @@
             </form>
 
             <div class="auth-links auth-links--split">
-                <a href="{% url 'resend_code' pk=user_id %}">{% trans "Resend Code" %}</a>
-                <a href="{% url 'login' %}">{% trans "Back to Login" %}</a>
+                <a href="{% url 'resend_code' pk=user_id %}{% if next %}?next={{ next|urlencode }}{% endif %}">{% trans "Resend Code" %}</a>
+                <a href="{% url 'login' %}{% if next %}?next={{ next|urlencode }}{% endif %}">{% trans "Back to Login" %}</a>
             </div>
         </div>
     </div>

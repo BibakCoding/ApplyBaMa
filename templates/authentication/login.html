@@ -53,6 +53,8 @@
 
             <form id="loginForm" action="{% url 'login' %}" method="post" class="auth-form" novalidate>
                 {% csrf_token %}
+                {# Carries the deep link the visitor was bounced from, so they land on it after signing in. #}
+                <input type="hidden" name="next" value="{{ next }}">
                 <div id="loginNonFieldErrors"></div>
 
                 <div class="ab-field">
@@ -84,7 +86,7 @@
             </form>
 
             <div class="auth-links">
-                <p>{% trans "Don't have an account?" %} <a href="{% url 'register' %}">{% trans "Create Account" %}</a></p>
+                <p>{% trans "Don't have an account?" %} <a href="{% url 'register' %}{% if next %}?next={{ next|urlencode }}{% endif %}">{% trans "Create Account" %}</a></p>
             </div>
         </div>
     </div>

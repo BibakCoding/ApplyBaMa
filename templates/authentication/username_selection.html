@@ -49,6 +49,8 @@
 
             <form id="usernameForm" action="{% url 'username_selection' %}" method="post" class="auth-form" novalidate>
                 {% csrf_token %}
+                {# Final step of the registration detour: opens the deep link the visitor started from. #}
+                <input type="hidden" name="next" value="{{ next }}">
                 <div id="usernameNonFieldErrors"></div>
 
                 <div class="ab-field">
@@ -62,6 +64,7 @@
 
             <form action="{% url 'username_selection' %}" method="post" class="auth-form auth-form--stacked">
                 {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
                 <button type="submit" name="action" value="skip" class="ab-btn ab-btn-outline w-full">{% trans "Skip for Now" %}</button>
             </form>
         </div>

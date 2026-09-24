@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme, urlencode
 from django.utils.translation import gettext as _
 from django_ratelimit.decorators import ratelimit
 
@@ -43,11 +44,53 @@ def generate_unique_username(base):
         counter += 1
     return username
 
+def get_next_target(request):
+    """Return the requested post-authentication destination, or "".
+
+    A dashboard deep link (?page=profile, ?page=my_applications, ...) travels as
+    Django's standard `next` value. It arrives in the query string when
+    @login_required bounces an anonymous visitor, and in the POST body once the
+    page's own form submits, so both are checked.
+
+    Only same-host targets are accepted: anything absolute, protocol-relative or
+    otherwise pointing off-site is ignored, so a crafted ?next= can never turn
+    these forms into an open redirect.
+    """
+    target = (request.POST.get("next") or request.GET.get("next") or "").strip()
+    if target and url_has_allowed_host_and_scheme(
+        target,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return target
+    return ""
+
+def resolve_next_destination(request, fallback="dashboard"):
+    """Return the validated destination, falling back to `fallback`.
+
+    Used wherever a view finishes an authentication step and has to decide where
+    to send the user, so the deep link chosen before logging in is not lost.
+    """
+    return get_next_target(request) or reverse(fallback)
+
+def append_next(url, request):
+    """Append the validated `next` target to an internal URL, when there is one.
+
+    Keeps the target alive across the multi-step detours (register -> confirm
+    code -> username selection), which are separate requests rather than one
+    form chain.
+    """
+    target = get_next_target(request)
+    if not target:
+        return url
+    separator = "&" if "?" in url else "?"
+    return f"{url}{separator}{urlencode({'next': target})}"
+
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def login_view(request):
     if request.user.is_authenticated:
         messages.info(request, _("You are already logged in."))
-        return redirect("dashboard")
+        return redirect(resolve_next_destination(request))
 
     form = LoginForm(request.POST or None)
     if request.method == "POST":
@@ -73,7 +116,7 @@ def login_view(request):
                 return JsonResponse({
                     "success": True,
                     "message": msg,
-                    "redirect": reverse("dashboard"),
+                    "redirect": resolve_next_destination(request),
                     "access": access_token,
                     "refresh": refresh_token,
                     "user": {
@@ -86,7 +129,7 @@ def login_view(request):
                     }
                 })
             messages.success(request, msg)
-            return redirect("dashboard")
+            return redirect(resolve_next_destination(request))
 
         errors = form.errors.get_json_data()
         if is_ajax(request):
@@ -94,13 +137,17 @@ def login_view(request):
         for err in form.non_field_errors():
             messages.error(request, err)
 
-    return render(request, "authentication/login.html", {"form": form})
+    return render(
+        request,
+        "authentication/login.html",
+        {"form": form, "next": get_next_target(request)},
+    )
 
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def register_view(request):
     if request.user.is_authenticated:
         messages.info(request, _("You are already logged in."))
-        return redirect("dashboard")
+        return redirect(resolve_next_destination(request))
 
     form = RegisterForm(request.POST or None)
     if request.method == "POST":
@@ -128,7 +175,12 @@ def register_view(request):
             messages.success(
                 request, _("We sent you an email that includes verification code.")
             )
-            redirect_url = reverse("confirm_code", kwargs={"pk": user.pk})
+            # The target is carried into the confirmation step, which in turn
+            # hands it to the username step, so a deep link survives the whole
+            # registration detour instead of landing on the default page.
+            redirect_url = append_next(
+                reverse("confirm_code", kwargs={"pk": user.pk}), request
+            )
             if is_ajax(request):
                 return JsonResponse({"success": True, "redirect": redirect_url})
             return redirect(redirect_url)
@@ -143,7 +195,11 @@ def register_view(request):
         for e in form.non_field_errors():
             messages.error(request, e)
 
-    return render(request, "authentication/register.html", {"form": form})
+    return render(
+        request,
+        "authentication/register.html",
+        {"form": form, "next": get_next_target(request)},
+    )
 
 def logout_view(request):
     auth_logout(request)
@@ -153,7 +209,7 @@ def logout_view(request):
 def confirm_code(request, pk):
     if request.user.is_authenticated:
         messages.info(request, _("You are already logged in."))
-        return redirect("dashboard")
+        return redirect(resolve_next_destination(request))
 
     user = get_object_or_404(User, pk=pk)
     vc = VerificationCode.objects.filter(
@@ -189,10 +245,11 @@ def confirm_code(request, pk):
                 send_welcome_notification(user)
 
                 msg = _("Account confirmed!")
+                next_url = append_next(reverse("username_selection"), request)
                 if is_ajax(request):
-                    return JsonResponse({"success": True, "redirect": reverse("username_selection")})
+                    return JsonResponse({"success": True, "redirect": next_url})
                 messages.success(request, msg)
-                return redirect("username_selection")
+                return redirect(next_url)
 
         errors = form.errors.get_json_data()
         if is_ajax(request):
@@ -205,14 +262,16 @@ def confirm_code(request, pk):
                     messages.error(request, f"{form.fields[f].label}: {e}")
 
     return render(
-        request, "authentication/confirm_code.html", {"form": form, "user_id": user.pk}
+        request,
+        "authentication/confirm_code.html",
+        {"form": form, "user_id": user.pk, "next": get_next_target(request)},
     )
 
 @ratelimit(key="ip", rate="3/m", method="POST", block=True)
 def resend_code(request, pk):
     if request.user.is_authenticated:
         messages.info(request, _("You are already logged in."))
-        return redirect("dashboard")
+        return redirect(resolve_next_destination(request))
 
     user = User.objects.filter(pk=pk, is_active=False).first()
     if not user:
@@ -238,13 +297,13 @@ def resend_code(request, pk):
         return JsonResponse({"success": True, "message": msg})
     messages.success(request, msg)
 
-    return redirect("confirm_code", pk=pk)
+    return redirect(append_next(reverse("confirm_code", kwargs={"pk": pk}), request))
 
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def forget_password(request):
     if request.user.is_authenticated:
         messages.info(request, _("You are already logged in."))
-        return redirect("dashboard")
+        return redirect(resolve_next_destination(request))
 
     form = PasswordResetRequestForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
@@ -283,7 +342,7 @@ def forget_password(request):
 def change_password(request, token):
     if request.user.is_authenticated:
         messages.info(request, _("You are already logged in."))
-        return redirect("dashboard")
+        return redirect(resolve_next_destination(request))
 
     vc = VerificationCode.objects.filter(
         token=token,
@@ -343,7 +402,7 @@ def username_selection(request):
     if request.method == "POST":
         action = request.POST.get("action")
         if action == "skip":
-            return redirect("dashboard")
+            return redirect(resolve_next_destination(request))
         elif action == "save":
             new_username = request.POST.get("username", "").strip()
             if new_username and new_username != user.username:
@@ -357,10 +416,14 @@ def username_selection(request):
                     user.save()
                     msg = _("Username updated successfully.")
                     if is_ajax(request):
-                        return JsonResponse({"success": True, "redirect": reverse("dashboard"), "message": msg})
+                        return JsonResponse({"success": True, "redirect": resolve_next_destination(request), "message": msg})
                     messages.success(request, msg)
-                    return redirect("dashboard")
+                    return redirect(resolve_next_destination(request))
             else:
-                return redirect("dashboard")
+                return redirect(resolve_next_destination(request))
 
-    return render(request, "authentication/username_selection.html")
+    return render(
+        request,
+        "authentication/username_selection.html",
+        {"next": get_next_target(request)},
+    )

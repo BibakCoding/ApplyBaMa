@@ -1,5 +1,6 @@
 from datetime import timedelta
 from unittest.mock import patch
+from urllib.parse import unquote
 
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -140,6 +141,124 @@ class AuthenticationViewTests(TestCase):
 
 		self.assertEqual(response.status_code, 302)
 		self.assertEqual(response.url, reverse("login"))
+
+
+@override_settings(RATELIMIT_ENABLE=False)
+class LoginRedirectTargetTests(TestCase):
+	"""A dashboard deep link has to survive the whole authentication detour.
+
+	The SPA reads the page to open from ?page=, so a visitor who follows (or
+	bookmarks) /dashboard/?page=profile must still land on the profile fragment
+	after logging in or registering -- not on the default landing page.
+	"""
+
+	def setUp(self):
+		self.user = User.objects.create_user(
+			username="student",
+			email="student@example.com",
+			password="StrongPassword123!",
+			is_active=True,
+		)
+		self.target = reverse("dashboard") + "?page=profile"
+
+	def test_login_form_carries_the_target_in_a_hidden_field(self):
+		response = self.client.get(reverse("login"), {"next": self.target})
+
+		self.assertContains(response, f'name="next" value="{self.target}"')
+
+	def test_ajax_login_redirects_to_the_requested_target(self):
+		response = self.client.post(
+			reverse("login"),
+			{
+				"username": "student@example.com",
+				"password": "StrongPassword123!",
+				"next": self.target,
+			},
+			HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+		)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.json()["redirect"], self.target)
+
+	def test_non_ajax_login_redirects_to_the_requested_target(self):
+		response = self.client.post(
+			reverse("login"),
+			{
+				"username": "student@example.com",
+				"password": "StrongPassword123!",
+				"next": self.target,
+			},
+		)
+
+		self.assertEqual(response.status_code, 302)
+		self.assertEqual(response.url, self.target)
+
+	def test_already_authenticated_visitor_opens_the_requested_target(self):
+		self.client.force_login(self.user)
+
+		response = self.client.get(reverse("login"), {"next": self.target})
+
+		self.assertEqual(response.status_code, 302)
+		self.assertEqual(response.url, self.target)
+
+	def test_offsite_target_is_ignored(self):
+		response = self.client.post(
+			reverse("login"),
+			{
+				"username": "student@example.com",
+				"password": "StrongPassword123!",
+				"next": "https://evil.example.com/steal",
+			},
+			HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+		)
+
+		self.assertEqual(response.json()["redirect"], reverse("dashboard"))
+
+	@patch("authentication.views.dispatch_email", return_value=True)
+	def test_registration_detour_carries_the_target(self, dispatch_email):
+		response = self.client.post(
+			reverse("register"),
+			{
+				"email": "new@example.com",
+				"password1": "StrongPassword123!",
+				"password2": "StrongPassword123!",
+				"next": self.target,
+			},
+			HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+		)
+
+		user = User.objects.get(email="new@example.com")
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(
+			unquote(response.json()["redirect"]),
+			reverse("confirm_code", kwargs={"pk": user.pk}) + f"?next={self.target}",
+		)
+
+	def test_confirmation_step_hands_the_target_to_the_username_step(self):
+		vc = VerificationCode.create_registration(self.user)
+
+		response = self.client.post(
+			reverse("confirm_code", kwargs={"pk": self.user.pk}),
+			{"code": vc.code, "next": self.target},
+			HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+		)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(
+			unquote(response.json()["redirect"]),
+			reverse("username_selection") + f"?next={self.target}",
+		)
+
+	def test_username_step_opens_the_requested_target(self):
+		self.client.force_login(self.user)
+
+		response = self.client.post(
+			reverse("username_selection"),
+			{"action": "skip", "next": self.target},
+		)
+
+		self.assertEqual(response.status_code, 302)
+		self.assertEqual(response.url, self.target)
 
 
 class JWTManagerTests(TestCase):

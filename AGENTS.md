@@ -132,6 +132,28 @@ The project uses verification codes for flows such as:
 
 Do not replace these flows with Django's standard password-reset architecture unless the task explicitly requires such a change.
 
+**`LOGIN_URL` is a URL *name* (`"login"`), not a path, and every auth redirect must honour `next`.**
+The login route lives under `i18n_patterns`, so a hardcoded "/auth/login/" would lose its language
+prefix; the default `/accounts/login/` does not exist here at all, so leaving `LOGIN_URL` unset
+sends every anonymous visitor to a 404.
+
+Django's `@login_required` appends the requested URL as `?next=`. The SPA reads the fragment to
+open from `?page=` alone, so **a dashboard deep link (`?page=profile`, `?page=my_applications`, …)
+is only as good as the `next` value the auth views pass on**. Those views therefore:
+
+* read the target with `get_next_target()` and redirect with `resolve_next_destination()`;
+* carry it in a hidden `name="next"` input on the login, register, confirm-code and
+  username-selection forms (the destination must be in the *POST body*, because the form action
+  drops the query string);
+* forward it through the multi-step detours with `append_next()` — a registration travels
+  `register → confirm_code → username_selection → dashboard`, and each hop has to hand it on;
+* keep the cross-links honest too (login ↔ register, confirm-code ↔ login), or the target dies
+  when a user switches from registering to signing in.
+
+`get_next_target()` validates with `url_has_allowed_host_and_scheme()` against the current host,
+so an off-site `?next=` is ignored and these forms cannot become an open redirect. Keep that check
+whenever you touch these views.
+
 #### `dashboard`
 
 Contains the application's main user dashboard.

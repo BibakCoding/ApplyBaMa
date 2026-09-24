@@ -47,6 +47,8 @@
 
             <form id="registerForm" action="{% url 'register' %}" method="post" class="auth-form" novalidate>
                 {% csrf_token %}
+                {# Carried into the confirmation and username steps so the deep link survives them. #}
+                <input type="hidden" name="next" value="{{ next }}">
                 <div id="nonFieldErrors"></div>
 
                 <div class="ab-field">
@@ -81,7 +83,7 @@
             </form>
 
             <div class="auth-links">
-                <p>{% trans "Already have an account?" %} <a href="{% url 'login' %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">{% trans "Sign In" %}</a></p>
+                <p>{% trans "Already have an account?" %} <a href="{% url 'login' %}{% if next %}?next={{ next|urlencode }}{% endif %}">{% trans "Sign In" %}</a></p>
             </div>
         </div>
     </div>
