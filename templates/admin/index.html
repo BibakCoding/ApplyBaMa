@@ -1,175 +1,10 @@
 {% extends "admin/base_site.html" %}
-{% load i18n log %}
+{% load i18n log static %}
 
 {% block extrastyle %}
 {{ block.super }}
-<style>
-    /* ==========================================================================
-       CUSTOM ADMIN DASHBOARD STYLES (THEME 1: BLUE & GOLD)
-    ========================================================================== */
-    body { background: #F8FAFC !important; } /* Match site bg */
-
-    .custom-admin-dashboard {
-        padding: 32px 24px;
-        max-width: 1400px;
-        margin: 0 auto;
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    .dashboard-header { margin-bottom: 32px; }
-    .dashboard-title { font-size: 28px; font-weight: 800; color: #0F172A; margin: 0 0 8px 0; }
-    .dashboard-subtitle { font-size: 15px; color: #475569; margin: 0; }
-
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-        gap: 24px;
-    }
-
-    /* --- ANIMATIONS --- */
-    @keyframes cardFadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* --- CARD BASE --- */
-    .admin-card, .recent-actions-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 16px;
-        padding: 24px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        display: flex;
-        flex-direction: column;
-        animation: cardFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-    }
-
-    /* Staggered entry */
-    .admin-card:nth-child(1) { animation-delay: 0.05s; }
-    .admin-card:nth-child(2) { animation-delay: 0.10s; }
-    .admin-card:nth-child(3) { animation-delay: 0.15s; }
-    .admin-card:nth-child(4) { animation-delay: 0.20s; }
-    .admin-card:nth-child(5) { animation-delay: 0.25s; }
-    .admin-card:nth-child(6) { animation-delay: 0.30s; }
-    .recent-actions-card { animation-delay: 0.35s; }
-
-    .admin-card:hover {
-        box-shadow: 0 12px 28px rgba(30, 58, 138, 0.08); /* Blue tinted shadow */
-        transform: translateY(-4px);
-        border-color: #DBEAFE;
-    }
-
-    /* --- CARD HEADER --- */
-    .card-header {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        margin-bottom: 20px;
-        padding-bottom: 18px;
-        border-bottom: 1px solid #F1F5F9;
-    }
-    .card-icon {
-        font-size: 22px;
-        width: 44px;
-        height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #DBEAFE; /* Soft Blue */
-        color: #1E3A8A; /* Deep Blue */
-        border-radius: 10px;
-    }
-    .card-title {
-        font-size: 17px;
-        font-weight: 800;
-        color: #1E3A8A; /* Deep Blue */
-        margin: 0;
-        letter-spacing: -0.01em;
-    }
-
-    /* --- MODEL LIST --- */
-    .model-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-    .model-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 12px 14px;
-        border-radius: 10px;
-        background: #F8FAFC;
-        transition: background 0.15s ease;
-    }
-    .model-item:hover { background: #F1F5F9; }
-    .model-name {
-        font-weight: 600;
-        color: #0F172A;
-        text-decoration: none;
-        font-size: 14px;
-        flex: 1;
-    }
-    .model-name:hover { color: #1E3A8A; }
-
-    /* --- ACTION BUTTONS --- */
-    .model-actions { display: flex; gap: 8px; }
-    .action-link {
-        font-size: 12px;
-        font-weight: 700;
-        text-decoration: none;
-        padding: 5px 12px;
-        border-radius: 6px;
-        transition: all 0.15s ease;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-    }
-    .action-add { color: #1E3A8A; background: #DBEAFE; }
-    .action-add:hover { background: #BFDBFE; }
-    .action-change { color: #475569; background: #E2E8F0; }
-    .action-change:hover { background: #CBD5E1; }
-
-    /* --- RECENT ACTIONS CARD --- */
-    .recent-actions-card {
-        grid-column: 1 / -1; /* Span full width */
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 16px;
-        padding: 24px;
-    }
-    .recent-actions-card .card-icon { background: #FEF3C7; color: #D97706; } /* Gold tinted */
-    .recent-actions-card .card-title { color: #0F172A; }
-
-    .actionlog-list { list-style: none; padding: 0; margin: 0; }
-    .actionlog-item {
-        padding: 14px 0;
-        border-bottom: 1px solid #E2E8F0;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        font-size: 14px;
-    }
-    .actionlog-item:last-child { border-bottom: none; }
-
-    .action-badge {
-        font-size: 11px;
-        font-weight: 800;
-        padding: 4px 10px;
-        border-radius: 6px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        min-width: 70px;
-        text-align: center;
-    }
-    .badge-add { background: #DBEAFE; color: #1E3A8A; }
-    .badge-change { background: #FEF3C7; color: #D97706; }
-    .badge-delete { background: #FEE2E2; color: #B91C1C; }
-
-    .actionlog-link { color: #1E3A8A; text-decoration: none; font-weight: 600; }
-    .actionlog-link:hover { text-decoration: underline; }
-    .actionlog-meta { color: #64748B; font-size: 13px; margin-left: auto; font-style: italic; }
-
-    /* Hide default Django sidebar since we moved Recent Actions to the main grid */
-    #content-related { display: none !important; }
-    #content-main { margin-right: 0 !important; }
-</style>
+{# Dashboard styles live in a cacheable stylesheet — no inline <style> here. #}
+<link rel="stylesheet" href="{% static 'css/admin/admin-dashboard.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -305,7 +140,7 @@
         {% get_admin_log 10 as admin_log for_user user %}
         {% if admin_log %}
         <div class="recent-actions-card">
-            <div class="card-header" style="border-bottom: none; padding-bottom: 0; margin-bottom: 8px;">
+            <div class="card-header card-header--flush">
                 <div class="card-icon">🕒</div>
                 <h2 class="card-title">{% trans 'Recent Actions' %}</h2>
             </div>
@@ -321,7 +156,7 @@
                     {% endif %}
 
                     {% if entry.is_deletion or not entry.get_admin_url %}
-                        <span class="model-name" style="color: #475569;">{{ entry.object_repr }}</span>
+                        <span class="model-name model-name--muted">{{ entry.object_repr }}</span>
                     {% else %}
                         <a href="{{ entry.get_admin_url }}" class="actionlog-link">{{ entry.object_repr }}</a>
                     {% endif %}

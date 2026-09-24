@@ -483,6 +483,18 @@ html[lang="ar"] body, html[lang="fa"] body { letter-spacing: 0; }
 ::-webkit-scrollbar-thumb:hover { background: var(--ab-primary-hover); }
 
 /* ==========================================================================
+   AUTO-HIDING ALERTS
+   Applied by base.js to elements marked [data-autohide]; the fade state lives
+   here rather than being written as inline styles from JavaScript.
+========================================================================== */
+
+.ab-alert--hiding {
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 300ms ease, transform 300ms ease;
+}
+
+/* ==========================================================================
    ACCESSIBILITY
 ========================================================================== */
 

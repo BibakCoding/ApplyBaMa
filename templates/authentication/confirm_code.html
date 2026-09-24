@@ -39,8 +39,8 @@
         </div>
 
         <div class="auth-form-container">
-            <div class="auth-form-header" style="text-align: center;">
-                <div style="width: 4rem; height: 4rem; margin: 0 auto 1rem auto; background: var(--ab-primary-soft); color: var(--ab-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <div class="auth-form-header auth-form-header--centered">
+                <div class="auth-status-icon">
                     <i class="fas fa-envelope-open-text"></i>
                 </div>
                 <h2 class="font-serif">{% trans "Check Your Email" %}</h2>
@@ -61,7 +61,7 @@
                 <button type="submit" class="ab-btn ab-btn-primary">{% trans "Verify Code" %}</button>
             </form>
 
-            <div class="auth-links" style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+            <div class="auth-links auth-links--split">
                 <a href="{% url 'resend_code' pk=user_id %}">{% trans "Resend Code" %}</a>
                 <a href="{% url 'login' %}">{% trans "Back to Login" %}</a>
             </div>

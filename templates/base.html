@@ -19,183 +19,53 @@
         {% endblock %}
         <link rel="stylesheet" href="{% static 'vendor/notyf/notyf.min.css' %}">
         <link rel="stylesheet" href="{% static 'vendor/fontawesome/css/all.min.css' %}">
-        <script>window.CSRF_TOKEN = "{{ csrf_token }}";</script>
-        <script>document.documentElement.setAttribute('dir', '{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}');</script>
+        {% comment %}
+        Server-rendered values that the JavaScript needs are published as data,
+        never as an inline script: inline script is re-sent with every response,
+        cannot be cached, and forces 'unsafe-inline' in any Content-Security-
+        Policy. base.js reads the meta tag and the <body> attributes below; the
+        configuration block and the server messages are further down the body.
+        {% endcomment %}
+        <meta name="csrf-token" content="{{ csrf_token }}">
         <script src="{% static 'vendor/notyf/notyf.min.js' %}" defer></script>
     </head>
-    <body class="bg-gray-50">
-        <script>
-            /* Carries a hero search across the register/login detour.
-               Set by the home page's hero search as a query string
-               ("page=programs&country=tr&degree=master"); the dashboard view
-               consumes it server-side, so it survives every redirect and any
-               tab. The browser expires it after COOKIE_MAX_AGE seconds, which
-               stops a half-finished search from hijacking a later login. */
-            window.PendingSearch = {
-                COOKIE: 'pending_program_search',
-                COOKIE_MAX_AGE: 300,
-                set: function (query) {
-                    try {
-                        document.cookie = this.COOKIE + '=' + encodeURIComponent(query) +
-                            '; path=/; max-age=' + this.COOKIE_MAX_AGE + '; samesite=lax';
-                    } catch (e) {}
-                }
-            };
-        </script>
+    <body class="bg-gray-50"
+          data-i18n-unexpected-error="{% trans 'An unexpected error occurred.' %}">
         <div id="ab-scroll-progress"></div>
+
+        {% comment %}
+        The JavaScript runtime configuration (API URLs, static prefix,
+        translated strings), built once in Python by
+        core.context_processors.app_config and read by app-config.js.
+        {% endcomment %}
+        {{ AB_APP_CONFIG|json_script:"ab-app-config" }}
+
+        {% if messages %}
+            {% comment %}
+            Server-side Django messages (login, logout, redirects, form results):
+            rendered as markup so Django escapes the text, and read by notify.js
+            without any inline script.
+            {% endcomment %}
+            <div id="ab-server-messages" hidden>
+                {% for message in messages %}
+                    <span data-ab-message="{{ message }}" data-ab-level="{{ message.tags }}"></span>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% block header %}{% endblock %}
         {% block content %}{% endblock %}
         {% block footer %}{% endblock %}
 {% block js %}
-    <script>
-/* ---------------------------------------------------------------------------
-   The single source of truth for user notifications across the whole site.
-
-   Every page extends this template, so there is exactly ONE configured Notyf
-   instance and ONE entry point: window.notify(message, type).
-
-   Page scripts must never construct their own Notyf — a local instance would
-   ignore this configuration (position, colours, icons, durations) and could
-   drift from it. Call window.notify() instead:
-
-       window.notify("Saved successfully", "success");
-       window.notify(data.errors, "error");   // array or "a\nb" both work
-
-   Types: success | info (5s), warning (7s), error (8s). Errors linger longer
-   because they usually need reading; successes should not block the view.
---------------------------------------------------------------------------- */
-(function () {
-    // notyf.min.js is loaded with `defer`, so it is not defined yet while this
-    // template is still being parsed. The instance is therefore created lazily
-    // (and idempotently) instead of at parse time.
-    function notyfInstance() {
-        if (!window.notyf && typeof Notyf !== 'undefined') {
-            window.notyf = new Notyf(notyfOptions);
-        }
-        return window.notyf;
-    }
-
-    var notyfOptions = {
-        duration: 5000,
-        dismissible: true,
-        position: {x: 'right', y: 'top'},
-        types: [
-            {
-                type: 'success',
-                duration: 5000,
-                background: '#15803D',
-                icon: {
-                    className: 'fas fa-check-circle',
-                    tagName: 'i',
-                    color: 'white'
-                }
-            },
-            {
-                type: 'error',
-                duration: 8000,
-                background: '#B91C1C',
-                icon: {
-                    className: 'fas fa-exclamation-circle',
-                    tagName: 'i',
-                    color: 'white'
-                }
-            },
-            {
-                type: 'warning',
-                duration: 7000,
-                background: '#B45309',
-                icon: {
-                    className: 'fas fa-exclamation-triangle',
-                    tagName: 'i',
-                    color: 'white'
-                }
-            },
-            {
-                type: 'info',
-                duration: 5000,
-                background: '#0369A1',
-                icon: {
-                    className: 'fas fa-info-circle',
-                    tagName: 'i',
-                    color: 'white'
-                }
-            }
-        ]
-    };
-
-    var ALIASES = {danger: 'error', warn: 'warning', debug: 'info', notice: 'info'};
-    var KNOWN = ['success', 'error', 'warning', 'info'];
-
-    /*
-     * Canonical notification entry point.
-     *
-     * @param {string|string[]} message  text, or several lines/messages
-     * @param {string}          type     success | error | warning | info
-     * @returns {boolean}                true when at least one toast was shown
-     *
-     * Never throws: a notification failure must not abort the caller's flow
-     * (e.g. a redirect or a form submission that already succeeded).
-     */
-    window.notify = function (message, type) {
-        var items = (Array.isArray(message) ? message : String(message == null ? '' : message).split('\n'))
-            .map(function (m) { return String(m).trim(); })
-            .filter(Boolean);
-        if (!items.length) return false;
-
-        var kind = String(type || 'info').toLowerCase();
-        kind = ALIASES[kind] || kind;
-        if (KNOWN.indexOf(kind) === -1) kind = 'info';
-
-        var inst = notyfInstance();
-        if (!inst || typeof inst.open !== 'function') {
-            // Notyf failed to load (blocked or missing vendor file): degrade to
-            // the browser console rather than breaking the page.
-            items.forEach(function (text) { console.log('[' + kind + '] ' + text); });
-            return false;
-        }
-
-        items.forEach(function (text) {
-            inst.open({type: kind, message: text});
-        });
-        return true;
-    };
-
-    // Server-side Django messages (login, logout, redirects, ...)
-    var levelMap = {
-        'debug': 'info',
-        'info': 'info',
-        'success': 'success',
-        'warning': 'warning',
-        'error': 'error'
-    };
-
-    function showServerMessages() {
-        // Pre-warm the instance so window.notyf is ready for any page script.
-        notyfInstance();
-        {% for message in messages %}
-        window.notify("{{ message|escapejs }}", levelMap["{{ message.tags }}"] || 'info');
-        {% endfor %}
-    }
-
-    // The deferred Notyf script has definitely executed by DOMContentLoaded.
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', showServerMessages);
-    } else {
-        showServerMessages();
-    }
-})();
-    </script>
-    <script>
-/* Strings that the static page scripts need.
-
-   Files under static/js are served verbatim by the staticfiles app and are
-   NEVER rendered as Django templates, so translation tags cannot be used
-   inside them — writing one there would ship the raw tag text to the browser.
-   Scripts must therefore read their text from this object instead. */
-window.I18N = {
-    unexpectedError: "{% trans 'An unexpected error occurred.' %}"
-};
-    </script>
+    {% comment %}
+    Global scripts in dependency order — deferred scripts run in document order.
+    notify.js defines window.notify, app-config.js publishes window.AppConfig,
+    base.js publishes window.CSRF_TOKEN, window.PendingSearch and window.I18N,
+    each before any page script runs. Templates that extend this one add their
+    page script after block.super.
+    {% endcomment %}
+    <script src="{% static 'js/notify.js' %}" defer></script>
+    <script src="{% static 'js/app-config.js' %}" defer></script>
     <script src="{% static 'js/base.js' %}" defer></script>
     <script src="{% static 'js/jwt-auth.js' %}" defer></script>
 {% endblock %}

@@ -684,6 +684,18 @@
     color: var(--ab-primary, #1E3A8A);
 }
 
+/* Wrapper around a password input that holds an absolutely positioned toggle.
+   Every field needs its own positioning context. */
+.pwd-field {
+    position: relative;
+}
+
+/* Anti-bot honeypot input: present in the form for bots, invisible to users.
+   Previously an inline style="display:none" set from the form definition. */
+.ab-honeypot {
+    display: none;
+}
+
 /* Password Toggle Dashboard Profile (Eye Icon) */
 .pwd-toggle-dash {
     position: absolute;
@@ -722,6 +734,16 @@
 /* ==========================================================================
    ADDITIONAL UTILITIES
 ========================================================================== */
+
+/* Attention pulse for the unread-notifications badge */
+@keyframes pulse-badge {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+.badge-pulse {
+    animation: pulse-badge 1.5s infinite;
+}
 
 /* Toast styling is owned by Notyf (configured in templates/base.html) — the
    dashboard no longer has its own toast container, so no rules are needed here. */

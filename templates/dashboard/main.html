@@ -7,15 +7,6 @@
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'vendor/intl-tel-input/css/intlTelInput.css' %}">
     <link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}">
-    <style>
-        @keyframes pulse-badge {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.8; }
-        }
-        .badge-pulse {
-            animation: pulse-badge 1.5s infinite;
-        }
-    </style>
 {% endblock %}
 {% block content %}
     <div class="dashboard-wrapper">
@@ -181,33 +172,11 @@
 {% endblock %}
 {% block js %}
     {{ block.super }}
-    <script>
-    window.AppConfig = {
-        staticUrl: "{% static '' %}",
-        urls: {
-            dashboardContent: "{% url 'dashboard_content' 'PAGE_PLACEHOLDER' %}",
-            logout: "{% url 'logout' %}",
-            generatePassword: "{% url 'generate_password' %}",
-            programApplyRequest: "{% url 'program_apply_request' %}",
-            programsSearch: "{% url 'programs_search' %}",
-            universitiesSearch: "{% url 'universities_search' %}",
-            sendNotification: "{% url 'send_notification' %}",
-            searchUsers: "{% url 'search_users_for_notification' %}",
-            getGroupUsers: "{% url 'get_group_user_ids' %}",
-            unreadCount: "{% url 'unread_notification_count' %}",
-            markAllRead: "{% url 'mark_all_notifications_read' %}",
-            markRead: "/dashboard/notifications/mark-read/",
-            updateNotification: "{% url 'update_notification' 0 %}".replace('0/', ''),
-            getNotifRecipients: "{% url 'get_notification_recipients' 0 %}".replace('0/', '')
-        },
-        translations: {
-            loadingContent: "{% trans 'Loading content...' %}",
-            loadingError: "{% trans 'Loading Error' %}",
-            errorSupport: "{% trans 'Please try again or contact support' %}",
-            reloadPage: "{% trans 'Reload Page' %}"
-        }
-    };
-    </script>
+    {% comment %}
+    window.AppConfig (every dashboard endpoint) is built once in Python by
+    core.context_processors.app_config and published by app-config.js from the
+    data block in base.html, so the URL list is not duplicated per page.
+    {% endcomment %}
     <script src="{% static 'js/pages/dashboard.js' %}" defer></script>
     <script src="{% static 'vendor/intl-tel-input/js/intlTelInput.min.js' %}" defer></script>
 {% endblock %}

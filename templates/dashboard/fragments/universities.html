@@ -169,8 +169,10 @@
     </div>
     <!-- Modern Pagination -->
     {% if page_obj.has_other_pages %}
-        {# Serialized once so a renamed filter never has to be chased through
-           every page button below. Already carries a leading "&". #}
+        {% comment %}
+        Serialized once so a renamed filter never has to be chased through every
+        page button below. Already carries a leading "&".
+        {% endcomment %}
         {% filter_params filters as filters_qs %}
         <div class="flex flex-col items-center gap-4 mt-8">
             <div class="flex items-center gap-2 flex-wrap justify-center">

@@ -141,7 +141,7 @@
                 <input type="hidden" name="form_type" value="password_change">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Current Password" %}</label>
-                    <div style="position: relative;">
+                    <div class="pwd-field">
                         {{ password_form.old_password }}
                         <button type="button"
                                 class="pwd-toggle-dash"
@@ -152,7 +152,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "New Password" %}</label>
-                    <div style="position: relative;">
+                    <div class="pwd-field">
                         {{ password_form.new_password1 }}
                         <button type="button"
                                 class="pwd-toggle-dash"
@@ -163,7 +163,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Confirm New Password" %}</label>
-                    <div style="position: relative;">
+                    <div class="pwd-field">
                         {{ password_form.new_password2 }}
                         <button type="button"
                                 class="pwd-toggle-dash"

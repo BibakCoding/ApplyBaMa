@@ -441,6 +441,59 @@ Do not change these assumptions without updating the corresponding JavaScript.
 
 The widget's `utilsScript` is resolved from `window.AppConfig.staticUrl` (exposed in the dashboard shell), **not** from a CDN — keep it that way when touching `dashboard.js`.
 
+### No Inline Markup Code
+
+**Templates must not contain inline `style` attributes, `<style>` blocks, or event handlers.**
+Inline markup code cannot be cached, is re-sent with every response, beats the stylesheet in the
+cascade (so it silently defeats RTL and responsive rules), and forces `unsafe-inline` into any
+future Content-Security-Policy — which would break every affected element at once.
+
+| Instead of | Put it in |
+|---|---|
+| `style="position: relative;"` | a class in the matching stylesheet (`static/css/pages/*.css`, `base.css`) |
+| a `<style>` block in a page template | the page's stylesheet — e.g. `static/css/admin/admin-theme.css`, loaded via `{% block extrastyle %}` |
+| `onclick="…"`, `onsubmit="…"` | a `data-*` attribute handled by the one delegated listener (see Event Delegation above) |
+
+Prefer a **modifier class** (`card-header--flush`, `model-name--muted`) over a one-off rule when
+only one element needs the variation.
+
+**Two exceptions are intentional — do not "fix" them:**
+
+* `templates/emails/*.html` keep inline CSS and `<style>` blocks: mail clients strip or ignore
+  external stylesheets, so inline is the only thing that renders.
+* `templates/dashboard/pdf_export.html` keeps its `<style>` block: it is rendered by
+  **xhtml2pdf (`pisa.CreatePDF`)** from an HTML string, with no browser and no HTTP fetch, so an
+  external stylesheet would simply not be loaded and the PDF would lose its layout.
+
+Runtime styles set from JavaScript are acceptable when the value is **computed** (e.g. a scroll
+progress width), but a fixed value belongs in a class: `.ab-alert--hiding` replaced three
+`alert.style.*` assignments.
+
+### The Data Bridge — no executable inline `<script>`
+
+**No template may contain an executable inline `<script>` block.** Server data reaches JavaScript
+through declared bridges only, so every script is a cacheable static file:
+
+| Data | Bridge | Read by |
+|---|---|---|
+| `window.AppConfig` (URLs, `staticUrl`, translations) | `{{ AB_APP_CONFIG &#124; json_script:"ab-app-config" }}` — a `type="application/json"` block assembled by `core/context_processors.py` | `static/js/app-config.js` |
+| CSRF token | `<meta name="csrf-token" content="{{ csrf_token }}">` | `static/js/base.js` → `window.CSRF_TOKEN` |
+| Translated JS strings | `data-i18n-*` attributes on `<body>` | `static/js/base.js` → `window.I18N` |
+| Django messages | the `#ab-server-messages` hidden container | `static/js/notify.js` |
+| `window.PendingSearch` (hero-search handoff) | — (pure logic) | `static/js/base.js` |
+
+A `<script type="application/json">` is a **data block, not code**: the browser never executes it,
+so it needs no CSP exemption. `json_script` escapes `<`, `>` and `&`, which is what makes it safe
+for values interpolated from the database.
+
+Anything that is **logic** rather than data belongs in `static/js/base.js` or a page script —
+that is how the CSRF token and `window.PendingSearch` moved out of `base.html`.
+
+**Multi-line `{# … #}` comments are a trap.** Django only strips a `{# #}` comment when it opens
+and closes on the *same* line; a multi-line one is emitted into the HTML verbatim. Use
+`{% comment %} … {% endcomment %}` or one comment tag per line. Verify with
+`grep -rn '{#' templates/ | grep -v '#}'` — it must return nothing.
+
 ### Static Assets & Styling
 
 Everything the frontend needs is served from this repository. **No page may reference an

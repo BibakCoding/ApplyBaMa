@@ -39,8 +39,8 @@
         </div>
 
         <div class="auth-form-container">
-            <div class="auth-form-header" style="text-align: center;">
-                <div style="width: 4rem; height: 4rem; margin: 0 auto 1rem auto; background: var(--ab-primary-soft); color: var(--ab-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <div class="auth-form-header auth-form-header--centered">
+                <div class="auth-status-icon">
                     <i class="fas fa-user-edit"></i>
                 </div>
                 <h2 class="font-serif">{% trans "Choose Your Username" %}</h2>
@@ -60,7 +60,7 @@
                 <button type="submit" name="action" value="save" class="ab-btn ab-btn-primary">{% trans "Save & Continue" %}</button>
             </form>
 
-            <form action="{% url 'username_selection' %}" method="post" class="auth-form" style="margin-top: 1rem;">
+            <form action="{% url 'username_selection' %}" method="post" class="auth-form auth-form--stacked">
                 {% csrf_token %}
                 <button type="submit" name="action" value="skip" class="ab-btn ab-btn-outline w-full">{% trans "Skip for Now" %}</button>
             </form>

@@ -342,18 +342,10 @@
 {% endblock %}
 {% block js %}
     {{ block.super }}
-    <script>
-    window.AppConfig = {
-        isLoggedIn: {% if user.is_authenticated %}true{% else %}false{% endif %},
-        urls: {
-            register: "{% url 'register' %}",
-            dashboard: "{% url 'dashboard' %}"
-        },
-        translations: {
-            searchInfo: "{% trans 'Registration is required to see programs matching your search.' %}",
-            newsletterSuccess: "{% trans 'Thank you! You are on the scholarship alerts list.' %}"
-        }
-    };
-    </script>
+    {% comment %}
+    window.AppConfig (isLoggedIn, the register/dashboard URLs) is built once in
+    Python by core.context_processors.app_config and published by app-config.js
+    from the data block in base.html.
+    {% endcomment %}
     <script src="{% static 'js/pages/home.js' %}" defer></script>
 {% endblock %}

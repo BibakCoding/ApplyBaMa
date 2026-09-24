@@ -235,11 +235,13 @@ class AddStudentForm(forms.Form):
         )
     )
 
-    # Honeypot field to trap bots
+    # Honeypot field to trap bots. Hidden with a CSS class (.ab-honeypot in
+    # dashboard.css) rather than an inline style, so presentation stays in the
+    # stylesheet and no inline style is emitted into the markup.
     website = forms.CharField(
         required=False,
         widget=forms.TextInput(
-            attrs={"style": "display:none;", "tabindex": "-1", "autocomplete": "off"}
+            attrs={"class": "ab-honeypot", "tabindex": "-1", "autocomplete": "off"}
         ),
     )
 
