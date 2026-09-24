@@ -241,8 +241,7 @@ html[dir="rtl"] .auth-lang-switch { right: auto; left: 1.5rem; }
 }
 
 .auth-brand-panel {
-    /* auth-bg.webp is the same picture as auth-bg.png at ~4% of the size;
-       the PNG stays tracked as the master copy for future re-encodes. */
+    /* Optimized WebP (~60 KB) — the original PNG was 1.58 MB. */
     background-image: linear-gradient(rgba(30, 58, 138, 0.92), rgba(23, 37, 84, 0.95)), url('/static/images/auth/auth-bg.webp');
     background-size: cover;
     background-position: center;
