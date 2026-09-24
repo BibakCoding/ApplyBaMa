@@ -47,9 +47,10 @@ npm-debug.log*
 .coverage
 htmlcov/
 
-# Migrations (Keep __init__.py, ignore the rest)
-**/migrations/*.py
-!**/migrations/__init__.py
+# Migrations are tracked deliberately: a fresh clone has to be able to build
+# the exact schema the models expect. Ignoring them left every checkout with an
+# empty database, and regenerating them per clone produced migrations that
+# diverged from everyone else's.
 
 requirements.txt
 
