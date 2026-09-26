@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 01:24+0330\n"
+"POT-Creation-Date: 2026-09-26 19:27+0330\n"
 "PO-Revision-Date: 2026-08-27 03:43+0000\n"
-"Last-Translator:   <a@g.com>\n"
+"Last-Translator: <a@g.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
@@ -99,6 +99,58 @@ msgstr "تصویر پروفایل با موفقیت به‌روزرسانی شد
 msgid "Invalid pagination parameters"
 msgstr "پارامترهای صفحه‌بندی نامعتبر است"
 
+#: .\authentication\admin.py:47
+msgid "Lifetime"
+msgstr "مدت اعتبار"
+
+#: .\authentication\admin.py:57 .\core\admin.py:501 .\core\admin.py:976
+#: .\templates\dashboard\fragments\notifications.html:62
+msgid "Type"
+msgstr "نوع"
+
+#: .\authentication\admin.py:61
+#: .\templates\dashboard\fragments\application_detail.html:11
+msgid "Code"
+msgstr "کد"
+
+#: .\authentication\admin.py:65
+msgid "State"
+msgstr "وضعیت"
+
+#: .\authentication\admin.py:68
+msgid "Used"
+msgstr "استفاده‌شده"
+
+#: .\authentication\admin.py:70
+msgid "Expired"
+msgstr "منقضی‌شده"
+
+#: .\authentication\admin.py:71
+msgid "Active"
+msgstr "فعال"
+
+#: .\authentication\admin.py:73
+msgid "Mark selected codes as used"
+msgstr "علامت‌گذاری کدهای انتخاب‌شده به‌عنوان استفاده‌شده"
+
+#: .\authentication\admin.py:78
+#, python-format
+msgid "%(count)d code invalidated."
+msgid_plural "%(count)d codes invalidated."
+msgstr[0] "%(count)d کد باطل شد."
+msgstr[1] "%(count)d کد باطل شد."
+
+#: .\authentication\admin.py:83
+msgid "Delete expired codes"
+msgstr "حذف کدهای منقضی‌شده"
+
+#: .\authentication\admin.py:90
+#, python-format
+msgid "%(count)d expired code deleted."
+msgid_plural "%(count)d expired codes deleted."
+msgstr[0] "%(count)d کد منقضی‌شده حذف شد."
+msgstr[1] "%(count)d کد منقضی‌شده حذف شد."
+
 #: .\authentication\forms.py:11 .\templates\authentication\login.html:61
 msgid "Email or Username"
 msgstr "ایمیل یا نام کاربری"
@@ -147,7 +199,7 @@ msgstr "رمزهای عبور مطابقت ندارند."
 msgid "Confirmation Code"
 msgstr "کد تأیید"
 
-#: .\authentication\forms.py:93
+#: .\authentication\forms.py:93 .\authentication\models.py:31
 #: .\templates\authentication\change_password.html:51
 msgid "Verification Code"
 msgstr "کد تأیید"
@@ -171,6 +223,10 @@ msgstr "ثبت‌نام"
 #: .\authentication\models.py:16
 msgid "Password Reset"
 msgstr "بازیابی رمز عبور"
+
+#: .\authentication\models.py:32
+msgid "Verification Codes"
+msgstr "کدهای تأیید"
 
 #: .\authentication\views.py:92 .\authentication\views.py:149
 #: .\authentication\views.py:218 .\authentication\views.py:280
@@ -255,13 +311,415 @@ msgstr "این نام کاربری قبلاً گرفته شده است."
 msgid "Username updated successfully."
 msgstr "رمز عبور با موفقیت به‌روزرسانی شد."
 
-#: .\core\context_processors.py:72
-#, fuzzy
-#| msgid "Create your free account to see programs matching your search."
-msgid "Registration is required to see programs matching your search."
+#: .\core\admin.py:61 .\templates\admin\base_site.html:25
+#: .\templates\admin\base_site.html:51
+msgid "Apply BM Control Center"
+msgstr "مرکز کنترل اپلای بی‌ام"
+
+#: .\core\admin.py:62
+msgid "Apply BM Admin"
+msgstr "مدیریت اپلای بی‌ام"
+
+#: .\core\admin.py:99 .\core\admin.py:141 .\core\admin.py:217
+#: .\core\models.py:278 .\core\templatetags\admin_extras.py:238
+#: .\templates\dashboard\fragments\programs.html:4
+#: .\templates\dashboard\main.html:88
+msgid "Programs"
+msgstr "برنامه‌ها"
+
+#: .\core\admin.py:114 .\core\models.py:172
+msgid "Faculties"
+msgstr "دانشکدهها"
+
+#: .\core\admin.py:137 .\core\models.py:244
+#: .\core\templatetags\admin_extras.py:246
+#: .\templates\authentication\login.html:28
+#: .\templates\dashboard\fragments\universities.html:4
+#: .\templates\dashboard\main.html:81
+msgid "Universities"
+msgstr "دانشگاهها"
+
+#: .\core\admin.py:213
+msgid "Logo"
+msgstr "لوگو"
+
+#: .\core\admin.py:221
+msgid "Show selected universities on the homepage"
+msgstr "نمایش دانشگاه‌های انتخاب‌شده در صفحه اصلی"
+
+#: .\core\admin.py:227
+#, python-format
+msgid "%(count)d university is now on the homepage."
+msgid_plural "%(count)d universities are now on the homepage."
+msgstr[0] "%(count)d دانشگاه اکنون در صفحه اصلی است."
+msgstr[1] "%(count)d دانشگاه اکنون در صفحه اصلی است."
+
+#: .\core\admin.py:235
+msgid "Hide selected universities from the homepage"
+msgstr "حذف دانشگاه‌های انتخاب‌شده از صفحه اصلی"
+
+#: .\core\admin.py:241
+#, python-format
+msgid "%(count)d university was removed from the homepage."
+msgid_plural "%(count)d universities were removed from the homepage."
+msgstr[0] "%(count)d دانشگاه از صفحه اصلی حذف شد."
+msgstr[1] "%(count)d دانشگاه از صفحه اصلی حذف شد."
+
+#: .\core\admin.py:249
+msgid "Activate selected universities"
+msgstr "فعال‌کردن دانشگاه‌های انتخاب‌شده"
+
+#: .\core\admin.py:254
+#, python-format
+msgid "%(count)d university activated."
+msgid_plural "%(count)d universities activated."
+msgstr[0] "%(count)d دانشگاه فعال شد."
+msgstr[1] "%(count)d دانشگاه فعال شد."
+
+#: .\core\admin.py:259
+msgid "Deactivate selected universities"
+msgstr "غیرفعال‌کردن دانشگاه‌های انتخاب‌شده"
+
+#: .\core\admin.py:265
+#, python-format
+msgid "%(count)d university deactivated."
+msgid_plural "%(count)d universities deactivated."
+msgstr[0] "%(count)d دانشگاه غیرفعال شد."
+msgstr[1] "%(count)d دانشگاه غیرفعال شد."
+
+#: .\core\admin.py:275
+msgid "discount"
+msgstr "تخفیف"
+
+#: .\core\admin.py:279
+msgid "Has an offer"
+msgstr "تخفیف دارد"
+
+#: .\core\admin.py:279
+msgid "No offer"
+msgstr "بدون تخفیف"
+
+#: .\core\admin.py:346 .\core\admin.py:707
+msgid "Status"
+msgstr "وضعیت"
+
+#: .\core\admin.py:351
+msgid "Price"
+msgstr "قیمت"
+
+#: .\core\admin.py:360
+msgid "offer"
+msgstr "تخفیف"
+
+#: .\core\admin.py:364
+msgid "Mark selected programs as available"
+msgstr "علامت‌گذاری رشته‌های انتخاب‌شده به‌عنوان موجود"
+
+#: .\core\admin.py:370
+#, python-format
+msgid "%(count)d program is now available."
+msgid_plural "%(count)d programs are now available."
+msgstr[0] "%(count)d رشته اکنون موجود است."
+msgstr[1] "%(count)d رشته اکنون موجود است."
+
+#: .\core\admin.py:376
+msgid "Mark selected programs as quota full"
+msgstr "علامت‌گذاری رشته‌های انتخاب‌شده به‌عنوان تکمیل‌ظرفیت"
+
+#: .\core\admin.py:382
+#, python-format
+msgid "%(count)d program marked as quota full."
+msgid_plural "%(count)d programs marked as quota full."
+msgstr[0] "%(count)d رشته به‌عنوان تکمیل‌ظرفیت علامت خورد."
+msgstr[1] "%(count)d رشته به‌عنوان تکمیل‌ظرفیت علامت خورد."
+
+#: .\core\admin.py:390
+msgid "Activate selected programs"
+msgstr "فعال‌کردن رشته‌های انتخاب‌شده"
+
+#: .\core\admin.py:395
+#, python-format
+msgid "%(count)d program activated."
+msgid_plural "%(count)d programs activated."
+msgstr[0] "%(count)d رشته فعال شد."
+msgstr[1] "%(count)d رشته فعال شد."
+
+#: .\core\admin.py:400
+msgid "Deactivate selected programs"
+msgstr "غیرفعال‌کردن رشته‌های انتخاب‌شده"
+
+#: .\core\admin.py:405
+#, python-format
+msgid "%(count)d program deactivated."
+msgid_plural "%(count)d programs deactivated."
+msgstr[0] "%(count)d رشته غیرفعال شد."
+msgstr[1] "%(count)d رشته غیرفعال شد."
+
+#: .\core\admin.py:450 .\templates\dashboard\fragments\welcome.html:18
+#: .\templates\dashboard\main.html:66
+msgid "Profile"
+msgstr "پروفایل"
+
+#: .\core\admin.py:506 .\core\admin.py:576 .\core\models.py:527
+#: .\core\templatetags\admin_extras.py:50
+#: .\core\templatetags\admin_extras.py:230
+#: .\templates\dashboard\fragments\my_students.html:19
+#: .\templates\dashboard\fragments\welcome.html:64
+#: .\templates\dashboard\main.html:94
+msgid "Applications"
+msgstr "درخواست‌ها"
+
+#: .\core\admin.py:510
+msgid "Activate selected users"
+msgstr "فعال‌کردن کاربران انتخاب‌شده"
+
+#: .\core\admin.py:515
+#, python-format
+msgid "%(count)d user activated."
+msgid_plural "%(count)d users activated."
+msgstr[0] "%(count)d کاربر فعال شد."
+msgstr[1] "%(count)d کاربر فعال شد."
+
+#: .\core\admin.py:520
+msgid "Deactivate selected users"
+msgstr "غیرفعال‌کردن کاربران انتخاب‌شده"
+
+#: .\core\admin.py:525
+#, python-format
+msgid "%(count)d user deactivated."
+msgid_plural "%(count)d users deactivated."
+msgstr[0] "%(count)d کاربر غیرفعال شد."
+msgstr[1] "%(count)d کاربر غیرفعال شد."
+
+#: .\core\admin.py:553 .\core\templatetags\admin_extras.py:211
+msgid "Agents"
+msgstr "نمایندگان"
+
+#: .\core\admin.py:599 .\templates\dashboard\fragments\profile.html:198
+msgid "Stage"
+msgstr "مرحله"
+
+#: .\core\admin.py:610
+msgid "needs attention"
+msgstr "نیازمند بررسی"
+
+#: .\core\admin.py:615
+msgid "Still in progress"
+msgstr "در جریان"
+
+#: .\core\admin.py:616
+msgid "No update for 30+ days"
+msgstr "بیش از ۳۰ روز بدون به‌روزرسانی"
+
+#: .\core\admin.py:617
+msgid "No program chosen yet"
+msgstr "هنوز رشته‌ای انتخاب نشده"
+
+#: .\core\admin.py:666
+msgid "Identifiers"
+msgstr "شناسه‌ها"
+
+#: .\core\admin.py:667
+msgid "Parties"
+msgstr "طرفین"
+
+#: .\core\admin.py:668 .\core\admin.py:711
+msgid "Progress"
+msgstr "پیشرفت"
+
+#: .\core\admin.py:669 .\templates\core\main.html:20
+#: .\templates\core\main.html:54
+msgid "Documents"
+msgstr "مدارک"
+
+#: .\core\admin.py:699
+#: .\templates\dashboard\fragments\application_detail.html:42
+#: .\templates\dashboard\main.html:47
+msgid "Student"
+msgstr "دانشجو"
+
+#: .\core\admin.py:703 .\core\models.py:388 .\templates\dashboard\main.html:43
+msgid "Agent"
+msgstr "نماینده"
+
+#: .\core\admin.py:746
+msgid "Mark selected applications as finished"
+msgstr "علامت‌گذاری درخواست‌های انتخاب‌شده به‌عنوان تکمیل‌شده"
+
+#: .\core\admin.py:752
+#, python-format
+msgid "%(count)d application marked as finished."
+msgstr "%(count)d درخواست به‌عنوان تکمیل‌شده علامت خورد."
+
+#: .\core\admin.py:753
+#, python-format
+msgid "%(count)d applications marked as finished."
+msgstr "%(count)d درخواست به‌عنوان تکمیل‌شده علامت خوردند."
+
+#: .\core\admin.py:756
+msgid "Mark selected applications as failed"
+msgstr "علامت‌گذاری درخواست‌های انتخاب‌شده به‌عنوان ناموفق"
+
+#: .\core\admin.py:762
+#, python-format
+msgid "%(count)d application marked as failed."
+msgstr "%(count)d درخواست به‌عنوان ناموفق علامت خورد."
+
+#: .\core\admin.py:763
+#, python-format
+msgid "%(count)d applications marked as failed."
+msgstr "%(count)d درخواست به‌عنوان ناموفق علامت خوردند."
+
+#: .\core\admin.py:766
+msgid "Reopen selected applications"
+msgstr "بازگشایی درخواست‌های انتخاب‌شده"
+
+#: .\core\admin.py:772
+#, python-format
+msgid "%(count)d application reopened."
+msgstr "%(count)d درخواست بازگشایی شد."
+
+#: .\core\admin.py:773
+#, python-format
+msgid "%(count)d applications reopened."
+msgstr "%(count)d درخواست بازگشایی شدند."
+
+#: .\core\admin.py:789
+msgid "Hero section"
+msgstr "بخش هیرو"
+
+#: .\core\admin.py:791
+msgid "Contact & social"
+msgstr "تماس و شبکه‌های اجتماعی"
+
+#: .\core\admin.py:832
+msgid "Level"
+msgstr "مقطع"
+
+#: .\core\admin.py:862
+msgid "Photo"
+msgstr "عکس"
+
+#: .\core\admin.py:866
+msgid "Publish selected success stories"
+msgstr "انتشار داستان‌های موفقیت انتخاب‌شده"
+
+#: .\core\admin.py:872
+#, python-format
+msgid "%(count)d success story published."
+msgid_plural "%(count)d success stories published."
+msgstr[0] "%(count)d داستان موفقیت منتشر شد."
+msgstr[1] "%(count)d داستان موفقیت منتشر شد."
+
+#: .\core\admin.py:880
+msgid "Unpublish selected success stories"
+msgstr "لغو انتشار داستان‌های موفقیت انتخاب‌شده"
+
+#: .\core\admin.py:886
+#, python-format
+msgid "%(count)d success story hidden from the homepage."
+msgid_plural "%(count)d success stories hidden from the homepage."
+msgstr[0] "%(count)d داستان موفقیت از صفحه اصلی پنهان شد."
+msgstr[1] "%(count)d داستان موفقیت از صفحه اصلی پنهان شد."
+
+#: .\core\admin.py:924 .\core\models.py:724
+#: .\templates\dashboard\fragments\notifications.html:14
+#: .\templates\dashboard\fragments\notifications.html:125
+msgid "Message"
+msgstr "پیام"
+
+#: .\core\admin.py:934
+msgid "Audience"
+msgstr "مخاطبان"
+
+#: .\core\admin.py:938
+msgid ""
+"Use “Specific users” from the dashboard notification composer: the admin "
+"cannot edit a through-model recipient list directly."
 msgstr ""
-"حساب کاربری رایگان خود را ایجاد کنید تا برنامه‌های منطبق با جستجوی خود را "
-"ببینید."
+"برای فهرست گیرندگان، از گزینه «کاربران مشخص» در بخش ساخت اعلان داشبورد "
+"استفاده کنید؛ پنل مدیریت نمیتواند گیرندگان این مدل واسط را مستقیماً ویرایش "
+"کند."
+
+#: .\core\admin.py:943 .\core\admin.py:988
+msgid "Delivery"
+msgstr "ارسال"
+
+#: .\core\admin.py:980 .\core\models.py:748
+#: .\templates\dashboard\fragments\notifications.html:63
+msgid "Recipients"
+msgstr "گیرندگان"
+
+#: .\core\admin.py:984 .\core\models.py:790
+msgid "Read"
+msgstr "خوانده‌شده"
+
+#: .\core\admin.py:996
+#, python-format
+msgid "%(count)d recipient,"
+msgid_plural "%(count)d recipients,"
+msgstr[0] "%(count)d گیرنده،"
+msgstr[1] "%(count)d گیرنده،"
+
+#: .\core\admin.py:1003
+msgid "open the recipient list"
+msgstr "باز کردن فهرست گیرندگان"
+
+#: .\core\admin.py:1006
+msgid "Deliver to the selected audience"
+msgstr "ارسال به مخاطبان انتخاب‌شده"
+
+#: .\core\admin.py:1025
+#, python-format
+msgid "%(count)d new delivery created."
+msgid_plural "%(count)d new deliveries created."
+msgstr[0] "%(count)d ارسال جدید ایجاد شد."
+msgstr[1] "%(count)d ارسال جدید ایجاد شد."
+
+#: .\core\admin.py:1045
+msgid "Mark selected deliveries as read"
+msgstr "علامت‌گذاری ارسال‌های انتخاب‌شده به‌عنوان خوانده‌شده"
+
+#: .\core\admin.py:1050
+#, python-format
+msgid "%(count)d delivery marked as read."
+msgid_plural "%(count)d deliveries marked as read."
+msgstr[0] "%(count)d ارسال به‌عنوان خوانده‌شده علامت خورد."
+msgstr[1] "%(count)d ارسال به‌عنوان خوانده‌شده علامت خورد."
+
+#: .\core\admin.py:1055
+msgid "Mark selected deliveries as unread"
+msgstr "علامت‌گذاری ارسال‌های انتخاب‌شده به‌عنوان خوانده‌نشده"
+
+#: .\core\admin.py:1061
+#, python-format
+msgid "%(count)d delivery marked as unread."
+msgid_plural "%(count)d deliveries marked as unread."
+msgstr[0] "%(count)d ارسال به‌عنوان خوانده‌نشده علامت خورد."
+msgstr[1] "%(count)d ارسال به‌عنوان خوانده‌نشده علامت خورد."
+
+#: .\core\admin_utils.py:53
+msgid "Yes"
+msgstr "بله"
+
+#: .\core\admin_utils.py:53
+msgid "No"
+msgstr "خیر"
+
+#: .\core\admin_utils.py:70
+msgid "Export selected rows as CSV"
+msgstr "خروجی ردیف‌های انتخاب‌شده به‌صورت CSV"
+
+#: .\core\admin_utils.py:89
+#, python-format
+msgid "%(count)d row exported."
+msgid_plural "%(count)d rows exported."
+msgstr[0] "%(count)d ردیف خروجی گرفته شد."
+msgstr[1] "%(count)d ردیف خروجی گرفته شد."
+
+#: .\core\context_processors.py:72
+msgid "Registration is required to see programs matching your search."
+msgstr "برای دیدن رشته‌های منطبق با جست‌وجوی شما، ثبت‌نام لازم است."
 
 #: .\core\context_processors.py:75
 msgid "Thank you! You are on the scholarship alerts list."
@@ -336,14 +794,12 @@ msgid ""
 "Unsupported file extension. Allowed: .pdf, .doc, .docx, .jpg, .jpeg, .png"
 msgstr "پسوند فایل پشتیبانی نمی‌شود. مجاز: .pdf, .doc, .docx, .jpg, .jpeg, .png"
 
-#: .\core\models.py:75 .\core\models.py:103 .\core\models.py:173
-#: .\core\models.py:270
+#: .\core\models.py:75 .\core\models.py:104 .\core\models.py:192
+#: .\core\models.py:295
 msgid "ID from info.studyfans.com"
 msgstr "شناسه از info.studyfans.com"
 
 #: .\core\models.py:79
-#, fuzzy
-#| msgid "Current language"
 msgid "Primary language"
 msgstr "زبان اصلی"
 
@@ -351,302 +807,424 @@ msgstr "زبان اصلی"
 msgid "Nationality adjective"
 msgstr "صفت ملیت"
 
-#: .\core\models.py:137
+#: .\core\models.py:86 .\templates\dashboard\fragments\profile.html:117
+msgid "Country"
+msgstr "کشور"
+
+#: .\core\models.py:87 .\templates\authentication\login.html:29
+msgid "Countries"
+msgstr "کشورها"
+
+#: .\core\models.py:116 .\templates\dashboard\fragments\profile.html:121
+msgid "City"
+msgstr "شهر"
+
+#: .\core\models.py:117
+msgid "Cities"
+msgstr "شهرها"
+
+#: .\core\models.py:128
+msgid "Term Option"
+msgstr "گزینه ترم"
+
+#: .\core\models.py:129
+msgid "Term Options"
+msgstr "گزینه‌های ترم"
+
+#: .\core\models.py:148
 msgid "Number of years—for example, '1', '1.5', '2', etc."
 msgstr "تعداد سال‌ها—برای مثال، '1'، '1.5'، '2' و غیره."
 
-#: .\core\models.py:151
+#: .\core\models.py:152
+msgid "Year Option"
+msgstr "گزینه سال"
+
+#: .\core\models.py:153
+msgid "Year Options"
+msgstr "گزینه‌های سال"
+
+#: .\core\models.py:166
 msgid ""
 "Select one or more possible durations (in years) that this faculty offers."
 msgstr ""
 "یک یا چند مدت زمان ممکن (به سال) که این دانشکده ارائه می‌دهد را انتخاب کنید."
 
-#: .\core\models.py:203
+#: .\core\models.py:171
+msgid "Faculty"
+msgstr "دانشکده"
+
+#: .\core\models.py:222
 msgid "Parsed details (dates, exams, documents, fees, etc.) from the site"
 msgstr "جزئیات استخراج‌شده (تاریخ‌ها، آزمون‌ها، مدارک، هزینه‌ها و غیره) از سایت"
 
-#: .\core\models.py:209
+#: .\core\models.py:228
 msgid "Year founded, e.g. 2013"
 msgstr "سال تأسیس، مثلاً ۲۰۱۳"
 
-#: .\core\models.py:213
-#, fuzzy
-#| msgid "University"
+#: .\core\models.py:232
 msgid "University PIN code"
 msgstr "کد پین دانشگاه"
 
-#: .\core\models.py:220
+#: .\core\models.py:239
 msgid "Which country languages are taught/used by this university"
 msgstr "زبان‌های کدام کشورها در این دانشگاه تدریس/استفاده می‌شوند"
 
-#: .\core\models.py:256
+#: .\core\models.py:243
+msgid "University"
+msgstr "دانشگاه"
+
+#: .\core\models.py:277
+#: .\templates\dashboard\fragments\application_detail.html:47
+msgid "Program"
+msgstr "برنامه"
+
+#: .\core\models.py:281
 msgid "Available"
 msgstr "موجود"
 
-#: .\core\models.py:257
+#: .\core\models.py:282
 msgid "Near to Close"
 msgstr "نزدیک به بسته شدن"
 
-#: .\core\models.py:258
+#: .\core\models.py:283
 msgid "Quota Full"
 msgstr "سهمیه تکمیل است"
 
-#: .\core\models.py:259
+#: .\core\models.py:284
 msgid "Closed"
 msgstr "بسته شده"
 
-#: .\core\models.py:297
+#: .\core\models.py:322
 msgid "Duration in years; should be one of the faculty's year options"
 msgstr "مدت زمان به سال؛ باید یکی از گزینه‌های سال دانشکده باشد"
 
-#: .\core\models.py:307
+#: .\core\models.py:332
 msgid "Fee per semester"
 msgstr "شهریه هر ترم"
 
-#: .\core\models.py:315
+#: .\core\models.py:340
 msgid "Scholarship or discount offered"
 msgstr "بورس تحصیلی یا تخفیف ارائه شده"
 
-#: .\core\models.py:323
+#: .\core\models.py:348
 msgid "Language of instruction, e.g. English, Turkish"
 msgstr "زبان آموزش، مثلاً انگلیسی، ترکی"
 
-#: .\core\models.py:326
+#: .\core\models.py:351
 msgid "Currency code, e.g. USD, EUR, TRY"
 msgstr "کد ارز، مثلاً USD، EUR، TRY"
 
-#: .\core\models.py:361
+#: .\core\models.py:386
 msgid "Default"
 msgstr "پیش‌فرض"
 
-#: .\core\models.py:362 .\templates\dashboard\main.html:45
+#: .\core\models.py:387 .\templates\dashboard\main.html:45
 msgid "Company"
 msgstr "شرکت"
 
-#: .\core\models.py:363 .\templates\dashboard\main.html:43
-msgid "Agent"
-msgstr "نماینده"
-
-#: .\core\models.py:366
+#: .\core\models.py:391
 msgid "Male"
 msgstr "مرد"
 
-#: .\core\models.py:367
+#: .\core\models.py:392
 msgid "Female"
 msgstr "زن"
 
-#: .\core\models.py:404
+#: .\core\models.py:429
 msgid "Profile Image"
 msgstr "تصویر پروفایل"
 
-#: .\core\models.py:405
+#: .\core\models.py:430
 msgid "Upload a profile image (max 2MB)"
 msgstr "آپلود تصویر پروفایل (حداکثر ۲ مگابایت)"
 
-#: .\core\models.py:411
+#: .\core\models.py:436
 msgid "Designates whether this student can access representative features"
 msgstr ""
 "مشخص می‌کند که آیا این دانشجو می‌تواند به ویژگی‌های نمایندگی دسترسی داشته باشد"
 
-#: .\core\models.py:420
+#: .\core\models.py:445
 msgid "Only student users can be representatives"
 msgstr "فقط کاربران دانشجو می‌توانند نماینده باشند"
 
-#: .\core\models.py:477
+#: .\core\models.py:460
+msgid "Company Profile"
+msgstr "پروفایل شرکت"
+
+#: .\core\models.py:461
+msgid "Company Profiles"
+msgstr "پروفایل‌های شرکت"
+
+#: .\core\models.py:478
+msgid "Agent Profile"
+msgstr "پروفایل نماینده"
+
+#: .\core\models.py:479
+msgid "Agent Profiles"
+msgstr "پروفایل‌های نماینده"
+
+#: .\core\models.py:494
+msgid "Student Profile"
+msgstr "پروفایل دانشجو"
+
+#: .\core\models.py:495
+msgid "Student Profiles"
+msgstr "پروفایل‌های دانشجو"
+
+#: .\core\models.py:514
 msgid "Select the country whose language you speak"
 msgstr "کشوری که به زبان آن صحبت می‌کنید را انتخاب کنید"
 
-#: .\core\models.py:489
+#: .\core\models.py:526
+msgid "Application"
+msgstr "درخواست"
+
+#: .\core\models.py:530
 msgid "In Progress"
 msgstr "در حال انجام"
 
-#: .\core\models.py:490
+#: .\core\models.py:531
 msgid "Finished"
 msgstr "پایان یافته"
 
-#: .\core\models.py:491
+#: .\core\models.py:532
 msgid "Failed"
 msgstr "ناموفق"
 
-#: .\core\models.py:494
+#: .\core\models.py:535
 msgid "Step One"
 msgstr "مرحله اول"
 
-#: .\core\models.py:495
+#: .\core\models.py:536
 msgid "Step Two"
 msgstr "مرحله دوم"
 
-#: .\core\models.py:496
+#: .\core\models.py:537
 msgid "Step Three"
 msgstr "مرحله سوم"
 
-#: .\core\models.py:497
+#: .\core\models.py:538
 msgid "Step Four"
 msgstr "مرحله چهارم"
 
-#: .\core\models.py:498
+#: .\core\models.py:539
 msgid "Step Five"
 msgstr "مرحله پنجم"
 
-#: .\core\models.py:499
+#: .\core\models.py:540
 msgid "Step Six"
 msgstr "مرحله ششم"
 
-#: .\core\models.py:500
+#: .\core\models.py:541
 msgid "Step Seven"
 msgstr "مرحله هفتم"
 
-#: .\core\models.py:503
+#: .\core\models.py:544
 msgid "Transfer Student"
 msgstr "دانشجوی انتقالی"
 
-#: .\core\models.py:504
+#: .\core\models.py:545
 msgid "First-Year Student"
 msgstr "دانشجوی سال اول"
 
-#: .\core\models.py:537
+#: .\core\models.py:578
 msgid "Auto-generated application code"
 msgstr "کد درخواست تولیدشده به‌صورت خودکار"
 
-#: .\core\models.py:543
+#: .\core\models.py:584
 msgid "Application Documents"
 msgstr "مدارک درخواست"
 
-#: .\core\models.py:613 .\core\templatetags\custom_filters.py:49
+#: .\core\models.py:624 .\core\models.py:625
+msgid "Site Settings"
+msgstr "تنظیمات سایت"
+
+#: .\core\models.py:645
+msgid "Journey Step"
+msgstr "مرحله مسیر"
+
+#: .\core\models.py:654 .\core\templatetags\custom_filters.py:49
 msgid "Associate & Bachelor"
 msgstr "کاردانی و کارشناسی"
 
-#: .\core\models.py:614 .\core\templatetags\custom_filters.py:50
+#: .\core\models.py:655 .\core\templatetags\custom_filters.py:50
 #: .\templates\core\main.html:118
 msgid "Master"
 msgstr "کارشناسی ارشد"
 
-#: .\core\models.py:615 .\core\templatetags\custom_filters.py:51
+#: .\core\models.py:656 .\core\templatetags\custom_filters.py:51
 #: .\templates\core\main.html:119
 msgid "PhD"
 msgstr "دکتری"
 
-#: .\core\models.py:668
-#, fuzzy
-#| msgid "Contact Information"
-msgid "Information"
-msgstr "اطلاعات تماس"
+#: .\core\models.py:664
+msgid "Document Requirement"
+msgstr "مدرک مورد نیاز"
 
-#: .\core\models.py:669
+#: .\core\models.py:689
+msgid "Success Story"
+msgstr "داستان موفقیت"
+
+#: .\core\models.py:690 .\templates\core\main.html:21
+msgid "Success Stories"
+msgstr "داستانهای موفقیت"
+
+#: .\core\models.py:710
+msgid "Information"
+msgstr "اطلاعیه"
+
+#: .\core\models.py:711
 msgid "Warning"
 msgstr "هشدار"
 
-#: .\core\models.py:670
-#, fuzzy
-#| msgid "Success Rate"
+#: .\core\models.py:712
 msgid "Success"
-msgstr "نرخ موفقیت"
+msgstr "موفقیت"
 
-#: .\core\models.py:671
+#: .\core\models.py:713
 msgid "Error"
 msgstr "خطا"
 
-#: .\core\models.py:672
-#, fuzzy
-#| msgid "Gender"
+#: .\core\models.py:714
 msgid "Reminder"
-msgstr "جنسیت"
+msgstr "یادآوری"
 
-#: .\core\models.py:675
-#, fuzzy
-#| msgid "All Degrees"
+#: .\core\models.py:717
 msgid "All Users"
-msgstr "همه مقاطع"
+msgstr "همه کاربران"
 
-#: .\core\models.py:676
-#, fuzzy
-#| msgid "Students"
+#: .\core\models.py:718
 msgid "Students (Default)"
-msgstr "دانشجویان"
+msgstr "دانشجویان (پیشفرض)"
 
-#: .\core\models.py:677
-#, fuzzy
-#| msgid "Company"
+#: .\core\models.py:719
 msgid "Company Users"
-msgstr "شرکت"
+msgstr "کاربران شرکت"
 
-#: .\core\models.py:678
-#, fuzzy
-#| msgid "Agent"
+#: .\core\models.py:720
 msgid "Agent Users"
-msgstr "نماینده"
+msgstr "کاربران نماینده"
 
-#: .\core\models.py:679
+#: .\core\models.py:721
 msgid "Specific Users"
 msgstr "کاربران خاص"
 
-#: .\core\models.py:681 .\templates\dashboard\fragments\notifications.html:9
+#: .\core\models.py:723 .\templates\dashboard\fragments\notifications.html:9
 #: .\templates\dashboard\fragments\notifications.html:61
 #: .\templates\dashboard\fragments\notifications.html:121
 msgid "Title"
 msgstr "عنوان"
 
-#: .\core\models.py:682 .\templates\dashboard\fragments\notifications.html:14
-#: .\templates\dashboard\fragments\notifications.html:125
-msgid "Message"
-msgstr "پیام"
-
-#: .\core\models.py:687 .\templates\dashboard\fragments\notifications.html:19
+#: .\core\models.py:729 .\templates\dashboard\fragments\notifications.html:19
 #: .\templates\dashboard\fragments\notifications.html:129
-#, fuzzy
-#| msgid "Verification Code"
 msgid "Notification Type"
-msgstr "کد تأیید"
+msgstr "نوع اعلان"
 
-#: .\core\models.py:693
-#, fuzzy
-#| msgid "Student Type"
+#: .\core\models.py:735
 msgid "Recipient Type"
-msgstr "نوع دانشجو"
+msgstr "نوع گیرنده"
 
-#: .\core\models.py:700
-#, fuzzy
-#| msgid "Student Type"
+#: .\core\models.py:742
 msgid "Sent By"
-msgstr "نوع دانشجو"
+msgstr "فرستنده"
 
-#: .\core\models.py:706 .\templates\dashboard\fragments\notifications.html:63
-msgid "Recipients"
-msgstr "گیرندگان"
-
-#: .\core\models.py:708
-#, fuzzy
-#| msgid "Create Account"
+#: .\core\models.py:750
 msgid "Created At"
-msgstr "ایجاد حساب کاربری"
+msgstr "تاریخ ایجاد"
 
-#: .\core\models.py:712
-#, fuzzy
-#| msgid "Location"
+#: .\core\models.py:754
 msgid "Notification"
-msgstr "موقعیت"
+msgstr "اعلان"
 
-#: .\core\models.py:713
-#, fuzzy
-#| msgid "Location"
+#: .\core\models.py:755 .\core\templatetags\admin_extras.py:55
 msgid "Notifications"
-msgstr "موقعیت"
+msgstr "اعلان‌ها"
 
-#: .\core\models.py:748
-msgid "Read"
-msgstr "خوانده‌شده"
-
-#: .\core\models.py:749
+#: .\core\models.py:791
 msgid "Read At"
 msgstr "زمان خواندن"
 
-#: .\core\models.py:753
+#: .\core\models.py:795
 msgid "Notification Recipient"
 msgstr "گیرنده اعلان"
 
-#: .\core\models.py:754
+#: .\core\models.py:796
 msgid "Notification Recipients"
 msgstr "گیرندگان اعلان"
+
+#: .\core\templatetags\admin_extras.py:35
+msgid "Homepage content"
+msgstr "محتوای صفحه اصلی"
+
+#: .\core\templatetags\admin_extras.py:40
+msgid "Universities & programs"
+msgstr "دانشگاه‌ها و رشته‌ها"
+
+#: .\core\templatetags\admin_extras.py:45
+msgid "People & access"
+msgstr "کاربران و دسترسی‌ها"
+
+#: .\core\templatetags\admin_extras.py:60
+msgid "Security & verification"
+msgstr "امنیت و تأیید"
+
+#: .\core\templatetags\admin_extras.py:66
+msgid "System & other models"
+msgstr "سیستم و سایر مدل‌ها"
+
+#: .\core\templatetags\admin_extras.py:200
+#: .\templates\authentication\login.html:27
+msgid "Students"
+msgstr "دانشجویان"
+
+#: .\core\templatetags\admin_extras.py:203
+#, python-brace-format
+msgid "{count} with a student profile"
+msgstr "{count} با پروفایل دانشجویی"
+
+#: .\core\templatetags\admin_extras.py:213
+msgid "Agencies managing students"
+msgstr "آژانس‌های مدیریت‌کننده دانشجو"
+
+#: .\core\templatetags\admin_extras.py:219
+msgid "Companies"
+msgstr "شرکت‌ها"
+
+#: .\core\templatetags\admin_extras.py:222
+#, python-brace-format
+msgid "{count} company profiles"
+msgstr "{count} پروفایل شرکت"
+
+#: .\core\templatetags\admin_extras.py:232
+#, python-brace-format
+msgid "{count} still in progress"
+msgstr "{count} در جریان"
+
+#: .\core\templatetags\admin_extras.py:240
+#, python-brace-format
+msgid "{count} active"
+msgstr "{count} فعال"
+
+#: .\core\templatetags\admin_extras.py:248
+#, python-brace-format
+msgid "{count} on the homepage"
+msgstr "{count} در صفحه اصلی"
+
+#: .\core\templatetags\admin_extras.py:260
+msgid "Success stories not published"
+msgstr "داستان‌های موفقیت منتشرنشده"
+
+#: .\core\templatetags\admin_extras.py:272
+msgid "Programs with a full quota"
+msgstr "رشته‌های تکمیل‌ظرفیت"
+
+#: .\core\templatetags\admin_extras.py:284
+msgid "Unused verification codes"
+msgstr "کدهای تأیید استفاده‌نشده"
+
+#: .\core\templatetags\admin_extras.py:299
+msgid "Applications waiting on a decision"
+msgstr "درخواست‌های در انتظار تصمیم"
 
 #: .\core\tests_notifications.py:109 .\core\utils\notifications.py:75
 #, fuzzy
@@ -853,85 +1431,128 @@ msgstr "درخواست حذف شد."
 msgid "Notification updated successfully!"
 msgstr "اطلاعات تماس با موفقیت به‌روزرسانی شد."
 
-#: .\templates\admin\index.html:13
-msgid "Welcome to Apply BM Control Center"
-msgstr "به مرکز کنترل Apply BM خوش آمدید"
+#: .\data_fetch\admin.py:30
+msgid "Session id"
+msgstr "شناسه نشست"
 
-#: .\templates\admin\index.html:14
+#: .\data_fetch\models.py:17
+msgid "Stored ConnectSID"
+msgstr "ConnectSID ذخیرهشده"
+
+#: .\data_fetch\models.py:18
+msgid "Stored ConnectSIDs"
+msgstr "ConnectSIDهای ذخیرهشده"
+
+#: .\templates\admin\base_site.html:28
+msgid "Admin"
+msgstr "مدیریت"
+
+#: .\templates\admin\base_site.html:32
+msgid "Admin quick links"
+msgstr "دسترسی‌های سریع مدیریت"
+
+#: .\templates\admin\base_site.html:33 .\templates\core\main.html:30
+#: .\templates\core\main.html:57 .\templates\dashboard\main.html:4
+#: .\templates\dashboard\main.html:59
+msgid "Dashboard"
+msgstr "داشبورد"
+
+#: .\templates\admin\base_site.html:35
+msgid "View site"
+msgstr "مشاهده سایت"
+
+#: .\templates\admin\base_site.html:37 .\templates\admin\index.html:55
+msgid "Translations"
+msgstr "ترجمه‌ها"
+
+#: .\templates\admin\base_site.html:38
+msgid "Scheduled tasks"
+msgstr "کارهای زمان‌بندی‌شده"
+
+#: .\templates\admin\base_site.html:54
+#, python-format
+msgid "Signed in as %(username)s"
+msgstr "واردشده با نام %(username)s"
+
+#: .\templates\admin\base_site.html:56
+msgid "Change password"
+msgstr "تغییر گذرواژه"
+
+#: .\templates\admin\base_site.html:58
+msgid "Press / to filter the sidebar"
+msgstr "برای جست‌وجو در نوار کناری / را بزنید"
+
+#: .\templates\admin\index.html:24
+msgid "Control center"
+msgstr "مرکز کنترل"
+
+#: .\templates\admin\index.html:27
+#, python-format
+msgid "Welcome back, %(name)s"
+msgstr "خوش آمدید، %(name)s"
+
+#: .\templates\admin\index.html:30
 msgid ""
 "Manage your platform, content, and users from one centralized dashboard."
 msgstr "پلتفرم، محتوا و کاربران خود را از یک داشبورد متمرکز مدیریت کنید."
 
-#: .\templates\admin\index.html:23
-msgid "Homepage Management"
-msgstr "مدیریت صفحه اصلی"
+#: .\templates\admin\index.html:34
+msgid "Quick actions"
+msgstr "دسترسی‌های سریع"
 
-#: .\templates\admin\index.html:27 .\templates\admin\index.html:28
-#: .\templates\admin\index.html:29 .\templates\admin\index.html:30
-#: .\templates\admin\index.html:44 .\templates\admin\index.html:45
-#: .\templates\admin\index.html:46 .\templates\admin\index.html:47
-#: .\templates\admin\index.html:48 .\templates\admin\index.html:49
-#: .\templates\admin\index.html:50 .\templates\admin\index.html:64
-#: .\templates\admin\index.html:65 .\templates\admin\index.html:66
-#: .\templates\admin\index.html:67 .\templates\admin\index.html:81
-#: .\templates\admin\index.html:95 .\templates\admin\index.html:130
+#: .\templates\admin\index.html:38
+msgid "New program"
+msgstr "رشته جدید"
+
+#: .\templates\admin\index.html:44
+msgid "New university"
+msgstr "دانشگاه جدید"
+
+#: .\templates\admin\index.html:50
+msgid "Send notification"
+msgstr "ارسال اعلان"
+
+#: .\templates\admin\index.html:61
+msgid "Key figures"
+msgstr "آمار کلیدی"
+
+#: .\templates\admin\index.html:87
+msgid "Needs attention"
+msgstr "نیازمند بررسی"
+
+#: .\templates\admin\index.html:104
+msgid "Manage content"
+msgstr "مدیریت محتوا"
+
+#: .\templates\admin\index.html:116
+msgid "Records"
+msgstr "رکوردها"
+
+#: .\templates\admin\index.html:122 .\templates\admin\index.html:123
 msgid "Add"
 msgstr "افزودن"
 
-#: .\templates\admin\index.html:27 .\templates\admin\index.html:28
-#: .\templates\admin\index.html:29 .\templates\admin\index.html:30
-#: .\templates\admin\index.html:44 .\templates\admin\index.html:45
-#: .\templates\admin\index.html:46 .\templates\admin\index.html:47
-#: .\templates\admin\index.html:48 .\templates\admin\index.html:49
-#: .\templates\admin\index.html:50 .\templates\admin\index.html:64
-#: .\templates\admin\index.html:65 .\templates\admin\index.html:66
-#: .\templates\admin\index.html:67 .\templates\admin\index.html:81
-#: .\templates\admin\index.html:95 .\templates\admin\index.html:131
-msgid "Change"
-msgstr "تغییر"
+#: .\templates\admin\index.html:126 .\templates\admin\index.html:127
+msgid "Manage"
+msgstr "مدیریت"
 
-#: .\templates\admin\index.html:40
-#, fuzzy
-#| msgid "Universities"
-msgid "Universities & Programs"
-msgstr "دانشگاه‌ها و برنامه‌ها"
-
-#: .\templates\admin\index.html:60
-msgid "Users & Companies"
-msgstr "کاربران و شرکت‌ها"
-
-#: .\templates\admin\index.html:77
-#: .\templates\dashboard\fragments\my_students.html:19
-#: .\templates\dashboard\fragments\welcome.html:64
-#: .\templates\dashboard\main.html:94
-msgid "Applications"
-msgstr "درخواست‌ها"
-
-#: .\templates\admin\index.html:91
-msgid "Security & Verification"
-msgstr "امنیت و تأیید"
-
-#: .\templates\admin\index.html:105
-msgid "System & Automation"
-msgstr "سیستم و خودکارسازی"
-
-#: .\templates\admin\index.html:145
-msgid "Recent Actions"
+#: .\templates\admin\index.html:142
+msgid "Recent actions"
 msgstr "اقدامات اخیر"
 
-#: .\templates\admin\index.html:151
+#: .\templates\admin\index.html:148
 msgid "Added"
 msgstr "افزوده شد"
 
-#: .\templates\admin\index.html:153
+#: .\templates\admin\index.html:150
 msgid "Changed"
 msgstr "تغییر یافت"
 
-#: .\templates\admin\index.html:155
+#: .\templates\admin\index.html:152
 msgid "Deleted"
 msgstr "حذف شد"
 
-#: .\templates\admin\index.html:168
+#: .\templates\admin\index.html:165
 #: .\templates\dashboard\fragments\universities.html:136
 msgid "Unknown"
 msgstr "نامشخص"
@@ -1107,20 +1728,6 @@ msgid ""
 msgstr ""
 "برای دسترسی به داشبورد شخصی‌سازی‌شده، پیگیری درخواست‌ها و ارتباط با نمایندگان "
 "معتبر وارد شوید."
-
-#: .\templates\authentication\login.html:27
-msgid "Students"
-msgstr "دانشجویان"
-
-#: .\templates\authentication\login.html:28
-#: .\templates\dashboard\fragments\universities.html:4
-#: .\templates\dashboard\main.html:81
-msgid "Universities"
-msgstr "دانشگاه‌ها"
-
-#: .\templates\authentication\login.html:29
-msgid "Countries"
-msgstr "کشورها"
 
 #: .\templates\authentication\login.html:34
 #: .\templates\emails\base_email.html:66
@@ -1302,19 +1909,6 @@ msgstr "چرا ما"
 #: .\templates\core\main.html:19 .\templates\core\main.html:53
 msgid "How It Works"
 msgstr "نحوه کار"
-
-#: .\templates\core\main.html:20 .\templates\core\main.html:54
-msgid "Documents"
-msgstr "مدارک"
-
-#: .\templates\core\main.html:21
-msgid "Success Stories"
-msgstr "داستان‌های موفقیت"
-
-#: .\templates\core\main.html:30 .\templates\core\main.html:57
-#: .\templates\dashboard\main.html:4 .\templates\dashboard\main.html:59
-msgid "Dashboard"
-msgstr "داشبورد"
 
 #: .\templates\core\main.html:34 .\templates\core\main.html:60
 #: .\templates\dashboard\main.html:140
@@ -1498,10 +2092,6 @@ msgstr "بازگشت به درخواست‌ها"
 msgid "Application Details"
 msgstr "جزئیات درخواست"
 
-#: .\templates\dashboard\fragments\application_detail.html:11
-msgid "Code"
-msgstr "کد"
-
 #: .\templates\dashboard\fragments\application_detail.html:17
 #: .\templates\dashboard\fragments\notifications.html:95
 msgid "Delete"
@@ -1510,15 +2100,6 @@ msgstr "حذف"
 #: .\templates\dashboard\fragments\application_detail.html:37
 msgid "Current Step"
 msgstr "مرحله فعلی"
-
-#: .\templates\dashboard\fragments\application_detail.html:42
-#: .\templates\dashboard\main.html:47
-msgid "Student"
-msgstr "دانشجو"
-
-#: .\templates\dashboard\fragments\application_detail.html:47
-msgid "Program"
-msgstr "برنامه"
 
 #: .\templates\dashboard\fragments\application_detail.html:48
 msgid "Unassigned"
@@ -1710,10 +2291,6 @@ msgstr "در حال بارگذاری..."
 msgid "Sent Notifications"
 msgstr "امنیت و تأیید"
 
-#: .\templates\dashboard\fragments\notifications.html:62
-msgid "Type"
-msgstr "نوع"
-
 #: .\templates\dashboard\fragments\notifications.html:64
 msgid "Date"
 msgstr "تاریخ"
@@ -1792,14 +2369,6 @@ msgstr "اطلاعات تماس"
 msgid "Mobile Number"
 msgstr "شماره موبایل"
 
-#: .\templates\dashboard\fragments\profile.html:117
-msgid "Country"
-msgstr "کشور"
-
-#: .\templates\dashboard\fragments\profile.html:121
-msgid "City"
-msgstr "شهر"
-
 #: .\templates\dashboard\fragments\profile.html:127
 msgid "Update Contact Info"
 msgstr "به‌روزرسانی اطلاعات تماس"
@@ -1816,10 +2385,6 @@ msgstr "به‌روزرسانی رمز عبور"
 msgid "Student Profile Details"
 msgstr "جزئیات پروفایل دانشجو"
 
-#: .\templates\dashboard\fragments\profile.html:198
-msgid "Stage"
-msgstr "مرحله"
-
 #: .\templates\dashboard\fragments\profile.html:202
 msgid "Language"
 msgstr "زبان"
@@ -1827,11 +2392,6 @@ msgstr "زبان"
 #: .\templates\dashboard\fragments\profile.html:208
 msgid "Update Student Details"
 msgstr "به‌روزرسانی جزئیات دانشجو"
-
-#: .\templates\dashboard\fragments\programs.html:4
-#: .\templates\dashboard\main.html:88
-msgid "Programs"
-msgstr "برنامه‌ها"
 
 #: .\templates\dashboard\fragments\programs.html:5
 msgid "Explore available academic programs and degrees."
@@ -2066,11 +2626,6 @@ msgstr "خوش آمدید"
 msgid "Here's an overview of your dashboard and quick actions."
 msgstr "در اینجا مروری بر داشبورد و اقدامات سریع شما وجود دارد."
 
-#: .\templates\dashboard\fragments\welcome.html:18
-#: .\templates\dashboard\main.html:66
-msgid "Profile"
-msgstr "پروفایل"
-
 #: .\templates\dashboard\fragments\welcome.html:21
 msgid "Manage your personal information and account details."
 msgstr "اطلاعات شخصی و جزئیات حساب کاربری خود را مدیریت کنید."
@@ -2192,7 +2747,9 @@ msgstr "سلام،"
 msgid ""
 "Thanks for signing up for %(site_name)s. Enter the code below to confirm "
 "your email address and finish creating your account."
-msgstr "از ثبت‌نام شما در %(site_name)s سپاسگزاریم. برای تأیید آدرس ایمیل و تکمیل ساخت حساب، کد زیر را وارد کنید."
+msgstr ""
+"از ثبت‌نام شما در %(site_name)s سپاسگزاریم. برای تأیید آدرس ایمیل و تکمیل "
+"ساخت حساب، کد زیر را وارد کنید."
 
 #: .\templates\emails\confirmation_code.html:20
 msgid "Your confirmation code"
@@ -2206,7 +2763,9 @@ msgstr "این کد ۱۵ دقیقه اعتبار دارد."
 msgid ""
 "If you didn't create an account, you can safely ignore this email — no "
 "account will be activated."
-msgstr "اگر حسابی نساخته‌اید، می‌توانید این ایمیل را نادیده بگیرید؛ هیچ حسابی فعال نخواهد شد."
+msgstr ""
+"اگر حسابی نساخته‌اید، می‌توانید این ایمیل را نادیده بگیرید؛ هیچ حسابی فعال "
+"نخواهد شد."
 
 #: .\templates\emails\confirmation_code.html:38
 msgid "Welcome aboard,"
@@ -2222,7 +2781,9 @@ msgstr "تیم"
 msgid ""
 "You received this email because this address was used to sign up for "
 "%(site_name)s."
-msgstr "این ایمیل را دریافت کرده‌اید زیرا این آدرس برای ثبت‌نام در %(site_name)s استفاده شده است."
+msgstr ""
+"این ایمیل را دریافت کرده‌اید زیرا این آدرس برای ثبت‌نام در %(site_name)s "
+"استفاده شده است."
 
 #: .\templates\emails\reset_password.html:4
 #: .\templates\emails\reset_password.html:10
@@ -2238,7 +2799,9 @@ msgstr "رمز عبور خود را بازیابی کنید — دکمه و کد
 msgid ""
 "We received a request to reset the password for your %(site_name)s account. "
 "Continue below to choose a new password."
-msgstr "درخواستی برای بازیابی رمز عبور حساب %(site_name)s شما دریافت کردیم. برای انتخاب رمز عبور جدید ادامه دهید."
+msgstr ""
+"درخواستی برای بازیابی رمز عبور حساب %(site_name)s شما دریافت کردیم. برای "
+"انتخاب رمز عبور جدید ادامه دهید."
 
 #: .\templates\emails\reset_password.html:24
 msgid "Choose a new password"
@@ -2260,7 +2823,9 @@ msgstr "اگر دکمه کار نکرد، این پیوند را در مرورگ
 msgid ""
 "If you didn't request a password reset, you can ignore this email — your "
 "password will not change."
-msgstr "اگر درخواست بازیابی رمز عبور نداده‌اید، این ایمیل را نادیده بگیرید — رمز عبور شما تغییر نمی‌کند."
+msgstr ""
+"اگر درخواست بازیابی رمز عبور نداده‌اید، این ایمیل را نادیده بگیرید — رمز عبور "
+"شما تغییر نمی‌کند."
 
 #: .\templates\emails\reset_password.html:56
 msgid "Thank you,"
@@ -2271,61 +2836,12 @@ msgstr "با سپاس،"
 msgid ""
 "You received this email because a password reset was requested for your "
 "%(site_name)s account."
-msgstr "این ایمیل را دریافت کرده‌اید زیرا برای حساب %(site_name)s شما درخواست بازیابی رمز عبور شده است."
+msgstr ""
+"این ایمیل را دریافت کرده‌اید زیرا برای حساب %(site_name)s شما درخواست بازیابی "
+"رمز عبور شده است."
 
 #: .\templates\partials\language_switcher.html:6
 #, fuzzy
 #| msgid "Language"
 msgid "Choose language"
 msgstr "زبان"
-
-#~ msgid "You recently requested to reset your password for your"
-#~ msgstr "شما اخیراً درخواست بازیابی رمز عبور برای"
-
-#~ msgid "account."
-#~ msgstr "حساب کاربری خود را داده‌اید."
-
-#~ msgid ""
-#~ "Click the button below and enter the following code to reset your "
-#~ "password. This link and code are valid for 15 minutes."
-#~ msgstr ""
-#~ "روی دکمه زیر کلیک کنید و کد زیر را برای بازیابی رمز عبور خود وارد کنید. "
-#~ "این لینک و کد به مدت ۱۵ دقیقه معتبر هستند."
-
-#~ msgid "Verification Code:"
-#~ msgstr "کد تأیید:"
-
-#~ msgid "Generate"
-#~ msgstr "تولید"
-
-#~ msgid "Profile Picture"
-#~ msgstr "عکس پروفایل"
-
-#~ msgid "Upload New Picture"
-#~ msgstr "آپلود تصویر جدید"
-
-#~ msgid "Duration"
-#~ msgstr "مدت زمان"
-
-#, fuzzy
-#~| msgid "Scholarship Registration"
-#~ msgid "Scholarship"
-#~ msgstr "بورس تحصیلی"
-
-#~ msgid "Per Semester"
-#~ msgstr "هر ترم"
-
-#~ msgid "Enter the official university name"
-#~ msgstr "نام دانشگاه را وارد نمایید"
-
-#~ msgid "Welcome to our multilingual site!"
-#~ msgstr "به سایت چند زبانه ما خوش آمدید!"
-
-#~ msgid "This is a test sentence to demonstrate translation."
-#~ msgstr "این یک جمله آزمایشی برای نمایش ترجمه است."
-
-#~ msgid "Today is %(current_date)s."
-#~ msgstr "امروز %(current_date)s است."
-
-#~ msgid "Test page"
-#~ msgstr "صفحه آزمایش"

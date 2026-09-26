@@ -28,6 +28,8 @@ class VerificationCode(models.Model):
     token = models.CharField(max_length=64, unique=True, null=True, blank=True)
 
     class Meta:
+        verbose_name = _("Verification Code")
+        verbose_name_plural = _("Verification Codes")
         indexes = [
             models.Index(fields=["user", "code_type", "code"]),
             models.Index(fields=["token"]),

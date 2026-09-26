@@ -1,183 +1,181 @@
 {% extends "admin/base_site.html" %}
-{% load i18n log static %}
+{% load i18n log static admin_extras %}
 
 {% block extrastyle %}
-{{ block.super }}
-{# Dashboard styles live in a cacheable stylesheet — no inline <style> here. #}
-<link rel="stylesheet" href="{% static 'css/admin/admin-dashboard.css' %}">
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/admin/admin-dashboard.css' %}">
 {% endblock %}
 
+{% comment %}
+    The stock index prints the site's index_title as an <h1> above the content.
+    The dashboard supplies its own page heading, so that one is suppressed to
+    keep a single <h1> per page.
+{% endcomment %}
+{% block content_title %}{% endblock %}
+
 {% block content %}
-<div class="custom-admin-dashboard">
-    <div class="dashboard-header">
-        <h1 class="dashboard-title">{% trans "Welcome to Apply BM Control Center" %}</h1>
-        <p class="dashboard-subtitle">{% trans "Manage your platform, content, and users from one centralized dashboard." %}</p>
-    </div>
+    {% admin_dashboard_stats as stats %}
+    {% admin_dashboard_cards app_list as cards %}
+    <div class="admin-dashboard">
 
-    <div class="dashboard-grid">
-
-        <!-- 🏠 HOMEPAGE MANAGEMENT -->
-        <div class="admin-card">
-            <div class="card-header">
-                <div class="card-icon">🏠</div>
-                <h2 class="card-title">{% trans "Homepage Management" %}</h2>
+        <header class="dashboard-hero">
+            <div class="dashboard-hero__text">
+                <p class="dashboard-hero__eyebrow">
+                    {% trans "Control center" %} &middot; {% now "DATE_FORMAT" %}
+                </p>
+                <h1 class="dashboard-title">
+                    {% blocktrans with name=user.get_short_name|default:user.get_username %}Welcome back, {{ name }}{% endblocktrans %}
+                </h1>
+                <p class="dashboard-subtitle">
+                    {% trans "Manage your platform, content, and users from one centralized dashboard." %}
+                </p>
             </div>
-            <ul class="model-list">
-                {% for app in app_list %}{% for model in app.models %}
-                    {% if model.object_name == "SiteSettings" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% elif model.object_name == "HowItWorksStep" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% elif model.object_name == "DocumentRequirement" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% elif model.object_name == "SuccessStory" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% endif %}
-                {% endfor %}{% endfor %}
-            </ul>
-        </div>
 
-        <!-- 🏛 UNIVERSITIES & PROGRAMS -->
-        <div class="admin-card">
-            <div class="card-header">
-                <div class="card-icon">🏛</div>
-                <h2 class="card-title">{% trans "Universities & Programs" %}</h2>
-            </div>
-            <ul class="model-list">
-                {% for app in app_list %}{% for model in app.models %}
-                    {% if model.object_name == "University" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% elif model.object_name == "Program" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% elif model.object_name == "Faculty" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% elif model.object_name == "Country" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% elif model.object_name == "City" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% elif model.object_name == "TermOption" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% elif model.object_name == "YearOption" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% endif %}
-                {% endfor %}{% endfor %}
-            </ul>
-        </div>
+            <nav class="dashboard-hero__actions" aria-label="{% trans 'Quick actions' %}">
+                {% if perms.core.add_program %}
+                    <a class="admin-quick-action" href="{% url 'admin:core_program_add' %}">
+                        <span class="admin-quick-action__icon" aria-hidden="true"><i class="fa-solid fa-book-open"></i></span>
+                        {% trans "New program" %}
+                    </a>
+                {% endif %}
+                {% if perms.core.add_university %}
+                    <a class="admin-quick-action" href="{% url 'admin:core_university_add' %}">
+                        <span class="admin-quick-action__icon" aria-hidden="true"><i class="fa-solid fa-building-columns"></i></span>
+                        {% trans "New university" %}
+                    </a>
+                {% endif %}
+                {% if perms.core.add_notification %}
+                    <a class="admin-quick-action" href="{% url 'admin:core_notification_add' %}">
+                        <span class="admin-quick-action__icon" aria-hidden="true"><i class="fa-solid fa-bell"></i></span>
+                        {% trans "Send notification" %}
+                    </a>
+                {% endif %}
+                <a class="admin-quick-action" href="{% url 'rosetta-file-list' po_filter='project' %}">
+                    <span class="admin-quick-action__icon" aria-hidden="true"><i class="fa-solid fa-language"></i></span>
+                    {% trans "Translations" %}
+                </a>
+            </nav>
+        </header>
 
-        <!-- 👥 USERS & COMPANIES -->
-        <div class="admin-card">
-            <div class="card-header">
-                <div class="card-icon">👥</div>
-                <h2 class="card-title">{% trans "Users & Companies" %}</h2>
-            </div>
-            <ul class="model-list">
-                {% for app in app_list %}{% for model in app.models %}
-                    {% if model.object_name == "User" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% elif model.object_name == "CompanyProfile" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% elif model.object_name == "AgentProfile" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% elif model.object_name == "StudentProfile" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% endif %}
-                {% endfor %}{% endfor %}
-            </ul>
-        </div>
-
-        <!-- 📁 APPLICATIONS -->
-        <div class="admin-card">
-            <div class="card-header">
-                <div class="card-icon">📁</div>
-                <h2 class="card-title">{% trans "Applications" %}</h2>
-            </div>
-            <ul class="model-list">
-                {% for app in app_list %}{% for model in app.models %}
-                    {% if model.object_name == "Application" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% endif %}
-                {% endfor %}{% endfor %}
-            </ul>
-        </div>
-
-        <!-- 🔐 SECURITY -->
-        <div class="admin-card">
-            <div class="card-header">
-                <div class="card-icon">🔐</div>
-                <h2 class="card-title">{% trans "Security & Verification" %}</h2>
-            </div>
-            <ul class="model-list">
-                {% for app in app_list %}{% for model in app.models %}
-                    {% if model.object_name == "VerificationCode" %}<li class="model-item"><a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a><div class="model-actions">{% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}<a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a></div></li>
-                    {% endif %}
-                {% endfor %}{% endfor %}
-            </ul>
-        </div>
-
-        <!-- ⚙️ SYSTEM & AUTOMATION -->
-        <div class="admin-card">
-            <div class="card-header">
-                <div class="card-icon">⚙️</div>
-                <h2 class="card-title">{% trans "System & Automation" %}</h2>
-            </div>
-            <ul class="model-list">
-                {% for app in app_list %}{% for model in app.models %}
-                    {% if model.object_name == "SiteSettings" %}
-                    {% elif model.object_name == "HowItWorksStep" %}
-                    {% elif model.object_name == "DocumentRequirement" %}
-                    {% elif model.object_name == "SuccessStory" %}
-                    {% elif model.object_name == "University" %}
-                    {% elif model.object_name == "Program" %}
-                    {% elif model.object_name == "Faculty" %}
-                    {% elif model.object_name == "Country" %}
-                    {% elif model.object_name == "City" %}
-                    {% elif model.object_name == "TermOption" %}
-                    {% elif model.object_name == "YearOption" %}
-                    {% elif model.object_name == "User" %}
-                    {% elif model.object_name == "CompanyProfile" %}
-                    {% elif model.object_name == "AgentProfile" %}
-                    {% elif model.object_name == "StudentProfile" %}
-                    {% elif model.object_name == "Application" %}
-                    {% elif model.object_name == "VerificationCode" %}
+        {% if stats.tiles %}
+            <section class="admin-kpis" aria-label="{% trans 'Key figures' %}">
+                {% for tile in stats.tiles %}
+                    {% if tile.url %}
+                        <a class="admin-kpi" data-tint="{{ tile.tone }}" href="{{ tile.url }}">
                     {% else %}
-                        <li class="model-item">
-                            <a href="{{ model.admin_url }}" class="model-name">{{ model.name }}</a>
-                            <div class="model-actions">
-                                {% if model.add_url %}<a href="{{ model.add_url }}" class="action-link action-add">{% trans 'Add' %}</a>{% endif %}
-                                <a href="{{ model.admin_url }}" class="action-link action-change">{% trans 'Change' %}</a>
-                            </div>
-                        </li>
+                        <div class="admin-kpi" data-tint="{{ tile.tone }}">
                     {% endif %}
-                {% endfor %}{% endfor %}
-            </ul>
-        </div>
+                            <span class="admin-kpi__icon" aria-hidden="true"><i class="{{ tile.icon }}"></i></span>
+                            <span class="admin-kpi__body">
+                                <span class="admin-kpi__value">{{ tile.value }}</span>
+                                <span class="admin-kpi__label">{{ tile.label }}</span>
+                                <span class="admin-kpi__hint">{{ tile.hint }}</span>
+                            </span>
+                    {% if tile.url %}
+                        </a>
+                    {% else %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </section>
+        {% endif %}
 
-        <!-- 🕒 RECENT ACTIONS (Full Width Bottom Card) -->
+        {% if stats.attention %}
+            <section class="admin-attention">
+                <h2 class="admin-attention__title">
+                    <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                    {% trans "Needs attention" %}
+                </h2>
+                <ul class="admin-attention__list">
+                    {% for item in stats.attention %}
+                        <li class="admin-attention__item">
+                            <span class="admin-pill admin-pill--{{ item.tone }}">{{ item.count }}</span>
+                            {% if item.url %}
+                                <a href="{{ item.url }}">{{ item.label }}</a>
+                            {% else %}
+                                <span>{{ item.label }}</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endif %}
+
+        <section class="dashboard-grid" aria-label="{% trans 'Manage content' %}">
+            {% for card in cards %}
+                <article class="admin-card" data-tint="{{ card.tint }}">
+                    <header class="card-header">
+                        <span class="card-icon" aria-hidden="true"><i class="{{ card.icon }}"></i></span>
+                        <h2 class="card-title">{{ card.title }}</h2>
+                    </header>
+                    <ul class="model-list">
+                        {% for model in card.models %}
+                            <li class="model-item">
+                                <a class="model-name" href="{{ model.admin_url }}">{{ model.name }}</a>
+                                {% if model.count is not None %}
+                                    <span class="model-count" title="{% trans 'Records' %}">{{ model.count }}</span>
+                                {% endif %}
+                                {% comment %}Icon + label: a narrow card drops the label, and aria-label/title carry the action.{% endcomment %}
+                                <span class="model-actions">
+                                    {% if model.add_url %}
+                                        <a class="action-link action-add" href="{{ model.add_url }}" aria-label="{% trans 'Add' %}" title="{% trans 'Add' %}">
+                                            <i class="fa-solid fa-plus" aria-hidden="true"></i><span class="action-link__label">{% trans "Add" %}</span>
+                                        </a>
+                                    {% endif %}
+                                    <a class="action-link action-change" href="{{ model.admin_url }}" aria-label="{% trans 'Manage' %}" title="{% trans 'Manage' %}">
+                                        <i class="fa-solid fa-table-list" aria-hidden="true"></i><span class="action-link__label">{% trans "Manage" %}</span>
+                                    </a>
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </article>
+            {% endfor %}
+        </section>
+
         {% get_admin_log 10 as admin_log for_user user %}
         {% if admin_log %}
-        <div class="recent-actions-card">
-            <div class="card-header card-header--flush">
-                <div class="card-icon">🕒</div>
-                <h2 class="card-title">{% trans 'Recent Actions' %}</h2>
-            </div>
-            <ul class="actionlog-list">
-                {% for entry in admin_log %}
-                <li class="actionlog-item">
-                    {% if entry.is_addition %}
-                        <span class="action-badge badge-add">{% trans 'Added' %}</span>
-                    {% elif entry.is_change %}
-                        <span class="action-badge badge-change">{% trans 'Changed' %}</span>
-                    {% elif entry.is_deletion %}
-                        <span class="action-badge badge-delete">{% trans 'Deleted' %}</span>
-                    {% endif %}
+            <section class="recent-actions-card">
+                <header class="card-header card-header--flush">
+                    <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                    <h2 class="card-title">{% trans "Recent actions" %}</h2>
+                </header>
+                <ul class="actionlog-list">
+                    {% for entry in admin_log %}
+                        <li class="actionlog-item">
+                            {% if entry.is_addition %}
+                                <span class="action-badge badge-add">{% trans "Added" %}</span>
+                            {% elif entry.is_change %}
+                                <span class="action-badge badge-change">{% trans "Changed" %}</span>
+                            {% elif entry.is_deletion %}
+                                <span class="action-badge badge-delete">{% trans "Deleted" %}</span>
+                            {% endif %}
 
-                    {% if entry.is_deletion or not entry.get_admin_url %}
-                        <span class="model-name model-name--muted">{{ entry.object_repr }}</span>
-                    {% else %}
-                        <a href="{{ entry.get_admin_url }}" class="actionlog-link">{{ entry.object_repr }}</a>
-                    {% endif %}
+                            {% if entry.is_deletion or not entry.get_admin_url %}
+                                <span class="model-name model-name--muted">{{ entry.object_repr }}</span>
+                            {% else %}
+                                <a href="{{ entry.get_admin_url }}" class="actionlog-link">{{ entry.object_repr }}</a>
+                            {% endif %}
 
-                    <span class="actionlog-meta">
-                        {% if entry.content_type %}
-                            {{ entry.content_type.name|capfirst }}
-                        {% else %}
-                            {% trans 'Unknown' %}
-                        {% endif %}
-                    </span>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+                            <span class="actionlog-meta">
+                                {% if entry.content_type %}
+                                    {{ entry.content_type.name|capfirst }}
+                                {% else %}
+                                    {% trans "Unknown" %}
+                                {% endif %}
+                            </span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
         {% endif %}
 
     </div>
-</div>
 {% endblock %}
 
 {% block sidebar %}
-    {# We hide the default sidebar because we moved Recent Actions into the main grid #}
+    {% comment %}
+        The dashboard renders Recent Actions inside the main grid, so Django's
+        own related-object column is deliberately left empty here.
+    {% endcomment %}
 {% endblock %}

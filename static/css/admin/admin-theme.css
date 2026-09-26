@@ -1,178 +1,1503 @@
 /* ==========================================================================
-   APPLY BM — DJANGO ADMIN THEME (THEME 1: BLUE & GOLD)
+   APPLY BM — DJANGO ADMIN THEME (BLUE & GOLD)
 
-   Moved out of templates/admin/base_site.html, where this lived in an inline
-   <style> block. Inline CSS cannot be cached, is re-sent with every admin
-   response, and forces 'unsafe-inline' in any Content-Security-Policy.
-   Loaded through {% block extrastyle %}.
+   Why this file exists
+   --------------------
+   It used to live in an inline <style> block in templates/admin/base_site.html,
+   and it fixed dark mode by pasting two contradictory
+   `@media (prefers-color-scheme: dark)` blocks that forced BOTH
+   `background:#fff` and `background:#1e293b` on the same inputs with
+   `!important`. Django's own theme variables could not win, so whenever the
+   operating system switched to dark, the panel broke.
 
-   The branding link and logo rules at the bottom replace inline style=""
-   attributes that used to sit on those elements.
-========================================================================== */
+   How it works now
+   ----------------
+   1. One palette per theme (light / dark) expressed as `--admin-*` tokens.
+   2. Django's own variables (`--body-bg`, `--link-fg`, `--hairline-color`, …)
+      are re-mapped onto those tokens, so every stock Django component —
+      autocomplete/Select2, calendar, responsive rules — follows the theme
+      automatically.
+   3. Components are then styled from the tokens. `!important` is **not** used
+      for any colour or surface: that is possible because this stylesheet is
+      linked last (see `{% block extrahead %}` in templates/admin/base_site.html),
+      after Django's changelists.css / forms.css / responsive.css, so equal
+      specificity resolves in this file's favour. The only `!important` left is
+      in the reduced-motion and print blocks, where it is the standard idiom.
 
-:root {
-    --admin-primary: #1E3A8A;
+   The three theme states Django supports are all covered:
+     html[data-theme="light"]  → explicit light
+     html[data-theme="dark"]   → explicit dark
+     html[data-theme="auto"]   → follow the OS (the two blocks below)
+
+   The dark token block is intentionally duplicated for the `auto` case,
+   exactly as Django's own dark_mode.css does, because CSS has no mixins.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. TOKENS — LIGHT (default, and explicit "light")
+   -------------------------------------------------------------------------- */
+:root,
+html[data-theme="light"] {
+    /* Brand */
+    --admin-navy: #1E3A8A;
+    --admin-navy-deep: #172554;
     --admin-accent: #F59E0B;
-    --admin-body-bg: #F8FAFC;
-    --admin-surface: #ffffff;
+    --admin-accent-deep: #B45309;
+
+    /* Surfaces */
+    --admin-canvas: #EFF3F9;
+    --admin-surface: #FFFFFF;
+    --admin-surface-2: #F8FAFC;
+    --admin-surface-3: #F1F5F9;
     --admin-border: #E2E8F0;
+    --admin-border-strong: #CBD5E1;
+    --admin-hairline: #EEF2F7;
+
+    /* Text */
     --admin-text: #0F172A;
-    --admin-muted: #475569;
+    --admin-text-2: #334155;
+    --admin-text-3: #64748B;
+    --admin-link: #1D4ED8;
+    --admin-link-hover: #B45309;
+    --admin-focus-ring: rgba(30, 58, 138, 0.18);
+
+    /* Header / breadcrumbs (the navy band is brand identity in both themes) */
+    --admin-header-bg: linear-gradient(135deg, #1E3A8A 0%, #172554 100%);
+    --admin-header-fg: #FFFFFF;
+    --admin-header-border: rgba(255, 255, 255, 0.14);
+    --admin-header-muted: rgba(255, 255, 255, 0.78);
+    --admin-crumb-bg: #1E40AF;
+    --admin-crumb-fg: #DBEAFE;
+
+    /* Elevation */
+    --admin-shadow-1: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --admin-shadow-2: 0 6px 16px -4px rgba(15, 23, 42, 0.12);
+    --admin-shadow-3: 0 16px 32px -8px rgba(30, 58, 138, 0.22);
+
+    /* Semantic tints (pills, status labels, messages) */
+    --admin-info-bg: #DBEAFE;
+    --admin-info-fg: #1E3A8A;
+    --admin-info-border: #BFDBFE;
+    --admin-success-bg: #DCFCE7;
+    --admin-success-fg: #15803D;
+    --admin-success-border: #BBF7D0;
+    --admin-warning-bg: #FEF3C7;
+    --admin-warning-fg: #92400E;
+    --admin-warning-border: #FDE68A;
+    --admin-danger-bg: #FEE2E2;
+    --admin-danger-fg: #B91C1C;
+    --admin-danger-border: #FECACA;
+    --admin-neutral-bg: #F1F5F9;
+    --admin-neutral-fg: #475569;
+    --admin-neutral-border: #E2E8F0;
+    --admin-accent-bg: #FEF3C7;
+    --admin-accent-fg: #B45309;
+    --admin-violet-bg: #EDE9FE;
+    --admin-violet-fg: #5B21B6;
+    --admin-teal-bg: #CCFBF1;
+    --admin-teal-fg: #0F766E;
+
+    /* --- Django's own variables, re-mapped (this is what fixes dark mode) --- */
+    --primary: var(--admin-navy);
+    --secondary: var(--admin-navy);
+    --accent: var(--admin-accent);
+    --primary-fg: #FFFFFF;
+
+    --body-fg: var(--admin-text);
+    --body-bg: var(--admin-canvas);
+    --body-quiet-color: var(--admin-text-3);
+    --body-medium-color: var(--admin-text-2);
+    --body-loud-color: #020617;
+
+    --header-color: var(--admin-header-fg);
+    --header-branding-color: #FFFFFF;
+    --header-bg: var(--admin-navy-deep);
+    --header-link-color: #FFFFFF;
+
+    --breadcrumbs-fg: var(--admin-crumb-fg);
+    --breadcrumbs-link-fg: #FFFFFF;
+    --breadcrumbs-bg: var(--admin-crumb-bg);
+
+    --link-fg: var(--admin-link);
+    --link-hover-color: var(--admin-link-hover);
+    --link-selected-fg: #1D4ED8;
+
+    --hairline-color: var(--admin-hairline);
+    --border-color: var(--admin-border-strong);
+
+    --error-fg: #B91C1C;
+    --message-success-bg: var(--admin-success-bg);
+    --message-warning-bg: var(--admin-warning-bg);
+    --message-error-bg: var(--admin-danger-bg);
+
+    --darkened-bg: var(--admin-surface-2);
+    --selected-bg: #E0EAFF;
+    --selected-row: #EFF6FF;
+
+    /* Form controls. The border IS the boundary WCAG 1.4.11 measures, so both
+       values are chosen for a >= 3:1 ratio against the surface the control
+       sits on — a white input with a 1.5:1 hairline does not read as a field. */
+    --admin-control-bg: #FFFFFF;
+    --admin-control-border: #8393A8;
+
+    --button-fg: #FFFFFF;
+    --button-bg: var(--admin-navy);
+    --button-hover-bg: #172554;
+    --default-button-bg: var(--admin-accent);
+    --default-button-hover-bg: #D97706;
+    --close-button-bg: #475569;
+    --close-button-hover-bg: #334155;
+    --delete-button-bg: #DC2626;
+    --delete-button-hover-bg: #B91C1C;
+
+    --object-tools-fg: #FFFFFF;
+    --object-tools-bg: #475569;
+    --object-tools-hover-bg: #334155;
+
+    --font-family-primary:
+        "Noto Sans", "Vazirmatn", system-ui, -apple-system, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+
+    color-scheme: light;
 }
 
-/* Header */
-#header {
-    background: linear-gradient(135deg, #1E3A8A, #172554) !important;
-    color: #fff !important;
-    padding: 1rem 2rem !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
-}
-#header a:link, #header a:visited { color: #fff !important; }
-#header a:hover { color: #F59E0B !important; }
-
-#user-tools { text-transform: none !important; font-weight: 500 !important; font-size: 0.9rem !important; }
-#user-tools a { text-decoration: none !important; border-bottom: 1px dotted rgba(255,255,255,0.5) !important; }
-#user-tools a:hover { border-bottom-color: #F59E0B !important; color: #F59E0B !important; }
-
-/* Breadcrumbs */
-div.breadcrumbs {
-    background: #1E40AF !important;
-    color: #DBEAFE !important;
-    padding: 0.75rem 2rem !important;
-    border: none !important;
-}
-div.breadcrumbs a { color: #fff !important; font-weight: 600 !important; }
-div.breadcrumbs a:hover { color: #F59E0B !important; }
-
-/* Body & Links */
-body { background: var(--admin-body-bg) !important; font-family: 'Noto Sans', 'Vazirmatn', system-ui, sans-serif !important; color: var(--admin-text) !important; }
-a:link, a:visited { color: var(--admin-primary) !important; }
-a:hover { color: var(--admin-accent) !important; }
-
-/* Modules (The categorization tables) */
-.module {
-    background: var(--admin-surface) !important;
-    border: 1px solid var(--admin-border) !important;
-    border-radius: 12px !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
-    margin-bottom: 2rem !important;
-    overflow: hidden !important;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.module:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08) !important;
-}
-
-.module caption {
-    background: transparent !important;
-    color: var(--admin-text) !important;
-    font-size: 1.15rem !important;
-    font-weight: 800 !important;
-    padding: 1.25rem 1.5rem 0.75rem !important;
-    border-bottom: 2px solid var(--admin-border) !important;
-    margin: 0 !important;
-}
-.module caption a.section { color: var(--admin-text) !important; text-decoration: none !important; }
-
-.module th, .module td {
-    padding: 1rem 1.5rem !important;
-    border-bottom: 1px solid #F1F5F9 !important;
-    font-size: 0.95rem !important;
-}
-.module tr:last-child td { border-bottom: none !important; }
-.module th { width: 60% !important; font-weight: 600 !important; }
-
-/* Buttons in Admin */
-.button, input[type=submit], input[type=button], .submit-row input {
-    background: var(--admin-primary) !important;
-    color: #fff !important;
-    border: none !important;
-    border-radius: 8px !important;
-    padding: 0.6rem 1.2rem !important;
-    font-weight: 600 !important;
-    text-transform: none !important;
-    transition: all 0.2s !important;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
-}
-.button:hover, input[type=submit]:hover, input[type=button]:hover {
-    background: var(--admin-accent) !important;
-    color: #fff !important;
-    transform: translateY(-1px);
-}
-.default { background: var(--admin-accent) !important; }
-.default:hover { background: #010000 !important; }
-
-/* Form Fields in Admin */
-.form-row { border-bottom: 1px solid #F1F5F9 !important; padding: 1.25rem 1.5rem !important; }
-.form-row:last-child { border-bottom: none !important; }
-
-input[type=text], input[type=password], input[type=email], input[type=url], input[type=number], input[type=tel], textarea, select, .vTextField {
-    border: 1px solid var(--admin-border) !important;
-    border-radius: 8px !important;
-    padding: 0.6rem 0.8rem !important;
-    font-size: 0.95rem !important;
-    transition: all 0.2s !important;
-    background: #fff !important;
-    color: var(--admin-text) !important;
-}
-input:focus, textarea:focus, select:focus, .vTextField:focus {
-    border-color: var(--admin-primary) !important;
-    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15) !important;
-    outline: none !important;
-}
-select option { color: var(--admin-text) !important; background: #fff !important; }
-
-/* Messages */
-.messagelist li {
-    border-radius: 8px !important;
-    padding: 0.8rem 1.2rem !important;
-    margin-bottom: 0.5rem !important;
-    font-weight: 500 !important;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
-}
-.messagelist li.success { background: #DCFCE7 !important; color: #15803D !important; border: 1px solid #BBF7D0 !important; }
-.messagelist li.warning { background: #FEF3C7 !important; color: #B45309 !important; border: 1px solid #FDE68A !important; }
-.messagelist li.error { background: #FEE2E2 !important; color: #B91C1C !important; border: 1px solid #FECACA !important; }
-
-#container input, #container select, #container textarea,
-.dashboard #content-main input, .dashboard #content-main select,
-.form-row input, .form-row select, .form-row textarea {
-    color: #333 !important;
-    background-color: #fff !important;
-    border: 1px solid #ccc !important;
-}
-
-/* Fix for Django 3.2+ Dark Mode OS overrides */
+/* --------------------------------------------------------------------------
+   2a. TOKENS — DARK when the OS asks for dark and the user chose "auto"
+   -------------------------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
-    #container input, #container select, #container textarea,
-    .form-row input, .form-row select, .form-row textarea {
-        color: #333 !important;
-        background-color: #fff !important;
+    :root {
+        --admin-canvas: #0B1220;
+        --admin-surface: #101A2E;
+        --admin-surface-2: #16233C;
+        --admin-surface-3: #1B2942;
+        --admin-border: #22314E;
+        --admin-border-strong: #33456B;
+        --admin-hairline: #1D2A44;
+
+        --admin-text: #E8EDF7;
+        --admin-text-2: #C3CDE0;
+        --admin-text-3: #93A2BD;
+        --admin-link: #8AB4FF;
+        --admin-link-hover: #FBBF24;
+        --admin-focus-ring: rgba(138, 180, 255, 0.32);
+
+        --admin-header-bg: linear-gradient(135deg, #16244A 0%, #0B1220 100%);
+        --admin-header-fg: #F3F6FD;
+        --admin-header-border: rgba(255, 255, 255, 0.09);
+        --admin-header-muted: rgba(232, 237, 247, 0.74);
+        --admin-crumb-bg: #111D36;
+        --admin-crumb-fg: #AFC3E6;
+
+        --admin-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.45);
+        --admin-shadow-2: 0 6px 16px -4px rgba(0, 0, 0, 0.55);
+        --admin-shadow-3: 0 16px 32px -8px rgba(0, 0, 0, 0.65);
+
+        --admin-info-bg: rgba(59, 130, 246, 0.16);
+        --admin-info-fg: #A9C8FF;
+        --admin-info-border: rgba(96, 165, 250, 0.34);
+        --admin-success-bg: rgba(34, 197, 94, 0.15);
+        --admin-success-fg: #7BE3A5;
+        --admin-success-border: rgba(34, 197, 94, 0.34);
+        --admin-warning-bg: rgba(245, 158, 11, 0.16);
+        --admin-warning-fg: #FBD38D;
+        --admin-warning-border: rgba(245, 158, 11, 0.38);
+        --admin-danger-bg: rgba(239, 68, 68, 0.16);
+        --admin-danger-fg: #FCA5A5;
+        --admin-danger-border: rgba(239, 68, 68, 0.38);
+        --admin-neutral-bg: rgba(148, 163, 184, 0.14);
+        --admin-neutral-fg: #C3CDE0;
+        --admin-neutral-border: rgba(148, 163, 184, 0.28);
+        --admin-accent-bg: rgba(245, 158, 11, 0.18);
+        --admin-accent-fg: #FCD34D;
+        --admin-violet-bg: rgba(139, 92, 246, 0.18);
+        --admin-violet-fg: #C4B5FD;
+        --admin-teal-bg: rgba(20, 184, 166, 0.16);
+        --admin-teal-fg: #5EEAD4;
+
+        --primary: #1E40AF;
+        --secondary: #1E40AF;
+        --primary-fg: #E8EDF7;
+
+        --body-fg: var(--admin-text);
+        --body-bg: var(--admin-canvas);
+        --body-quiet-color: var(--admin-text-3);
+        --body-medium-color: var(--admin-text-2);
+        --body-loud-color: #FFFFFF;
+
+        --header-color: var(--admin-header-fg);
+        --header-branding-color: #FFFFFF;
+        --header-bg: #0E1830;
+        --header-link-color: #F3F6FD;
+
+        --breadcrumbs-fg: var(--admin-crumb-fg);
+        --breadcrumbs-link-fg: #E8EDF7;
+        --breadcrumbs-bg: var(--admin-crumb-bg);
+
+        --link-fg: var(--admin-link);
+        --link-hover-color: var(--admin-link-hover);
+        --link-selected-fg: #A9C8FF;
+
+        --hairline-color: var(--admin-hairline);
+        --border-color: var(--admin-border-strong);
+
+        --error-fg: #FCA5A5;
+        --message-success-bg: var(--admin-success-bg);
+        --message-warning-bg: var(--admin-warning-bg);
+        --message-error-bg: var(--admin-danger-bg);
+
+        --darkened-bg: var(--admin-surface-2);
+        --selected-bg: rgba(96, 165, 250, 0.18);
+        --selected-row: rgba(96, 165, 250, 0.12);
+
+        /* One step lighter than the fieldset fill, with a border that keeps the
+           control boundary above 3:1 (see the light block). */
+        --admin-control-bg: #16233C;
+        --admin-control-border: #566F92;
+
+        --button-fg: #FFFFFF;
+        --button-bg: #1E40AF;
+        --button-hover-bg: #2B52C9;
+        --default-button-bg: var(--admin-accent);
+        --default-button-hover-bg: #D97706;
+        --close-button-bg: #33456B;
+        --close-button-hover-bg: #45597F;
+        --delete-button-bg: #B91C1C;
+        --delete-button-hover-bg: #991B1B;
+
+        --object-tools-fg: #F3F6FD;
+        --object-tools-bg: #33456B;
+        --object-tools-hover-bg: #45597F;
+
+        color-scheme: dark;
     }
 }
 
-@media (prefers-color-scheme: dark) {
-    :root { --primary: #1e3a8a; --body-bg: #0f172a; --body-fg: #f8fafc; }
-    .deletelink { background: #dc3545 !important; color: #ffffff !important; border-color: #dc3545 !important; }
-    select, input[type=text], input[type=email] {
-        background-color: #1e293b !important; color: #ffffff !important;
-        border: 1px solid #334155 !important; padding: 8px !important; line-height: 1.5 !important; height: auto !important;
-    }
+/* --------------------------------------------------------------------------
+   2b. TOKENS — DARK, explicitly chosen in the theme toggle
+       (kept in sync with 2a; CSS has no mixins, and Django's dark_mode.css
+       duplicates its own block for exactly the same reason)
+   -------------------------------------------------------------------------- */
+html[data-theme="dark"] {
+    --admin-canvas: #0B1220;
+    --admin-surface: #101A2E;
+    --admin-surface-2: #16233C;
+    --admin-surface-3: #1B2942;
+    --admin-border: #22314E;
+    --admin-border-strong: #33456B;
+    --admin-hairline: #1D2A44;
+
+    --admin-text: #E8EDF7;
+    --admin-text-2: #C3CDE0;
+    --admin-text-3: #93A2BD;
+    --admin-link: #8AB4FF;
+    --admin-link-hover: #FBBF24;
+    --admin-focus-ring: rgba(138, 180, 255, 0.32);
+
+    --admin-header-bg: linear-gradient(135deg, #16244A 0%, #0B1220 100%);
+    --admin-header-fg: #F3F6FD;
+    --admin-header-border: rgba(255, 255, 255, 0.09);
+    --admin-header-muted: rgba(232, 237, 247, 0.74);
+    --admin-crumb-bg: #111D36;
+    --admin-crumb-fg: #AFC3E6;
+
+    --admin-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.45);
+    --admin-shadow-2: 0 6px 16px -4px rgba(0, 0, 0, 0.55);
+    --admin-shadow-3: 0 16px 32px -8px rgba(0, 0, 0, 0.65);
+
+    --admin-info-bg: rgba(59, 130, 246, 0.16);
+    --admin-info-fg: #A9C8FF;
+    --admin-info-border: rgba(96, 165, 250, 0.34);
+    --admin-success-bg: rgba(34, 197, 94, 0.15);
+    --admin-success-fg: #7BE3A5;
+    --admin-success-border: rgba(34, 197, 94, 0.34);
+    --admin-warning-bg: rgba(245, 158, 11, 0.16);
+    --admin-warning-fg: #FBD38D;
+    --admin-warning-border: rgba(245, 158, 11, 0.38);
+    --admin-danger-bg: rgba(239, 68, 68, 0.16);
+    --admin-danger-fg: #FCA5A5;
+    --admin-danger-border: rgba(239, 68, 68, 0.38);
+    --admin-neutral-bg: rgba(148, 163, 184, 0.14);
+    --admin-neutral-fg: #C3CDE0;
+    --admin-neutral-border: rgba(148, 163, 184, 0.28);
+    --admin-accent-bg: rgba(245, 158, 11, 0.18);
+    --admin-accent-fg: #FCD34D;
+    --admin-violet-bg: rgba(139, 92, 246, 0.18);
+    --admin-violet-fg: #C4B5FD;
+    --admin-teal-bg: rgba(20, 184, 166, 0.16);
+    --admin-teal-fg: #5EEAD4;
+
+    --primary: #1E40AF;
+    --secondary: #1E40AF;
+    --primary-fg: #E8EDF7;
+
+    --body-fg: var(--admin-text);
+    --body-bg: var(--admin-canvas);
+    --body-quiet-color: var(--admin-text-3);
+    --body-medium-color: var(--admin-text-2);
+    --body-loud-color: #FFFFFF;
+
+    --header-color: var(--admin-header-fg);
+    --header-branding-color: #FFFFFF;
+    --header-bg: #0E1830;
+    --header-link-color: #F3F6FD;
+
+    --breadcrumbs-fg: var(--admin-crumb-fg);
+    --breadcrumbs-link-fg: #E8EDF7;
+    --breadcrumbs-bg: var(--admin-crumb-bg);
+
+    --link-fg: var(--admin-link);
+    --link-hover-color: var(--admin-link-hover);
+    --link-selected-fg: #A9C8FF;
+
+    --hairline-color: var(--admin-hairline);
+    --border-color: var(--admin-border-strong);
+
+    --error-fg: #FCA5A5;
+    --message-success-bg: var(--admin-success-bg);
+    --message-warning-bg: var(--admin-warning-bg);
+    --message-error-bg: var(--admin-danger-bg);
+
+    --darkened-bg: var(--admin-surface-2);
+    --selected-bg: rgba(96, 165, 250, 0.18);
+    --selected-row: rgba(96, 165, 250, 0.12);
+
+    --admin-control-bg: #16233C;
+    --admin-control-border: #566F92;
+
+    --button-fg: #FFFFFF;
+    --button-bg: #1E40AF;
+    --button-hover-bg: #2B52C9;
+    --default-button-bg: var(--admin-accent);
+    --default-button-hover-bg: #D97706;
+    --close-button-bg: #33456B;
+    --close-button-hover-bg: #45597F;
+    --delete-button-bg: #B91C1C;
+    --delete-button-hover-bg: #991B1B;
+
+    --object-tools-fg: #F3F6FD;
+    --object-tools-bg: #33456B;
+    --object-tools-hover-bg: #45597F;
+
+    color-scheme: dark;
 }
 
-/* Branding link and logo — previously inline style="" on the elements */
-#site-name a {
-    color: #fff;
+/* --------------------------------------------------------------------------
+   3. PAGE CANVAS, TYPE, LINKS
+   -------------------------------------------------------------------------- */
+body {
+    background: var(--admin-canvas);
+    color: var(--admin-text);
+    font-family: var(--font-family-primary);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+}
+
+a:link, a:visited {
+    color: var(--admin-link);
+}
+a:focus, a:hover {
+    color: var(--admin-link-hover);
+}
+a:focus-visible,
+.button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--admin-accent);
+    outline-offset: 2px;
+}
+
+h1, h2, h3, h4, h5 {
+    color: var(--admin-text);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+h1 { font-size: 1.55rem; }
+h2 { font-size: 1.2rem; }
+#content h1 {
+    font-size: 1.6rem;
     font-weight: 800;
-    font-size: 1.5rem;
+    margin: 0 0 1rem;
+}
+#content > h1:first-child {
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+code, pre, pre.literal-block {
+    background: var(--admin-surface-3);
+    color: var(--admin-text);
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    font-size: 0.82rem;
+}
+pre.literal-block { padding: 0.75rem 1rem; }
+hr { border: none; border-top: 1px solid var(--admin-border); }
+
+.help, p.help, form p.help, div.help, form div.help, div.help li {
+    color: var(--admin-text-3);
+    font-size: 0.8rem;
+}
+.quiet, a.quiet:link, a.quiet:visited { color: var(--admin-text-3); }
+
+/* --------------------------------------------------------------------------
+   4. HEADER — brand band, quick links, user tools, theme toggle
+   -------------------------------------------------------------------------- */
+#header {
+    background: var(--admin-header-bg);
+    color: var(--admin-header-fg);
+    padding: 0.85rem 1.75rem;
+    box-shadow: var(--admin-shadow-2);
+    border-bottom: 1px solid var(--admin-header-border);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+}
+#header a:link,
+#header a:visited,
+#logout-form button {
+    color: var(--admin-header-fg);
+}
+#header a:focus,
+#header a:hover,
+#logout-form button:focus,
+#logout-form button:hover {
+    color: var(--admin-accent);
 }
 
+#branding { flex: 0 0 auto; }
+#site-name {
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+#branding h1,
+#branding h1 a:link,
+#branding h1 a:visited {
+    color: var(--admin-header-fg);
+}
+#site-name a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 800;
+    font-size: 1.12rem;
+    text-decoration: none;
+}
 #site-name img {
-    height: 32px;
+    height: 30px;
     width: auto;
     filter: brightness(0) invert(1);
+}
+.admin-brand-name {
+    white-space: nowrap;
+}
+.admin-brand-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--admin-accent);
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    display: none;
+}
+@media (min-width: 1100px) {
+    .admin-brand-tag { display: inline-block; }
+}
+
+/* Quick links ({% block nav-global %}) */
+.admin-header-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+.admin-header-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.32rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--admin-header-fg);
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.admin-header-link:link,
+.admin-header-link:visited { color: var(--admin-header-fg); }
+.admin-header-link:focus,
+.admin-header-link:hover {
+    background: rgba(245, 158, 11, 0.18);
+    border-color: var(--admin-accent);
+    color: #FFFFFF;
+}
+
+#user-tools {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--admin-header-muted);
+    text-transform: none;
+    letter-spacing: 0;
+    margin-inline-start: auto;
+}
+#user-tools a,
+#logout-form button {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+    padding-bottom: 1px;
+    text-decoration: none;
+    font-weight: 600;
+}
+#user-tools a:focus,
+#user-tools a:hover,
+#logout-form button:focus,
+#logout-form button:hover {
+    border-bottom-color: var(--admin-accent);
+}
+#logout-form { display: inline; }
+#logout-form button {
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0 0 1px;
+}
+
+/* Theme toggle (admin/color_theme_toggle.html) */
+.theme-toggle {
+    margin-inline-start: 0.5rem;
+    padding: 0.2rem;
+    border-radius: 8px;
+    line-height: 0;
+    transition: background 0.15s ease;
+}
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+.theme-toggle svg.theme-icon-when-auto,
+.theme-toggle svg.theme-icon-when-dark,
+.theme-toggle svg.theme-icon-when-light {
+    fill: var(--admin-header-fg);
+    color: transparent;
+}
+.theme-toggle:hover svg.theme-icon-when-auto,
+.theme-toggle:hover svg.theme-icon-when-dark,
+.theme-toggle:hover svg.theme-icon-when-light {
+    fill: var(--admin-accent);
+}
+
+/* --------------------------------------------------------------------------
+   5. BREADCRUMBS
+   -------------------------------------------------------------------------- */
+div.breadcrumbs {
+    background: var(--admin-crumb-bg);
+    color: var(--admin-crumb-fg);
+    padding: 0.7rem 1.75rem;
+    border: none;
+    border-bottom: 1px solid var(--admin-header-border);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+div.breadcrumbs a { color: #FFFFFF; text-decoration: none; }
+div.breadcrumbs a:focus,
+div.breadcrumbs a:hover { color: var(--admin-accent); text-decoration: underline; }
+
+/* --------------------------------------------------------------------------
+   6. MODULES (fieldsets, dashboard tables, inlines)
+   -------------------------------------------------------------------------- */
+.module {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    box-shadow: var(--admin-shadow-1);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+.module > h2,
+.module caption,
+.inline-group h2 {
+    background: var(--admin-surface-2);
+    color: var(--admin-text);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    padding: 0.8rem 1.25rem;
+    margin: 0;
+    border-bottom: 1px solid var(--admin-border);
+}
+.module caption a.section,
+.module caption a.section:link,
+.module caption a.section:visited { color: var(--admin-text); text-decoration: none; }
+.module caption a.section:hover { color: var(--admin-link); }
+.inline-group h2 { border-radius: 12px 12px 0 0; }
+
+.module table { border-collapse: collapse; width: 100%; }
+.module th,
+.module td {
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid var(--admin-hairline);
+    font-size: 0.875rem;
+}
+.module tr:last-child th,
+.module tr:last-child td { border-bottom: none; }
+.module th { font-weight: 600; color: var(--admin-text-2); }
+
+/* Stock tables (results, history, inlines) */
+table { border-collapse: collapse; }
+th, td { color: var(--admin-text); }
+thead th {
+    background: var(--admin-surface-2);
+    color: var(--admin-text-2);
+    border-bottom: 1px solid var(--admin-border);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+thead th a:link,
+thead th a:visited { color: var(--admin-text-2); }
+thead th a:focus,
+thead th a:hover { color: var(--admin-link); }
+tfoot td { background: var(--admin-surface-2); color: var(--admin-text-2); }
+tr.alt, tr:nth-child(odd) { background: var(--admin-surface-2); }
+tbody tr:hover { background: var(--admin-surface-2); }
+thead th.sorted { background: var(--admin-info-bg); color: var(--admin-info-fg); }
+thead th.sorted a:link,
+thead th.sorted a:visited { color: var(--admin-info-fg); }
+table thead th.sorted .sortoptions a.sortremove,
+table thead th.sorted .sortoptions a.sortremove:hover { color: var(--admin-text-2); }
+
+/* --------------------------------------------------------------------------
+   7. FORMS, WIDGETS, INLINES
+   -------------------------------------------------------------------------- */
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=url],
+input[type=number],
+input[type=tel],
+input[type=search],
+input[type=date],
+input[type=time],
+input[type=datetime-local],
+textarea,
+select,
+.vTextField,
+.vLargeTextField,
+.vXMLLargeTextField,
+.vDateField,
+.vTimeField,
+.vIntegerField,
+.vBigIntegerField,
+.vURLField,
+.vPhoneNumberField,
+.vForeignKeyRawIdAdminField {
+    background: var(--admin-control-bg);
+    color: var(--admin-text);
+    border: 1px solid var(--admin-control-border);
+    border-radius: 8px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    line-height: 1.4;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+input[type=text]:focus,
+input[type=password]:focus,
+input[type=email]:focus,
+input[type=url]:focus,
+input[type=number]:focus,
+input[type=tel]:focus,
+input[type=search]:focus,
+input[type=date]:focus,
+input[type=time]:focus,
+input[type=datetime-local]:focus,
+textarea:focus,
+select:focus,
+.vTextField:focus,
+.vLargeTextField:focus,
+.vForeignKeyRawIdAdminField:focus {
+    border-color: var(--admin-navy);
+    box-shadow: 0 0 0 3px var(--admin-focus-ring);
+    outline: none;
+}
+html[data-theme="dark"] input:focus,
+html[data-theme="dark"] textarea:focus,
+html[data-theme="dark"] select:focus {
+    border-color: var(--admin-link);
+}
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] input:focus,
+    html[data-theme="auto"] textarea:focus,
+    html[data-theme="auto"] select:focus {
+        border-color: var(--admin-link);
+    }
+}
+input::placeholder,
+textarea::placeholder { color: var(--admin-text-3); }
+
+select option,
+select optgroup {
+    background: var(--admin-surface);
+    color: var(--admin-text);
+}
+select[multiple] { padding: 0.25rem; }
+form .aligned select option:checked {
+    background: var(--admin-info-bg);
+    color: var(--admin-info-fg);
+}
+input[type=checkbox],
+input[type=radio] {
+    accent-color: var(--admin-navy);
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
+}
+html[data-theme="dark"] input[type=checkbox],
+html[data-theme="dark"] input[type=radio] { accent-color: var(--admin-accent); }
+
+input[type=file] {
+    color: var(--admin-text-2);
+    font-size: 0.85rem;
+}
+input[type=file]::file-selector-button {
+    background: var(--admin-surface-3);
+    color: var(--admin-text);
+    border: 1px solid var(--admin-border-strong);
+    border-radius: 6px;
+    padding: 0.3rem 0.7rem;
+    font-family: inherit;
+    font-weight: 600;
+    margin-inline-end: 0.5rem;
+    cursor: pointer;
+}
+input[type=file]::file-selector-button:hover {
+    border-color: var(--admin-navy);
+    color: var(--admin-link);
+}
+.clearable-file-input input,
+.clearable-file-input label { color: var(--admin-text-2); }
+
+.form-row {
+    border-bottom: 1px solid var(--admin-hairline);
+    padding: 1rem 1.25rem;
+}
+.form-row:last-child { border-bottom: none; }
+.form-row.errors { background: var(--admin-danger-bg); }
+.aligned label {
+    color: var(--admin-text-2);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+.required label::after,
+label.required::after { color: var(--admin-danger-fg); }
+
+.readonly,
+div.readonly,
+.form-row div.readonly,
+.aligned label + div.readonly {
+    background: var(--admin-surface-2);
+    border: 1px dashed var(--admin-border-strong);
+    border-radius: 8px;
+    color: var(--admin-text-2);
+    padding: 0.5rem 0.7rem;
+}
+.description {
+    color: var(--admin-text-3);
+    font-size: 0.8rem;
+    padding: 0.35rem 0;
+}
+.errornote,
+ul.errorlist li {
+    background: var(--admin-danger-bg);
+    color: var(--admin-danger-fg);
+    border: 1px solid var(--admin-danger-border);
+    border-radius: 8px;
+}
+.errornote { padding: 0.75rem 1rem; font-weight: 600; }
+ul.errorlist li { padding: 0.5rem 0.8rem; }
+ul.errorlist li a { color: var(--admin-danger-fg); text-decoration: underline; }
+
+/* Fieldset headings, collapsible sections */
+fieldset.module > h2 { cursor: default; }
+details summary,
+.collapse summary,
+:not(.inline-related) .collapse summary {
+    background: var(--admin-surface-2);
+    color: var(--admin-text);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+details summary:hover,
+.collapse summary:hover { color: var(--admin-link); }
+
+/* Horizontal filter widget (.selector) */
+.selector select {
+    border-radius: 8px;
+    background: var(--admin-surface);
+    color: var(--admin-text);
+}
+.selector-chosen h2,
+.selector-available h2 {
+    background: var(--admin-surface-2);
+    color: var(--admin-text);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px 8px 0 0;
+}
+.selector .selector-chooser { background: transparent; }
+.selector a.selector-chooseall,
+.selector a.selector-clearall { color: var(--admin-link); }
+.related-widget-wrapper-link { opacity: 0.75; }
+.related-widget-wrapper-link:hover { opacity: 1; }
+
+/* Inlines */
+.inline-group {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+.inline-related h3 {
+    background: var(--admin-surface-2);
+    color: var(--admin-text);
+    border-bottom: 1px solid var(--admin-border);
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+}
+.inline-group .tabular fieldset.module { border: none; border-radius: 0; }
+.inline-related.tabular fieldset.module { background: transparent; }
+.inline-group .tabular tr.has_original td { background: var(--admin-surface-2); }
+.inline-group .tabular tr.add-row td {
+    background: var(--admin-surface-2);
+    border-top: 1px solid var(--admin-border);
+}
+.inline-group .tabular tr.add-row td a { color: var(--admin-link); font-weight: 700; }
+.add-row a { color: var(--admin-link); }
+.inline-related h3 span.delete label { color: var(--admin-danger-fg); }
+
+/* Date/time pickers */
+.calendarbox,
+.clockbox {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border-strong);
+    border-radius: 12px;
+    box-shadow: var(--admin-shadow-2);
+    color: var(--admin-text);
+}
+.calendar caption,
+.calendarbox h2 {
+    background: var(--admin-crumb-bg);
+    color: #FFFFFF;
+    border-radius: 11px 11px 0 0;
+}
+.calendar td, .calendar th { background: var(--admin-surface); }
+.calendar td a:link,
+.calendar td a:visited { color: var(--admin-text); }
+.calendar td a:hover { background: var(--admin-info-bg); color: var(--admin-info-fg); }
+.calendar td.today a { border-bottom: 2px solid var(--admin-accent); }
+.calendarnav-previous,
+.calendarnav-next { color: #FFFFFF; }
+.timelist a { background: var(--admin-surface); color: var(--admin-text); }
+.timelist a:hover { background: var(--admin-info-bg); color: var(--admin-info-fg); }
+
+/* The message "close" link on the admin index banner */
+.messagelist li a { color: inherit; font-weight: 700; }
+
+/* --------------------------------------------------------------------------
+   8. BUTTONS
+   -------------------------------------------------------------------------- */
+.button,
+input[type=submit],
+input[type=button],
+.submit-row input,
+a.button {
+    /* `--button-bg`/`--button-hover-bg` are redefined in every theme block, so
+       one rule themes all three (auto, light, explicit dark). Do NOT re-declare
+       the background under `html[data-theme="dark"]`: that selector out-specifies
+       the `.default` (Save) rule below and left it blue-on-dark. */
+    background: var(--button-bg);
+    color: #FFFFFF;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 0.55rem 1.1rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0;
+    cursor: pointer;
+    box-shadow: var(--admin-shadow-1);
+    transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.button:link,
+a.button:visited { color: #FFFFFF; }
+.button:hover,
+input[type=submit]:hover,
+input[type=button]:hover,
+a.button:hover {
+    background: var(--button-hover-bg);
+    transform: translateY(-1px);
+    box-shadow: var(--admin-shadow-2);
+}
+
+/* Primary action (Save) — amber with dark text: 9.6:1 contrast, and it is the
+   only amber button on the page, so the eye lands on it. Django's own base.css
+   sets `.default { font-weight: 400 }`; the primary action is worth the weight. */
+.button.default,
+input[type=submit].default,
+.submit-row input.default {
+    background: var(--admin-accent);
+    color: #1F1300;
+    border-color: transparent;
+    font-weight: 700;
+}
+.button.default:hover,
+.button.default:focus,
+.button.default:active,
+input[type=submit].default:hover,
+input[type=submit].default:focus,
+input[type=submit].default:active,
+.submit-row input.default:hover,
+.submit-row input.default:focus,
+.submit-row input.default:active {
+    background: var(--default-button-hover-bg);
+    color: #1F1300;
+    transform: translateY(-1px);
+}
+
+.button[disabled],
+input[type=submit][disabled],
+input[type=button][disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.submit-row {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    box-shadow: var(--admin-shadow-1);
+}
+/* Set by static/js/admin/admin.js while a change form has unsaved edits. */
+.admin-form-dirty .submit-row {
+    border-color: var(--admin-accent);
+    box-shadow: 0 0 0 3px var(--admin-accent-bg);
+}
+.submit-row a.deletelink,
+a.deletelink:link,
+a.deletelink:visited {
+    background: var(--delete-button-bg);
+    color: #FFFFFF;
+    border-radius: 8px;
+    padding: 0.55rem 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    line-height: normal;
+}
+.submit-row a.deletelink:hover,
+a.deletelink:hover { background: var(--delete-button-hover-bg); color: #FFFFFF; }
+.submit-row a.closelink {
+    background: var(--close-button-bg);
+    color: #FFFFFF;
+    border-radius: 8px;
+    padding: 0.55rem 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    line-height: normal;
+}
+.submit-row a.closelink:hover { background: var(--close-button-hover-bg); color: #FFFFFF; }
+
+/* Object tools (top-right buttons on changelists/forms) */
+.object-tools a,
+.object-tools a:link,
+.object-tools a:visited {
+    background: var(--object-tools-bg);
+    color: var(--object-tools-fg);
+    border-radius: 999px;
+    padding: 0.4rem 0.95rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0;
+    box-shadow: var(--admin-shadow-1);
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+.object-tools a:hover,
+.object-tools a:focus {
+    background: var(--object-tools-hover-bg);
+    color: var(--object-tools-fg);
+    transform: translateY(-1px);
+}
+.object-tools a.addlink { background: var(--admin-navy); }
+.object-tools a.addlink:hover { background: #172554; }
+.object-tools a.viewsitelink { background: var(--admin-navy-deep); }
+
+.delete-confirmation form input[type="submit"] { background: var(--delete-button-bg); }
+.delete-confirmation form input[type="submit"]:hover { background: var(--delete-button-hover-bg); }
+.delete-confirmation form .cancel-link {
+    background: var(--close-button-bg);
+    color: #FFFFFF;
+    border-radius: 8px;
+}
+.delete-confirmation form .cancel-link:hover { background: var(--close-button-hover-bg); }
+
+/* --------------------------------------------------------------------------
+   9. MESSAGES
+   -------------------------------------------------------------------------- */
+ul.messagelist li {
+    border-radius: 10px;
+    padding: 0.8rem 1.1rem;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    box-shadow: var(--admin-shadow-1);
+    background: var(--admin-info-bg);
+    color: var(--admin-info-fg);
+    border-color: var(--admin-info-border);
+}
+ul.messagelist li.success {
+    background: var(--admin-success-bg);
+    color: var(--admin-success-fg);
+    border-color: var(--admin-success-border);
+}
+ul.messagelist li.warning {
+    background: var(--admin-warning-bg);
+    color: var(--admin-warning-fg);
+    border-color: var(--admin-warning-border);
+}
+ul.messagelist li.error {
+    background: var(--admin-danger-bg);
+    color: var(--admin-danger-fg);
+    border-color: var(--admin-danger-border);
+}
+
+/* --------------------------------------------------------------------------
+   10. CHANGELIST — toolbar, results, filters, actions, paginator
+   -------------------------------------------------------------------------- */
+#changelist .changelist-form-container { background: transparent; }
+#toolbar,
+#toolbar form#changelist-search {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+}
+#toolbar form input[type=submit] {
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+}
+#toolbar #searchbar {
+    background: var(--admin-surface-2);
+    border: 1px solid var(--admin-border-strong);
+    border-radius: 8px;
+    color: var(--admin-text);
+}
+#toolbar #searchbar:focus {
+    border-color: var(--admin-navy);
+    box-shadow: 0 0 0 3px var(--admin-focus-ring);
+}
+
+#changelist .results,
+#changelist table {
+    background: var(--admin-surface);
+    border-radius: 12px;
+    overflow: hidden;
+}
+#changelist table thead th {
+    background: var(--admin-surface-2);
+    border-bottom: 1px solid var(--admin-border);
+}
+#changelist table tbody tr { background: var(--admin-surface); }
+#changelist table tbody tr:nth-child(odd) { background: var(--admin-surface-2); }
+#changelist table tbody tr:hover { background: var(--admin-info-bg); }
+#changelist tbody tr.selected,
+#changelist tbody tr:has(.action-select:checked) {
+    background: var(--selected-row);
+    box-shadow: inset 3px 0 0 var(--admin-navy);
+}
+#changelist table tfoot,
+#changelist .paginator {
+    background: var(--admin-surface-2);
+    border-top: 1px solid var(--admin-border);
+    color: var(--admin-text-2);
+}
+#changelist .toplinks,
+.change-list .toplinks {
+    border-bottom: 1px solid var(--admin-border);
+}
+.change-list .toplinks a { color: var(--admin-link); }
+.change-list .toplinks .date-back { color: var(--admin-text-2); }
+
+/* Filter rail */
+#changelist-filter {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--admin-shadow-1);
+}
+#changelist-filter h2 {
+    background: var(--admin-surface-2);
+    color: var(--admin-text);
+    border-bottom: 1px solid var(--admin-border);
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+#changelist-filter h3,
+#changelist-filter details > summary,
+#changelist-filter #changelist-filter-extra-actions h3 {
+    background: transparent;
+    border: none;
+    border-top: 1px solid var(--admin-hairline);
+    color: var(--admin-text-3);
+    padding: 0.6rem 1rem 0.25rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 0;
+}
+#changelist-filter ul { padding: 0 0 0.5rem; margin: 0; }
+#changelist-filter li { border: none; }
+#changelist-filter a {
+    display: block;
+    padding: 0.35rem 1rem;
+    color: var(--admin-text-2);
+    text-decoration: none;
+    font-weight: 500;
+    border-inline-start: 3px solid transparent;
+}
+#changelist-filter a:hover {
+    background: var(--admin-surface-2);
+    color: var(--admin-link);
+}
+#changelist-filter li.selected a {
+    background: var(--admin-info-bg);
+    color: var(--admin-info-fg);
+    border-inline-start-color: var(--admin-navy);
+    font-weight: 700;
+}
+html[data-theme="dark"] #changelist-filter li.selected a {
+    border-inline-start-color: var(--admin-accent);
+}
+#changelist-filter li.selected a:hover { color: var(--admin-info-fg); }
+
+/* Bulk-action bar */
+.actions {
+    background: var(--admin-surface-2);
+    border: 1px solid var(--admin-border);
+    border-radius: 10px 10px 0 0;
+    color: var(--admin-text-2);
+}
+.actions select {
+    background: var(--admin-surface);
+    color: var(--admin-text);
+    border: 1px solid var(--admin-border-strong);
+    border-radius: 8px;
+}
+.actions label { color: var(--admin-text-2); font-weight: 600; }
+.actions .button { padding: 0.4rem 0.9rem; }
+
+/* Paginator */
+.paginator {
+    background: var(--admin-surface-2);
+    border-color: var(--admin-border);
+    color: var(--admin-text-2);
+    border-radius: 0 0 12px 12px;
+}
+.paginator a:link,
+.paginator a:visited {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border-strong);
+    border-radius: 8px;
+    color: var(--admin-link);
+    padding: 0.25rem 0.6rem;
+    text-decoration: none;
+    font-weight: 600;
+}
+.paginator a:hover {
+    background: var(--admin-navy);
+    color: #FFFFFF;
+    border-color: var(--admin-navy);
+}
+.paginator .this-page,
+.paginator span.this-page {
+    background: var(--admin-navy);
+    color: #FFFFFF;
+    border-radius: 8px;
+    padding: 0.25rem 0.6rem;
+    font-weight: 700;
+}
+.paginator input {
+    background: var(--admin-surface);
+    color: var(--admin-text);
+    border: 1px solid var(--admin-border-strong);
+    border-radius: 8px;
+}
+.paginator a.showall { color: var(--admin-link); font-weight: 700; }
+
+/* Read-only "view on site" links etc. */
+.viewlink, .inlineviewlink { color: var(--admin-link); }
+
+/* --------------------------------------------------------------------------
+   11. NAV SIDEBAR
+   -------------------------------------------------------------------------- */
+#nav-sidebar {
+    background: var(--admin-surface);
+    border-inline-end: 1px solid var(--admin-border);
+}
+#nav-filter {
+    background: var(--admin-surface-2);
+    border: 1px solid var(--admin-border-strong);
+    border-radius: 8px;
+    color: var(--admin-text);
+    padding: 0.45rem 0.7rem;
+    font-size: 0.85rem;
+}
+#nav-filter:focus {
+    border-color: var(--admin-navy);
+    box-shadow: 0 0 0 3px var(--admin-focus-ring);
+}
+#nav-filter.no-results { background: var(--admin-warning-bg); color: var(--admin-warning-fg); }
+#nav-sidebar .module {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    margin-bottom: 0.75rem;
+}
+#nav-sidebar .module th,
+#nav-sidebar .module caption {
+    background: transparent;
+    border: none;
+    color: var(--admin-text-3);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 0.6rem 0.75rem 0.25rem;
+}
+#nav-sidebar .module td { padding: 0; border: none; }
+#nav-sidebar .module td a {
+    display: block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 8px;
+    color: var(--admin-text-2);
+    text-decoration: none;
+    font-weight: 500;
+}
+#nav-sidebar .module td a:hover {
+    background: var(--admin-surface-2);
+    color: var(--admin-link);
+}
+#nav-sidebar .current-model,
+#nav-sidebar .module td a.current-model {
+    background: var(--admin-info-bg);
+    color: var(--admin-info-fg);
+    font-weight: 700;
+}
+#nav-sidebar .current-app .section:link,
+#nav-sidebar .current-app .section:visited { color: var(--admin-text); }
+.toggle-nav-sidebar {
+    background: var(--admin-surface);
+    border-inline-end: 1px solid var(--admin-border);
+    color: var(--admin-text-2);
+}
+.toggle-nav-sidebar:hover,
+.toggle-nav-sidebar:focus {
+    background: var(--admin-surface-2);
+    color: var(--admin-link);
+}
+
+/* --------------------------------------------------------------------------
+   12. LOGIN PAGE
+   -------------------------------------------------------------------------- */
+.login {
+    background:
+        radial-gradient(900px 420px at 50% -10%, rgba(30, 58, 138, 0.18), transparent),
+        var(--admin-canvas);
+}
+.login #container {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 16px;
+    box-shadow: var(--admin-shadow-3);
+    overflow: hidden;
+    width: 26rem;
+    max-width: calc(100% - 2rem);
+}
+.login #header {
+    border-radius: 0;
+    padding: 1.1rem 1.5rem;
+}
+.login #header h1,
+.login #header h1 a {
+    color: #FFFFFF;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+.login #content { padding: 1.75rem 1.5rem; }
+.login .form-row { padding: 0.75rem 0; border: none; }
+.login .form-row label { color: var(--admin-text-2); font-weight: 600; }
+.login .form-row #id_username,
+.login .form-row #id_password {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+}
+.login .submit-row {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0.75rem 0 0;
+}
+.login .submit-row input {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+}
+.login .password-reset-link { text-align: center; padding-top: 0.75rem; }
+.login .password-reset-link a { color: var(--admin-link); font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   13. SHARED PILLS (used by dashboard cards and changelist badges)
+   -------------------------------------------------------------------------- */
+.admin-pill {
+    display: inline-block;
+    padding: 0.18rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+.admin-pill--info { background: var(--admin-info-bg); color: var(--admin-info-fg); border-color: var(--admin-info-border); }
+.admin-pill--success { background: var(--admin-success-bg); color: var(--admin-success-fg); border-color: var(--admin-success-border); }
+.admin-pill--warning { background: var(--admin-warning-bg); color: var(--admin-warning-fg); border-color: var(--admin-warning-border); }
+.admin-pill--danger { background: var(--admin-danger-bg); color: var(--admin-danger-fg); border-color: var(--admin-danger-border); }
+.admin-pill--neutral { background: var(--admin-neutral-bg); color: var(--admin-neutral-fg); border-color: var(--admin-neutral-border); }
+.admin-pill--accent { background: var(--admin-accent-bg); color: var(--admin-accent-fg); border-color: var(--admin-warning-border); }
+.admin-pill--violet { background: var(--admin-violet-bg); color: var(--admin-violet-fg); border-color: transparent; }
+.admin-pill--teal { background: var(--admin-teal-bg); color: var(--admin-teal-fg); border-color: transparent; }
+
+/* Small muted suffix inside a table cell ("· 3 programs") */
+.admin-cell-muted { color: var(--admin-text-3); font-size: 0.8rem; }
+
+/* Application progress bar.
+   The fill width comes from one of seven precomputed step classes instead of
+   an inline style attribute, so core/admin.py stays attribute-free. */
+.admin-progress {
+    display: inline-block;
+    width: 72px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--admin-surface-3);
+    border: 1px solid var(--admin-border);
+    overflow: hidden;
+    vertical-align: middle;
+    margin-inline-end: 0.4rem;
+}
+.admin-progress__bar {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--admin-info-fg);
+}
+.admin-progress--success .admin-progress__bar { background: var(--admin-success-fg); }
+.admin-progress--danger .admin-progress__bar { background: var(--admin-danger-fg); }
+.admin-progress--info .admin-progress__bar { background: var(--admin-info-fg); }
+.admin-progress__bar--step-1 { width: 14.28%; }
+.admin-progress__bar--step-2 { width: 28.57%; }
+.admin-progress__bar--step-3 { width: 42.86%; }
+.admin-progress__bar--step-4 { width: 57.14%; }
+.admin-progress__bar--step-5 { width: 71.43%; }
+.admin-progress__bar--step-6 { width: 85.71%; }
+.admin-progress__bar--step-7 { width: 100%; }
+
+/* Inline code (verification codes, application codes) inside a table cell */
+td code,
+.field-application_name code {
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+/* Thumbnails rendered by admin list_display columns */
+.admin-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--admin-border);
+    background: var(--admin-surface-2);
+    display: block;
+}
+.admin-thumb--wide { width: 72px; height: 44px; }
+
+/* --------------------------------------------------------------------------
+   14. FOOTER
+   -------------------------------------------------------------------------- */
+#footer {
+    color: var(--admin-text-3);
+    border-top: 1px solid var(--admin-border);
+    padding: 1rem 1.75rem;
+    font-size: 0.8rem;
+}
+.admin-footer-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+}
+.admin-footer-row a { color: var(--admin-link); font-weight: 600; }
+.admin-footer-sep { color: var(--admin-border-strong); }
+
+/* --------------------------------------------------------------------------
+   15. ACCESSIBILITY & PRINT
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-delay: 0ms !important;
+        transition-duration: 0.001ms !important;
+    }
+    .button:hover,
+    input[type=submit]:hover,
+    input[type=button]:hover,
+    .object-tools a:hover { transform: none; }
+}
+
+@media print {
+    #header, #footer, .breadcrumbs, #nav-sidebar, .toggle-nav-sidebar,
+    #changelist-filter, .object-tools, .paginator, .actions, .submit-row {
+        display: none !important;
+    }
+    body, #container, #content, .module, .admin-card, .admin-kpi {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        border-color: #CCCCCC !important;
+    }
 }

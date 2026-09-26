@@ -1,184 +1,482 @@
 /* ==========================================================================
-   CUSTOM ADMIN DASHBOARD STYLES (THEME 1: BLUE & GOLD)
+   APPLY BM — ADMIN DASHBOARD (index page only)
 
-   Moved out of templates/admin/index.html, where this lived in an inline
-   <style> block: inline CSS is re-sent with every response, cannot be cached,
-   and forces 'unsafe-inline' in a Content-Security-Policy. Loaded through
-   {% block extrastyle %}.
+   Every colour comes from the `--admin-*` tokens defined in admin-theme.css,
+   so this page is identical in light and dark mode and follows the admin
+   theme toggle. Layout is a responsive grid: KPI tiles → attention strip →
+   cards → recent actions.
 
-   The two "--flush" / "--muted" rules at the bottom replace inline style=""
-   attributes that used to sit on individual elements.
-========================================================================== */
+   Loaded from templates/admin/index.html {% block extrastyle %}.
+   ========================================================================== */
 
-body { background: #F8FAFC !important; } /* Match site bg */
-
-.custom-admin-dashboard {
-    padding: 32px 24px;
-    max-width: 1400px;
+.admin-dashboard {
+    max-width: 1500px;
     margin: 0 auto;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 0.5rem 0 2rem;
 }
 
-.dashboard-header { margin-bottom: 32px; }
-.dashboard-title { font-size: 28px; font-weight: 800; color: #0F172A; margin: 0 0 8px 0; }
-.dashboard-subtitle { font-size: 15px; color: #475569; margin: 0; }
+/* --------------------------------------------------------------------------
+   HERO
+   -------------------------------------------------------------------------- */
+.dashboard-hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--admin-border);
+}
+.dashboard-hero__text { min-width: 16rem; }
+.dashboard-hero__eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--admin-text-3);
+}
+.dashboard-title {
+    margin: 0 0 0.35rem;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--admin-text);
+    border: none;
+    padding: 0;
+}
+.dashboard-subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--admin-text-2);
+    max-width: 46rem;
+}
 
+.dashboard-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.admin-quick-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 10px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--admin-text-2);
+    text-decoration: none;
+    box-shadow: var(--admin-shadow-1);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.admin-quick-action:link,
+.admin-quick-action:visited { color: var(--admin-text-2); }
+.admin-quick-action:hover,
+.admin-quick-action:focus {
+    transform: translateY(-2px);
+    border-color: var(--admin-accent);
+    color: var(--admin-link);
+    box-shadow: var(--admin-shadow-2);
+}
+.admin-quick-action__icon { font-size: 1rem; line-height: 1; }
+
+/* --------------------------------------------------------------------------
+   KPI TILES
+   -------------------------------------------------------------------------- */
+.admin-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.admin-kpi {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 14px;
+    padding: 0.95rem 1rem;
+    text-decoration: none;
+    box-shadow: var(--admin-shadow-1);
+    transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease, border-color 0.18s ease;
+}
+a.admin-kpi:hover,
+a.admin-kpi:focus {
+    transform: translateY(-3px);
+    border-color: var(--admin-border-strong);
+    box-shadow: var(--admin-shadow-3);
+}
+.admin-kpi__icon {
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    background: var(--admin-neutral-bg);
+    color: var(--admin-neutral-fg);
+}
+.admin-kpi__body { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+.admin-kpi__value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--admin-text);
+    font-variant-numeric: tabular-nums;
+}
+.admin-kpi__label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--admin-text-2);
+}
+.admin-kpi__hint {
+    font-size: 0.72rem;
+    color: var(--admin-text-3);
+}
+
+/* --------------------------------------------------------------------------
+   TINTED ICONS (shared by KPI tiles and card headers)
+   -------------------------------------------------------------------------- */
+.admin-kpi[data-tint="blue"] .admin-kpi__icon,
+.admin-card[data-tint="blue"] .card-icon { background: var(--admin-info-bg); color: var(--admin-info-fg); }
+.admin-kpi[data-tint="violet"] .admin-kpi__icon,
+.admin-card[data-tint="violet"] .card-icon { background: var(--admin-violet-bg); color: var(--admin-violet-fg); }
+.admin-kpi[data-tint="teal"] .admin-kpi__icon,
+.admin-card[data-tint="teal"] .card-icon { background: var(--admin-teal-bg); color: var(--admin-teal-fg); }
+.admin-kpi[data-tint="amber"] .admin-kpi__icon,
+.admin-card[data-tint="amber"] .card-icon { background: var(--admin-accent-bg); color: var(--admin-accent-fg); }
+.admin-kpi[data-tint="rose"] .admin-kpi__icon,
+.admin-card[data-tint="rose"] .card-icon { background: var(--admin-danger-bg); color: var(--admin-danger-fg); }
+.admin-kpi[data-tint="slate"] .admin-kpi__icon,
+.admin-card[data-tint="slate"] .card-icon { background: var(--admin-neutral-bg); color: var(--admin-neutral-fg); }
+.admin-kpi[data-tint="blue"],
+.admin-card[data-tint="blue"] { --admin-card-accent: var(--admin-info-border); }
+.admin-kpi[data-tint="violet"],
+.admin-card[data-tint="violet"] { --admin-card-accent: var(--admin-violet-fg); }
+.admin-kpi[data-tint="teal"],
+.admin-card[data-tint="teal"] { --admin-card-accent: var(--admin-teal-fg); }
+.admin-kpi[data-tint="amber"],
+.admin-card[data-tint="amber"] { --admin-card-accent: var(--admin-warning-border); }
+.admin-kpi[data-tint="rose"],
+.admin-card[data-tint="rose"] { --admin-card-accent: var(--admin-danger-border); }
+.admin-kpi[data-tint="slate"],
+.admin-card[data-tint="slate"] { --admin-card-accent: var(--admin-border-strong); }
+
+/* --------------------------------------------------------------------------
+   NEEDS ATTENTION
+   -------------------------------------------------------------------------- */
+.admin-attention {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-inline-start: 4px solid var(--admin-accent);
+    border-radius: 14px;
+    padding: 1rem 1.15rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--admin-shadow-1);
+}
+.admin-attention__title {
+    margin: 0 0 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--admin-text-2);
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+.admin-attention__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+}
+.admin-attention__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+.admin-attention__item a {
+    color: var(--admin-text-2);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+}
+.admin-attention__item a:hover {
+    color: var(--admin-link);
+    border-bottom-color: currentColor;
+}
+
+/* --------------------------------------------------------------------------
+   CARDS
+   -------------------------------------------------------------------------- */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 1.25rem;
 }
 
-/* --- ANIMATIONS --- */
-@keyframes cardFadeIn {
-    from { opacity: 0; transform: translateY(20px); }
+@keyframes adminCardIn {
+    from { opacity: 0; transform: translateY(14px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- CARD BASE --- */
-.admin-card, .recent-actions-card {
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+.admin-card,
+.recent-actions-card {
     display: flex;
     flex-direction: column;
-    animation: cardFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 16px;
+    padding: 1.15rem 1.25rem;
+    box-shadow: var(--admin-shadow-1);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+    animation: adminCardIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
-
-/* Staggered entry */
-.admin-card:nth-child(1) { animation-delay: 0.05s; }
-.admin-card:nth-child(2) { animation-delay: 0.10s; }
-.admin-card:nth-child(3) { animation-delay: 0.15s; }
-.admin-card:nth-child(4) { animation-delay: 0.20s; }
-.admin-card:nth-child(5) { animation-delay: 0.25s; }
-.admin-card:nth-child(6) { animation-delay: 0.30s; }
-.recent-actions-card { animation-delay: 0.35s; }
+.admin-card:nth-child(1) { animation-delay: 0.04s; }
+.admin-card:nth-child(2) { animation-delay: 0.08s; }
+.admin-card:nth-child(3) { animation-delay: 0.12s; }
+.admin-card:nth-child(4) { animation-delay: 0.16s; }
+.admin-card:nth-child(5) { animation-delay: 0.20s; }
+.admin-card:nth-child(6) { animation-delay: 0.24s; }
+.admin-card:nth-child(7) { animation-delay: 0.28s; }
+.recent-actions-card { animation-delay: 0.32s; }
 
 .admin-card:hover {
-    box-shadow: 0 12px 28px rgba(30, 58, 138, 0.08); /* Blue tinted shadow */
-    transform: translateY(-4px);
-    border-color: #DBEAFE;
+    transform: translateY(-3px);
+    border-color: var(--admin-card-accent, var(--admin-border-strong));
+    box-shadow: var(--admin-shadow-3);
 }
 
-/* --- CARD HEADER --- */
 .card-header {
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-bottom: 20px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid #F1F5F9;
+    gap: 0.75rem;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--admin-hairline);
 }
 .card-icon {
-    font-size: 22px;
-    width: 44px;
-    height: 44px;
-    display: flex;
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #DBEAFE; /* Soft Blue */
-    color: #1E3A8A; /* Deep Blue */
     border-radius: 10px;
+    font-size: 1.1rem;
+    background: var(--admin-neutral-bg);
+    color: var(--admin-neutral-fg);
 }
 .card-title {
-    font-size: 17px;
-    font-weight: 800;
-    color: #1E3A8A; /* Deep Blue */
     margin: 0;
+    font-size: 1rem;
+    font-weight: 800;
     letter-spacing: -0.01em;
+    color: var(--admin-text);
+}
+.card-header--flush {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0.6rem;
 }
 
-/* --- MODEL LIST --- */
-.model-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+/* --------------------------------------------------------------------------
+   MODEL LIST INSIDE A CARD
+   -------------------------------------------------------------------------- */
+/* Each card is its own query container (the rule that uses it is at the end of
+   this section, so it wins the cascade against the base .model-* rules). */
+.admin-card { container-type: inline-size; }
+
+.model-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+}
 .model-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 12px 14px;
+    gap: 0.6rem;
+    padding: 0.55rem 0.65rem;
     border-radius: 10px;
-    background: #F8FAFC;
+    background: var(--admin-surface-2);
     transition: background 0.15s ease;
 }
-.model-item:hover { background: #F1F5F9; }
+.model-item:hover { background: var(--admin-surface-3); }
 .model-name {
-    font-weight: 600;
-    color: #0F172A;
-    text-decoration: none;
-    font-size: 14px;
     flex: 1;
-}
-.model-name:hover { color: #1E3A8A; }
-
-/* --- ACTION BUTTONS --- */
-.model-actions { display: flex; gap: 8px; }
-.action-link {
-    font-size: 12px;
-    font-weight: 700;
+    min-width: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--admin-text);
     text-decoration: none;
-    padding: 5px 12px;
-    border-radius: 6px;
-    transition: all 0.15s ease;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.model-name:hover { color: var(--admin-link); }
+.model-name--muted { color: var(--admin-text-2); }
+
+.model-count {
+    flex: 0 0 auto;
+    min-width: 1.9rem;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--admin-text-2);
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 999px;
+    padding: 0.1rem 0.45rem;
+}
+
+.model-actions {
+    display: flex;
+    gap: 0.4rem;
+    flex: 0 0 auto;
+}
+.action-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
-.action-add { color: #1E3A8A; background: #DBEAFE; }
-.action-add:hover { background: #BFDBFE; }
-.action-change { color: #475569; background: #E2E8F0; }
-.action-change:hover { background: #CBD5E1; }
+.action-link i { font-size: 0.72rem; }
+.action-add {
+    background: var(--admin-info-bg);
+    color: var(--admin-info-fg);
+    border-color: var(--admin-info-border);
+}
+.action-add:hover { background: var(--admin-info-border); color: var(--admin-info-fg); }
+.action-change {
+    background: var(--admin-surface);
+    color: var(--admin-text-2);
+    border-color: var(--admin-border);
+}
+.action-change:hover { border-color: var(--admin-border-strong); color: var(--admin-link); }
 
-/* --- RECENT ACTIONS CARD --- */
+/* Model rows adapt to the CARD's own width, not the viewport: the grid gives
+   two cards to a small laptop and three to a desktop, so the same viewport
+   produces cards of different widths.
+
+   Thresholds are the card's CONTENT box (that is what a container query
+   measures), so a 345px card is a 305px container.
+
+   1. Below 400px there is no room for two labelled buttons next to a readable
+      model name, so the labels give way — the icons keep the action and the
+      template's aria-label/title keep it announced and discoverable — instead
+      of truncating real names to "Document …".
+   2. Below 250px the name takes its own line, so even a very long translated
+      name is shown in full.
+
+   Declared after the .model-* rules on purpose: same specificity, so source
+   order is what decides and these conditions must win. */
+@container (max-width: 400px) {
+    .action-link__label { display: none; }
+    .action-link { padding: 0.3rem 0.4rem; }
+    /* Tighter row furniture: those pixels are what keep the longest model
+       name ("Document Requirements") unclipped in a two-column card. */
+    .model-item { gap: 0.45rem; }
+    .model-count { min-width: 1.6rem; padding: 0.1rem 0.35rem; }
+}
+@container (max-width: 250px) {
+    .model-item { flex-wrap: wrap; row-gap: 0.4rem; }
+    .model-name {
+        flex: 1 1 100%;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+    }
+    .model-count { margin-inline-end: auto; }
+}
+
+/* --------------------------------------------------------------------------
+   RECENT ACTIONS (full width)
+   -------------------------------------------------------------------------- */
 .recent-actions-card {
-    grid-column: 1 / -1; /* Span full width */
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    border-radius: 16px;
-    padding: 24px;
+    grid-column: 1 / -1;
+    margin-top: 1.25rem;
 }
-.recent-actions-card .card-icon { background: #FEF3C7; color: #D97706; } /* Gold tinted */
-.recent-actions-card .card-title { color: #0F172A; }
+.recent-actions-card .card-icon { background: var(--admin-accent-bg); color: var(--admin-accent-fg); }
 
-.actionlog-list { list-style: none; padding: 0; margin: 0; }
+.actionlog-list { list-style: none; margin: 0; padding: 0; }
 .actionlog-item {
-    padding: 14px 0;
-    border-bottom: 1px solid #E2E8F0;
     display: flex;
     align-items: center;
-    gap: 14px;
-    font-size: 14px;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--admin-hairline);
+    font-size: 0.85rem;
 }
 .actionlog-item:last-child { border-bottom: none; }
 
 .action-badge {
-    font-size: 11px;
-    font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    min-width: 70px;
+    flex: 0 0 auto;
+    min-width: 4.6rem;
     text-align: center;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
 }
-.badge-add { background: #DBEAFE; color: #1E3A8A; }
-.badge-change { background: #FEF3C7; color: #D97706; }
-.badge-delete { background: #FEE2E2; color: #B91C1C; }
+.badge-add { background: var(--admin-info-bg); color: var(--admin-info-fg); border-color: var(--admin-info-border); }
+.badge-change { background: var(--admin-accent-bg); color: var(--admin-accent-fg); border-color: var(--admin-warning-border); }
+.badge-delete { background: var(--admin-danger-bg); color: var(--admin-danger-fg); border-color: var(--admin-danger-border); }
 
-.actionlog-link { color: #1E3A8A; text-decoration: none; font-weight: 600; }
+.actionlog-link {
+    color: var(--admin-link);
+    font-weight: 600;
+    text-decoration: none;
+}
 .actionlog-link:hover { text-decoration: underline; }
-.actionlog-meta { color: #64748B; font-size: 13px; margin-left: auto; font-style: italic; }
-
-/* Hide default Django sidebar since we moved Recent Actions to the main grid */
-#content-related { display: none !important; }
-#content-main { margin-right: 0 !important; }
-
-/* Card header without its divider (previously inline style="" on the element) */
-.card-header--flush {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 8px;
+.actionlog-meta {
+    margin-inline-start: auto;
+    color: var(--admin-text-3);
+    font-size: 0.78rem;
+    font-style: italic;
 }
 
-/* Muted model name inside the recent-actions list */
-.model-name--muted { color: #475569; }
+/* --------------------------------------------------------------------------
+   RESPONSIVE
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+    .dashboard-hero { align-items: flex-start; }
+    .dashboard-hero__actions { width: 100%; }
+}
+@media (max-width: 640px) {
+    .dashboard-title { font-size: 1.35rem; }
+    .admin-kpis { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+    .dashboard-grid { grid-template-columns: 1fr; }
+    .model-item { flex-wrap: wrap; }
+    .model-name { flex: 1 0 100%; }
+    .actionlog-meta { margin-inline-start: 0; width: 100%; }
+}

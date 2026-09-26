@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class ConnectSID(models.Model):
@@ -13,5 +14,5 @@ class ConnectSID(models.Model):
         return f"{self.sid[:30]}… (fetched {self.fetched_at})"
 
     class Meta:
-        verbose_name = "Stored ConnectSID"
-        verbose_name_plural = "Stored ConnectSIDs"
+        verbose_name = _("Stored ConnectSID")
+        verbose_name_plural = _("Stored ConnectSIDs")

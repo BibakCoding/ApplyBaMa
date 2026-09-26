@@ -83,7 +83,8 @@ class Country(TimeStampedModel):
     )
 
     class Meta:
-        verbose_name_plural = "Countries"
+        verbose_name = _("Country")
+        verbose_name_plural = _("Countries")
         constraints = [
             models.UniqueConstraint(Lower("name"), name="country_name_ci_unique")
         ]
@@ -108,6 +109,12 @@ class City(TimeStampedModel):
     name = models.CharField(max_length=100)
 
     class Meta:
+        # Singular and plural are both declared: Django appends an "s" to derive
+        # the plural ("citys", "facultys", "universitys") and the admin shows the
+        # lowercase model name where no singular is set — untranslated, which put
+        # English model names inside Persian/Turkish/Arabic admin headings.
+        verbose_name = _("City")
+        verbose_name_plural = _("Cities")
         unique_together = ("country", "name")
 
     def __str__(self):
@@ -116,6 +123,10 @@ class City(TimeStampedModel):
 
 class TermOption(TimeStampedModel):
     label = models.CharField(max_length=50)
+
+    class Meta:
+        verbose_name = _("Term Option")
+        verbose_name_plural = _("Term Options")
 
     def __str__(self):
         return self.label
@@ -137,6 +148,10 @@ class YearOption(TimeStampedModel):
         help_text=_("Number of years—for example, '1', '1.5', '2', etc."),
     )
 
+    class Meta:
+        verbose_name = _("Year Option")
+        verbose_name_plural = _("Year Options")
+
     def __str__(self):
         return self.get_value_display()
 
@@ -151,6 +166,10 @@ class Faculty(TimeStampedModel):
             "Select one or more possible durations (in years) that this faculty offers."
         ),
     )
+
+    class Meta:
+        verbose_name = _("Faculty")
+        verbose_name_plural = _("Faculties")
 
     def __str__(self):
         return self.name
@@ -221,6 +240,8 @@ class University(TimeStampedModel):
     )
 
     class Meta:
+        verbose_name = _("University")
+        verbose_name_plural = _("Universities")
         constraints = [
             models.UniqueConstraint(Lower("name"), name="university_name_ci_unique")
         ]
@@ -252,6 +273,10 @@ class University(TimeStampedModel):
 
 
 class Program(TimeStampedModel):
+    class Meta:
+        verbose_name = _("Program")
+        verbose_name_plural = _("Programs")
+
     class StatusChoices(models.TextChoices):
         AVAILABLE = "available", _("Available")
         NEAR_TO_CLOSE = "near_to_close", _("Near to Close")
@@ -431,6 +456,10 @@ class User(AbstractUser):
 
 
 class CompanyProfile(TimeStampedModel):
+    class Meta:
+        verbose_name = _("Company Profile")
+        verbose_name_plural = _("Company Profiles")
+
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="company_profile"
     )
@@ -445,6 +474,10 @@ class CompanyProfile(TimeStampedModel):
 
 
 class AgentProfile(TimeStampedModel):
+    class Meta:
+        verbose_name = _("Agent Profile")
+        verbose_name_plural = _("Agent Profiles")
+
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="agent_profile"
     )
@@ -457,6 +490,10 @@ class AgentProfile(TimeStampedModel):
 
 
 class StudentProfile(TimeStampedModel):
+    class Meta:
+        verbose_name = _("Student Profile")
+        verbose_name_plural = _("Student Profiles")
+
     STAGE_CHOICES = [
         ("freshman", "Freshman"),
         ("sophomore", "Sophomore"),
@@ -485,6 +522,10 @@ class StudentProfile(TimeStampedModel):
 # Application
 # -----------------------------------------------------------------------------
 class Application(TimeStampedModel):
+    class Meta:
+        verbose_name = _("Application")
+        verbose_name_plural = _("Applications")
+
     class Status(models.TextChoices):
         IN_PROGRESS = "in_progress", _("In Progress")
         FINISHED = "finished", _("Finished")
@@ -580,8 +621,8 @@ class SiteSettings(models.Model):
     )
 
     class Meta:
-        verbose_name = "Site Settings"
-        verbose_name_plural = "Site Settings"
+        verbose_name = _("Site Settings")
+        verbose_name_plural = _("Site Settings")
 
     def __str__(self):
         return "Global Site Settings"
@@ -601,7 +642,7 @@ class HowItWorksStep(models.Model):
 
     class Meta:
         ordering = ["order"]
-        verbose_name = "Journey Step"
+        verbose_name = _("Journey Step")
 
     def __str__(self):
         return f"Step {self.order}: {self.title}"
@@ -620,7 +661,7 @@ class DocumentRequirement(models.Model):
 
     class Meta:
         ordering = ["level", "order"]
-        verbose_name = "Document Requirement"
+        verbose_name = _("Document Requirement")
 
     def __str__(self):
         return f"{self.get_level_display()} - {self.title}"
@@ -645,7 +686,8 @@ class SuccessStory(models.Model):
     is_published = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = "Success Story"
+        verbose_name = _("Success Story")
+        verbose_name_plural = _("Success Stories")
 
     def __str__(self):
         return self.name

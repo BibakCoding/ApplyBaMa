@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 01:24+0330\n"
+"POT-Creation-Date: 2026-09-26 19:27+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,6 +86,58 @@ msgstr ""
 msgid "Invalid pagination parameters"
 msgstr ""
 
+#: .\authentication\admin.py:47
+msgid "Lifetime"
+msgstr ""
+
+#: .\authentication\admin.py:57 .\core\admin.py:501 .\core\admin.py:976
+#: .\templates\dashboard\fragments\notifications.html:62
+msgid "Type"
+msgstr ""
+
+#: .\authentication\admin.py:61
+#: .\templates\dashboard\fragments\application_detail.html:11
+msgid "Code"
+msgstr ""
+
+#: .\authentication\admin.py:65
+msgid "State"
+msgstr ""
+
+#: .\authentication\admin.py:68
+msgid "Used"
+msgstr ""
+
+#: .\authentication\admin.py:70
+msgid "Expired"
+msgstr ""
+
+#: .\authentication\admin.py:71
+msgid "Active"
+msgstr ""
+
+#: .\authentication\admin.py:73
+msgid "Mark selected codes as used"
+msgstr ""
+
+#: .\authentication\admin.py:78
+#, python-format
+msgid "%(count)d code invalidated."
+msgid_plural "%(count)d codes invalidated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\authentication\admin.py:83
+msgid "Delete expired codes"
+msgstr ""
+
+#: .\authentication\admin.py:90
+#, python-format
+msgid "%(count)d expired code deleted."
+msgid_plural "%(count)d expired codes deleted."
+msgstr[0] ""
+msgstr[1] ""
+
 #: .\authentication\forms.py:11 .\templates\authentication\login.html:61
 msgid "Email or Username"
 msgstr ""
@@ -134,7 +186,7 @@ msgstr ""
 msgid "Confirmation Code"
 msgstr ""
 
-#: .\authentication\forms.py:93
+#: .\authentication\forms.py:93 .\authentication\models.py:31
 #: .\templates\authentication\change_password.html:51
 msgid "Verification Code"
 msgstr ""
@@ -157,6 +209,10 @@ msgstr ""
 
 #: .\authentication\models.py:16
 msgid "Password Reset"
+msgstr ""
+
+#: .\authentication\models.py:32
+msgid "Verification Codes"
 msgstr ""
 
 #: .\authentication\views.py:92 .\authentication\views.py:149
@@ -238,6 +294,409 @@ msgstr ""
 msgid "Username updated successfully."
 msgstr ""
 
+#: .\core\admin.py:61 .\templates\admin\base_site.html:25
+#: .\templates\admin\base_site.html:51
+msgid "Apply BM Control Center"
+msgstr ""
+
+#: .\core\admin.py:62
+msgid "Apply BM Admin"
+msgstr ""
+
+#: .\core\admin.py:99 .\core\admin.py:141 .\core\admin.py:217
+#: .\core\models.py:278 .\core\templatetags\admin_extras.py:238
+#: .\templates\dashboard\fragments\programs.html:4
+#: .\templates\dashboard\main.html:88
+msgid "Programs"
+msgstr ""
+
+#: .\core\admin.py:114 .\core\models.py:172
+msgid "Faculties"
+msgstr ""
+
+#: .\core\admin.py:137 .\core\models.py:244
+#: .\core\templatetags\admin_extras.py:246
+#: .\templates\authentication\login.html:28
+#: .\templates\dashboard\fragments\universities.html:4
+#: .\templates\dashboard\main.html:81
+msgid "Universities"
+msgstr ""
+
+#: .\core\admin.py:213
+msgid "Logo"
+msgstr ""
+
+#: .\core\admin.py:221
+msgid "Show selected universities on the homepage"
+msgstr ""
+
+#: .\core\admin.py:227
+#, python-format
+msgid "%(count)d university is now on the homepage."
+msgid_plural "%(count)d universities are now on the homepage."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:235
+msgid "Hide selected universities from the homepage"
+msgstr ""
+
+#: .\core\admin.py:241
+#, python-format
+msgid "%(count)d university was removed from the homepage."
+msgid_plural "%(count)d universities were removed from the homepage."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:249
+msgid "Activate selected universities"
+msgstr ""
+
+#: .\core\admin.py:254
+#, python-format
+msgid "%(count)d university activated."
+msgid_plural "%(count)d universities activated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:259
+msgid "Deactivate selected universities"
+msgstr ""
+
+#: .\core\admin.py:265
+#, python-format
+msgid "%(count)d university deactivated."
+msgid_plural "%(count)d universities deactivated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:275
+msgid "discount"
+msgstr ""
+
+#: .\core\admin.py:279
+msgid "Has an offer"
+msgstr ""
+
+#: .\core\admin.py:279
+msgid "No offer"
+msgstr ""
+
+#: .\core\admin.py:346 .\core\admin.py:707
+msgid "Status"
+msgstr ""
+
+#: .\core\admin.py:351
+msgid "Price"
+msgstr ""
+
+#: .\core\admin.py:360
+msgid "offer"
+msgstr ""
+
+#: .\core\admin.py:364
+msgid "Mark selected programs as available"
+msgstr ""
+
+#: .\core\admin.py:370
+#, python-format
+msgid "%(count)d program is now available."
+msgid_plural "%(count)d programs are now available."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:376
+msgid "Mark selected programs as quota full"
+msgstr ""
+
+#: .\core\admin.py:382
+#, python-format
+msgid "%(count)d program marked as quota full."
+msgid_plural "%(count)d programs marked as quota full."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:390
+msgid "Activate selected programs"
+msgstr ""
+
+#: .\core\admin.py:395
+#, python-format
+msgid "%(count)d program activated."
+msgid_plural "%(count)d programs activated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:400
+msgid "Deactivate selected programs"
+msgstr ""
+
+#: .\core\admin.py:405
+#, python-format
+msgid "%(count)d program deactivated."
+msgid_plural "%(count)d programs deactivated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:450 .\templates\dashboard\fragments\welcome.html:18
+#: .\templates\dashboard\main.html:66
+msgid "Profile"
+msgstr ""
+
+#: .\core\admin.py:506 .\core\admin.py:576 .\core\models.py:527
+#: .\core\templatetags\admin_extras.py:50
+#: .\core\templatetags\admin_extras.py:230
+#: .\templates\dashboard\fragments\my_students.html:19
+#: .\templates\dashboard\fragments\welcome.html:64
+#: .\templates\dashboard\main.html:94
+msgid "Applications"
+msgstr ""
+
+#: .\core\admin.py:510
+msgid "Activate selected users"
+msgstr ""
+
+#: .\core\admin.py:515
+#, python-format
+msgid "%(count)d user activated."
+msgid_plural "%(count)d users activated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:520
+msgid "Deactivate selected users"
+msgstr ""
+
+#: .\core\admin.py:525
+#, python-format
+msgid "%(count)d user deactivated."
+msgid_plural "%(count)d users deactivated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:553 .\core\templatetags\admin_extras.py:211
+msgid "Agents"
+msgstr ""
+
+#: .\core\admin.py:599 .\templates\dashboard\fragments\profile.html:198
+msgid "Stage"
+msgstr ""
+
+#: .\core\admin.py:610
+msgid "needs attention"
+msgstr ""
+
+#: .\core\admin.py:615
+msgid "Still in progress"
+msgstr ""
+
+#: .\core\admin.py:616
+msgid "No update for 30+ days"
+msgstr ""
+
+#: .\core\admin.py:617
+msgid "No program chosen yet"
+msgstr ""
+
+#: .\core\admin.py:666
+msgid "Identifiers"
+msgstr ""
+
+#: .\core\admin.py:667
+msgid "Parties"
+msgstr ""
+
+#: .\core\admin.py:668 .\core\admin.py:711
+msgid "Progress"
+msgstr ""
+
+#: .\core\admin.py:669 .\templates\core\main.html:20
+#: .\templates\core\main.html:54
+msgid "Documents"
+msgstr ""
+
+#: .\core\admin.py:699
+#: .\templates\dashboard\fragments\application_detail.html:42
+#: .\templates\dashboard\main.html:47
+msgid "Student"
+msgstr ""
+
+#: .\core\admin.py:703 .\core\models.py:388 .\templates\dashboard\main.html:43
+msgid "Agent"
+msgstr ""
+
+#: .\core\admin.py:746
+msgid "Mark selected applications as finished"
+msgstr ""
+
+#: .\core\admin.py:752
+#, python-format
+msgid "%(count)d application marked as finished."
+msgstr ""
+
+#: .\core\admin.py:753
+#, python-format
+msgid "%(count)d applications marked as finished."
+msgstr ""
+
+#: .\core\admin.py:756
+msgid "Mark selected applications as failed"
+msgstr ""
+
+#: .\core\admin.py:762
+#, python-format
+msgid "%(count)d application marked as failed."
+msgstr ""
+
+#: .\core\admin.py:763
+#, python-format
+msgid "%(count)d applications marked as failed."
+msgstr ""
+
+#: .\core\admin.py:766
+msgid "Reopen selected applications"
+msgstr ""
+
+#: .\core\admin.py:772
+#, python-format
+msgid "%(count)d application reopened."
+msgstr ""
+
+#: .\core\admin.py:773
+#, python-format
+msgid "%(count)d applications reopened."
+msgstr ""
+
+#: .\core\admin.py:789
+msgid "Hero section"
+msgstr ""
+
+#: .\core\admin.py:791
+msgid "Contact & social"
+msgstr ""
+
+#: .\core\admin.py:832
+msgid "Level"
+msgstr ""
+
+#: .\core\admin.py:862
+msgid "Photo"
+msgstr ""
+
+#: .\core\admin.py:866
+msgid "Publish selected success stories"
+msgstr ""
+
+#: .\core\admin.py:872
+#, python-format
+msgid "%(count)d success story published."
+msgid_plural "%(count)d success stories published."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:880
+msgid "Unpublish selected success stories"
+msgstr ""
+
+#: .\core\admin.py:886
+#, python-format
+msgid "%(count)d success story hidden from the homepage."
+msgid_plural "%(count)d success stories hidden from the homepage."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:924 .\core\models.py:724
+#: .\templates\dashboard\fragments\notifications.html:14
+#: .\templates\dashboard\fragments\notifications.html:125
+msgid "Message"
+msgstr ""
+
+#: .\core\admin.py:934
+msgid "Audience"
+msgstr ""
+
+#: .\core\admin.py:938
+msgid ""
+"Use “Specific users” from the dashboard notification composer: the admin "
+"cannot edit a through-model recipient list directly."
+msgstr ""
+
+#: .\core\admin.py:943 .\core\admin.py:988
+msgid "Delivery"
+msgstr ""
+
+#: .\core\admin.py:980 .\core\models.py:748
+#: .\templates\dashboard\fragments\notifications.html:63
+msgid "Recipients"
+msgstr ""
+
+#: .\core\admin.py:984 .\core\models.py:790
+msgid "Read"
+msgstr ""
+
+#: .\core\admin.py:996
+#, python-format
+msgid "%(count)d recipient,"
+msgid_plural "%(count)d recipients,"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:1003
+msgid "open the recipient list"
+msgstr ""
+
+#: .\core\admin.py:1006
+msgid "Deliver to the selected audience"
+msgstr ""
+
+#: .\core\admin.py:1025
+#, python-format
+msgid "%(count)d new delivery created."
+msgid_plural "%(count)d new deliveries created."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:1045
+msgid "Mark selected deliveries as read"
+msgstr ""
+
+#: .\core\admin.py:1050
+#, python-format
+msgid "%(count)d delivery marked as read."
+msgid_plural "%(count)d deliveries marked as read."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin.py:1055
+msgid "Mark selected deliveries as unread"
+msgstr ""
+
+#: .\core\admin.py:1061
+#, python-format
+msgid "%(count)d delivery marked as unread."
+msgid_plural "%(count)d deliveries marked as unread."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\core\admin_utils.py:53
+msgid "Yes"
+msgstr ""
+
+#: .\core\admin_utils.py:53
+msgid "No"
+msgstr ""
+
+#: .\core\admin_utils.py:70
+msgid "Export selected rows as CSV"
+msgstr ""
+
+#: .\core\admin_utils.py:89
+#, python-format
+msgid "%(count)d row exported."
+msgid_plural "%(count)d rows exported."
+msgstr[0] ""
+msgstr[1] ""
+
 #: .\core\context_processors.py:72
 msgid "Registration is required to see programs matching your search."
 msgstr ""
@@ -307,8 +766,8 @@ msgid ""
 "Unsupported file extension. Allowed: .pdf, .doc, .docx, .jpg, .jpeg, .png"
 msgstr ""
 
-#: .\core\models.py:75 .\core\models.py:103 .\core\models.py:173
-#: .\core\models.py:270
+#: .\core\models.py:75 .\core\models.py:104 .\core\models.py:192
+#: .\core\models.py:295
 msgid "ID from info.studyfans.com"
 msgstr ""
 
@@ -320,271 +779,421 @@ msgstr ""
 msgid "Nationality adjective"
 msgstr ""
 
-#: .\core\models.py:137
+#: .\core\models.py:86 .\templates\dashboard\fragments\profile.html:117
+msgid "Country"
+msgstr ""
+
+#: .\core\models.py:87 .\templates\authentication\login.html:29
+msgid "Countries"
+msgstr ""
+
+#: .\core\models.py:116 .\templates\dashboard\fragments\profile.html:121
+msgid "City"
+msgstr ""
+
+#: .\core\models.py:117
+msgid "Cities"
+msgstr ""
+
+#: .\core\models.py:128
+msgid "Term Option"
+msgstr ""
+
+#: .\core\models.py:129
+msgid "Term Options"
+msgstr ""
+
+#: .\core\models.py:148
 msgid "Number of years—for example, '1', '1.5', '2', etc."
 msgstr ""
 
-#: .\core\models.py:151
+#: .\core\models.py:152
+msgid "Year Option"
+msgstr ""
+
+#: .\core\models.py:153
+msgid "Year Options"
+msgstr ""
+
+#: .\core\models.py:166
 msgid ""
 "Select one or more possible durations (in years) that this faculty offers."
 msgstr ""
 
-#: .\core\models.py:203
+#: .\core\models.py:171
+msgid "Faculty"
+msgstr ""
+
+#: .\core\models.py:222
 msgid "Parsed details (dates, exams, documents, fees, etc.) from the site"
 msgstr ""
 
-#: .\core\models.py:209
+#: .\core\models.py:228
 msgid "Year founded, e.g. 2013"
 msgstr ""
 
-#: .\core\models.py:213
+#: .\core\models.py:232
 msgid "University PIN code"
 msgstr ""
 
-#: .\core\models.py:220
+#: .\core\models.py:239
 msgid "Which country languages are taught/used by this university"
 msgstr ""
 
-#: .\core\models.py:256
+#: .\core\models.py:243
+msgid "University"
+msgstr ""
+
+#: .\core\models.py:277
+#: .\templates\dashboard\fragments\application_detail.html:47
+msgid "Program"
+msgstr ""
+
+#: .\core\models.py:281
 msgid "Available"
 msgstr ""
 
-#: .\core\models.py:257
+#: .\core\models.py:282
 msgid "Near to Close"
 msgstr ""
 
-#: .\core\models.py:258
+#: .\core\models.py:283
 msgid "Quota Full"
 msgstr ""
 
-#: .\core\models.py:259
+#: .\core\models.py:284
 msgid "Closed"
 msgstr ""
 
-#: .\core\models.py:297
+#: .\core\models.py:322
 msgid "Duration in years; should be one of the faculty's year options"
 msgstr ""
 
-#: .\core\models.py:307
+#: .\core\models.py:332
 msgid "Fee per semester"
 msgstr ""
 
-#: .\core\models.py:315
+#: .\core\models.py:340
 msgid "Scholarship or discount offered"
 msgstr ""
 
-#: .\core\models.py:323
+#: .\core\models.py:348
 msgid "Language of instruction, e.g. English, Turkish"
 msgstr ""
 
-#: .\core\models.py:326
+#: .\core\models.py:351
 msgid "Currency code, e.g. USD, EUR, TRY"
 msgstr ""
 
-#: .\core\models.py:361
+#: .\core\models.py:386
 msgid "Default"
 msgstr ""
 
-#: .\core\models.py:362 .\templates\dashboard\main.html:45
+#: .\core\models.py:387 .\templates\dashboard\main.html:45
 msgid "Company"
 msgstr ""
 
-#: .\core\models.py:363 .\templates\dashboard\main.html:43
-msgid "Agent"
-msgstr ""
-
-#: .\core\models.py:366
+#: .\core\models.py:391
 msgid "Male"
 msgstr ""
 
-#: .\core\models.py:367
+#: .\core\models.py:392
 msgid "Female"
 msgstr ""
 
-#: .\core\models.py:404
+#: .\core\models.py:429
 msgid "Profile Image"
 msgstr ""
 
-#: .\core\models.py:405
+#: .\core\models.py:430
 msgid "Upload a profile image (max 2MB)"
 msgstr ""
 
-#: .\core\models.py:411
+#: .\core\models.py:436
 msgid "Designates whether this student can access representative features"
 msgstr ""
 
-#: .\core\models.py:420
+#: .\core\models.py:445
 msgid "Only student users can be representatives"
 msgstr ""
 
-#: .\core\models.py:477
-msgid "Select the country whose language you speak"
+#: .\core\models.py:460
+msgid "Company Profile"
 msgstr ""
 
-#: .\core\models.py:489
-msgid "In Progress"
+#: .\core\models.py:461
+msgid "Company Profiles"
 msgstr ""
 
-#: .\core\models.py:490
-msgid "Finished"
+#: .\core\models.py:478
+msgid "Agent Profile"
 msgstr ""
 
-#: .\core\models.py:491
-msgid "Failed"
+#: .\core\models.py:479
+msgid "Agent Profiles"
 msgstr ""
 
 #: .\core\models.py:494
-msgid "Step One"
+msgid "Student Profile"
 msgstr ""
 
 #: .\core\models.py:495
+msgid "Student Profiles"
+msgstr ""
+
+#: .\core\models.py:514
+msgid "Select the country whose language you speak"
+msgstr ""
+
+#: .\core\models.py:526
+msgid "Application"
+msgstr ""
+
+#: .\core\models.py:530
+msgid "In Progress"
+msgstr ""
+
+#: .\core\models.py:531
+msgid "Finished"
+msgstr ""
+
+#: .\core\models.py:532
+msgid "Failed"
+msgstr ""
+
+#: .\core\models.py:535
+msgid "Step One"
+msgstr ""
+
+#: .\core\models.py:536
 msgid "Step Two"
 msgstr ""
 
-#: .\core\models.py:496
+#: .\core\models.py:537
 msgid "Step Three"
 msgstr ""
 
-#: .\core\models.py:497
+#: .\core\models.py:538
 msgid "Step Four"
 msgstr ""
 
-#: .\core\models.py:498
+#: .\core\models.py:539
 msgid "Step Five"
 msgstr ""
 
-#: .\core\models.py:499
+#: .\core\models.py:540
 msgid "Step Six"
 msgstr ""
 
-#: .\core\models.py:500
+#: .\core\models.py:541
 msgid "Step Seven"
 msgstr ""
 
-#: .\core\models.py:503
+#: .\core\models.py:544
 msgid "Transfer Student"
 msgstr ""
 
-#: .\core\models.py:504
+#: .\core\models.py:545
 msgid "First-Year Student"
 msgstr ""
 
-#: .\core\models.py:537
+#: .\core\models.py:578
 msgid "Auto-generated application code"
 msgstr ""
 
-#: .\core\models.py:543
+#: .\core\models.py:584
 msgid "Application Documents"
 msgstr ""
 
-#: .\core\models.py:613 .\core\templatetags\custom_filters.py:49
+#: .\core\models.py:624 .\core\models.py:625
+msgid "Site Settings"
+msgstr ""
+
+#: .\core\models.py:645
+msgid "Journey Step"
+msgstr ""
+
+#: .\core\models.py:654 .\core\templatetags\custom_filters.py:49
 msgid "Associate & Bachelor"
 msgstr ""
 
-#: .\core\models.py:614 .\core\templatetags\custom_filters.py:50
+#: .\core\models.py:655 .\core\templatetags\custom_filters.py:50
 #: .\templates\core\main.html:118
 msgid "Master"
 msgstr ""
 
-#: .\core\models.py:615 .\core\templatetags\custom_filters.py:51
+#: .\core\models.py:656 .\core\templatetags\custom_filters.py:51
 #: .\templates\core\main.html:119
 msgid "PhD"
 msgstr ""
 
-#: .\core\models.py:668
+#: .\core\models.py:664
+msgid "Document Requirement"
+msgstr ""
+
+#: .\core\models.py:689
+msgid "Success Story"
+msgstr ""
+
+#: .\core\models.py:690 .\templates\core\main.html:21
+msgid "Success Stories"
+msgstr ""
+
+#: .\core\models.py:710
 msgid "Information"
 msgstr ""
 
-#: .\core\models.py:669
+#: .\core\models.py:711
 msgid "Warning"
 msgstr ""
 
-#: .\core\models.py:670
+#: .\core\models.py:712
 msgid "Success"
 msgstr ""
 
-#: .\core\models.py:671
+#: .\core\models.py:713
 msgid "Error"
 msgstr ""
 
-#: .\core\models.py:672
+#: .\core\models.py:714
 msgid "Reminder"
 msgstr ""
 
-#: .\core\models.py:675
+#: .\core\models.py:717
 msgid "All Users"
 msgstr ""
 
-#: .\core\models.py:676
+#: .\core\models.py:718
 msgid "Students (Default)"
 msgstr ""
 
-#: .\core\models.py:677
+#: .\core\models.py:719
 msgid "Company Users"
 msgstr ""
 
-#: .\core\models.py:678
+#: .\core\models.py:720
 msgid "Agent Users"
 msgstr ""
 
-#: .\core\models.py:679
+#: .\core\models.py:721
 msgid "Specific Users"
 msgstr ""
 
-#: .\core\models.py:681 .\templates\dashboard\fragments\notifications.html:9
+#: .\core\models.py:723 .\templates\dashboard\fragments\notifications.html:9
 #: .\templates\dashboard\fragments\notifications.html:61
 #: .\templates\dashboard\fragments\notifications.html:121
 msgid "Title"
 msgstr ""
 
-#: .\core\models.py:682 .\templates\dashboard\fragments\notifications.html:14
-#: .\templates\dashboard\fragments\notifications.html:125
-msgid "Message"
-msgstr ""
-
-#: .\core\models.py:687 .\templates\dashboard\fragments\notifications.html:19
+#: .\core\models.py:729 .\templates\dashboard\fragments\notifications.html:19
 #: .\templates\dashboard\fragments\notifications.html:129
 msgid "Notification Type"
 msgstr ""
 
-#: .\core\models.py:693
+#: .\core\models.py:735
 msgid "Recipient Type"
 msgstr ""
 
-#: .\core\models.py:700
+#: .\core\models.py:742
 msgid "Sent By"
 msgstr ""
 
-#: .\core\models.py:706 .\templates\dashboard\fragments\notifications.html:63
-msgid "Recipients"
-msgstr ""
-
-#: .\core\models.py:708
+#: .\core\models.py:750
 msgid "Created At"
 msgstr ""
 
-#: .\core\models.py:712
+#: .\core\models.py:754
 msgid "Notification"
 msgstr ""
 
-#: .\core\models.py:713
+#: .\core\models.py:755 .\core\templatetags\admin_extras.py:55
 msgid "Notifications"
 msgstr ""
 
-#: .\core\models.py:748
-msgid "Read"
-msgstr ""
-
-#: .\core\models.py:749
+#: .\core\models.py:791
 msgid "Read At"
 msgstr ""
 
-#: .\core\models.py:753
+#: .\core\models.py:795
 msgid "Notification Recipient"
 msgstr ""
 
-#: .\core\models.py:754
+#: .\core\models.py:796
 msgid "Notification Recipients"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:35
+msgid "Homepage content"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:40
+msgid "Universities & programs"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:45
+msgid "People & access"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:60
+msgid "Security & verification"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:66
+msgid "System & other models"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:200
+#: .\templates\authentication\login.html:27
+msgid "Students"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:203
+#, python-brace-format
+msgid "{count} with a student profile"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:213
+msgid "Agencies managing students"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:219
+msgid "Companies"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:222
+#, python-brace-format
+msgid "{count} company profiles"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:232
+#, python-brace-format
+msgid "{count} still in progress"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:240
+#, python-brace-format
+msgid "{count} active"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:248
+#, python-brace-format
+msgid "{count} on the homepage"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:260
+msgid "Success stories not published"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:272
+msgid "Programs with a full quota"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:284
+msgid "Unused verification codes"
+msgstr ""
+
+#: .\core\templatetags\admin_extras.py:299
+msgid "Applications waiting on a decision"
 msgstr ""
 
 #: .\core\tests_notifications.py:109 .\core\utils\notifications.py:75
@@ -767,83 +1376,128 @@ msgstr ""
 msgid "Notification updated successfully!"
 msgstr ""
 
-#: .\templates\admin\index.html:13
-msgid "Welcome to Apply BM Control Center"
+#: .\data_fetch\admin.py:30
+msgid "Session id"
 msgstr ""
 
-#: .\templates\admin\index.html:14
+#: .\data_fetch\models.py:17
+msgid "Stored ConnectSID"
+msgstr ""
+
+#: .\data_fetch\models.py:18
+msgid "Stored ConnectSIDs"
+msgstr ""
+
+#: .\templates\admin\base_site.html:28
+msgid "Admin"
+msgstr ""
+
+#: .\templates\admin\base_site.html:32
+msgid "Admin quick links"
+msgstr ""
+
+#: .\templates\admin\base_site.html:33 .\templates\core\main.html:30
+#: .\templates\core\main.html:57 .\templates\dashboard\main.html:4
+#: .\templates\dashboard\main.html:59
+msgid "Dashboard"
+msgstr ""
+
+#: .\templates\admin\base_site.html:35
+msgid "View site"
+msgstr ""
+
+#: .\templates\admin\base_site.html:37 .\templates\admin\index.html:55
+msgid "Translations"
+msgstr ""
+
+#: .\templates\admin\base_site.html:38
+msgid "Scheduled tasks"
+msgstr ""
+
+#: .\templates\admin\base_site.html:54
+#, python-format
+msgid "Signed in as %(username)s"
+msgstr ""
+
+#: .\templates\admin\base_site.html:56
+msgid "Change password"
+msgstr ""
+
+#: .\templates\admin\base_site.html:58
+msgid "Press / to filter the sidebar"
+msgstr ""
+
+#: .\templates\admin\index.html:24
+msgid "Control center"
+msgstr ""
+
+#: .\templates\admin\index.html:27
+#, python-format
+msgid "Welcome back, %(name)s"
+msgstr ""
+
+#: .\templates\admin\index.html:30
 msgid ""
 "Manage your platform, content, and users from one centralized dashboard."
 msgstr ""
 
-#: .\templates\admin\index.html:23
-msgid "Homepage Management"
+#: .\templates\admin\index.html:34
+msgid "Quick actions"
 msgstr ""
 
-#: .\templates\admin\index.html:27 .\templates\admin\index.html:28
-#: .\templates\admin\index.html:29 .\templates\admin\index.html:30
-#: .\templates\admin\index.html:44 .\templates\admin\index.html:45
-#: .\templates\admin\index.html:46 .\templates\admin\index.html:47
-#: .\templates\admin\index.html:48 .\templates\admin\index.html:49
-#: .\templates\admin\index.html:50 .\templates\admin\index.html:64
-#: .\templates\admin\index.html:65 .\templates\admin\index.html:66
-#: .\templates\admin\index.html:67 .\templates\admin\index.html:81
-#: .\templates\admin\index.html:95 .\templates\admin\index.html:130
+#: .\templates\admin\index.html:38
+msgid "New program"
+msgstr ""
+
+#: .\templates\admin\index.html:44
+msgid "New university"
+msgstr ""
+
+#: .\templates\admin\index.html:50
+msgid "Send notification"
+msgstr ""
+
+#: .\templates\admin\index.html:61
+msgid "Key figures"
+msgstr ""
+
+#: .\templates\admin\index.html:87
+msgid "Needs attention"
+msgstr ""
+
+#: .\templates\admin\index.html:104
+msgid "Manage content"
+msgstr ""
+
+#: .\templates\admin\index.html:116
+msgid "Records"
+msgstr ""
+
+#: .\templates\admin\index.html:122 .\templates\admin\index.html:123
 msgid "Add"
 msgstr ""
 
-#: .\templates\admin\index.html:27 .\templates\admin\index.html:28
-#: .\templates\admin\index.html:29 .\templates\admin\index.html:30
-#: .\templates\admin\index.html:44 .\templates\admin\index.html:45
-#: .\templates\admin\index.html:46 .\templates\admin\index.html:47
-#: .\templates\admin\index.html:48 .\templates\admin\index.html:49
-#: .\templates\admin\index.html:50 .\templates\admin\index.html:64
-#: .\templates\admin\index.html:65 .\templates\admin\index.html:66
-#: .\templates\admin\index.html:67 .\templates\admin\index.html:81
-#: .\templates\admin\index.html:95 .\templates\admin\index.html:131
-msgid "Change"
+#: .\templates\admin\index.html:126 .\templates\admin\index.html:127
+msgid "Manage"
 msgstr ""
 
-#: .\templates\admin\index.html:40
-msgid "Universities & Programs"
+#: .\templates\admin\index.html:142
+msgid "Recent actions"
 msgstr ""
 
-#: .\templates\admin\index.html:60
-msgid "Users & Companies"
-msgstr ""
-
-#: .\templates\admin\index.html:77
-#: .\templates\dashboard\fragments\my_students.html:19
-#: .\templates\dashboard\fragments\welcome.html:64
-#: .\templates\dashboard\main.html:94
-msgid "Applications"
-msgstr ""
-
-#: .\templates\admin\index.html:91
-msgid "Security & Verification"
-msgstr ""
-
-#: .\templates\admin\index.html:105
-msgid "System & Automation"
-msgstr ""
-
-#: .\templates\admin\index.html:145
-msgid "Recent Actions"
-msgstr ""
-
-#: .\templates\admin\index.html:151
+#: .\templates\admin\index.html:148
 msgid "Added"
 msgstr ""
 
-#: .\templates\admin\index.html:153
+#: .\templates\admin\index.html:150
 msgid "Changed"
 msgstr ""
 
-#: .\templates\admin\index.html:155
+#: .\templates\admin\index.html:152
 msgid "Deleted"
 msgstr ""
 
-#: .\templates\admin\index.html:168
+#: .\templates\admin\index.html:165
 #: .\templates\dashboard\fragments\universities.html:136
 msgid "Unknown"
 msgstr ""
@@ -1007,20 +1661,6 @@ msgstr ""
 msgid ""
 "Log in to access your personalized dashboard, track your applications, and "
 "connect with certified agents."
-msgstr ""
-
-#: .\templates\authentication\login.html:27
-msgid "Students"
-msgstr ""
-
-#: .\templates\authentication\login.html:28
-#: .\templates\dashboard\fragments\universities.html:4
-#: .\templates\dashboard\main.html:81
-msgid "Universities"
-msgstr ""
-
-#: .\templates\authentication\login.html:29
-msgid "Countries"
 msgstr ""
 
 #: .\templates\authentication\login.html:34
@@ -1190,19 +1830,6 @@ msgstr ""
 
 #: .\templates\core\main.html:19 .\templates\core\main.html:53
 msgid "How It Works"
-msgstr ""
-
-#: .\templates\core\main.html:20 .\templates\core\main.html:54
-msgid "Documents"
-msgstr ""
-
-#: .\templates\core\main.html:21
-msgid "Success Stories"
-msgstr ""
-
-#: .\templates\core\main.html:30 .\templates\core\main.html:57
-#: .\templates\dashboard\main.html:4 .\templates\dashboard\main.html:59
-msgid "Dashboard"
 msgstr ""
 
 #: .\templates\core\main.html:34 .\templates\core\main.html:60
@@ -1380,10 +2007,6 @@ msgstr ""
 msgid "Application Details"
 msgstr ""
 
-#: .\templates\dashboard\fragments\application_detail.html:11
-msgid "Code"
-msgstr ""
-
 #: .\templates\dashboard\fragments\application_detail.html:17
 #: .\templates\dashboard\fragments\notifications.html:95
 msgid "Delete"
@@ -1391,15 +2014,6 @@ msgstr ""
 
 #: .\templates\dashboard\fragments\application_detail.html:37
 msgid "Current Step"
-msgstr ""
-
-#: .\templates\dashboard\fragments\application_detail.html:42
-#: .\templates\dashboard\main.html:47
-msgid "Student"
-msgstr ""
-
-#: .\templates\dashboard\fragments\application_detail.html:47
-msgid "Program"
 msgstr ""
 
 #: .\templates\dashboard\fragments\application_detail.html:48
@@ -1570,10 +2184,6 @@ msgstr ""
 msgid "Sent Notifications"
 msgstr ""
 
-#: .\templates\dashboard\fragments\notifications.html:62
-msgid "Type"
-msgstr ""
-
 #: .\templates\dashboard\fragments\notifications.html:64
 msgid "Date"
 msgstr ""
@@ -1648,14 +2258,6 @@ msgstr ""
 msgid "Mobile Number"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:117
-msgid "Country"
-msgstr ""
-
-#: .\templates\dashboard\fragments\profile.html:121
-msgid "City"
-msgstr ""
-
 #: .\templates\dashboard\fragments\profile.html:127
 msgid "Update Contact Info"
 msgstr ""
@@ -1672,21 +2274,12 @@ msgstr ""
 msgid "Student Profile Details"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:198
-msgid "Stage"
-msgstr ""
-
 #: .\templates\dashboard\fragments\profile.html:202
 msgid "Language"
 msgstr ""
 
 #: .\templates\dashboard\fragments\profile.html:208
 msgid "Update Student Details"
-msgstr ""
-
-#: .\templates\dashboard\fragments\programs.html:4
-#: .\templates\dashboard\main.html:88
-msgid "Programs"
 msgstr ""
 
 #: .\templates\dashboard\fragments\programs.html:5
@@ -1900,11 +2493,6 @@ msgstr ""
 
 #: .\templates\dashboard\fragments\welcome.html:8
 msgid "Here's an overview of your dashboard and quick actions."
-msgstr ""
-
-#: .\templates\dashboard\fragments\welcome.html:18
-#: .\templates\dashboard\main.html:66
-msgid "Profile"
 msgstr ""
 
 #: .\templates\dashboard\fragments\welcome.html:21

@@ -1,20 +1,61 @@
 {% extends "admin/base.html" %}
 {% load i18n static %}
-{% block title %}
-    {% if title %}{{ title }} |{% endif %}
-    Apply BM Admin
+
+{% block title %}{% if title %}{{ title }} | {% endif %}{{ site_title }}{% endblock %}
+
+{% comment %}
+    The theme stylesheet is linked in {% block extrahead %} — not extrastyle —
+    because Django renders extrahead AFTER extrastyle. That puts this file after
+    admin/css/base.css, dark_mode.css, changelists.css, forms.css and the
+    per-model widget CSS (Select2/autocomplete), which is why the theme wins at
+    equal specificity and needs no !important.
+{% endcomment %}
+{% block extrahead %}
+    {{ block.super }}
+    {# Same vendored Font Awesome as the site: dashboard icons inherit the tint colour, no OS emoji. #}
+    <link rel="stylesheet" href="{% static 'vendor/fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin/admin-theme.css' %}">
+    <script src="{% static 'js/admin/admin.js' %}" defer></script>
 {% endblock %}
+
 {% block branding %}
     <h1 id="site-name">
         <a href="{% url 'admin:index' %}">
-            <img src="{% static 'images/logo.png' %}" alt="Logo">
-            Apply BM Control Center
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <span class="admin-brand-name">{% trans "Apply BM Control Center" %}</span>
         </a>
     </h1>
+    <span class="admin-brand-tag">{% trans "Admin" %}</span>
 {% endblock %}
-{% block nav-global %}{% endblock %}
-{% block extrastyle %}
-    {{ block.super }}
-    {# Theme overrides live in a cacheable stylesheet — no inline <style> here. #}
-    <link rel="stylesheet" href="{% static 'css/admin/admin-theme.css' %}">
+
+{% block nav-global %}
+    <nav class="admin-header-nav" aria-label="{% trans 'Admin quick links' %}">
+        <a class="admin-header-link" href="{% url 'admin:index' %}">{% trans "Dashboard" %}</a>
+        {% if site_url %}
+            <a class="admin-header-link" href="{{ site_url }}">{% trans "View site" %}</a>
+        {% endif %}
+        <a class="admin-header-link" href="{% url 'rosetta-file-list' po_filter='project' %}">{% trans "Translations" %}</a>
+        <a class="admin-header-link" href="{% url 'admin:django_celery_beat_periodictask_changelist' %}">{% trans "Scheduled tasks" %}</a>
+    </nav>
+{% endblock %}
+
+{% block footer %}
+    {% if not is_popup %}
+        {% comment %}
+            The identity line is for signed-in staff only: on the login page
+            there is no user yet, and an unconditional "Signed in as" would
+            render as "Signed in as" followed by nothing.
+        {% endcomment %}
+        <div class="admin-footer-row">
+            <span>{% trans "Apply BM Control Center" %}</span>
+            {% if user.is_authenticated %}
+                <span class="admin-footer-sep">&middot;</span>
+                <span>{% blocktrans with username=user.get_username %}Signed in as {{ username }}{% endblocktrans %}</span>
+                <span class="admin-footer-sep">&middot;</span>
+                <a href="{% url 'admin:password_change' %}">{% trans "Change password" %}</a>
+                <span class="admin-footer-sep">&middot;</span>
+                <span>{% trans "Press / to filter the sidebar" %}</span>
+            {% endif %}
+        </div>
+    {% endif %}
 {% endblock %}
