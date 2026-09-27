@@ -1,0 +1,33 @@
+{% load i18n %}
+{# Replaces gated dashboard pages while the account's email is unverified. #}
+<div class="max-w-2xl mx-auto text-center py-16 animate-[auth-fade-in-up_0.6s_ease-out]">
+    <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-amber-50 text-amber-500">
+        <i class="fas fa-envelope-open-text text-4xl" aria-hidden="true"></i>
+    </div>
+    <h2 class="text-3xl font-bold text-[var(--ab-text)] font-serif">
+        {% trans "Verify your email to continue" %}
+    </h2>
+    <p class="mt-4 text-[var(--ab-muted)] leading-relaxed">
+        {% if user.pending_email %}
+            {% blocktrans with email=user.pending_email %}We sent a verification link to <strong>{{ email }}</strong>. Open it to confirm the change.{% endblocktrans %}
+        {% else %}
+            {% trans "Your email address has not been verified yet, so this section is unavailable and your account is in read-only mode." %}
+        {% endif %}
+    </p>
+    <p class="mt-2 text-sm text-[var(--ab-muted)]">
+        {% trans "Already verified? Reload the page, or head to your profile to resend the verification email." %}
+    </p>
+
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <button type="button" data-page="profile" class="ab-btn ab-btn-primary">
+            <i class="fas fa-user-gear mr-2" aria-hidden="true"></i>{% trans "Go to Profile" %}
+        </button>
+        {% comment %}
+        This fragment only renders while the account is unverified, so a link can
+        always be re-sent: to the pending address, or to the current one.
+        {% endcomment %}
+        <button type="button" id="resend-email-verification" class="ab-btn ab-btn-secondary">
+            <i class="fas fa-paper-plane mr-2" aria-hidden="true"></i>{% trans "Resend verification email" %}
+        </button>
+    </div>
+</div>

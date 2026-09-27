@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Email Verification" %} | Apply BM{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-brand-panel">
+        <div class="auth-brand-top">
+            <a href="{% url 'main' %}" class="ab-brand">
+                <img src="{% static 'images/logo.png' %}" alt="" width="40" height="40">
+                <span>Apply BM</span>
+            </a>
+        </div>
+
+        <div class="auth-brand-hero">
+            <h1 class="font-serif">{% trans "Email Verification" %}</h1>
+            <p>{% trans "Confirming your email address keeps your account secure and keeps every feature of Apply BM available to you." %}</p>
+            <div class="auth-brand-stats">
+                <div class="auth-stat-item"><strong><i class="fas fa-shield-alt"></i></strong><span>{% trans "Secure" %}</span></div>
+                <div class="auth-stat-item"><strong><i class="fas fa-lock"></i></strong><span>{% trans "Encrypted" %}</span></div>
+                <div class="auth-stat-item"><strong><i class="fas fa-user-check"></i></strong><span>{% trans "Verified" %}</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-form-panel">
+        <div class="auth-lang-switch">{% include 'partials/language_switcher.html' %}</div>
+        <div class="auth-mobile-logo">
+            <a href="{% url 'main' %}" class="ab-brand">
+                <img src="{% static 'images/logo.png' %}" alt="" width="40" height="40">
+                <span>Apply BM</span>
+            </a>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="auth-form-header auth-form-header--centered">
+                {% if status == "success" %}
+                    <div class="auth-status-icon auth-status-icon--success">
+                        <i class="fas fa-circle-check"></i>
+                    </div>
+                    <h2 class="font-serif">{% trans "Email Verified!" %}</h2>
+                    <p>{% blocktrans with email=new_email %}<strong>{{ email }}</strong> is now confirmed on your account. Everything is fully active again — you can continue where you left off.{% endblocktrans %}</p>
+                {% elif status == "expired" %}
+                    <div class="auth-status-icon auth-status-icon--warning">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h2 class="font-serif">{% trans "Link Expired" %}</h2>
+                    <p>{% trans "This verification link has expired or was already used. Your previous email address is still active and nothing was changed." %}</p>
+                {% else %}
+                    <div class="auth-status-icon auth-status-icon--warning">
+                        <i class="fas fa-triangle-exclamation"></i>
+                    </div>
+                    <h2 class="font-serif">{% trans "Invalid Link" %}</h2>
+                    <p>{% trans "We couldn't validate this verification link. It may have been mistyped, already used, or the request was cancelled. Your current email address is unchanged." %}</p>
+                {% endif %}
+            </div>
+
+            <div class="auth-links auth-links--split">
+                {% if status == "success" %}
+                    <a href="{% url 'dashboard' %}">{% trans "Go to Dashboard" %}</a>
+                    <a href="{% url 'main' %}">{% trans "Back to Home" %}</a>
+                {% else %}
+                    <a href="{% url 'dashboard' %}?page=profile">{% trans "Request a New Link" %}</a>
+                    <a href="{% url 'main' %}">{% trans "Back to Home" %}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

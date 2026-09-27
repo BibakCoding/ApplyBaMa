@@ -22,7 +22,7 @@ from .forms import (
 from .models import VerificationCode
 from .tasks import send_async_email
 from core.utils.jwt_auth import JWTManager
-from core.utils.notifications import send_welcome_notification
+from core.utils.notifications import send_welcome_notification, send_email_verified_notification
 
 User = get_user_model()
 
@@ -245,6 +245,9 @@ def confirm_code(request, pk):
                 vc.used = True
                 vc.save()
                 user.is_active = True
+                # Registration confirmed the address, so the account starts
+                # with a verified email (matches the data backfill).
+                user.email_verified = True
                 user.save()
                 auth_login(request, user)
 
@@ -352,6 +355,91 @@ def forget_password(request):
             messages.error(request, e)
 
     return render(request, "authentication/forget_password.html", {"form": form})
+
+def verify_email(request, token):
+    """Landing page for an email verification link.
+
+    The link confirms one of two things: a NEW address, when a logged-in user
+    requested a change (the pending address is committed onto the account), or
+    the CURRENT address, when a never-verified account asked to confirm the
+    address it already had (the address is unchanged and the account simply
+    leaves read-only mode). Opening it with a live token marks the code used
+    and shows a confirmation page; any other state (unknown token, already
+    used, expired, or stale with nothing left to activate) renders the same
+    page in a failed variant with a way forward.
+    """
+    vc = VerificationCode.objects.filter(
+        token=token,
+        code_type=VerificationCode.CodeType.EMAIL_CHANGE,
+        used=False,
+    ).first()
+
+    if not vc:
+        return render(
+            request,
+            "authentication/verify_email.html",
+            {"status": "invalid"},
+            status=404,
+        )
+
+    if vc.expires_at < timezone.now():
+        # The user can simply ask for a new link from their profile, so an
+        # expired request is cleaned up here: the pending address is dropped
+        # and the account returns to its previous, verified state.
+        user = vc.user
+        if user.pending_email:
+            user.pending_email = None
+            user.save(update_fields=["pending_email"])
+        vc.used = True
+        vc.save()
+        return render(
+            request,
+            "authentication/verify_email.html",
+            {"status": "expired"},
+            status=410,
+        )
+
+    user = vc.user
+    new_email = user.pending_email
+    if not new_email and user.email_verified:
+        # Stale link: the request behind it was already confirmed or cancelled,
+        # so there is nothing left to activate. Treated as expired so the
+        # profile returns to a clean state.
+        vc.used = True
+        vc.save()
+        return render(
+            request,
+            "authentication/verify_email.html",
+            {"status": "expired"},
+            status=410,
+        )
+
+    # Whether this link activates a changed address or confirms the address
+    # the account already had; only the former is a "new" address.
+    is_change = bool(new_email)
+
+    vc.used = True
+    vc.save()
+
+    if new_email:
+        # A requested change is committed onto the account.
+        user.email = new_email
+        user.pending_email = None
+        user.email_verified = True
+        user.save(update_fields=["email", "pending_email", "email_verified"])
+    else:
+        # No change was requested: the account confirms the address it already
+        # has, which is how a never-verified account leaves read-only mode.
+        user.email_verified = True
+        user.save(update_fields=["email_verified"])
+        new_email = user.email
+
+    # A success notification so the dashboard banner clears itself the next
+    # time the user loads a page. The plain "verified" wording is used when the
+    # address itself did not change (new_email is None for that case).
+    send_email_verified_notification(user, new_email=new_email if is_change else None)
+
+    return render(request, "authentication/verify_email.html", {"status": "success", "new_email": new_email})
 
 def change_password(request, token):
     if request.user.is_authenticated:

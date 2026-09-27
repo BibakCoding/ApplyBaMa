@@ -14,6 +14,10 @@ class VerificationCode(models.Model):
     class CodeType(models.TextChoices):
         REGISTRATION = "registration", _("Registration")
         RESET = "reset", _("Password Reset")
+        # One-time link for confirming a changed email address on an active
+        # account. The code field holds the random 6-digit value, but the
+        # confirmation travels by token link only.
+        EMAIL_CHANGE = "email_change", _("Email Change")
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -43,9 +47,13 @@ class VerificationCode(models.Model):
         # On first save, set expiration
         if not self.pk:
             self.expires_at = timezone.now() + timedelta(minutes=15)
-            if self.code_type == self.CodeType.RESET and not self.token:
-                # 192 bits of URL-safe entropy
-                self.token = get_random_string(length=43)  # ~258 bits base64
+            if self.code_type in (
+                self.CodeType.RESET,
+                self.CodeType.EMAIL_CHANGE,
+            ) and not self.token:
+                # ~258 bits of URL-safe entropy: the link is the only
+                # confirmation channel for these types.
+                self.token = get_random_string(length=43)
         super().save(*args, **kwargs)
 
     @classmethod
@@ -65,6 +73,21 @@ class VerificationCode(models.Model):
             code=code,
             code_type=cls.CodeType.REGISTRATION,
         )
+
+    @classmethod
+    def create_email_change(cls, user):
+        """Invalidate previous email-change codes and issue a fresh link."""
+        cls.objects.filter(
+            user=user, code_type=cls.CodeType.EMAIL_CHANGE, used=False
+        ).update(used=True)
+
+        vc = cls(
+            user=user,
+            code=f"{secrets.randbelow(10 ** 6):06d}",
+            code_type=cls.CodeType.EMAIL_CHANGE,
+        )
+        vc.save()
+        return vc
 
     @classmethod
     def create_reset(cls, user):

@@ -24,6 +24,16 @@ urlpatterns = [
         name="program_apply_request",
     ),
     path("get-cities/", views.get_cities_by_country, name="get_cities_by_country"),
+    path(
+        "email-verification/resend/",
+        views.resend_email_verification,
+        name="resend_email_verification",
+    ),
+    path(
+        "email-verification/cancel/",
+        views.cancel_email_change,
+        name="cancel_email_change",
+    ),
     path("programs-search/", views.programs_search, name="programs_search"),
     path("universities-search/", views.universities_search, name="universities_search"),
     path(

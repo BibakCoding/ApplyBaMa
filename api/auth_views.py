@@ -88,6 +88,7 @@ def obtain_token(request):
                 'user_type': user.user_type,
                 'first_name': user.first_name or '',
                 'last_name': user.last_name or '',
+                'email_verified': user.is_fully_verified,
             }
         })
 
@@ -156,6 +157,7 @@ def refresh_token(request):
                 'user_type': user.user_type,
                 'first_name': user.first_name or '',
                 'last_name': user.last_name or '',
+                'email_verified': user.is_fully_verified,
             }
         })
 
@@ -217,6 +219,7 @@ def verify_token(request):
                     'user_type': user.user_type,
                     'first_name': user.first_name or '',
                     'last_name': user.last_name or '',
+                    'email_verified': user.is_fully_verified,
                 }
             })
         else:

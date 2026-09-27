@@ -10,6 +10,8 @@ from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
+from django.utils.translation import get_language
+from functools import wraps
 import secrets
 import string
 from urllib.parse import parse_qs, unquote, urlencode
@@ -28,6 +30,9 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django_ratelimit.decorators import ratelimit
 from django.utils.decorators import method_decorator
+from authentication.models import VerificationCode
+from authentication.tasks import send_async_email
+from authentication.views import dispatch_email
 from core.models import (
     User,
     StudentProfile,
@@ -75,6 +80,41 @@ def get_managed_students(user):
     return []
 
 
+# Pages that stay usable while the account's email is unverified. Everything
+# else listed in dashboard_content's content_map is read-only: profile (to
+# verify/cancel), notifications (read) and application_detail (read) remain
+# reachable; notifications and detail render normally.
+VERIFICATION_EXEMPT_PAGES = {"welcome", "profile", "notifications", "my_notifications", "application_detail"}
+
+
+def email_verification_required(view):
+    """Block state-changing dashboard actions until the email is verified.
+
+    An unverified address (never confirmed, or a pending change in flight)
+    puts the account into read-only mode: GET browsing keeps working, every
+    POST through this decorator answers 403 with a clear reason so the SPA
+    can surface it as a toast and the user can go verify.
+    """
+    @wraps(view)
+    def wrapped(request, *args, **kwargs):
+        if request.method == "POST" and not request.user.is_fully_verified:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "errors": [
+                        _(
+                            "Your email address is not verified, so your account is in read-only mode. Verify it from your profile page to continue."
+                        )
+                    ],
+                    "email_verification_required": True,
+                },
+                status=403,
+            )
+        return view(request, *args, **kwargs)
+
+    return wrapped
+
+
 # Country slugs used by the home-page hero search (see templates/core/main.html),
 # mapped to actual Country names in the database. Dashboard filters use numeric
 # country ids, so hero selections must be resolved before filtering. When adding
@@ -119,6 +159,21 @@ def dashboard_content(request, page):
                 request, _("You do not have permission to access this page.")
             )
             return redirect("dashboard")
+
+    # Read-only mode for unverified accounts: universities/programs (and the
+    # other pages that exist to act on data) render a prompt instead of
+    # content until the address is confirmed. Welcome, profile (where the
+    # verification controls live) and notification pages stay reachable.
+    if (
+        page not in VERIFICATION_EXEMPT_PAGES
+        and page != "university_detail"
+        and not request.user.is_fully_verified
+    ):
+        return render(
+            request,
+            "dashboard/fragments/verification_required.html",
+            context={"user": request.user, "blocked_page": page},
+        )
 
     context = {"user": request.user}
 
@@ -438,6 +493,7 @@ def get_cities_by_country(request):
 
 
 @login_required
+@email_verification_required
 def profile_view(request):
     if request.method != "POST":
         return redirect("dashboard")
@@ -470,10 +526,48 @@ def profile_view(request):
         return _form_error_response(form)
 
     elif form_type == "contact_info":
+        # The current address as stored in the DB. It must be captured BEFORE
+        # is_valid(): ModelForm._post_clean applies the submitted email to the
+        # bound instance during validation, so afterwards user.email already
+        # holds the NEW address and would never look "changed".
+        db_email = (
+            User.objects.filter(pk=user.pk)
+            .values_list("email", flat=True)
+            .first()
+            or ""
+        )
         form = ContactInfoForm(request.POST, instance=user)
         if form.is_valid():
+            new_email = form.cleaned_data.get("email", "")
+            email_changed = bool(new_email) and new_email.lower() != db_email.lower()
+
+            if not email_changed:
+                form.save()
+                return _success_response(_("Contact information updated successfully."))
+
+            # Email changed: keep the current address active and hold the new
+            # one as pending until its verification link is clicked. The
+            # account returns to read-only mode while the request is open.
+            if User.objects.filter(email__iexact=new_email).exclude(pk=user.pk).exists():
+                form.add_error("email", _("This email address is already in use."))
+                return _form_error_response(form)
+
+            # The submitted email is reverted on the instance (it was applied
+            # during validation) and parked as pending: every other contact
+            # field saves normally, the active address stays as-is.
+            form.instance.email = db_email
+            form.instance.pending_email = new_email
+            # A changed address is unverified until its link is clicked.
+            form.instance.email_verified = False
             form.save()
-            return _success_response(_("Contact information updated successfully."))
+
+            _send_email_change_link(request, user)
+            msg = _(
+                "Contact information updated. We sent a verification link to "
+                "%(email)s — confirm it to activate the change. Until then your "
+                "account is in read-only mode."
+            ) % {"email": new_email}
+            return _success_response(msg)
         return _form_error_response(form)
 
     elif form_type == "profile_image":
@@ -501,6 +595,87 @@ def profile_view(request):
     return JsonResponse({"success": False, "errors": [_("Invalid form type.")]})
 
 
+def _send_email_change_link(request, user):
+    """Create a fresh EMAIL_CHANGE code and mail its confirmation link.
+
+    The target address is the pending one while a change is in flight. An
+    account that was never verified and has no pending change gets the link at
+    its current address, so it can confirm that address and leave read-only
+    mode through the same one-click flow.
+    """
+    is_change = bool(user.pending_email)
+    target_email = user.pending_email or user.email
+    vc = VerificationCode.create_email_change(user)
+    verify_url = request.build_absolute_uri(
+        reverse("verify_email", kwargs={"token": vc.token})
+    )
+    dispatch_email(
+        subject=(
+            _("Verify your new email address")
+            if is_change
+            else _("Verify your email address")
+        ),
+        template_name="emails/verify_email.html",
+        context={
+            "site_name": "Apply Ba Ma",
+            "new_email": target_email,
+            "is_change": is_change,
+            "verify_url": verify_url,
+            "language": get_language(),
+            "site_url": request.build_absolute_uri("/"),
+        },
+        to=[target_email],
+    )
+    return vc
+
+@login_required
+@ratelimit(key="user", rate="3/m", method="POST", block=True)
+def resend_email_verification(request):
+    """Re-send the confirmation link for the address awaiting verification.
+
+    Covers both an open email change (link goes to the pending address) and an
+    account whose current address was never confirmed (link goes to it), so
+    read-only mode always has a self-service way out.
+    """
+    user = request.user
+    if not user.pending_email and user.email_verified:
+        return JsonResponse(
+            {"success": False, "errors": [_("There is no pending email change.")]},
+            status=400,
+        )
+    _send_email_change_link(request, user)
+    msg = _("A new verification link was sent to %(email)s.") % {
+        "email": user.pending_email or user.email
+    }
+    return _success_response(msg)
+
+@login_required
+def cancel_email_change(request):
+    """Drop a pending email change and restore full account access."""
+    user = request.user
+    if not user.pending_email:
+        return JsonResponse(
+            {"success": False, "errors": [_("There is no pending email change.")]},
+            status=400,
+        )
+    cancelled = user.pending_email
+    user.pending_email = None
+    # The old address was verified before the change was requested, so its
+    # verified state is restored; otherwise the account stays in read-only
+    # mode and the user can still verify from the profile page.
+    if not user.email_verified and cancelled:
+        user.email_verified = True
+    user.save(update_fields=["pending_email", "email_verified"])
+    # Invalidate any outstanding links for the dropped request.
+    VerificationCode.objects.filter(
+        user=user, code_type=VerificationCode.CodeType.EMAIL_CHANGE, used=False
+    ).update(used=True)
+    msg = _("The email change to %(email)s was cancelled. Your account is fully active again.") % {
+        "email": cancelled
+    }
+    return _success_response(msg)
+
+
 def _success_response(message):
     return JsonResponse({"success": True, "message": str(message)})
 
@@ -514,6 +689,7 @@ def _form_error_response(form):
 
 
 @login_required
+@email_verification_required
 def application_action(request, pk):
     app = get_object_or_404(Application, pk=pk)
     if request.user != app.agent and request.user != app.student:
@@ -535,6 +711,7 @@ def application_action(request, pk):
 
 
 @login_required
+@email_verification_required
 def generate_password(request):
     alphabet = string.ascii_letters + string.digits + string.punctuation
     password = "".join(secrets.choice(alphabet) for i in range(12))
@@ -542,6 +719,7 @@ def generate_password(request):
 
 
 @login_required
+@email_verification_required
 def submit_new_application(request):
     if request.method == "POST" and request.user.user_type in [
         User.UserType.AGENT,
@@ -568,6 +746,7 @@ def submit_new_application(request):
 
 
 @login_required
+@email_verification_required
 @ratelimit(key="ip", rate="10/h", method="POST", block=True)
 @ratelimit(key="user", rate="5/h", method="POST", block=True)
 def submit_add_student(request):
@@ -606,6 +785,7 @@ def submit_add_student(request):
 
 
 @login_required
+@email_verification_required
 def program_apply_request(request):
     if request.method == "POST":
         program_id = request.POST.get("program_id")
@@ -813,6 +993,7 @@ def get_unread_notification_count(request):
 
 
 @login_required
+@email_verification_required
 def send_notification(request):
     if request.method != "POST":
         return JsonResponse({"success": False, "message": _("Invalid request.")})
@@ -856,6 +1037,7 @@ def send_notification(request):
 
 
 @login_required
+@email_verification_required
 def mark_notification_read(request, pk):
     if request.method != "POST":
         return JsonResponse({"success": False, "message": _("Invalid request.")})
@@ -871,6 +1053,7 @@ def mark_notification_read(request, pk):
 
 
 @login_required
+@email_verification_required
 def mark_all_notifications_read(request):
     if request.method != "POST":
         return JsonResponse({"success": False, "message": _("Invalid request.")})
@@ -933,6 +1116,7 @@ def get_group_user_ids(request):
 
 
 @login_required
+@email_verification_required
 def delete_notification(request, pk):
     if request.method != "POST":
         return JsonResponse({"success": False, "message": _("Invalid request.")})
@@ -966,6 +1150,7 @@ def get_notification_recipients(request, pk):
 
 
 @login_required
+@email_verification_required
 def update_notification(request, pk):
     if request.method != "POST":
         return JsonResponse({"success": False, "message": _("Invalid request.")})

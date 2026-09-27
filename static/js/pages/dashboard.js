@@ -182,6 +182,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Global event delegation for dynamic click actions (password toggles, apply buttons, etc.)
   contentContainer.addEventListener("click", function (e) {
+    // Email verification escape hatches (read-only mode banner + profile page)
+    if (
+      e.target.closest("#resend-email-verification") ||
+      e.target.closest("#cancel-email-change")
+    ) {
+      handleEmailVerificationAction(e.target);
+      return;
+    }
+
     if (
       e.target.id === "generatePwdBtn" ||
       e.target.closest("#generatePwdBtn")
@@ -1032,6 +1041,52 @@ document.addEventListener("DOMContentLoaded", function () {
     // Defensive fallback only: a missing notifier must never swallow a message
     // the user needs to see.
     console.log("[" + (type || "info") + "] " + message);
+  }
+
+  // Resend the verification email, or cancel a pending email change. Both
+  // actions POST to their dashboard endpoint and reload the fragment on
+  // success so the read-only banner reflects the new state immediately.
+  function handleEmailVerificationAction(target) {
+    const isResend = !!target.closest("#resend-email-verification");
+    const urls = (window.AppConfig && window.AppConfig.urls) || {};
+    const endpoint = isResend
+      ? urls.resendEmailVerification
+      : urls.cancelEmailChange;
+    if (!endpoint) return;
+
+    const btn = target.closest("button");
+    if (btn) btn.disabled = true;
+
+    fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": window.ApplyBaMa.getCsrfToken(),
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    })
+      .then((r) =>
+        r.json().catch(() => ({})).then((data) => ({ status: r.status, data })),
+      )
+      .then(({ status, data }) => {
+        if (data && data.success) {
+          showToast(data.message, "success");
+          // Reload the current fragment: the banner disappears once the
+          // account is fully verified again.
+          const params = new URLSearchParams(window.location.search);
+          loadContent(params.get("page") || "welcome", "");
+        } else {
+          const msg =
+            (data && data.errors && data.errors.join("\n")) ||
+            (data && data.message) ||
+            "Error";
+          showToast(msg, "error");
+          if (btn) btn.disabled = false;
+        }
+      })
+      .catch(() => {
+        showToast("Network error. Please try again.", "error");
+        if (btn) btn.disabled = false;
+      });
   }
 
   // Handles native browser back/forward buttons for seamless SPA history navigation

@@ -1,0 +1,70 @@
+{% extends "emails/base_email.html" %}
+{% load i18n %}
+
+{% block title %}{{ site_name }} — {% if is_change %}{% trans "Verify your new email address" %}{% else %}{% trans "Verify your email address" %}{% endif %}{% endblock %}
+
+{% block preheader %}{% if is_change %}{% trans "Confirm your new email address — the button expires in 15 minutes." %}{% else %}{% trans "Confirm your email address — the button expires in 15 minutes." %}{% endif %}{% endblock %}
+
+{% block content %}
+    <h1 style="margin:0 0 14px 0; font-family:'Playfair Display', Georgia, 'Times New Roman', 'Vazirmatn', Tahoma, serif; font-size:22px; line-height:30px; font-weight:700; color:#0F172A;">
+        {% if is_change %}{% trans "Verify your new email address" %}{% else %}{% trans "Verify your email address" %}{% endif %}
+    </h1>
+
+    <p style="margin:0 0 14px 0;">{% trans "Hello," %}</p>
+
+    <p style="margin:0 0 8px 0;">
+        {% if is_change %}
+            {% blocktrans %}A request was made to change the email address on your {{ site_name }} account to:{% endblocktrans %}
+        {% else %}
+            {% blocktrans %}Please confirm this email address for your {{ site_name }} account:{% endblocktrans %}
+        {% endif %}
+    </p>
+
+    {# The address stays LTR in every locale, including RTL. #}
+    <div style="direction:ltr; text-align:center; background-color:#EFF6FF; border:1px solid #BFDBFE; border-radius:6px; padding:12px 14px; margin:0 0 20px 0;">
+        <span style="font-family:'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size:16px; line-height:22px; font-weight:700; color:#1E3A8A; user-select:all; -webkit-user-select:all;">{{ new_email }}</span>
+    </div>
+
+    <p style="margin:0 0 20px 0;">
+        {% trans "Confirm it with the button below. Until you do, your account stays in read-only mode: you can look around, but nothing can be changed." %}
+    </p>
+
+    {# Bulletproof button, same construction as the reset-password email. #}
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="ab-btn" align="center" style="margin:0 auto 18px auto;">
+        <tr>
+            <td align="center" bgcolor="#1E3A8A" style="background-color:#1E3A8A; border-radius:6px; padding:14px 28px; mso-padding-alt:14px 28px;">
+                <a href="{{ verify_url }}" style="display:inline-block; font-family:'Noto Sans', -apple-system, 'Segoe UI', Roboto, Arial, 'Vazirmatn', Tahoma, sans-serif; font-size:15px; line-height:20px; font-weight:700; color:#FFFFFF; text-decoration:none;">
+                    {% trans "Verify my email address" %}
+                </a>
+            </td>
+        </tr>
+    </table>
+
+    <p style="margin:0 0 20px 0; font-size:13px; line-height:20px; color:#475569;">
+        {% trans "This link is valid for 15 minutes and can be used once." %}
+    </p>
+
+    <div style="background-color:#FFFBEB; {% if EMAIL_BIDI %}border-right:3px solid #F59E0B;{% else %}border-left:3px solid #F59E0B;{% endif %} border-radius:4px; padding:12px 14px; margin:0 0 20px 0;">
+        <p style="margin:0; font-size:13px; line-height:20px; color:#78350F;">
+            {% if is_change %}
+                {% trans "If you didn't request this change, don't click the button — your current email address stays active. You can cancel the request from your profile page." %}
+            {% else %}
+                {% trans "If you didn't ask for this, you can ignore this email — nothing changes until an address is confirmed." %}
+            {% endif %}
+        </p>
+    </div>
+
+    <p style="margin:0 0 8px 0; font-weight:700; color:#0F172A;">
+        {{ site_name }} {% trans "Team" %}
+    </p>
+{% endblock %}
+
+{% block footer_reason %}
+    <p style="margin:0 0 8px 0;">
+        {% if is_change %}
+            {% blocktrans %}You received this email because a new address was requested for your {{ site_name }} account.{% endblocktrans %}
+        {% else %}
+            {% blocktrans %}You received this email because your {{ site_name }} account email address needs confirmation.{% endblocktrans %}
+        {% endif %}
+    </p>
+{% endblock %}

@@ -58,6 +58,9 @@ def app_config(request):
                 "programApplyRequest": _url("program_apply_request"),
                 "programsSearch": _url("programs_search"),
                 "universitiesSearch": _url("universities_search"),
+                # Email verification (read-only mode escape hatches)
+                "resendEmailVerification": _url("resend_email_verification"),
+                "cancelEmailChange": _url("cancel_email_change"),
                 # Notifications
                 "sendNotification": _url("send_notification"),
                 "searchUsers": _url("search_users_for_notification"),
@@ -78,6 +81,9 @@ def app_config(request):
                 "loadingError": _("Loading Error"),
                 "errorSupport": _("Please try again or contact support"),
                 "reloadPage": _("Reload Page"),
+                "emailVerifiedReload": _(
+                    "Email verified! Your account is fully active again."
+                ),
             },
         }
     }

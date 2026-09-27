@@ -160,6 +160,22 @@
                 </a>
             </div>
             <!-- Dynamic Content Container -->
+            {% if not user.is_fully_verified %}
+            {# Persistent banner: the account is in read-only mode until the email is verified. #}
+            <div id="verification-banner" class="verification-banner" role="status">
+                <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+                <span>
+                    {% if user.pending_email %}
+                        {% trans "Your account is in read-only mode — confirm your new email address from your profile page." %}
+                    {% else %}
+                        {% trans "Your account is in read-only mode — verify your email address from your profile page." %}
+                    {% endif %}
+                </span>
+                <button type="button" data-page="profile" class="verification-banner__action">
+                    {% trans "Verify now" %}
+                </button>
+            </div>
+            {% endif %}
             <div id="dashboard-content" class="content-container">
                 <!-- Content loaded here via JS -->
                 <div class="content-loading">

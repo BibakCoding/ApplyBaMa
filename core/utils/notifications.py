@@ -86,3 +86,39 @@ def send_welcome_notification(user):
         message=welcome_message,
         notification_type='success',
     )
+
+
+def send_email_verified_notification(user, new_email=None):
+    """
+    Notify a user that their email address has been verified.
+
+    Used both after registration confirmation (new_email is None) and after
+    confirming a changed address through the verification link.
+
+    Args:
+        user: User instance to notify
+        new_email: the freshly confirmed address, when an email change was
+            just committed (None for the plain registration case)
+
+    Returns:
+        NotificationRecipient: The created notification recipient object
+    """
+    if new_email:
+        title = _("Email address verified")
+        message = _(
+            "Your new email address has been confirmed and your account is "
+            "fully active again. Everything works as normal."
+        )
+    else:
+        title = _("Email address verified")
+        message = _(
+            "Your email address has been confirmed. All features of your "
+            "account are now available."
+        )
+
+    return send_notification(
+        user=user,
+        title=title,
+        message=message,
+        notification_type='success',
+    )

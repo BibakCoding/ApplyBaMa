@@ -6,6 +6,41 @@
             {% trans "Manage your personal information, contact details, and security settings." %}
         </p>
     </div>
+
+    {% if not user.is_fully_verified %}
+    {# Email verification banner: explains read-only mode and offers the actions. #}
+    <div id="email-verification-banner" class="mb-6 rounded-xl border border-amber-300 bg-amber-50 p-5">
+        <div class="flex items-start gap-3">
+            <i class="fas fa-triangle-exclamation text-amber-500 mt-1" aria-hidden="true"></i>
+            <div class="flex-1">
+                {% if user.pending_email %}
+                    <h3 class="font-semibold text-amber-900">{% trans "Confirm your new email address" %}</h3>
+                    <p class="text-sm text-amber-800 mt-1">
+                        {% blocktrans with email=user.pending_email %}We sent a verification link to <strong>{{ email }}</strong>. Until you confirm it, your account is in read-only mode: you can look around, but nothing can be changed.{% endblocktrans %}
+                    </p>
+                    <div class="flex flex-wrap gap-3 mt-4">
+                        <button type="button" id="resend-email-verification" class="ab-btn ab-btn-primary">
+                            <i class="fas fa-paper-plane mr-2" aria-hidden="true"></i>{% trans "Resend verification email" %}
+                        </button>
+                        <button type="button" id="cancel-email-change" class="ab-btn ab-btn-secondary">
+                            <i class="fas fa-ban mr-2" aria-hidden="true"></i>{% trans "Cancel email change" %}
+                        </button>
+                    </div>
+                {% elif not user.email_verified %}
+                    <h3 class="font-semibold text-amber-900">{% trans "Your email address is not verified" %}</h3>
+                    <p class="text-sm text-amber-800 mt-1">
+                        {% blocktrans with email=user.email %}Your account is in read-only mode until we confirm that <strong>{{ email }}</strong> belongs to you. Send yourself a verification link and open it to activate your account.{% endblocktrans %}
+                    </p>
+                    <div class="flex flex-wrap gap-3 mt-4">
+                        <button type="button" id="resend-email-verification" class="ab-btn ab-btn-primary">
+                            <i class="fas fa-paper-plane mr-2" aria-hidden="true"></i>{% trans "Send verification email" %}
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Personal Information Card -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">

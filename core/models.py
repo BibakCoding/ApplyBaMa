@@ -436,6 +436,32 @@ class User(AbstractUser):
             "Designates whether this student can access representative features"
         ),
     )
+    # Pending email change: the address the user wants to switch to. Empty
+    # means no change is in progress. While a pending address exists the
+    # dashboard treats the email as unverified (read-only mode).
+    pending_email = models.EmailField(
+        blank=True,
+        null=True,
+        help_text=_(
+            "New email address awaiting verification; empty when no change is in progress"
+        ),
+    )
+    # The current email address has been confirmed through a verification
+    # link (or code, at registration). Unverified means read-only mode.
+    email_verified = models.BooleanField(
+        default=False,
+        help_text=_("The current email address has been confirmed"),
+    )
+
+    @property
+    def is_fully_verified(self):
+        """True when the account may use every feature.
+
+        A pending email change puts the account back into read-only mode
+        until the new address is confirmed (or the request is cancelled),
+        exactly like an address that was never verified.
+        """
+        return self.email_verified and not self.pending_email
 
     def __str__(self):
         return self.get_username()

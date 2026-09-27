@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-26 19:27+0330\n"
+"POT-Creation-Date: 2026-09-27 19:46+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\api\auth_views.py:53 .\api\auth_views.py:129 .\api\auth_views.py:197
-#: .\api\auth_views.py:266 .\api\jwt_views.py:83
+#: .\api\auth_views.py:53 .\api\auth_views.py:130 .\api\auth_views.py:199
+#: .\api\auth_views.py:269 .\api\jwt_views.py:83
 msgid "Invalid JSON payload"
 msgstr ""
 
@@ -27,32 +27,32 @@ msgstr ""
 msgid "Username and password are required"
 msgstr ""
 
-#: .\api\auth_views.py:70 .\api\auth_views.py:96
+#: .\api\auth_views.py:70 .\api\auth_views.py:97
 #: .\core\middleware\jwt_auth.py:151
 msgid "Authentication failed"
 msgstr ""
 
-#: .\api\auth_views.py:136
+#: .\api\auth_views.py:137
 msgid "Refresh token is required"
 msgstr ""
 
-#: .\api\auth_views.py:144
+#: .\api\auth_views.py:145
 msgid "Invalid or expired refresh token"
 msgstr ""
 
-#: .\api\auth_views.py:164
+#: .\api\auth_views.py:166
 msgid "Token refresh failed"
 msgstr ""
 
-#: .\api\auth_views.py:204
+#: .\api\auth_views.py:206
 msgid "Token is required"
 msgstr ""
 
-#: .\api\auth_views.py:275 .\api\auth_views.py:322
+#: .\api\auth_views.py:278 .\api\auth_views.py:325
 msgid "Registration failed"
 msgstr ""
 
-#: .\api\auth_views.py:342
+#: .\api\auth_views.py:345
 msgid "Logged out successfully. Please discard your tokens."
 msgstr ""
 
@@ -186,20 +186,20 @@ msgstr ""
 msgid "Confirmation Code"
 msgstr ""
 
-#: .\authentication\forms.py:93 .\authentication\models.py:31
+#: .\authentication\forms.py:93 .\authentication\models.py:35
 #: .\templates\authentication\change_password.html:51
 msgid "Verification Code"
 msgstr ""
 
 #: .\authentication\forms.py:99
 #: .\templates\authentication\change_password.html:58
-#: .\templates\dashboard\fragments\profile.html:154
+#: .\templates\dashboard\fragments\profile.html:189
 msgid "New Password"
 msgstr ""
 
 #: .\authentication\forms.py:104
 #: .\templates\authentication\change_password.html:65
-#: .\templates\dashboard\fragments\profile.html:165
+#: .\templates\dashboard\fragments\profile.html:200
 msgid "Confirm New Password"
 msgstr ""
 
@@ -211,13 +211,17 @@ msgstr ""
 msgid "Password Reset"
 msgstr ""
 
-#: .\authentication\models.py:32
+#: .\authentication\models.py:20
+msgid "Email Change"
+msgstr ""
+
+#: .\authentication\models.py:36
 msgid "Verification Codes"
 msgstr ""
 
 #: .\authentication\views.py:92 .\authentication\views.py:149
-#: .\authentication\views.py:218 .\authentication\views.py:280
-#: .\authentication\views.py:317 .\authentication\views.py:358
+#: .\authentication\views.py:218 .\authentication\views.py:283
+#: .\authentication\views.py:320 .\authentication\views.py:443
 msgid "You are already logged in."
 msgstr ""
 
@@ -249,48 +253,48 @@ msgstr ""
 msgid "Invalid confirmation code."
 msgstr ""
 
-#: .\authentication\views.py:254
+#: .\authentication\views.py:257
 msgid "Account confirmed!"
 msgstr ""
 
-#: .\authentication\views.py:285
+#: .\authentication\views.py:288
 msgid "User not found or already active."
 msgstr ""
 
-#: .\authentication\views.py:297
+#: .\authentication\views.py:300
 msgid "Your new Confirmation Code"
 msgstr ""
 
-#: .\authentication\views.py:307
+#: .\authentication\views.py:310
 msgid "A fresh confirmation code has been sent."
 msgstr ""
 
-#: .\authentication\views.py:330
+#: .\authentication\views.py:333
 msgid "Reset Your Password"
 msgstr ""
 
-#: .\authentication\views.py:341
+#: .\authentication\views.py:344
 msgid "If that email is registered, you’ll receive reset instructions."
 msgstr ""
 
-#: .\authentication\views.py:369
+#: .\authentication\views.py:454
 msgid "Invalid or expired reset link."
 msgstr ""
 
-#: .\authentication\views.py:382
+#: .\authentication\views.py:467
 msgid "Invalid verification code."
 msgstr ""
 
-#: .\authentication\views.py:389
+#: .\authentication\views.py:474
 msgid "Password updated successfully."
 msgstr ""
 
-#: .\authentication\views.py:424 .\dashboard\forms.py:69
+#: .\authentication\views.py:509 .\dashboard\forms.py:69
 #: .\dashboard\forms.py:86 .\dashboard\forms.py:256
 msgid "This username is already taken."
 msgstr ""
 
-#: .\authentication\views.py:431 .\dashboard\views.py:469
+#: .\authentication\views.py:516 .\dashboard\views.py:525
 msgid "Username updated successfully."
 msgstr ""
 
@@ -443,7 +447,7 @@ msgstr[1] ""
 msgid "Profile"
 msgstr ""
 
-#: .\core\admin.py:506 .\core\admin.py:576 .\core\models.py:527
+#: .\core\admin.py:506 .\core\admin.py:576 .\core\models.py:553
 #: .\core\templatetags\admin_extras.py:50
 #: .\core\templatetags\admin_extras.py:230
 #: .\templates\dashboard\fragments\my_students.html:19
@@ -478,7 +482,7 @@ msgstr[1] ""
 msgid "Agents"
 msgstr ""
 
-#: .\core\admin.py:599 .\templates\dashboard\fragments\profile.html:198
+#: .\core\admin.py:599 .\templates\dashboard\fragments\profile.html:233
 msgid "Stage"
 msgstr ""
 
@@ -605,7 +609,7 @@ msgid_plural "%(count)d success stories hidden from the homepage."
 msgstr[0] ""
 msgstr[1] ""
 
-#: .\core\admin.py:924 .\core\models.py:724
+#: .\core\admin.py:924 .\core\models.py:750
 #: .\templates\dashboard\fragments\notifications.html:14
 #: .\templates\dashboard\fragments\notifications.html:125
 msgid "Message"
@@ -625,12 +629,12 @@ msgstr ""
 msgid "Delivery"
 msgstr ""
 
-#: .\core\admin.py:980 .\core\models.py:748
+#: .\core\admin.py:980 .\core\models.py:774
 #: .\templates\dashboard\fragments\notifications.html:63
 msgid "Recipients"
 msgstr ""
 
-#: .\core\admin.py:984 .\core\models.py:790
+#: .\core\admin.py:984 .\core\models.py:816
 msgid "Read"
 msgstr ""
 
@@ -697,28 +701,32 @@ msgid_plural "%(count)d rows exported."
 msgstr[0] ""
 msgstr[1] ""
 
-#: .\core\context_processors.py:72
+#: .\core\context_processors.py:75
 msgid "Registration is required to see programs matching your search."
 msgstr ""
 
-#: .\core\context_processors.py:75
+#: .\core\context_processors.py:78
 msgid "Thank you! You are on the scholarship alerts list."
 msgstr ""
 
-#: .\core\context_processors.py:77
+#: .\core\context_processors.py:80
 msgid "Loading content..."
 msgstr ""
 
-#: .\core\context_processors.py:78
+#: .\core\context_processors.py:81
 msgid "Loading Error"
 msgstr ""
 
-#: .\core\context_processors.py:79
+#: .\core\context_processors.py:82
 msgid "Please try again or contact support"
 msgstr ""
 
-#: .\core\context_processors.py:80
+#: .\core\context_processors.py:83
 msgid "Reload Page"
+msgstr ""
+
+#: .\core\context_processors.py:85
+msgid "Email verified! Your account is fully active again."
 msgstr ""
 
 #: .\core\forms.py:46
@@ -779,7 +787,7 @@ msgstr ""
 msgid "Nationality adjective"
 msgstr ""
 
-#: .\core\models.py:86 .\templates\dashboard\fragments\profile.html:117
+#: .\core\models.py:86 .\templates\dashboard\fragments\profile.html:152
 msgid "Country"
 msgstr ""
 
@@ -787,7 +795,7 @@ msgstr ""
 msgid "Countries"
 msgstr ""
 
-#: .\core\models.py:116 .\templates\dashboard\fragments\profile.html:121
+#: .\core\models.py:116 .\templates\dashboard\fragments\profile.html:156
 msgid "City"
 msgstr ""
 
@@ -913,212 +921,221 @@ msgstr ""
 msgid "Designates whether this student can access representative features"
 msgstr ""
 
-#: .\core\models.py:445
+#: .\core\models.py:446
+msgid ""
+"New email address awaiting verification; empty when no change is in progress"
+msgstr ""
+
+#: .\core\models.py:453
+msgid "The current email address has been confirmed"
+msgstr ""
+
+#: .\core\models.py:471
 msgid "Only student users can be representatives"
 msgstr ""
 
-#: .\core\models.py:460
+#: .\core\models.py:486
 msgid "Company Profile"
 msgstr ""
 
-#: .\core\models.py:461
+#: .\core\models.py:487
 msgid "Company Profiles"
 msgstr ""
 
-#: .\core\models.py:478
+#: .\core\models.py:504
 msgid "Agent Profile"
 msgstr ""
 
-#: .\core\models.py:479
+#: .\core\models.py:505
 msgid "Agent Profiles"
 msgstr ""
 
-#: .\core\models.py:494
+#: .\core\models.py:520
 msgid "Student Profile"
 msgstr ""
 
-#: .\core\models.py:495
+#: .\core\models.py:521
 msgid "Student Profiles"
 msgstr ""
 
-#: .\core\models.py:514
+#: .\core\models.py:540
 msgid "Select the country whose language you speak"
 msgstr ""
 
-#: .\core\models.py:526
+#: .\core\models.py:552
 msgid "Application"
 msgstr ""
 
-#: .\core\models.py:530
+#: .\core\models.py:556
 msgid "In Progress"
 msgstr ""
 
-#: .\core\models.py:531
+#: .\core\models.py:557
 msgid "Finished"
 msgstr ""
 
-#: .\core\models.py:532
+#: .\core\models.py:558
 msgid "Failed"
 msgstr ""
 
-#: .\core\models.py:535
+#: .\core\models.py:561
 msgid "Step One"
 msgstr ""
 
-#: .\core\models.py:536
+#: .\core\models.py:562
 msgid "Step Two"
 msgstr ""
 
-#: .\core\models.py:537
+#: .\core\models.py:563
 msgid "Step Three"
 msgstr ""
 
-#: .\core\models.py:538
+#: .\core\models.py:564
 msgid "Step Four"
 msgstr ""
 
-#: .\core\models.py:539
+#: .\core\models.py:565
 msgid "Step Five"
 msgstr ""
 
-#: .\core\models.py:540
+#: .\core\models.py:566
 msgid "Step Six"
 msgstr ""
 
-#: .\core\models.py:541
+#: .\core\models.py:567
 msgid "Step Seven"
 msgstr ""
 
-#: .\core\models.py:544
+#: .\core\models.py:570
 msgid "Transfer Student"
 msgstr ""
 
-#: .\core\models.py:545
+#: .\core\models.py:571
 msgid "First-Year Student"
 msgstr ""
 
-#: .\core\models.py:578
+#: .\core\models.py:604
 msgid "Auto-generated application code"
 msgstr ""
 
-#: .\core\models.py:584
+#: .\core\models.py:610
 msgid "Application Documents"
 msgstr ""
 
-#: .\core\models.py:624 .\core\models.py:625
+#: .\core\models.py:650 .\core\models.py:651
 msgid "Site Settings"
 msgstr ""
 
-#: .\core\models.py:645
+#: .\core\models.py:671
 msgid "Journey Step"
 msgstr ""
 
-#: .\core\models.py:654 .\core\templatetags\custom_filters.py:49
+#: .\core\models.py:680 .\core\templatetags\custom_filters.py:49
 msgid "Associate & Bachelor"
 msgstr ""
 
-#: .\core\models.py:655 .\core\templatetags\custom_filters.py:50
+#: .\core\models.py:681 .\core\templatetags\custom_filters.py:50
 #: .\templates\core\main.html:118
 msgid "Master"
 msgstr ""
 
-#: .\core\models.py:656 .\core\templatetags\custom_filters.py:51
+#: .\core\models.py:682 .\core\templatetags\custom_filters.py:51
 #: .\templates\core\main.html:119
 msgid "PhD"
 msgstr ""
 
-#: .\core\models.py:664
+#: .\core\models.py:690
 msgid "Document Requirement"
 msgstr ""
 
-#: .\core\models.py:689
+#: .\core\models.py:715
 msgid "Success Story"
 msgstr ""
 
-#: .\core\models.py:690 .\templates\core\main.html:21
+#: .\core\models.py:716 .\templates\core\main.html:21
 msgid "Success Stories"
 msgstr ""
 
-#: .\core\models.py:710
+#: .\core\models.py:736
 msgid "Information"
 msgstr ""
 
-#: .\core\models.py:711
+#: .\core\models.py:737
 msgid "Warning"
 msgstr ""
 
-#: .\core\models.py:712
+#: .\core\models.py:738
 msgid "Success"
 msgstr ""
 
-#: .\core\models.py:713
+#: .\core\models.py:739
 msgid "Error"
 msgstr ""
 
-#: .\core\models.py:714
+#: .\core\models.py:740
 msgid "Reminder"
 msgstr ""
 
-#: .\core\models.py:717
+#: .\core\models.py:743
 msgid "All Users"
 msgstr ""
 
-#: .\core\models.py:718
+#: .\core\models.py:744
 msgid "Students (Default)"
 msgstr ""
 
-#: .\core\models.py:719
+#: .\core\models.py:745
 msgid "Company Users"
 msgstr ""
 
-#: .\core\models.py:720
+#: .\core\models.py:746
 msgid "Agent Users"
 msgstr ""
 
-#: .\core\models.py:721
+#: .\core\models.py:747
 msgid "Specific Users"
 msgstr ""
 
-#: .\core\models.py:723 .\templates\dashboard\fragments\notifications.html:9
+#: .\core\models.py:749 .\templates\dashboard\fragments\notifications.html:9
 #: .\templates\dashboard\fragments\notifications.html:61
 #: .\templates\dashboard\fragments\notifications.html:121
 msgid "Title"
 msgstr ""
 
-#: .\core\models.py:729 .\templates\dashboard\fragments\notifications.html:19
+#: .\core\models.py:755 .\templates\dashboard\fragments\notifications.html:19
 #: .\templates\dashboard\fragments\notifications.html:129
 msgid "Notification Type"
 msgstr ""
 
-#: .\core\models.py:735
+#: .\core\models.py:761
 msgid "Recipient Type"
 msgstr ""
 
-#: .\core\models.py:742
+#: .\core\models.py:768
 msgid "Sent By"
 msgstr ""
 
-#: .\core\models.py:750
+#: .\core\models.py:776
 msgid "Created At"
 msgstr ""
 
-#: .\core\models.py:754
+#: .\core\models.py:780
 msgid "Notification"
 msgstr ""
 
-#: .\core\models.py:755 .\core\templatetags\admin_extras.py:55
+#: .\core\models.py:781 .\core\templatetags\admin_extras.py:55
 msgid "Notifications"
 msgstr ""
 
-#: .\core\models.py:791
+#: .\core\models.py:817
 msgid "Read At"
 msgstr ""
 
-#: .\core\models.py:795
+#: .\core\models.py:821
 msgid "Notification Recipient"
 msgstr ""
 
-#: .\core\models.py:796
+#: .\core\models.py:822
 msgid "Notification Recipients"
 msgstr ""
 
@@ -1212,15 +1229,31 @@ msgid ""
 "feel free to contact our support team."
 msgstr ""
 
+#: .\core\utils\notifications.py:107 .\core\utils\notifications.py:113
+msgid "Email address verified"
+msgstr ""
+
+#: .\core\utils\notifications.py:109
+msgid ""
+"Your new email address has been confirmed and your account is fully active "
+"again. Everything works as normal."
+msgstr ""
+
+#: .\core\utils\notifications.py:115
+msgid ""
+"Your email address has been confirmed. All features of your account are now "
+"available."
+msgstr ""
+
 #: .\dashboard\forms.py:33 .\dashboard\forms.py:212
 #: .\templates\dashboard\fragments\my_students.html:67
-#: .\templates\dashboard\fragments\profile.html:23
+#: .\templates\dashboard\fragments\profile.html:58
 msgid "First Name"
 msgstr ""
 
 #: .\dashboard\forms.py:36 .\dashboard\forms.py:218
 #: .\templates\dashboard\fragments\my_students.html:71
-#: .\templates\dashboard\fragments\profile.html:27
+#: .\templates\dashboard\fragments\profile.html:62
 msgid "Last Name"
 msgstr ""
 
@@ -1235,7 +1268,7 @@ msgstr ""
 #: .\dashboard\forms.py:57 .\dashboard\forms.py:79 .\dashboard\forms.py:224
 #: .\templates\authentication\username_selection.html:57
 #: .\templates\dashboard\fragments\my_students.html:76
-#: .\templates\dashboard\fragments\profile.html:87
+#: .\templates\dashboard\fragments\profile.html:122
 msgid "Username"
 msgstr ""
 
@@ -1247,13 +1280,13 @@ msgstr ""
 msgid "Select a city"
 msgstr ""
 
-#: .\dashboard\forms.py:152 .\templates\dashboard\fragments\profile.html:194
+#: .\dashboard\forms.py:152 .\templates\dashboard\fragments\profile.html:229
 msgid "Passport Number"
 msgstr ""
 
 #: .\dashboard\forms.py:229 .\templates\authentication\forget_password.html:52
 #: .\templates\authentication\register.html:55
-#: .\templates\dashboard\fragments\profile.html:108
+#: .\templates\dashboard\fragments\profile.html:143
 msgid "Email Address"
 msgstr ""
 
@@ -1273,106 +1306,153 @@ msgstr ""
 msgid "Password must be at least 8 characters long."
 msgstr ""
 
-#: .\dashboard\views.py:108
+#: .\dashboard\views.py:106
+msgid ""
+"Your email address is not verified, so your account is in read-only mode. "
+"Verify it from your profile page to continue."
+msgstr ""
+
+#: .\dashboard\views.py:148
 msgid "Page not found."
 msgstr ""
 
-#: .\dashboard\views.py:119 .\dashboard\views.py:378
+#: .\dashboard\views.py:159 .\dashboard\views.py:433
 msgid "You do not have permission to access this page."
 msgstr ""
 
-#: .\dashboard\views.py:370 .\dashboard\views.py:787 .\dashboard\views.py:820
-#: .\dashboard\views.py:884 .\dashboard\views.py:916 .\dashboard\views.py:940
-#: .\dashboard\views.py:952 .\dashboard\views.py:973
+#: .\dashboard\views.py:425 .\dashboard\views.py:967 .\dashboard\views.py:1001
+#: .\dashboard\views.py:1067 .\dashboard\views.py:1099
+#: .\dashboard\views.py:1124 .\dashboard\views.py:1136
+#: .\dashboard\views.py:1158
 msgid "Permission denied."
 msgstr ""
 
-#: .\dashboard\views.py:453
+#: .\dashboard\views.py:509
 msgid "Personal information updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:461
+#: .\dashboard\views.py:517
 msgid "Identity and profile photo updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:476
+#: .\dashboard\views.py:546
 msgid "Contact information updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:483
+#: .\dashboard\views.py:552
+msgid "This email address is already in use."
+msgstr ""
+
+#: .\dashboard\views.py:566
+#, python-format
+msgid ""
+"Contact information updated. We sent a verification link to %(email)s — "
+"confirm it to activate the change. Until then your account is in read-only "
+"mode."
+msgstr ""
+
+#: .\dashboard\views.py:577
 msgid "Profile image updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:491
+#: .\dashboard\views.py:585
 msgid "Password changed successfully."
 msgstr ""
 
-#: .\dashboard\views.py:498
+#: .\dashboard\views.py:592
 msgid "Student profile updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:501
+#: .\dashboard\views.py:595
 msgid "Invalid form type."
 msgstr ""
 
-#: .\dashboard\views.py:529
+#: .\dashboard\views.py:614 .\templates\emails\verify_email.html:4
+#: .\templates\emails\verify_email.html:10
+msgid "Verify your new email address"
+msgstr ""
+
+#: .\dashboard\views.py:616 .\templates\emails\verify_email.html:4
+#: .\templates\emails\verify_email.html:10
+msgid "Verify your email address"
+msgstr ""
+
+#: .\dashboard\views.py:643 .\dashboard\views.py:658
+msgid "There is no pending email change."
+msgstr ""
+
+#: .\dashboard\views.py:647
+#, python-format
+msgid "A new verification link was sent to %(email)s."
+msgstr ""
+
+#: .\dashboard\views.py:673
+#, python-format
+msgid ""
+"The email change to %(email)s was cancelled. Your account is fully active "
+"again."
+msgstr ""
+
+#: .\dashboard\views.py:705
 msgid "Step updated."
 msgstr ""
 
-#: .\dashboard\views.py:532
+#: .\dashboard\views.py:708
 msgid "Application deleted."
 msgstr ""
 
-#: .\dashboard\views.py:561
+#: .\dashboard\views.py:739
 msgid "Application created successfully."
 msgstr ""
 
-#: .\dashboard\views.py:567 .\dashboard\views.py:605 .\dashboard\views.py:614
-#: .\dashboard\views.py:656 .\dashboard\views.py:818 .\dashboard\views.py:861
-#: .\dashboard\views.py:876 .\dashboard\views.py:938 .\dashboard\views.py:971
+#: .\dashboard\views.py:745 .\dashboard\views.py:784 .\dashboard\views.py:794
+#: .\dashboard\views.py:836 .\dashboard\views.py:999 .\dashboard\views.py:1043
+#: .\dashboard\views.py:1059 .\dashboard\views.py:1122
+#: .\dashboard\views.py:1156
 msgid "Invalid request."
 msgstr ""
 
-#: .\dashboard\views.py:586
+#: .\dashboard\views.py:765
 msgid ""
 "You have reached the maximum number of students (100). Please contact "
 "support."
 msgstr ""
 
-#: .\dashboard\views.py:601
+#: .\dashboard\views.py:780
 msgid "Student added successfully."
 msgstr ""
 
-#: .\dashboard\views.py:644
+#: .\dashboard\views.py:824
 msgid "Your request has been sent! Our team will contact you soon."
 msgstr ""
 
-#: .\dashboard\views.py:652
+#: .\dashboard\views.py:832
 msgid "Failed to send request. Please try again."
 msgstr ""
 
-#: .\dashboard\views.py:829 .\dashboard\views.py:982
+#: .\dashboard\views.py:1010 .\dashboard\views.py:1167
 msgid "All fields are required."
 msgstr ""
 
-#: .\dashboard\views.py:832
+#: .\dashboard\views.py:1013
 msgid "Please select at least one user."
 msgstr ""
 
-#: .\dashboard\views.py:855
+#: .\dashboard\views.py:1036
 msgid "Notification sent successfully!"
 msgstr ""
 
-#: .\dashboard\views.py:870 .\dashboard\views.py:946 .\dashboard\views.py:965
-#: .\dashboard\views.py:1011 .\dashboard\views.py:1027
+#: .\dashboard\views.py:1052 .\dashboard\views.py:1130
+#: .\dashboard\views.py:1149 .\dashboard\views.py:1196
+#: .\dashboard\views.py:1212
 msgid "Not found."
 msgstr ""
 
-#: .\dashboard\views.py:944
+#: .\dashboard\views.py:1128
 msgid "Notification deleted."
 msgstr ""
 
-#: .\dashboard\views.py:1009
+#: .\dashboard\views.py:1194
 msgid "Notification updated successfully!"
 msgstr ""
 
@@ -1519,6 +1599,7 @@ msgstr ""
 
 #: .\templates\authentication\change_password.html:25
 #: .\templates\authentication\confirm_code.html:26
+#: .\templates\authentication\verify_email.html:26
 msgid "Encrypted"
 msgstr ""
 
@@ -1529,6 +1610,7 @@ msgstr ""
 #: .\templates\authentication\change_password.html:27
 #: .\templates\authentication\confirm_code.html:27
 #: .\templates\authentication\username_selection.html:26
+#: .\templates\authentication\verify_email.html:27
 msgid "Verified"
 msgstr ""
 
@@ -1551,7 +1633,7 @@ msgid "Confirm your password"
 msgstr ""
 
 #: .\templates\authentication\change_password.html:71
-#: .\templates\dashboard\fragments\profile.html:134
+#: .\templates\dashboard\fragments\profile.html:169
 msgid "Change Password"
 msgstr ""
 
@@ -1571,6 +1653,7 @@ msgid ""
 msgstr ""
 
 #: .\templates\authentication\confirm_code.html:25
+#: .\templates\authentication\verify_email.html:25
 msgid "Secure"
 msgstr ""
 
@@ -1769,6 +1852,62 @@ msgstr ""
 
 #: .\templates\authentication\username_selection.html:68
 msgid "Skip for Now"
+msgstr ""
+
+#: .\templates\authentication\verify_email.html:4
+#: .\templates\authentication\verify_email.html:22
+msgid "Email Verification"
+msgstr ""
+
+#: .\templates\authentication\verify_email.html:23
+msgid ""
+"Confirming your email address keeps your account secure and keeps every "
+"feature of Apply BM available to you."
+msgstr ""
+
+#: .\templates\authentication\verify_email.html:47
+msgid "Email Verified!"
+msgstr ""
+
+#: .\templates\authentication\verify_email.html:48
+#, python-format
+msgid ""
+"<strong>%(email)s</strong> is now confirmed on your account. Everything is "
+"fully active again — you can continue where you left off."
+msgstr ""
+
+#: .\templates\authentication\verify_email.html:53
+msgid "Link Expired"
+msgstr ""
+
+#: .\templates\authentication\verify_email.html:54
+msgid ""
+"This verification link has expired or was already used. Your previous email "
+"address is still active and nothing was changed."
+msgstr ""
+
+#: .\templates\authentication\verify_email.html:59
+msgid "Invalid Link"
+msgstr ""
+
+#: .\templates\authentication\verify_email.html:60
+msgid ""
+"We couldn't validate this verification link. It may have been mistyped, "
+"already used, or the request was cancelled. Your current email address is "
+"unchanged."
+msgstr ""
+
+#: .\templates\authentication\verify_email.html:66
+msgid "Go to Dashboard"
+msgstr ""
+
+#: .\templates\authentication\verify_email.html:67
+#: .\templates\authentication\verify_email.html:70
+msgid "Back to Home"
+msgstr ""
+
+#: .\templates\authentication\verify_email.html:69
+msgid "Request a New Link"
 msgstr ""
 
 #: .\templates\base.html:12
@@ -2214,71 +2353,108 @@ msgid ""
 "Manage your personal information, contact details, and security settings."
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:13
+#: .\templates\dashboard\fragments\profile.html:17
+msgid "Confirm your new email address"
+msgstr ""
+
+#: .\templates\dashboard\fragments\profile.html:19
+#, python-format
+msgid ""
+"We sent a verification link to <strong>%(email)s</strong>. Until you confirm "
+"it, your account is in read-only mode: you can look around, but nothing can "
+"be changed."
+msgstr ""
+
+#: .\templates\dashboard\fragments\profile.html:23
+#: .\templates\dashboard\fragments\verification_required.html:28
+msgid "Resend verification email"
+msgstr ""
+
+#: .\templates\dashboard\fragments\profile.html:26
+msgid "Cancel email change"
+msgstr ""
+
+#: .\templates\dashboard\fragments\profile.html:30
+msgid "Your email address is not verified"
+msgstr ""
+
+#: .\templates\dashboard\fragments\profile.html:32
+#, python-format
+msgid ""
+"Your account is in read-only mode until we confirm that <strong>%(email)s</"
+"strong> belongs to you. Send yourself a verification link and open it to "
+"activate your account."
+msgstr ""
+
+#: .\templates\dashboard\fragments\profile.html:36
+msgid "Send verification email"
+msgstr ""
+
+#: .\templates\dashboard\fragments\profile.html:48
 msgid "Personal Information"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:33
+#: .\templates\dashboard\fragments\profile.html:68
 msgid "Gender"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:37
+#: .\templates\dashboard\fragments\profile.html:72
 msgid "Date of Birth"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:43
+#: .\templates\dashboard\fragments\profile.html:78
 msgid "Father's Name"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:47
+#: .\templates\dashboard\fragments\profile.html:82
 msgid "Mother's Name"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:53
+#: .\templates\dashboard\fragments\profile.html:88
 msgid "Update Personal Info"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:60
+#: .\templates\dashboard\fragments\profile.html:95
 msgid "Identity & Profile Photo"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:82
+#: .\templates\dashboard\fragments\profile.html:117
 msgid "JPG, PNG or GIF. Max size 2MB."
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:92
+#: .\templates\dashboard\fragments\profile.html:127
 msgid "Update Identity & Photo"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:99
+#: .\templates\dashboard\fragments\profile.html:134
 msgid "Contact Information"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:112
+#: .\templates\dashboard\fragments\profile.html:147
 msgid "Mobile Number"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:127
+#: .\templates\dashboard\fragments\profile.html:162
 msgid "Update Contact Info"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:143
+#: .\templates\dashboard\fragments\profile.html:178
 msgid "Current Password"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:177
+#: .\templates\dashboard\fragments\profile.html:212
 msgid "Update Password"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:185
+#: .\templates\dashboard\fragments\profile.html:220
 msgid "Student Profile Details"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:202
+#: .\templates\dashboard\fragments\profile.html:237
 msgid "Language"
 msgstr ""
 
-#: .\templates\dashboard\fragments\profile.html:208
+#: .\templates\dashboard\fragments\profile.html:243
 msgid "Update Student Details"
 msgstr ""
 
@@ -2487,6 +2663,34 @@ msgstr ""
 msgid "No programs available for this university yet."
 msgstr ""
 
+#: .\templates\dashboard\fragments\verification_required.html:8
+msgid "Verify your email to continue"
+msgstr ""
+
+#: .\templates\dashboard\fragments\verification_required.html:12
+#, python-format
+msgid ""
+"We sent a verification link to <strong>%(email)s</strong>. Open it to "
+"confirm the change."
+msgstr ""
+
+#: .\templates\dashboard\fragments\verification_required.html:14
+msgid ""
+"Your email address has not been verified yet, so this section is unavailable "
+"and your account is in read-only mode."
+msgstr ""
+
+#: .\templates\dashboard\fragments\verification_required.html:18
+msgid ""
+"Already verified? Reload the page, or head to your profile to resend the "
+"verification email."
+msgstr ""
+
+#: .\templates\dashboard\fragments\verification_required.html:23
+#: .\templates\dashboard\fragments\welcome.html:24
+msgid "Go to Profile"
+msgstr ""
+
 #: .\templates\dashboard\fragments\welcome.html:6
 msgid "Welcome"
 msgstr ""
@@ -2497,10 +2701,6 @@ msgstr ""
 
 #: .\templates\dashboard\fragments\welcome.html:21
 msgid "Manage your personal information and account details."
-msgstr ""
-
-#: .\templates\dashboard\fragments\welcome.html:24
-msgid "Go to Profile"
 msgstr ""
 
 #: .\templates\dashboard\fragments\welcome.html:33
@@ -2584,7 +2784,23 @@ msgstr ""
 msgid "Admin Panel"
 msgstr ""
 
-#: .\templates\dashboard\main.html:167
+#: .\templates\dashboard\main.html:169
+msgid ""
+"Your account is in read-only mode — confirm your new email address from your "
+"profile page."
+msgstr ""
+
+#: .\templates\dashboard\main.html:171
+msgid ""
+"Your account is in read-only mode — verify your email address from your "
+"profile page."
+msgstr ""
+
+#: .\templates\dashboard\main.html:175
+msgid "Verify now"
+msgstr ""
+
+#: .\templates\dashboard\main.html:183
 msgid "Loading..."
 msgstr ""
 
@@ -2599,6 +2815,7 @@ msgstr ""
 
 #: .\templates\emails\confirmation_code.html:13
 #: .\templates\emails\reset_password.html:13
+#: .\templates\emails\verify_email.html:13
 msgid "Hello,"
 msgstr ""
 
@@ -2629,6 +2846,7 @@ msgstr ""
 
 #: .\templates\emails\confirmation_code.html:40
 #: .\templates\emails\reset_password.html:58
+#: .\templates\emails\verify_email.html:58
 msgid "Team"
 msgstr ""
 
@@ -2686,6 +2904,67 @@ msgstr ""
 msgid ""
 "You received this email because a password reset was requested for your "
 "%(site_name)s account."
+msgstr ""
+
+#: .\templates\emails\verify_email.html:6
+msgid "Confirm your new email address — the button expires in 15 minutes."
+msgstr ""
+
+#: .\templates\emails\verify_email.html:6
+msgid "Confirm your email address — the button expires in 15 minutes."
+msgstr ""
+
+#: .\templates\emails\verify_email.html:17
+#, python-format
+msgid ""
+"A request was made to change the email address on your %(site_name)s account "
+"to:"
+msgstr ""
+
+#: .\templates\emails\verify_email.html:19
+#, python-format
+msgid "Please confirm this email address for your %(site_name)s account:"
+msgstr ""
+
+#: .\templates\emails\verify_email.html:29
+msgid ""
+"Confirm it with the button below. Until you do, your account stays in read-"
+"only mode: you can look around, but nothing can be changed."
+msgstr ""
+
+#: .\templates\emails\verify_email.html:37
+msgid "Verify my email address"
+msgstr ""
+
+#: .\templates\emails\verify_email.html:44
+msgid "This link is valid for 15 minutes and can be used once."
+msgstr ""
+
+#: .\templates\emails\verify_email.html:50
+msgid ""
+"If you didn't request this change, don't click the button — your current "
+"email address stays active. You can cancel the request from your profile "
+"page."
+msgstr ""
+
+#: .\templates\emails\verify_email.html:52
+msgid ""
+"If you didn't ask for this, you can ignore this email — nothing changes "
+"until an address is confirmed."
+msgstr ""
+
+#: .\templates\emails\verify_email.html:65
+#, python-format
+msgid ""
+"You received this email because a new address was requested for your "
+"%(site_name)s account."
+msgstr ""
+
+#: .\templates\emails\verify_email.html:67
+#, python-format
+msgid ""
+"You received this email because your %(site_name)s account email address "
+"needs confirmation."
 msgstr ""
 
 #: .\templates\partials\language_switcher.html:6

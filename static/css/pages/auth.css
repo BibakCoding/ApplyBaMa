@@ -112,6 +112,16 @@ html[dir="rtl"] .auth-lang-switch { right: auto; left: 1.5rem; }
     font-size: 1.5rem;
 }
 
+/* Outcome variants for the verification landing page */
+.auth-status-icon--success {
+    background: #ECFDF5;
+    color: #047857;
+}
+.auth-status-icon--warning {
+    background: #FFFBEB;
+    color: #B45309;
+}
+
 /* A second form stacked below the first one */
 .auth-form--stacked {
     margin-top: 1rem;
