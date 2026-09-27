@@ -78,6 +78,14 @@
     <script src="{% static 'js/app-config.js' %}" defer></script>
     <script src="{% static 'js/base.js' %}" defer></script>
     {% comment %}
+    realtime.js is global: it opens one WebSocket per tab (/ws/notify/) and
+    re-dispatches pushed events as document CustomEvents (ab:notification,
+    ab:connected, ...). It only connects for logged-in users; anonymous
+    visitors get no socket. Page scripts subscribe to those events instead of
+    polling.
+    {% endcomment %}
+    <script src="{% static 'js/realtime.js' %}" defer></script>
+    {% comment %}
     jwt-auth.js is NOT global: only the login flow stores tokens (login.js)
     and the dashboard is the SPA surface where they may be consumed. Pages
     that need it add it in their own js block after block.super.

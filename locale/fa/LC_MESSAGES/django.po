@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-27 19:46+0330\n"
+"POT-Creation-Date: 2026-09-27 22:16+0330\n"
 "PO-Revision-Date: 2026-08-27 03:43+0000\n"
 "Last-Translator: <a@g.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -222,7 +222,7 @@ msgstr "کدهای تأیید"
 
 #: .\authentication\views.py:92 .\authentication\views.py:149
 #: .\authentication\views.py:218 .\authentication\views.py:283
-#: .\authentication\views.py:320 .\authentication\views.py:443
+#: .\authentication\views.py:320 .\authentication\views.py:446
 msgid "You are already logged in."
 msgstr "شما قبلاً وارد شده‌اید."
 
@@ -278,24 +278,24 @@ msgstr "بازیابی رمز عبور"
 msgid "If that email is registered, you’ll receive reset instructions."
 msgstr "اگر آن ایمیل ثبت شده باشد، دستورالعمل‌های بازیابی را دریافت خواهید کرد."
 
-#: .\authentication\views.py:454
+#: .\authentication\views.py:457
 msgid "Invalid or expired reset link."
 msgstr "لینک بازیابی نامعتبر یا منقضی شده است."
 
-#: .\authentication\views.py:467
+#: .\authentication\views.py:470
 msgid "Invalid verification code."
 msgstr "کد تأیید نامعتبر است."
 
-#: .\authentication\views.py:474
+#: .\authentication\views.py:477
 msgid "Password updated successfully."
 msgstr "رمز عبور با موفقیت به‌روزرسانی شد."
 
-#: .\authentication\views.py:509 .\dashboard\forms.py:69
+#: .\authentication\views.py:512 .\dashboard\forms.py:69
 #: .\dashboard\forms.py:86 .\dashboard\forms.py:256
 msgid "This username is already taken."
 msgstr "این نام کاربری قبلاً گرفته شده است."
 
-#: .\authentication\views.py:516 .\dashboard\views.py:525
+#: .\authentication\views.py:519 .\dashboard\views.py:525
 msgid "Username updated successfully."
 msgstr "رمز عبور با موفقیت به‌روزرسانی شد."
 
@@ -657,29 +657,29 @@ msgstr "باز کردن فهرست گیرندگان"
 msgid "Deliver to the selected audience"
 msgstr "ارسال به مخاطبان انتخاب‌شده"
 
-#: .\core\admin.py:1025
+#: .\core\admin.py:1053
 #, python-format
 msgid "%(count)d new delivery created."
 msgid_plural "%(count)d new deliveries created."
 msgstr[0] "%(count)d ارسال جدید ایجاد شد."
 msgstr[1] "%(count)d ارسال جدید ایجاد شد."
 
-#: .\core\admin.py:1045
+#: .\core\admin.py:1073
 msgid "Mark selected deliveries as read"
 msgstr "علامت‌گذاری ارسال‌های انتخاب‌شده به‌عنوان خوانده‌شده"
 
-#: .\core\admin.py:1050
+#: .\core\admin.py:1078
 #, python-format
 msgid "%(count)d delivery marked as read."
 msgid_plural "%(count)d deliveries marked as read."
 msgstr[0] "%(count)d ارسال به‌عنوان خوانده‌شده علامت خورد."
 msgstr[1] "%(count)d ارسال به‌عنوان خوانده‌شده علامت خورد."
 
-#: .\core\admin.py:1055
+#: .\core\admin.py:1083
 msgid "Mark selected deliveries as unread"
 msgstr "علامت‌گذاری ارسال‌های انتخاب‌شده به‌عنوان خوانده‌نشده"
 
-#: .\core\admin.py:1061
+#: .\core\admin.py:1089
 #, python-format
 msgid "%(count)d delivery marked as unread."
 msgid_plural "%(count)d deliveries marked as unread."
@@ -705,31 +705,31 @@ msgid_plural "%(count)d rows exported."
 msgstr[0] "%(count)d ردیف خروجی گرفته شد."
 msgstr[1] "%(count)d ردیف خروجی گرفته شد."
 
-#: .\core\context_processors.py:75
+#: .\core\context_processors.py:78
 msgid "Registration is required to see programs matching your search."
 msgstr "برای دیدن رشته‌های منطبق با جست‌وجوی شما، ثبت‌نام لازم است."
 
-#: .\core\context_processors.py:78
+#: .\core\context_processors.py:81
 msgid "Thank you! You are on the scholarship alerts list."
 msgstr "متشکریم! شما در فهرست هشدارهای بورس تحصیلی قرار دارید."
 
-#: .\core\context_processors.py:80
+#: .\core\context_processors.py:83
 msgid "Loading content..."
 msgstr "در حال بارگذاری محتوا..."
 
-#: .\core\context_processors.py:81
+#: .\core\context_processors.py:84
 msgid "Loading Error"
 msgstr "خطا در بارگذاری"
 
-#: .\core\context_processors.py:82
+#: .\core\context_processors.py:85
 msgid "Please try again or contact support"
 msgstr "لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید"
 
-#: .\core\context_processors.py:83
+#: .\core\context_processors.py:86
 msgid "Reload Page"
 msgstr "بارگذاری مجدد صفحه"
 
-#: .\core\context_processors.py:85
+#: .\core\context_processors.py:88
 msgid "Email verified! Your account is fully active again."
 msgstr "ایمیل تأیید شد! حساب شما دوباره کاملاً فعال است."
 
@@ -1219,7 +1219,7 @@ msgstr "کدهای تأیید استفاده‌نشده"
 msgid "Applications waiting on a decision"
 msgstr "درخواست‌های در انتظار تصمیم"
 
-#: .\core\tests_notifications.py:109 .\core\utils\notifications.py:75
+#: .\core\tests_notifications.py:109 .\core\utils\notifications.py:90
 msgid "Welcome to ApplyBaMa!"
 msgstr "به مرکز کنترل Apply BM خوش آمدید"
 
@@ -1227,7 +1227,7 @@ msgstr "به مرکز کنترل Apply BM خوش آمدید"
 msgid "Invalid refresh token"
 msgstr "درخواست نامعتبر است."
 
-#: .\core\utils\notifications.py:77
+#: .\core\utils\notifications.py:92
 msgid ""
 "Thank you for registering with ApplyBaMa! We're here to help you find your "
 "dream university and program. Explore our dashboard to search universities, "
@@ -1239,11 +1239,11 @@ msgstr ""
 "رشته‌ها را مرور کنید و درخواست خود را شروع کنید. اگر به کمکی نیاز داشتید، با "
 "تیم پشتیبانی ما تماس بگیرید."
 
-#: .\core\utils\notifications.py:107 .\core\utils\notifications.py:113
+#: .\core\utils\notifications.py:122 .\core\utils\notifications.py:128
 msgid "Email address verified"
 msgstr "آدرس ایمیل تأیید شد"
 
-#: .\core\utils\notifications.py:109
+#: .\core\utils\notifications.py:124
 msgid ""
 "Your new email address has been confirmed and your account is fully active "
 "again. Everything works as normal."
@@ -1251,7 +1251,7 @@ msgstr ""
 "آدرس ایمیل جدید شما تأیید شد و حساب شما دوباره کاملاً فعال است. همه چیز به "
 "صورت عادی کار می‌کند."
 
-#: .\core\utils\notifications.py:115
+#: .\core\utils\notifications.py:130
 msgid ""
 "Your email address has been confirmed. All features of your account are now "
 "available."
@@ -1335,9 +1335,9 @@ msgid "You do not have permission to access this page."
 msgstr "شما مجوز دسترسی به این صفحه را ندارید."
 
 #: .\dashboard\views.py:425 .\dashboard\views.py:967 .\dashboard\views.py:1001
-#: .\dashboard\views.py:1067 .\dashboard\views.py:1099
-#: .\dashboard\views.py:1124 .\dashboard\views.py:1136
-#: .\dashboard\views.py:1158
+#: .\dashboard\views.py:1094 .\dashboard\views.py:1126
+#: .\dashboard\views.py:1151 .\dashboard\views.py:1163
+#: .\dashboard\views.py:1185
 msgid "Permission denied."
 msgstr "دسترسی ممنوع."
 
@@ -1390,7 +1390,6 @@ msgstr "آدرس ایمیل جدید خود را تأیید کنید"
 
 #: .\dashboard\views.py:616 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
-#| msgid "Verify your new email address"
 msgid "Verify your email address"
 msgstr "آدرس ایمیل خود را تأیید کنید"
 
@@ -1423,9 +1422,9 @@ msgid "Application created successfully."
 msgstr "درخواست با موفقیت ایجاد شد."
 
 #: .\dashboard\views.py:745 .\dashboard\views.py:784 .\dashboard\views.py:794
-#: .\dashboard\views.py:836 .\dashboard\views.py:999 .\dashboard\views.py:1043
-#: .\dashboard\views.py:1059 .\dashboard\views.py:1122
-#: .\dashboard\views.py:1156
+#: .\dashboard\views.py:836 .\dashboard\views.py:999 .\dashboard\views.py:1070
+#: .\dashboard\views.py:1086 .\dashboard\views.py:1149
+#: .\dashboard\views.py:1183
 msgid "Invalid request."
 msgstr "درخواست نامعتبر است."
 
@@ -1448,7 +1447,7 @@ msgstr "درخواست شما ارسال شد! تیم ما به‌زودی با 
 msgid "Failed to send request. Please try again."
 msgstr "ارسال درخواست ناموفق بود. لطفاً دوباره تلاش کنید."
 
-#: .\dashboard\views.py:1010 .\dashboard\views.py:1167
+#: .\dashboard\views.py:1010 .\dashboard\views.py:1194
 msgid "All fields are required."
 msgstr "تمامی حقوق محفوظ است."
 
@@ -1456,21 +1455,21 @@ msgstr "تمامی حقوق محفوظ است."
 msgid "Please select at least one user."
 msgstr "لطفاً حداقل یک کاربر انتخاب کنید."
 
-#: .\dashboard\views.py:1036
+#: .\dashboard\views.py:1063
 msgid "Notification sent successfully!"
 msgstr "درخواست با موفقیت ایجاد شد."
 
-#: .\dashboard\views.py:1052 .\dashboard\views.py:1130
-#: .\dashboard\views.py:1149 .\dashboard\views.py:1196
-#: .\dashboard\views.py:1212
+#: .\dashboard\views.py:1079 .\dashboard\views.py:1157
+#: .\dashboard\views.py:1176 .\dashboard\views.py:1250
+#: .\dashboard\views.py:1266
 msgid "Not found."
 msgstr "صفحه یافت نشد."
 
-#: .\dashboard\views.py:1128
+#: .\dashboard\views.py:1155
 msgid "Notification deleted."
 msgstr "درخواست حذف شد."
 
-#: .\dashboard\views.py:1194
+#: .\dashboard\views.py:1248
 msgid "Notification updated successfully!"
 msgstr "اطلاعات تماس با موفقیت به‌روزرسانی شد."
 
@@ -2414,7 +2413,7 @@ msgid ""
 msgstr ""
 
 #: .\templates\dashboard\fragments\profile.html:23
-#: .\templates\dashboard\fragments\verification_required.html:28
+#: .\templates\dashboard\fragments\verification_required.html:31
 msgid "Resend verification email"
 msgstr "ارسال دوباره ایمیل تأیید"
 
@@ -2432,12 +2431,12 @@ msgid ""
 "Your account is in read-only mode until we confirm that <strong>%(email)s</"
 "strong> belongs to you. Send yourself a verification link and open it to "
 "activate your account."
-msgstr "حساب شما در حالت فقط‌خواندنی است تا زمانی که تأیید شود که "
-"<strong>%(email)s</strong> متعلق به شماست. یک پیوند تأیید برای خود بفرستید "
-"و آن را باز کنید تا حساب شما فعال شود."
+msgstr ""
+"حساب شما در حالت فقط‌خواندنی است تا زمانی که تأیید شود که <strong>%(email)s</"
+"strong> متعلق به شماست. یک پیوند تأیید برای خود بفرستید و آن را باز کنید تا "
+"حساب شما فعال شود."
 
 #: .\templates\dashboard\fragments\profile.html:36
-#| msgid "Resend verification email"
 msgid "Send verification email"
 msgstr "ارسال ایمیل تأیید"
 
@@ -2983,7 +2982,6 @@ msgid "Confirm your new email address — the button expires in 15 minutes."
 msgstr "آدرس ایمیل جدید خود را تأیید کنید — دکمه پس از ۱۵ دقیقه منقضی می‌شود."
 
 #: .\templates\emails\verify_email.html:6
-#| msgid "Confirm your new email address — the button expires in 15 minutes."
 msgid "Confirm your email address — the button expires in 15 minutes."
 msgstr "آدرس ایمیل خود را تأیید کنید — دکمه پس از ۱۵ دقیقه منقضی می‌شود."
 
@@ -2995,9 +2993,7 @@ msgid ""
 msgstr ""
 
 #: .\templates\emails\verify_email.html:19
-#| msgid ""
-#| "You received this email because a new address was requested for your "
-#| "%(site_name)s account."
+#, python-format
 msgid "Please confirm this email address for your %(site_name)s account:"
 msgstr "لطفاً این آدرس ایمیل را برای حساب %(site_name)s خود تأیید کنید:"
 
@@ -3027,13 +3023,11 @@ msgstr ""
 "فعال می‌ماند. می‌توانید درخواست را از صفحه پروفایل خود لغو کنید."
 
 #: .\templates\emails\verify_email.html:52
-#| msgid ""
-#| "If you didn't create an account, you can safely ignore this email — no "
-#| "account will be activated."
 msgid ""
 "If you didn't ask for this, you can ignore this email — nothing changes "
 "until an address is confirmed."
-msgstr "اگر شما این درخواست را نداده‌اید، می‌توانید این ایمیل را نادیده بگیرید؛ تا "
+msgstr ""
+"اگر شما این درخواست را نداده‌اید، می‌توانید این ایمیل را نادیده بگیرید؛ تا "
 "زمانی که آدرسی تأیید نشود، هیچ تغییری اعمال نمی‌شود."
 
 #: .\templates\emails\verify_email.html:65
@@ -3046,13 +3040,12 @@ msgstr ""
 "درخواست شده است."
 
 #: .\templates\emails\verify_email.html:67
-#| msgid ""
-#| "You received this email because a new address was requested for your "
-#| "%(site_name)s account."
+#, python-format
 msgid ""
 "You received this email because your %(site_name)s account email address "
 "needs confirmation."
-msgstr "این ایمیل را دریافت کرده‌اید چون آدرس ایمیل حساب %(site_name)s شما نیاز به "
+msgstr ""
+"این ایمیل را دریافت کرده‌اید چون آدرس ایمیل حساب %(site_name)s شما نیاز به "
 "تأیید دارد."
 
 #: .\templates\partials\language_switcher.html:6

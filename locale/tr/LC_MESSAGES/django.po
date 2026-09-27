@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-27 19:47+0330\n"
+"POT-Creation-Date: 2026-09-27 22:16+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -221,7 +221,7 @@ msgstr "Doğrulama Kodları"
 
 #: .\authentication\views.py:92 .\authentication\views.py:149
 #: .\authentication\views.py:218 .\authentication\views.py:283
-#: .\authentication\views.py:320 .\authentication\views.py:443
+#: .\authentication\views.py:320 .\authentication\views.py:446
 msgid "You are already logged in."
 msgstr "Zaten giriş yapmış durumdasınız."
 
@@ -277,24 +277,24 @@ msgstr "Şifrenizi Sıfırlayın"
 msgid "If that email is registered, you’ll receive reset instructions."
 msgstr "Bu e-posta kayıtlıysa, sıfırlama talimatlarını alacaksınız."
 
-#: .\authentication\views.py:454
+#: .\authentication\views.py:457
 msgid "Invalid or expired reset link."
 msgstr "Geçersiz veya süresi dolmuş sıfırlama bağlantısı."
 
-#: .\authentication\views.py:467
+#: .\authentication\views.py:470
 msgid "Invalid verification code."
 msgstr "Geçersiz doğrulama kodu."
 
-#: .\authentication\views.py:474
+#: .\authentication\views.py:477
 msgid "Password updated successfully."
 msgstr "Şifre başarıyla güncellendi."
 
-#: .\authentication\views.py:509 .\dashboard\forms.py:69
+#: .\authentication\views.py:512 .\dashboard\forms.py:69
 #: .\dashboard\forms.py:86 .\dashboard\forms.py:256
 msgid "This username is already taken."
 msgstr "Kullanıcı adı zaten alınmış."
 
-#: .\authentication\views.py:516 .\dashboard\views.py:525
+#: .\authentication\views.py:519 .\dashboard\views.py:525
 msgid "Username updated successfully."
 msgstr "Şifre başarıyla güncellendi."
 
@@ -656,29 +656,29 @@ msgstr "alıcı listesini aç"
 msgid "Deliver to the selected audience"
 msgstr "Seçili hedef kitleye gönder"
 
-#: .\core\admin.py:1025
+#: .\core\admin.py:1053
 #, python-format
 msgid "%(count)d new delivery created."
 msgid_plural "%(count)d new deliveries created."
 msgstr[0] "%(count)d yeni gönderim oluşturuldu."
 msgstr[1] "%(count)d yeni gönderim oluşturuldu."
 
-#: .\core\admin.py:1045
+#: .\core\admin.py:1073
 msgid "Mark selected deliveries as read"
 msgstr "Seçili gönderimleri okundu olarak işaretle"
 
-#: .\core\admin.py:1050
+#: .\core\admin.py:1078
 #, python-format
 msgid "%(count)d delivery marked as read."
 msgid_plural "%(count)d deliveries marked as read."
 msgstr[0] "%(count)d gönderim okundu olarak işaretlendi."
 msgstr[1] "%(count)d gönderim okundu olarak işaretlendi."
 
-#: .\core\admin.py:1055
+#: .\core\admin.py:1083
 msgid "Mark selected deliveries as unread"
 msgstr "Seçili gönderimleri okunmadı olarak işaretle"
 
-#: .\core\admin.py:1061
+#: .\core\admin.py:1089
 #, python-format
 msgid "%(count)d delivery marked as unread."
 msgid_plural "%(count)d deliveries marked as unread."
@@ -704,31 +704,31 @@ msgid_plural "%(count)d rows exported."
 msgstr[0] "%(count)d satır dışa aktarıldı."
 msgstr[1] "%(count)d satır dışa aktarıldı."
 
-#: .\core\context_processors.py:75
+#: .\core\context_processors.py:78
 msgid "Registration is required to see programs matching your search."
 msgstr "Aramanızla eşleşen programları görmek için kayıt olmanız gerekir."
 
-#: .\core\context_processors.py:78
+#: .\core\context_processors.py:81
 msgid "Thank you! You are on the scholarship alerts list."
 msgstr "Teşekkürler! Burs uyarıları listesindesiniz."
 
-#: .\core\context_processors.py:80
+#: .\core\context_processors.py:83
 msgid "Loading content..."
 msgstr "İçerik yükleniyor..."
 
-#: .\core\context_processors.py:81
+#: .\core\context_processors.py:84
 msgid "Loading Error"
 msgstr "Yükleme Hatası"
 
-#: .\core\context_processors.py:82
+#: .\core\context_processors.py:85
 msgid "Please try again or contact support"
 msgstr "Lütfen tekrar deneyin veya destek ile iletişime geçin"
 
-#: .\core\context_processors.py:83
+#: .\core\context_processors.py:86
 msgid "Reload Page"
 msgstr "Sayfayı Yenile"
 
-#: .\core\context_processors.py:85
+#: .\core\context_processors.py:88
 msgid "Email verified! Your account is fully active again."
 msgstr "E-posta doğrulandı! Hesabınız yeniden tamamen aktif."
 
@@ -1223,7 +1223,7 @@ msgstr "Kullanılmamış doğrulama kodları"
 msgid "Applications waiting on a decision"
 msgstr "Karar bekleyen başvurular"
 
-#: .\core\tests_notifications.py:109 .\core\utils\notifications.py:75
+#: .\core\tests_notifications.py:109 .\core\utils\notifications.py:90
 msgid "Welcome to ApplyBaMa!"
 msgstr "Apply BM Kontrol Merkezine Hoş Geldiniz"
 
@@ -1231,7 +1231,7 @@ msgstr "Apply BM Kontrol Merkezine Hoş Geldiniz"
 msgid "Invalid refresh token"
 msgstr "Geçersiz istek."
 
-#: .\core\utils\notifications.py:77
+#: .\core\utils\notifications.py:92
 msgid ""
 "Thank you for registering with ApplyBaMa! We're here to help you find your "
 "dream university and program. Explore our dashboard to search universities, "
@@ -1243,11 +1243,11 @@ msgstr ""
 "arayabilir, programlara göz atabilir ve başvurunuza başlayabilirsiniz. "
 "Yardıma ihtiyacınız olursa destek ekibimizle iletişime geçmekten çekinmeyin."
 
-#: .\core\utils\notifications.py:107 .\core\utils\notifications.py:113
+#: .\core\utils\notifications.py:122 .\core\utils\notifications.py:128
 msgid "Email address verified"
 msgstr "E-posta adresi doğrulandı"
 
-#: .\core\utils\notifications.py:109
+#: .\core\utils\notifications.py:124
 msgid ""
 "Your new email address has been confirmed and your account is fully active "
 "again. Everything works as normal."
@@ -1255,7 +1255,7 @@ msgstr ""
 "Yeni e-posta adresiniz onaylandı ve hesabınız yeniden tamamen aktif. Her şey "
 "normal şekilde çalışıyor."
 
-#: .\core\utils\notifications.py:115
+#: .\core\utils\notifications.py:130
 msgid ""
 "Your email address has been confirmed. All features of your account are now "
 "available."
@@ -1341,9 +1341,9 @@ msgid "You do not have permission to access this page."
 msgstr "Bu sayfaya erişim izniniz yok."
 
 #: .\dashboard\views.py:425 .\dashboard\views.py:967 .\dashboard\views.py:1001
-#: .\dashboard\views.py:1067 .\dashboard\views.py:1099
-#: .\dashboard\views.py:1124 .\dashboard\views.py:1136
-#: .\dashboard\views.py:1158
+#: .\dashboard\views.py:1094 .\dashboard\views.py:1126
+#: .\dashboard\views.py:1151 .\dashboard\views.py:1163
+#: .\dashboard\views.py:1185
 msgid "Permission denied."
 msgstr "İzin reddedildi."
 
@@ -1397,7 +1397,6 @@ msgstr "Yeni e-posta adresinizi doğrulayın"
 
 #: .\dashboard\views.py:616 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
-#| msgid "Verify your new email address"
 msgid "Verify your email address"
 msgstr "E-posta adresinizi doğrulayın"
 
@@ -1432,9 +1431,9 @@ msgid "Application created successfully."
 msgstr "Başvuru başarıyla oluşturuldu."
 
 #: .\dashboard\views.py:745 .\dashboard\views.py:784 .\dashboard\views.py:794
-#: .\dashboard\views.py:836 .\dashboard\views.py:999 .\dashboard\views.py:1043
-#: .\dashboard\views.py:1059 .\dashboard\views.py:1122
-#: .\dashboard\views.py:1156
+#: .\dashboard\views.py:836 .\dashboard\views.py:999 .\dashboard\views.py:1070
+#: .\dashboard\views.py:1086 .\dashboard\views.py:1149
+#: .\dashboard\views.py:1183
 msgid "Invalid request."
 msgstr "Geçersiz istek."
 
@@ -1458,7 +1457,7 @@ msgstr ""
 msgid "Failed to send request. Please try again."
 msgstr "İstek gönderilemedi. Lütfen tekrar deneyin."
 
-#: .\dashboard\views.py:1010 .\dashboard\views.py:1167
+#: .\dashboard\views.py:1010 .\dashboard\views.py:1194
 msgid "All fields are required."
 msgstr "Tüm hakları saklıdır."
 
@@ -1466,21 +1465,21 @@ msgstr "Tüm hakları saklıdır."
 msgid "Please select at least one user."
 msgstr "Lütfen en az bir kullanıcı seçin."
 
-#: .\dashboard\views.py:1036
+#: .\dashboard\views.py:1063
 msgid "Notification sent successfully!"
 msgstr "Başvuru başarıyla oluşturuldu."
 
-#: .\dashboard\views.py:1052 .\dashboard\views.py:1130
-#: .\dashboard\views.py:1149 .\dashboard\views.py:1196
-#: .\dashboard\views.py:1212
+#: .\dashboard\views.py:1079 .\dashboard\views.py:1157
+#: .\dashboard\views.py:1176 .\dashboard\views.py:1250
+#: .\dashboard\views.py:1266
 msgid "Not found."
 msgstr "Sayfa bulunamadı."
 
-#: .\dashboard\views.py:1128
+#: .\dashboard\views.py:1155
 msgid "Notification deleted."
 msgstr "Başvuru silindi."
 
-#: .\dashboard\views.py:1194
+#: .\dashboard\views.py:1248
 msgid "Notification updated successfully!"
 msgstr "İletişim bilgileri başarıyla güncellendi."
 
@@ -2431,7 +2430,7 @@ msgid ""
 msgstr ""
 
 #: .\templates\dashboard\fragments\profile.html:23
-#: .\templates\dashboard\fragments\verification_required.html:28
+#: .\templates\dashboard\fragments\verification_required.html:31
 msgid "Resend verification email"
 msgstr "Doğrulama e-postasını yeniden gönder"
 
@@ -2449,12 +2448,12 @@ msgid ""
 "Your account is in read-only mode until we confirm that <strong>%(email)s</"
 "strong> belongs to you. Send yourself a verification link and open it to "
 "activate your account."
-msgstr "Hesabınız, <strong>%(email)s</strong> adresinin size ait olduğu "
-"doğrulanana kadar salt okunur moddadır. Kendinize bir doğrulama bağlantısı "
-"gönderin ve hesabınızı etkinleştirmek için açın."
+msgstr ""
+"Hesabınız, <strong>%(email)s</strong> adresinin size ait olduğu doğrulanana "
+"kadar salt okunur moddadır. Kendinize bir doğrulama bağlantısı gönderin ve "
+"hesabınızı etkinleştirmek için açın."
 
 #: .\templates\dashboard\fragments\profile.html:36
-#| msgid "Resend verification email"
 msgid "Send verification email"
 msgstr "Doğrulama e-postası gönder"
 
@@ -3004,9 +3003,9 @@ msgstr ""
 "Yeni e-posta adresinizi onaylayın — düğmenin süresi 15 dakika sonra doluyor."
 
 #: .\templates\emails\verify_email.html:6
-#| msgid "Confirm your new email address — the button expires in 15 minutes."
 msgid "Confirm your email address — the button expires in 15 minutes."
-msgstr "E-posta adresinizi onaylayın — düğmenin süresi 15 dakika sonra doluyor."
+msgstr ""
+"E-posta adresinizi onaylayın — düğmenin süresi 15 dakika sonra doluyor."
 
 #: .\templates\emails\verify_email.html:17
 #, python-format
@@ -3016,9 +3015,7 @@ msgid ""
 msgstr ""
 
 #: .\templates\emails\verify_email.html:19
-#| msgid ""
-#| "You received this email because a new address was requested for your "
-#| "%(site_name)s account."
+#, python-format
 msgid "Please confirm this email address for your %(site_name)s account:"
 msgstr "Lütfen %(site_name)s hesabınız için bu e-posta adresini onaylayın:"
 
@@ -3048,13 +3045,11 @@ msgstr ""
 "adresiniz aktif kalır. İsteği profil sayfanızdan iptal edebilirsiniz."
 
 #: .\templates\emails\verify_email.html:52
-#| msgid ""
-#| "If you didn't create an account, you can safely ignore this email — no "
-#| "account will be activated."
 msgid ""
 "If you didn't ask for this, you can ignore this email — nothing changes "
 "until an address is confirmed."
-msgstr "Bunu siz talep etmediyseniz bu e-postayı yok sayabilirsiniz — bir adres "
+msgstr ""
+"Bunu siz talep etmediyseniz bu e-postayı yok sayabilirsiniz — bir adres "
 "onaylanana kadar hiçbir şey değişmez."
 
 #: .\templates\emails\verify_email.html:65
@@ -3067,13 +3062,12 @@ msgstr ""
 "için aldınız."
 
 #: .\templates\emails\verify_email.html:67
-#| msgid ""
-#| "You received this email because a new address was requested for your "
-#| "%(site_name)s account."
+#, python-format
 msgid ""
 "You received this email because your %(site_name)s account email address "
 "needs confirmation."
-msgstr "Bu e-postayı, %(site_name)s hesabınızın e-posta adresinin onaylanması "
+msgstr ""
+"Bu e-postayı, %(site_name)s hesabınızın e-posta adresinin onaylanması "
 "gerektiği için aldınız."
 
 #: .\templates\partials\language_switcher.html:6

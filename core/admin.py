@@ -1019,6 +1019,34 @@ class NotificationAdmin(CsvExportMixin, admin.ModelAdmin):
             NotificationRecipient.objects.bulk_create(rows, ignore_conflicts=True)
             after = NotificationRecipient.objects.filter(notification=notification).count()
             created_total += max(after - before, 0)
+
+            # Realtime: only users that were actually delivered to just now
+            # (already-delivered recipients are kept untouched by
+            # ignore_conflicts, so re-delivering must not re-toast them).
+            if rows:
+                from realtime.push import notify_user
+
+                delivered_ids = set(recipients.values_list("id", flat=True))
+                delivered_rows = [r for r in rows if r.user_id in delivered_ids]
+                unread_by_user = {
+                    row["user_id"]: row["unread"]
+                    for row in NotificationRecipient.objects.filter(
+                        user_id__in=[r.user_id for r in delivered_rows], is_read=False
+                    )
+                    .values("user_id")
+                    .annotate(unread=Count("id"))
+                }
+                for row in delivered_rows:
+                    notify_user(
+                        row.user_id,
+                        {
+                            "id": notification.id,
+                            "title": notification.title,
+                            "message": notification.message,
+                            "notification_type": notification.notification_type,
+                            "unread_count": unread_by_user.get(row.user_id, 1),
+                        },
+                    )
         self.message_user(
             request,
             ngettext(

@@ -804,26 +804,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function updateUnreadBadge() {
-    if (!window.AppConfig.urls.unreadCount) return;
-    fetch(window.AppConfig.urls.unreadCount, {
-      headers: { "X-Requested-With": "XMLHttpRequest" }
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        const badge = document.getElementById("notifBadge");
-        if (badge) {
-          if (data.count > 0) {
-            badge.textContent = data.count;
-            badge.classList.remove("hidden");
-            badge.classList.add("badge-pulse");
-          } else {
-            badge.classList.add("hidden");
-            badge.classList.remove("badge-pulse");
-          }
-        }
-      });
-  }
+  // --- Realtime notifications (WebSocket, see static/js/realtime.js) -------
+  // realtime.js re-dispatches pushed server events as document CustomEvents.
+  // The sidebar badge and toasts are handled there for every page; this
+  // listener only keeps the open fragment fresh. No polling: the socket is
+  // the source of truth.
+  document.addEventListener("ab:notification-new", function () {
+    // If the open fragment IS the notifications list, refresh it in place so
+    // the new item appears without a manual reload. The composer page
+    // ("notifications") is deliberately not reloaded — a re-render would wipe
+    // the form the user is working in.
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("page") === "my_notifications") {
+      loadContent("my_notifications");
+    }
+  });
 
   function handleSendNotification(form) {
     const formData = new FormData(form);
@@ -1107,7 +1102,7 @@ document.addEventListener("DOMContentLoaded", function () {
   p.delete("page");
   loadContent(initialPage, p.toString());
 
-  // Initialize unread count polling
-  updateUnreadBadge();
-  setInterval(updateUnreadBadge, 30000);
+  // Initial badge value comes from the server once; afterwards the WebSocket
+  // is the source of truth (realtime.js updates the badge on every push and
+  // re-syncs it on reconnect), so the old 30-second polling interval is gone.
 });

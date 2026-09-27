@@ -50,6 +50,25 @@ CACHES = {
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
 
+# WebSockets run through Channels with a Redis channel layer so a push from
+# any worker (HTTP or Celery) reaches sockets held by every other worker.
+# The public site is served behind proxies, so browsers connect with wss://
+# to the same host; list any extra origins (e.g. an admin panel host) here.
+_ws_origins = [o for o in os.getenv("WEBSOCKET_ALLOWED_ORIGINS", "").split(",") if o]
+if _ws_origins:
+    ALLOWED_HOSTS += _ws_origins
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.getenv("CHANNEL_REDIS_URL", "redis://localhost:6379/1")],
+        },
+    }
+}
+
+# ASGI server for production (never runserver): daphne ApplyBaMa.asgi:application
+
 # Security settings for production
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True

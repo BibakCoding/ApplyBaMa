@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from core.models import Notification, NotificationRecipient
+from realtime.push import notify_user
 
 User = get_user_model()
 
@@ -57,6 +58,20 @@ def send_notification(user, title, message, notification_type='info', sender=Non
         notification=notification,
         user=user,
         is_read=False,
+    )
+
+    # Realtime: any open dashboard/browser tab learns about it without a
+    # refresh. Unread count is computed here so the badge is exact.
+    unread_count = NotificationRecipient.objects.filter(user=user, is_read=False).count()
+    notify_user(
+        user.pk,
+        {
+            "id": notification.id,
+            "title": notification.title,
+            "message": notification.message,
+            "notification_type": notification.notification_type,
+            "unread_count": unread_count,
+        },
     )
 
     return notification_recipient

@@ -1033,6 +1033,33 @@ def send_notification(request):
     if nr_objects:
         NotificationRecipient.objects.bulk_create(nr_objects, ignore_conflicts=True)
 
+    # Realtime: push to every targeted user's open tabs. Unread totals are
+    # computed in one query for all recipients, not one query per user.
+    from django.db.models import Count
+
+    from realtime.push import notify_user
+
+    recipient_ids = [nr.user_id for nr in nr_objects]
+    unread_by_user = {
+        row["user_id"]: row["unread"]
+        for row in NotificationRecipient.objects.filter(
+            user_id__in=recipient_ids, is_read=False
+        )
+        .values("user_id")
+        .annotate(unread=Count("id"))
+    }
+    for nr in nr_objects:
+        notify_user(
+            nr.user_id,
+            {
+                "id": notification.id,
+                "title": notification.title,
+                "message": notification.message,
+                "notification_type": notification.notification_type,
+                "unread_count": unread_by_user.get(nr.user_id, 1),
+            },
+        )
+
     return JsonResponse({"success": True, "message": _("Notification sent successfully!")})
 
 
@@ -1190,6 +1217,33 @@ def update_notification(request, pk):
 
         # Reset read status for ALL current recipients so they see the updated message
         NotificationRecipient.objects.filter(notification=n).update(is_read=False, read_at=None)
+
+        # Realtime: every current recipient gets the update pushed (same
+        # payload shape as a fresh notification; unread totals in one query).
+        from django.db.models import Count
+
+        from realtime.push import notify_user
+
+        current_recipients = list(NotificationRecipient.objects.filter(notification=n))
+        unread_by_user = {
+            row["user_id"]: row["unread"]
+            for row in NotificationRecipient.objects.filter(
+                user_id__in=[r.user_id for r in current_recipients], is_read=False
+            )
+            .values("user_id")
+            .annotate(unread=Count("id"))
+        }
+        for nr in current_recipients:
+            notify_user(
+                nr.user_id,
+                {
+                    "id": n.id,
+                    "title": n.title,
+                    "message": n.message,
+                    "notification_type": n.notification_type,
+                    "unread_count": unread_by_user.get(nr.user_id, 1),
+                },
+            )
 
         return JsonResponse({"success": True, "message": _("Notification updated successfully!")})
     except Notification.DoesNotExist:

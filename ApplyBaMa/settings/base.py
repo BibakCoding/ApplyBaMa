@@ -7,6 +7,7 @@ from .jwt_config import *
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 INSTALLED_APPS = [
+    "daphne",  # runserver serves ASGI (WebSockets) — must precede staticfiles
     "modeltranslation",
     "solo",
     "django.contrib.admin",
@@ -20,9 +21,19 @@ INSTALLED_APPS = [
     "dashboard.apps.DashboardConfig",
     "data_fetch.apps.DataFetchConfig",
     "api.apps.ApiConfig",
+    "realtime",  # WebSocket consumers + server-push helpers
     "django_celery_beat",
     "rosetta",
 ]
+
+# WebSocket infrastructure. Locally the in-memory layer is enough because the
+# whole site (HTTP + WebSockets) runs in one process; production swaps in Redis
+# so every worker can reach every open socket (see settings/prod.py).
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    }
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -56,6 +67,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "ApplyBaMa.wsgi.application"
+# ASGI entry point: the daphne-installed runserver (and any ASGI deployment)
+# serves WebSockets from this application (see ApplyBaMa/asgi.py).
+ASGI_APPLICATION = "ApplyBaMa.asgi.application"
 
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -16,6 +16,8 @@ from django.conf import settings
 from django.urls import NoReverseMatch, reverse
 from django.utils.translation import gettext_lazy as _
 
+from realtime.routing import WS_NOTIFY_PATH
+
 
 def _url(name, *args):
     """Reverse ``name``, returning an empty string when it is not mounted.
@@ -62,6 +64,7 @@ def app_config(request):
                 "resendEmailVerification": _url("resend_email_verification"),
                 "cancelEmailChange": _url("cancel_email_change"),
                 # Notifications
+                "notifySocket": "/" + WS_NOTIFY_PATH,
                 "sendNotification": _url("send_notification"),
                 "searchUsers": _url("search_users_for_notification"),
                 "getGroupUsers": _url("get_group_user_ids"),

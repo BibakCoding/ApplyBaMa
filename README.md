@@ -13,6 +13,7 @@ The site is fully translatable (English, Persian, Turkish, Arabic) with RTL supp
 - SQLite for local development
 - MySQL or PostgreSQL for production
 - Celery (in-memory/eager locally, Redis in production) and django-celery-beat for scheduled tasks
+- Django Channels with Daphne for WebSockets (in-memory layer locally, Redis in production) — server-push notifications today, chat later
 - Selenium and BeautifulSoup for university data collection
 - Tailwind CSS compiled with PostCSS; Notyf, Font Awesome, and intl-tel-input self-hosted under `static/vendor/` (no CDN requests)
 - django-rosetta and django-modeltranslation for translations
@@ -129,7 +130,7 @@ The admin panel is served at `/admin/`.
 python manage.py runserver
 ```
 
-Open <http://127.0.0.1:8000/> in a browser. `manage.py` selects `ApplyBaMa.settings.dev` by default. Locally, Celery runs tasks eagerly in-process (`memory://` broker), so no separate worker process is needed.
+Open <http://127.0.0.1:8000/> in a browser. `manage.py` selects `ApplyBaMa.settings.dev` by default. Locally, Celery runs tasks eagerly in-process (`memory://` broker), so no separate worker process is needed. `runserver` serves ASGI through Daphne (the `daphne` entry in `INSTALLED_APPS` handles this), so the WebSocket endpoint at `/ws/notify/` works out of the box — logged-in users get pushed notifications (badge + toast) without reloading.
 
 ## Frontend Assets
 
@@ -191,6 +192,14 @@ JSON endpoints live under `/api/` and authenticate with JWT (HS256; access token
 | `/api/dashboard/stats/` | GET | Dashboard statistics for the current user |
 | `/api/applications/` | GET | The current user's applications |
 | `/api/notifications/` | GET | The current user's notifications |
+
+### WebSockets
+
+| Endpoint | Purpose |
+|---|---|
+| `/ws/notify/` | Per-user server-push stream (session-authenticated; anonymous connections are closed) |
+
+Events arrive as JSON with a `type` field — today `connection.established` and `notification.new` (id, title, message, notification_type, unread_count). The browser side (`static/js/realtime.js`) re-dispatches them as document CustomEvents (`ab:notification-new`, `ab:notifications-read`, `ab:connected`), so page scripts react without knowing about WebSockets. Server code pushes with `realtime.push.notify_user(user_id, payload)`.
 | `/api/cities/` | GET | City lookup for forms |
 
 ## Production Dependencies
@@ -201,13 +210,20 @@ Install the production dependency set with:
 pip install -r requirements/prod.txt
 ```
 
-This includes the shared dependencies plus MySQL/PostgreSQL drivers, Gunicorn, and WhiteNoise. Run application code behind a real WSGI server such as Gunicorn — never Django's development server.
+This includes the shared dependencies plus MySQL/PostgreSQL drivers, Gunicorn, and WhiteNoise. HTTP is served by Gunicorn; the WebSocket endpoint (`/ws/notify/`) is served by Daphne next to it:
+
+```bash
+gunicorn ApplyBaMa.wsgi:application
+daphne -p 8001 ApplyBaMa.asgi:application
+```
+
+Point the proxy's `/ws/` location at the Daphne port and let it forward the `Upgrade`/`Connection` headers; browsers then connect with `wss://` on the public origin, which `ALLOWED_HOSTS`/`WEBSOCKET_ALLOWED_ORIGINS` already cover. WebSockets share the session cookie with HTTP, so no extra auth handshake is required.
 
 Production also needs:
 
 - A MySQL or PostgreSQL database (configured through `DB_*` variables)
 - Memcached for the cache (`CACHE_LOCATION`)
-- Redis plus running Celery worker and beat processes for background and scheduled tasks
+- Redis plus running Celery worker and beat processes for background and scheduled tasks — and a Redis channel layer for WebSockets (`CHANNEL_REDIS_URL`, default `redis://localhost:6379/1`; a second Redis DB on the same server is fine)
 - The environment variables required by `ApplyBaMa/settings/prod.py`, including `SECRET_KEY` and email settings
 
 ## Environment Variables
@@ -221,6 +237,8 @@ Production also needs:
 | `DB_ENGINE`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT` | prod | Yes | Database connection (defaults to MySQL on localhost) |
 | `CACHE_LOCATION` | prod | No | Memcached address (default `127.0.0.1:11211`) |
 | `CELERY_BROKER_URL` / `CELERY_RESULT_BACKEND` | prod | No | Redis addresses (default `redis://localhost:6379/0`) |
+| `CHANNEL_REDIS_URL` | prod | No | Redis address for the WebSocket channel layer (default `redis://localhost:6379/1`) |
+| `WEBSOCKET_ALLOWED_ORIGINS` | prod | No | Comma-separated extra origins allowed to open WebSockets (added to `ALLOWED_HOSTS`) |
 
 ## Dependency Notes
 
