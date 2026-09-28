@@ -1072,7 +1072,19 @@ class NotificationRecipientAdmin(admin.ModelAdmin):
 
     @admin.action(description=_("Mark selected deliveries as read"), permissions=["change"])
     def mark_read(self, request, queryset):
+        user_ids = list(queryset.values_list("user_id", flat=True).distinct())
         updated = queryset.update(is_read=True, read_at=timezone.now())
+        if updated:
+            # Realtime: the affected users' other tabs drop the unread badge.
+            from realtime.push import notify_user, unread_counts_for_users
+
+            unread_by_user = unread_counts_for_users(user_ids)
+            for user_id in user_ids:
+                notify_user(
+                    user_id,
+                    {"unread_count": unread_by_user.get(user_id, 0)},
+                    type="notifications.read",
+                )
         self.message_user(
             request,
             ngettext("%(count)d delivery marked as read.", "%(count)d deliveries marked as read.", updated)
@@ -1082,7 +1094,20 @@ class NotificationRecipientAdmin(admin.ModelAdmin):
 
     @admin.action(description=_("Mark selected deliveries as unread"), permissions=["change"])
     def mark_unread(self, request, queryset):
+        user_ids = list(queryset.values_list("user_id", flat=True).distinct())
         updated = queryset.update(is_read=False, read_at=None)
+        if updated:
+            # Realtime: re-raised unread counts reach the user's open tabs,
+            # but as a silent badge move — not as a "new notification" toast.
+            from realtime.push import notify_user, unread_counts_for_users
+
+            unread_by_user = unread_counts_for_users(user_ids)
+            for user_id in user_ids:
+                notify_user(
+                    user_id,
+                    {"unread_count": unread_by_user.get(user_id, 0)},
+                    type="notifications.read",
+                )
         self.message_user(
             request,
             ngettext(

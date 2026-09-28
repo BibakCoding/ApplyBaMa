@@ -770,7 +770,10 @@ document.addEventListener("DOMContentLoaded", function () {
               item.classList.remove("bg-blue-50", "border-blue-200");
               item.classList.add("bg-gray-50", "border-gray-200");
 
-              updateUnreadBadge();
+              // The read event also reaches this tab through the WebSocket
+              // (notifications.read -> ab:notifications-read in realtime.js),
+              // which moves the sidebar badge in every other tab without a
+              // refresh — the old updateUnreadBadge() poll is gone.
             }
           });
       });
@@ -809,16 +812,24 @@ document.addEventListener("DOMContentLoaded", function () {
   // The sidebar badge and toasts are handled there for every page; this
   // listener only keeps the open fragment fresh. No polling: the socket is
   // the source of truth.
-  document.addEventListener("ab:notification-new", function () {
+  function refreshMyNotificationsIfOpen() {
     // If the open fragment IS the notifications list, refresh it in place so
-    // the new item appears without a manual reload. The composer page
+    // it matches the pushed state without a manual reload. The composer page
     // ("notifications") is deliberately not reloaded — a re-render would wipe
     // the form the user is working in.
     const params = new URLSearchParams(window.location.search);
     if (params.get("page") === "my_notifications") {
       loadContent("my_notifications");
     }
-  });
+  }
+
+  document.addEventListener("ab:notification-new", refreshMyNotificationsIfOpen);
+
+  // Read-state sync: this tab (a modal click, or "mark all as read") or
+  // another tab of the same account marking things read pushes
+  // notifications.read, which realtime.js turns into a badge move — and into
+  // a refresh of the open list so read styling matches without a reload.
+  document.addEventListener("ab:notifications-read", refreshMyNotificationsIfOpen);
 
   function handleSendNotification(form) {
     const formData = new FormData(form);

@@ -17,6 +17,26 @@ from channels.layers import get_channel_layer
 logger = logging.getLogger(__name__)
 
 
+def unread_counts_for_users(user_ids):
+    """Return ``{user_id: unread_total}`` for the given user ids.
+
+    One aggregate query instead of one per user; producers attach the result
+    to their events so the browser can move the unread badge without a
+    round-trip. Users with zero unread are simply absent from the mapping.
+    """
+    from django.db.models import Count
+
+    from core.models import NotificationRecipient
+
+    user_ids = list(user_ids)
+    if not user_ids:
+        return {}
+    rows = NotificationRecipient.objects.filter(
+        user_id__in=user_ids, is_read=False
+    ).values("user_id").annotate(unread=Count("id"))
+    return {row["user_id"]: row["unread"] for row in rows}
+
+
 def notify_user(user_id, payload, type="notification.new"):
     """Push a realtime event to one user's open sockets.
 

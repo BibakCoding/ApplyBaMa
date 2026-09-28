@@ -1074,6 +1074,20 @@ def mark_notification_read(request, pk):
             nr.is_read = True
             nr.read_at = timezone.now()
             nr.save()
+            # Realtime read sync: other tabs of the same account drop their
+            # unread badge count without polling.
+            from realtime.push import notify_user, unread_counts_for_users
+
+            notify_user(
+                request.user.pk,
+                {
+                    "id": pk,
+                    "unread_count": unread_counts_for_users([request.user.pk]).get(
+                        request.user.pk, 0
+                    ),
+                },
+                type="notifications.read",
+            )
         return JsonResponse({"success": True})
     except NotificationRecipient.DoesNotExist:
         return JsonResponse({"success": False, "message": _("Not found.")})
@@ -1084,7 +1098,15 @@ def mark_notification_read(request, pk):
 def mark_all_notifications_read(request):
     if request.method != "POST":
         return JsonResponse({"success": False, "message": _("Invalid request.")})
-    NotificationRecipient.objects.filter(user=request.user, is_read=False).update(is_read=True, read_at=timezone.now())
+    updated = NotificationRecipient.objects.filter(
+        user=request.user, is_read=False
+    ).update(is_read=True, read_at=timezone.now())
+    if updated:
+        # Realtime read sync for the user's other tabs: badge to zero without
+        # a refresh (only pushed when something actually changed).
+        from realtime.push import notify_user
+
+        notify_user(request.user.pk, {"unread_count": 0}, type="notifications.read")
     return JsonResponse({"success": True})
 
 
@@ -1258,6 +1280,20 @@ def notification_detail(request, pk):
             nr.is_read = True
             nr.read_at = timezone.now()
             nr.save()
+            # Opening the detail modal counts as reading: sync the unread
+            # badge across the account's other tabs too.
+            from realtime.push import notify_user, unread_counts_for_users
+
+            notify_user(
+                request.user.pk,
+                {
+                    "id": pk,
+                    "unread_count": unread_counts_for_users([request.user.pk]).get(
+                        request.user.pk, 0
+                    ),
+                },
+                type="notifications.read",
+            )
         n = nr.notification
     except NotificationRecipient.DoesNotExist:
         if request.user.is_staff or request.user.is_superuser:
