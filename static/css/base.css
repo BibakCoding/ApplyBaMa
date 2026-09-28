@@ -519,3 +519,29 @@ html[lang="ar"] body, html[lang="fa"] body { letter-spacing: 0; }
     .ab-main { padding-block: 1.25rem; }
     .ab-section { padding-block: 2rem; }
 }
+
+/* ==========================================================================
+   TOAST CONTENT (notify.js)
+   A notification carries a title and a body; window.notify renders them as two
+   blocks inside ONE Notyf toast (.notyf__message) instead of as two separate
+   banners. Notyf's own stylesheet is vendored and stays untouched, so only the
+   blocks are styled here. Text colour is inherited (Notyf paints white on the
+   type's background).
+========================================================================== */
+
+.ab-toast__title {
+    display: block;
+    font-weight: 700;
+    line-height: 1.35;
+    /* A title is server text: it may contain a long unbroken token. */
+    overflow-wrap: anywhere;
+}
+
+.ab-toast__body {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.875em;
+    line-height: 1.45;
+    opacity: 0.92;
+    overflow-wrap: anywhere;
+}

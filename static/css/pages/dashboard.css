@@ -253,6 +253,12 @@
     min-height: 100vh;
     background: var(--ab-bg, #F9FAFB);
     margin-inline-start: var(--ab-sidebar-width); /* 🔥 RTL FIX: Replaced margin-left */
+    /* Flex items default to min-width:auto, so a wide fragment (a data table
+       inside .overflow-x-auto, a long unbroken string) would stretch this
+       column past the viewport and the wrapper's overflow-x:hidden would clip
+       it — the page simply could not be read on a narrow screen. Allowing the
+       column to shrink keeps every fragment inside its own scroll container. */
+    min-width: 0;
 }
 
 .content-container {
@@ -505,6 +511,25 @@
 .content-container table td,
 .content-container table th {
     padding: 1rem 1.5rem;
+}
+
+/* Data tables carry five or more columns (e.g. Sent Notifications); the
+   desktop cell padding above alone can push a table wider than a phone.
+   Trim it on small screens and let the table scroll inside its .overflow-x-auto
+   wrapper, which is what that wrapper is for. */
+@media (max-width: 640px) {
+
+    .content-container table td,
+    .content-container table th {
+        padding: 0.65rem 0.85rem;
+    }
+
+    /* Field pairs written as `grid grid-cols-2` (the Add Student name row, the
+       program detail stats) have no breakpoint of their own: at phone width two
+       columns leave each field around 140px. Stack them instead. */
+    .content-container .grid.grid-cols-2 {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 /* Line-clamp utilities */

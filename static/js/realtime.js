@@ -137,11 +137,15 @@
 
         // 2. A toast through the site's single notifier. Only genuinely new
         //    notifications toast here; read-state sync events just move the
-        //    badge. Notyf renders string messages as text, so server content
-        //    cannot inject markup.
+        //    badge. The structured form of window.notify escapes the server
+        //    text, so it cannot inject markup, and keeps the title and the
+        //    message in ONE banner (title area + description).
         if (typeof window.notify === "function" && d.title) {
-            var kind = d.notification_type;
-            window.notify(d.title + (d.message ? "\n" + d.message : ""), kind);
+            window.notify({
+                title: d.title,
+                message: d.message,
+                type: d.notification_type
+            });
         }
     }
 

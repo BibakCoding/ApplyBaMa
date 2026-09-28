@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-27 22:16+0330\n"
+"POT-Creation-Date: 2026-09-28 20:36+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -178,8 +178,8 @@ msgid "Confirm Password"
 msgstr "تأكيد كلمة المرور"
 
 #: .\authentication\forms.py:60 .\authentication\forms.py:86
-#: .\templates\dashboard\fragments\my_students.html:18
-#: .\templates\dashboard\fragments\my_students.html:80
+#: .\templates\dashboard\fragments\my_students.html:26
+#: .\templates\dashboard\fragments\my_students.html:89
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
@@ -491,7 +491,7 @@ msgstr "الملف الشخصي"
 #: .\core\admin.py:506 .\core\admin.py:576 .\core\models.py:553
 #: .\core\templatetags\admin_extras.py:50
 #: .\core\templatetags\admin_extras.py:230
-#: .\templates\dashboard\fragments\my_students.html:19
+#: .\templates\dashboard\fragments\my_students.html:27
 #: .\templates\dashboard\fragments\welcome.html:64
 #: .\templates\dashboard\main.html:94
 msgid "Applications"
@@ -731,7 +731,7 @@ msgstr[5] "تم إنشاء %(count)d إرسال جديد."
 msgid "Mark selected deliveries as read"
 msgstr "وضع علامة مقروء على عمليات الإرسال المحددة"
 
-#: .\core\admin.py:1078
+#: .\core\admin.py:1090
 #, python-format
 msgid "%(count)d delivery marked as read."
 msgid_plural "%(count)d deliveries marked as read."
@@ -742,11 +742,11 @@ msgstr[3] "تم وضع علامة مقروء على %(count)d إرسال."
 msgstr[4] "تم وضع علامة مقروء على %(count)d إرسال."
 msgstr[5] "تم وضع علامة مقروء على %(count)d إرسال."
 
-#: .\core\admin.py:1083
+#: .\core\admin.py:1095
 msgid "Mark selected deliveries as unread"
 msgstr "وضع علامة غير مقروء على عمليات الإرسال المحددة"
 
-#: .\core\admin.py:1089
+#: .\core\admin.py:1114
 #, python-format
 msgid "%(count)d delivery marked as unread."
 msgid_plural "%(count)d deliveries marked as unread."
@@ -1330,13 +1330,13 @@ msgid ""
 msgstr "تم تأكيد عنوان بريدك الإلكتروني. جميع ميزات حسابك متاحة الآن."
 
 #: .\dashboard\forms.py:33 .\dashboard\forms.py:212
-#: .\templates\dashboard\fragments\my_students.html:67
+#: .\templates\dashboard\fragments\my_students.html:76
 #: .\templates\dashboard\fragments\profile.html:58
 msgid "First Name"
 msgstr "الاسم الأول"
 
 #: .\dashboard\forms.py:36 .\dashboard\forms.py:218
-#: .\templates\dashboard\fragments\my_students.html:71
+#: .\templates\dashboard\fragments\my_students.html:80
 #: .\templates\dashboard\fragments\profile.html:62
 msgid "Last Name"
 msgstr "اسم العائلة"
@@ -1351,7 +1351,7 @@ msgstr "اسم الأم"
 
 #: .\dashboard\forms.py:57 .\dashboard\forms.py:79 .\dashboard\forms.py:224
 #: .\templates\authentication\username_selection.html:57
-#: .\templates\dashboard\fragments\my_students.html:76
+#: .\templates\dashboard\fragments\my_students.html:85
 #: .\templates\dashboard\fragments\profile.html:122
 msgid "Username"
 msgstr "اسم المستخدم"
@@ -1374,7 +1374,7 @@ msgstr "رقم جواز السفر"
 msgid "Email Address"
 msgstr "عنوان البريد الإلكتروني"
 
-#: .\dashboard\forms.py:234 .\templates\dashboard\fragments\my_students.html:84
+#: .\dashboard\forms.py:234 .\templates\dashboard\fragments\my_students.html:93
 msgid "Temporary Password"
 msgstr "كلمة المرور المؤقتة"
 
@@ -1407,9 +1407,9 @@ msgid "You do not have permission to access this page."
 msgstr "ليس لديك إذن للوصول إلى هذه الصفحة."
 
 #: .\dashboard\views.py:425 .\dashboard\views.py:967 .\dashboard\views.py:1001
-#: .\dashboard\views.py:1094 .\dashboard\views.py:1126
-#: .\dashboard\views.py:1151 .\dashboard\views.py:1163
-#: .\dashboard\views.py:1185
+#: .\dashboard\views.py:1116 .\dashboard\views.py:1148
+#: .\dashboard\views.py:1173 .\dashboard\views.py:1185
+#: .\dashboard\views.py:1207
 msgid "Permission denied."
 msgstr "تم رفض الإذن."
 
@@ -1496,8 +1496,8 @@ msgstr "تم إنشاء الطلب بنجاح."
 
 #: .\dashboard\views.py:745 .\dashboard\views.py:784 .\dashboard\views.py:794
 #: .\dashboard\views.py:836 .\dashboard\views.py:999 .\dashboard\views.py:1070
-#: .\dashboard\views.py:1086 .\dashboard\views.py:1149
-#: .\dashboard\views.py:1183
+#: .\dashboard\views.py:1100 .\dashboard\views.py:1171
+#: .\dashboard\views.py:1205
 msgid "Invalid request."
 msgstr "طلب غير صالح."
 
@@ -1519,7 +1519,7 @@ msgstr "تم إرسال طلبك! سيتواصل معك فريقنا قريبا�
 msgid "Failed to send request. Please try again."
 msgstr "فشل إرسال الطلب. يرجى المحاولة مرة أخرى."
 
-#: .\dashboard\views.py:1010 .\dashboard\views.py:1194
+#: .\dashboard\views.py:1010 .\dashboard\views.py:1216
 msgid "All fields are required."
 msgstr "جميع الحقوق محفوظة."
 
@@ -1531,17 +1531,17 @@ msgstr "يرجى اختيار مستخدم واحد على الأقل."
 msgid "Notification sent successfully!"
 msgstr "تم إنشاء الطلب بنجاح."
 
-#: .\dashboard\views.py:1079 .\dashboard\views.py:1157
-#: .\dashboard\views.py:1176 .\dashboard\views.py:1250
-#: .\dashboard\views.py:1266
+#: .\dashboard\views.py:1093 .\dashboard\views.py:1179
+#: .\dashboard\views.py:1198 .\dashboard\views.py:1272
+#: .\dashboard\views.py:1302
 msgid "Not found."
 msgstr "الصفحة غير موجودة."
 
-#: .\dashboard\views.py:1155
+#: .\dashboard\views.py:1177
 msgid "Notification deleted."
 msgstr "تم حذف الطلب."
 
-#: .\dashboard\views.py:1248
+#: .\dashboard\views.py:1270
 msgid "Notification updated successfully!"
 msgstr "تم تحديث معلومات الاتصال بنجاح."
 
@@ -2336,41 +2336,41 @@ msgid "Manage the students you are representing."
 msgstr "أدر الطلاب الذين تمثلهم."
 
 #: .\templates\dashboard\fragments\my_students.html:10
-#: .\templates\dashboard\fragments\my_students.html:55
+#: .\templates\dashboard\fragments\my_students.html:64
 msgid "Add New Student"
 msgstr "إضافة طالب جديد"
 
-#: .\templates\dashboard\fragments\my_students.html:17
+#: .\templates\dashboard\fragments\my_students.html:25
 msgid "Name"
 msgstr "الاسم"
 
-#: .\templates\dashboard\fragments\my_students.html:20
+#: .\templates\dashboard\fragments\my_students.html:28
 #: .\templates\dashboard\fragments\notifications.html:65
 msgid "Actions"
 msgstr "الإجراءات"
 
-#: .\templates\dashboard\fragments\my_students.html:32
+#: .\templates\dashboard\fragments\my_students.html:40
 #: .\templates\dashboard\fragments\welcome.html:70
 msgid "View Applications"
 msgstr "عرض الطلبات"
 
-#: .\templates\dashboard\fragments\my_students.html:40
+#: .\templates\dashboard\fragments\my_students.html:48
 msgid "No students added yet."
 msgstr "لم تتم إضافة طلاب بعد."
 
-#: .\templates\dashboard\fragments\my_students.html:90
+#: .\templates\dashboard\fragments\my_students.html:99
 msgid "Copy password"
 msgstr "أكد كلمة المرور الخاصة بك"
 
-#: .\templates\dashboard\fragments\my_students.html:96
+#: .\templates\dashboard\fragments\my_students.html:105
 msgid "Generate password"
 msgstr "إعادة تعيين كلمة المرور"
 
-#: .\templates\dashboard\fragments\my_students.html:102
+#: .\templates\dashboard\fragments\my_students.html:111
 msgid "Show/hide password"
 msgstr "تغيير كلمة المرور"
 
-#: .\templates\dashboard\fragments\my_students.html:111
+#: .\templates\dashboard\fragments\my_students.html:120
 msgid "Create Student Account"
 msgstr "إنشاء حساب طالب"
 
