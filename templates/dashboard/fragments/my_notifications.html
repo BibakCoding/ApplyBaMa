@@ -1,10 +1,19 @@
-{% load i18n %}
+{% load i18n custom_filters %}
 <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex flex-wrap gap-3 justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">{% trans "My Notifications" %}</h2>
-        <button id="markAllReadBtn" class="px-4 py-2 text-sm font-medium text-[#1E3A8A] border border-[#1E3A8A] rounded-lg hover:bg-[#1E3A8A] hover:!text-white transition-all duration-200">
-            <i class="fas fa-check-double mr-1"></i> {% trans "Mark all as read" %}
-        </button>
+        <div class="flex items-center gap-2">
+            <form id="notifSearchForm" data-section="my_notifications" class="relative" role="search">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                <input type="search" name="q" value="{{ search_query|default:'' }}"
+                       placeholder="{% trans 'Search title or message' %}"
+                       aria-label="{% trans 'Search notifications' %}"
+                       class="pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:border-[#1E3A8A] w-48 sm:w-64">
+            </form>
+            <button id="markAllReadBtn" class="px-4 py-2 text-sm font-medium text-[#1E3A8A] border border-[#1E3A8A] rounded-lg hover:bg-[#1E3A8A] hover:!text-white transition-all duration-200">
+                <i class="fas fa-check-double mr-1"></i> {% trans "Mark all as read" %}
+            </button>
+        </div>
     </div>
 
     <div class="space-y-4">
@@ -32,18 +41,46 @@
             </div>
         </div>
         {% empty %}
-        <p class="text-center text-gray-600 py-8">{% trans "You have no notifications." %}</p>
+        <p class="text-center text-gray-600 py-8">
+            {% if search_query %}{% trans "No notifications match your search." %}{% else %}{% trans "You have no notifications." %}{% endif %}
+        </p>
         {% endfor %}
     </div>
+
+    {% if page_obj.has_other_pages %}
+        {% comment %}Same pagination pattern as programs.html: filter_params serializes the search term once with a leading "&".{% endcomment %}
+        {% filter_params filters as filters_qs %}
+        <div class="flex items-center gap-2 flex-wrap justify-center mt-8">
+            {% if page_obj.has_previous %}
+                <button data-page="my_notifications" data-page-params="page={{ page_obj.previous_page_number }}{{ filters_qs }}"
+                        class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
+                    <i class="fas fa-chevron-left mr-1"></i> {% trans "Prev" %}
+                </button>
+            {% endif %}
+            {% for i in page_obj.paginator.page_range %}
+                {% if page_obj.number == i %}
+                    <span class="px-4 py-2 rounded-lg bg-[var(--ab-primary)] text-white font-bold shadow-sm text-sm">{{ i }}</span>
+                {% elif i >= page_obj.number|add:"-2" and i <= page_obj.number|add:"2" or i == 1 or i == page_obj.paginator.num_pages %}
+                    <button data-page="my_notifications" data-page-params="page={{ i }}{{ filters_qs }}"
+                            class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
+                        {{ i }}
+                    </button>
+                {% elif i == page_obj.number|add:"-3" or i == page_obj.number|add:"3" %}
+                    <span class="px-2 py-2 text-gray-400 text-sm">…</span>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <button data-page="my_notifications" data-page-params="page={{ page_obj.next_page_number }}{{ filters_qs }}"
+                        class="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition text-sm">
+                    {% trans "Next" %} <i class="fas fa-chevron-right ml-1"></i>
+                </button>
+            {% endif %}
+        </div>
+    {% endif %}
 </div>
 
-<div id="notificationModal" class="fixed inset-0 bg-opacity-50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4 transition-opacity duration-300">
-    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 relative border border-gray-200 transform transition-all duration-300">
-        <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-            <i class="fas fa-times"></i>
-        </button>
-        <div id="modalContent">
-            <!-- Populated by JS -->
-        </div>
-    </div>
-</div>
+{% comment %}
+The detail modal is NOT part of this fragment any more: it lives once in the
+dashboard shell (templates/dashboard/main.html), so no re-render of this list
+can delete it mid-read and it can centre on the viewport instead of the page.
+{% endcomment %}

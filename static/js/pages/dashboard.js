@@ -170,6 +170,10 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (form.id === "goToPageForm") {
       e.preventDefault();
       handleGoToPage(form);
+    } else if (form.id === "notifSearchForm") {
+      e.preventDefault();
+      const term = form.querySelector("input[name=q]").value.trim();
+      loadContent(form.dataset.section || "my_notifications", term ? "q=" + encodeURIComponent(term) : "");
     }
   });
 
@@ -810,10 +814,10 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSelectedUI();
   }
 
-  // The detail modal lives inside the fragment, so a re-render replaces the
-  // node the click handler just opened. These helpers keep that in one place:
-  // mark a row read in place (no reload), and close the modal (running any
-  // refresh that was deferred while it was open).
+  // The detail modal lives in the dashboard SHELL (main.html), so a fragment
+  // re-render can never delete it, and it centres on the viewport, not on the
+  // page. These helpers keep every open/close path in one place; closing also
+  // runs any fragment refresh that was deferred while the modal was open.
   function markNotificationItemRead(item) {
     const dot = item.querySelector(".w-3.h-3.bg-blue-600");
     if (dot) dot.remove();
@@ -835,53 +839,107 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function showNotificationModal(contentHtml) {
+    const modal = document.getElementById("notificationModal");
+    if (!modal) return;
+    document.getElementById("modalContent").innerHTML = contentHtml;
+    modal.classList.remove("hidden");
+  }
+
+  function notificationTypeBadge(type) {
+    const palette = {
+      success: "bg-green-100 text-green-800",
+      warning: "bg-yellow-100 text-yellow-800",
+      error: "bg-red-100 text-red-800",
+      info: "bg-blue-100 text-blue-800",
+    };
+    const label = { success: "Success", warning: "Warning", error: "Error", info: "Info" }[type] || "Reminder";
+    return `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${palette[type] || "bg-gray-100 text-gray-800"}">${label}</span>`;
+  }
+
+  // Escape closes the shell modal no matter which fragment is open.
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && isNotificationModalOpen()) closeNotificationModal();
+  });
+
   function initMyNotificationsScripts() {
     const modal = document.getElementById("notificationModal");
-    const modalContent = document.getElementById("modalContent");
     const closeModalBtn = document.getElementById("closeModalBtn");
     const markAllBtn = document.getElementById("markAllReadBtn");
+    const searchForm = document.getElementById("notifSearchForm");
 
     if (!modal) return;
 
+    // ONE click does everything: the modal opens at once with the row's own
+    // text (zero waiting), then the read is recorded. Filling the modal from
+    // the server response would need a round trip before anything appeared —
+    // which is exactly the "second click" behaviour this replaces.
     document.querySelectorAll(".notification-item").forEach((item) => {
       item.addEventListener("click", function () {
         const id = this.dataset.id;
+        const title = this.querySelector("h3");
+        const message = this.querySelector("p.text-gray-600");
+        const dateText = [...this.querySelectorAll("p")].find((p) =>
+          p.querySelector(".fa-clock"),
+        );
+
+        showNotificationModal(`
+          <div class="mb-4" id="notificationModalType"></div>
+          <h3 id="notificationModalTitle" class="text-xl font-bold text-gray-900 mb-2">${title ? title.textContent : ""}</h3>
+          <p class="text-gray-600 mb-4 whitespace-pre-wrap">${message ? message.textContent : ""}</p>
+          <p class="text-sm text-gray-500"><i class="far fa-clock mr-1"></i>${dateText ? dateText.textContent.trim() : ""}</p>
+        `);
+
+        // The list shows a truncated summary; replace it with the full body.
+        // If anything goes wrong the modal stays open with the summary text.
         fetch(`/dashboard/notifications/detail/${id}/`, {
-          headers: { "X-Requested-With": "XMLHttpRequest" }
+          headers: { "X-Requested-With": "XMLHttpRequest" },
         })
           .then((r) => r.json())
           .then((data) => {
-            if (data.success) {
-              let typeBadge = "";
-              if (data.type === "success") typeBadge = '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Success</span>';
-              else if (data.type === "warning") typeBadge = '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Warning</span>';
-              else if (data.type === "error") typeBadge = '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Error</span>';
-              else if (data.type === "info") typeBadge = '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Info</span>';
-              else typeBadge = '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Reminder</span>';
+            if (!data.success || !isNotificationModalOpen()) return;
+            document.getElementById("modalContent").innerHTML = `
+              <div class="mb-4">${notificationTypeBadge(data.type)}</div>
+              <h3 id="notificationModalTitle" class="text-xl font-bold text-gray-900 mb-2">${data.title}</h3>
+              <p class="text-gray-600 mb-4 whitespace-pre-wrap">${data.message}</p>
+              <p class="text-sm text-gray-500"><i class="far fa-clock mr-1"></i>${data.date}</p>
+            `;
+          })
+          .catch(() => {});
 
-              modalContent.innerHTML = `
-                <div class="mb-4">${typeBadge}</div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">${data.title}</h3>
-                <p class="text-gray-600 mb-4 whitespace-pre-wrap">${data.message}</p>
-                <p class="text-sm text-gray-500"><i class="far fa-clock mr-1"></i>${data.date}</p>
-              `;
-              modal.classList.remove("hidden");
+        // Record the read; the server pushes notifications.read back, which
+        // realtime.js turns into the badge move in every tab, and
+        // applyReadEvent below re-styles this row in place.
+        fetch(`/dashboard/notifications/mark-read/${id}/`, {
+          method: "POST",
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRFToken":
+              window.CSRF_TOKEN ||
+              (document.querySelector("[name=csrfmiddlewaretoken]") || {}).value ||
+              "",
+          },
+        }).catch(() => {});
 
-              markNotificationItemRead(item);
-
-              // The read event also reaches this tab through the WebSocket
-              // (notifications.read -> ab:notifications-read in realtime.js),
-              // which moves the sidebar badge in every other tab without a
-              // refresh — the old updateUnreadBadge() poll is gone.
-            }
-          });
+        markNotificationItemRead(this);
       });
     });
 
     if (closeModalBtn) {
       closeModalBtn.addEventListener("click", closeNotificationModal);
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) closeNotificationModal();
+    }
+
+    if (searchForm) {
+      // Enter submits (delegated handler below); typing searches after a short
+      // pause. The input re-renders the whole fragment server-side, so the
+      // term is passed back through loadContent and restored into the box.
+      let searchTimer;
+      searchForm.querySelector("input[name=q]").addEventListener("input", function () {
+        clearTimeout(searchTimer);
+        const term = this.value;
+        searchTimer = setTimeout(() => {
+          loadContent("my_notifications", "q=" + encodeURIComponent(term));
+        }, 350);
       });
     }
 
@@ -919,11 +977,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // A read change never needs a re-render: the rows are already rendered and
-  // only their read styling changes. Reloading here used to delete the detail
-  // modal (it lives inside this fragment) immediately after the click that
-  // opened it — the badge moved and no modal ever appeared. The composer page
-  // ("notifications") is deliberately not touched: a re-render would wipe the
-  // form the user is working in.
+  // only their read styling changes, so it is applied in place. The detail
+  // modal lives in the shell, so even a re-render could not close it any more —
+  // but an in-place update is still smoother than redrawing the list. The
+  // composer page ("notifications") is deliberately not touched: a re-render
+  // would wipe the form the user is working in.
   function applyReadEvent(event) {
     if (!isMyNotificationsOpen()) return;
     const id = (event.detail || {}).id;

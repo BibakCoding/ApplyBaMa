@@ -451,7 +451,24 @@ def dashboard_content(request, page):
         context["recipient_types"] = Notification.RecipientType.choices
 
     elif page == "my_notifications":
-        context["received_notifications"] = NotificationRecipient.objects.filter(user=request.user).select_related("notification").order_by("-notification__created_at")
+        # The list stays responsive as it grows: 20 per page, one query, and a
+        # search across the title AND the body (an OR filter — "binary search"
+        # does not apply to finding text in a database; Django does the matching
+        # in SQL over every page, not just the visible 20).
+        deliveries = NotificationRecipient.objects.filter(user=request.user).select_related("notification")
+        search_query = request.GET.get("q", "").strip()
+        if search_query:
+            deliveries = deliveries.filter(
+                Q(notification__title__icontains=search_query)
+                | Q(notification__message__icontains=search_query)
+            )
+        deliveries = deliveries.order_by("-notification__created_at")
+        page_obj = Paginator(deliveries, 20).get_page(request.GET.get("page"))
+
+        context["page_obj"] = page_obj
+        context["received_notifications"] = page_obj.object_list
+        context["search_query"] = search_query
+        context["filters"] = {"q": search_query}
 
     return render(request, content_map[page], context=context)
 

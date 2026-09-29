@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-29 12:30+0330\n"
+"POT-Creation-Date: 2026-09-29 13:45+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -294,7 +294,7 @@ msgstr "Şifre başarıyla güncellendi."
 msgid "This username is already taken."
 msgstr "Kullanıcı adı zaten alınmış."
 
-#: .\authentication\views.py:519 .\dashboard\views.py:525
+#: .\authentication\views.py:519 .\dashboard\views.py:556
 msgid "Username updated successfully."
 msgstr "Şifre başarıyla güncellendi."
 
@@ -1324,7 +1324,7 @@ msgstr "E-posta zaten kullanımda."
 msgid "Password must be at least 8 characters long."
 msgstr "Şifre en az 8 karakter uzunluğunda olmalıdır."
 
-#: .\dashboard\views.py:106
+#: .\dashboard\views.py:120
 msgid ""
 "Your email address is not verified, so your account is in read-only mode. "
 "Verify it from your profile page to continue."
@@ -1332,38 +1332,38 @@ msgstr ""
 "E-posta adresiniz doğrulanmadı, bu nedenle hesabınız salt okunur modda. "
 "Devam etmek için profil sayfanızdan doğrulayın."
 
-#: .\dashboard\views.py:148
+#: .\dashboard\views.py:162
 msgid "Page not found."
 msgstr "Sayfa bulunamadı."
 
-#: .\dashboard\views.py:159 .\dashboard\views.py:433
+#: .\dashboard\views.py:173 .\dashboard\views.py:447
 msgid "You do not have permission to access this page."
 msgstr "Bu sayfaya erişim izniniz yok."
 
-#: .\dashboard\views.py:425 .\dashboard\views.py:967 .\dashboard\views.py:1001
-#: .\dashboard\views.py:1116 .\dashboard\views.py:1148
-#: .\dashboard\views.py:1173 .\dashboard\views.py:1185
-#: .\dashboard\views.py:1207
+#: .\dashboard\views.py:439 .\dashboard\views.py:1006 .\dashboard\views.py:1040
+#: .\dashboard\views.py:1155 .\dashboard\views.py:1187
+#: .\dashboard\views.py:1212 .\dashboard\views.py:1224
+#: .\dashboard\views.py:1246
 msgid "Permission denied."
 msgstr "İzin reddedildi."
 
-#: .\dashboard\views.py:509
+#: .\dashboard\views.py:540
 msgid "Personal information updated successfully."
 msgstr "Kişisel bilgiler başarıyla güncellendi."
 
-#: .\dashboard\views.py:517
+#: .\dashboard\views.py:548
 msgid "Identity and profile photo updated successfully."
 msgstr "Öğrenci profili başarıyla güncellendi."
 
-#: .\dashboard\views.py:546
+#: .\dashboard\views.py:577
 msgid "Contact information updated successfully."
 msgstr "İletişim bilgileri başarıyla güncellendi."
 
-#: .\dashboard\views.py:552
+#: .\dashboard\views.py:583
 msgid "This email address is already in use."
 msgstr "Bu e-posta adresi zaten kullanımda."
 
-#: .\dashboard\views.py:566
+#: .\dashboard\views.py:597
 #, python-format
 msgid ""
 "Contact information updated. We sent a verification link to %(email)s — "
@@ -1374,42 +1374,42 @@ msgstr ""
 "gönderdik — değişikliği etkinleştirmek için onaylayın. O zamana kadar "
 "hesabınız salt okunur modda."
 
-#: .\dashboard\views.py:577
+#: .\dashboard\views.py:608
 msgid "Profile image updated successfully."
 msgstr "Profil resmi başarıyla güncellendi."
 
-#: .\dashboard\views.py:585
+#: .\dashboard\views.py:616
 msgid "Password changed successfully."
 msgstr "Şifre başarıyla değiştirildi."
 
-#: .\dashboard\views.py:592
+#: .\dashboard\views.py:623
 msgid "Student profile updated successfully."
 msgstr "Öğrenci profili başarıyla güncellendi."
 
-#: .\dashboard\views.py:595
+#: .\dashboard\views.py:626
 msgid "Invalid form type."
 msgstr "Geçersiz form türü."
 
-#: .\dashboard\views.py:614 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:645 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your new email address"
 msgstr "Yeni e-posta adresinizi doğrulayın"
 
-#: .\dashboard\views.py:616 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:647 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your email address"
 msgstr "E-posta adresinizi doğrulayın"
 
-#: .\dashboard\views.py:643 .\dashboard\views.py:658
+#: .\dashboard\views.py:674 .\dashboard\views.py:689
 msgid "There is no pending email change."
 msgstr "Bekleyen bir e-posta değişikliği yok."
 
-#: .\dashboard\views.py:647
+#: .\dashboard\views.py:678
 #, python-format
 msgid "A new verification link was sent to %(email)s."
 msgstr "Yeni bir doğrulama bağlantısı %(email)s adresine gönderildi."
 
-#: .\dashboard\views.py:673
+#: .\dashboard\views.py:704
 #, python-format
 msgid ""
 "The email change to %(email)s was cancelled. Your account is fully active "
@@ -1418,68 +1418,68 @@ msgstr ""
 "%(email)s adresine yapılan e-posta değişikliği iptal edildi. Hesabınız "
 "yeniden tamamen aktif."
 
-#: .\dashboard\views.py:705
+#: .\dashboard\views.py:736
 msgid "Step updated."
 msgstr "Adım güncellendi."
 
-#: .\dashboard\views.py:708
+#: .\dashboard\views.py:739
 msgid "Application deleted."
 msgstr "Başvuru silindi."
 
-#: .\dashboard\views.py:739
+#: .\dashboard\views.py:770
 msgid "Application created successfully."
 msgstr "Başvuru başarıyla oluşturuldu."
 
-#: .\dashboard\views.py:745 .\dashboard\views.py:784 .\dashboard\views.py:794
-#: .\dashboard\views.py:836 .\dashboard\views.py:999 .\dashboard\views.py:1070
-#: .\dashboard\views.py:1100 .\dashboard\views.py:1171
-#: .\dashboard\views.py:1205
+#: .\dashboard\views.py:776 .\dashboard\views.py:823 .\dashboard\views.py:833
+#: .\dashboard\views.py:875 .\dashboard\views.py:1038 .\dashboard\views.py:1109
+#: .\dashboard\views.py:1139 .\dashboard\views.py:1210
+#: .\dashboard\views.py:1244
 msgid "Invalid request."
 msgstr "Geçersiz istek."
 
-#: .\dashboard\views.py:765
+#: .\dashboard\views.py:796
 msgid ""
 "You have reached the maximum number of students (100). Please contact "
 "support."
 msgstr ""
 "Maksimum öğrenci sayısına (100) ulaştınız. Lütfen destekle iletişime geçin."
 
-#: .\dashboard\views.py:780
+#: .\dashboard\views.py:819
 msgid "Student added successfully."
 msgstr "Öğrenci başarıyla eklendi."
 
-#: .\dashboard\views.py:824
+#: .\dashboard\views.py:863
 msgid "Your request has been sent! Our team will contact you soon."
 msgstr ""
 "İsteğiniz gönderildi! Ekibimiz en kısa sürede sizinle iletişime geçecektir."
 
-#: .\dashboard\views.py:832
+#: .\dashboard\views.py:871
 msgid "Failed to send request. Please try again."
 msgstr "İstek gönderilemedi. Lütfen tekrar deneyin."
 
-#: .\dashboard\views.py:1010 .\dashboard\views.py:1216
+#: .\dashboard\views.py:1049 .\dashboard\views.py:1255
 msgid "All fields are required."
 msgstr "Tüm hakları saklıdır."
 
-#: .\dashboard\views.py:1013
+#: .\dashboard\views.py:1052
 msgid "Please select at least one user."
 msgstr "Lütfen en az bir kullanıcı seçin."
 
-#: .\dashboard\views.py:1063
+#: .\dashboard\views.py:1102
 msgid "Notification sent successfully!"
 msgstr "Başvuru başarıyla oluşturuldu."
 
-#: .\dashboard\views.py:1093 .\dashboard\views.py:1179
-#: .\dashboard\views.py:1198 .\dashboard\views.py:1272
-#: .\dashboard\views.py:1302
+#: .\dashboard\views.py:1132 .\dashboard\views.py:1218
+#: .\dashboard\views.py:1237 .\dashboard\views.py:1311
+#: .\dashboard\views.py:1341
 msgid "Not found."
 msgstr "Sayfa bulunamadı."
 
-#: .\dashboard\views.py:1177
+#: .\dashboard\views.py:1216
 msgid "Notification deleted."
 msgstr "Başvuru silindi."
 
-#: .\dashboard\views.py:1270
+#: .\dashboard\views.py:1309
 msgid "Notification updated successfully!"
 msgstr "İletişim bilgileri başarıyla güncellendi."
 
@@ -2278,13 +2278,37 @@ msgstr "Başvuru bulunamadı."
 msgid "My Notifications"
 msgstr "Başvurularım"
 
-#: .\templates\dashboard\fragments\my_notifications.html:6
+#: .\templates\dashboard\fragments\my_notifications.html:9
+msgid "Search title or message"
+msgstr "Başlık veya mesajda ara"
+
+#: .\templates\dashboard\fragments\my_notifications.html:10
+msgid "Search notifications"
+msgstr "Bildirimlerde ara"
+
+#: .\templates\dashboard\fragments\my_notifications.html:14
 msgid "Mark all as read"
 msgstr "Tümünü okundu işaretle"
 
-#: .\templates\dashboard\fragments\my_notifications.html:35
+#: .\templates\dashboard\fragments\my_notifications.html:45
+msgid "No notifications match your search."
+msgstr "Aramanızla eşleşen bildirim yok."
+
+#: .\templates\dashboard\fragments\my_notifications.html:45
 msgid "You have no notifications."
 msgstr "Çıkış yaptınız."
+
+#: .\templates\dashboard\fragments\my_notifications.html:58
+#: .\templates\dashboard\fragments\programs.html:223
+#: .\templates\dashboard\fragments\universities.html:195
+msgid "Prev"
+msgstr "Önceki"
+
+#: .\templates\dashboard\fragments\my_notifications.html:76
+#: .\templates\dashboard\fragments\programs.html:246
+#: .\templates\dashboard\fragments\universities.html:218
+msgid "Next"
+msgstr "Sonraki"
 
 #: .\templates\dashboard\fragments\my_students.html:5
 #: .\templates\dashboard\main.html:111
@@ -2626,16 +2650,6 @@ msgstr "Mevcut filtrelerinizle eşleşen program bulunamadı."
 msgid "First"
 msgstr "İlk"
 
-#: .\templates\dashboard\fragments\programs.html:223
-#: .\templates\dashboard\fragments\universities.html:195
-msgid "Prev"
-msgstr "Önceki"
-
-#: .\templates\dashboard\fragments\programs.html:246
-#: .\templates\dashboard\fragments\universities.html:218
-msgid "Next"
-msgstr "Sonraki"
-
 #: .\templates\dashboard\fragments\programs.html:250
 #: .\templates\dashboard\fragments\universities.html:222
 msgid "Last"
@@ -2893,6 +2907,10 @@ msgstr "Şimdi doğrula"
 #: .\templates\dashboard\main.html:183
 msgid "Loading..."
 msgstr "Yükleniyor..."
+
+#: .\templates\dashboard\main.html:200
+msgid "Close"
+msgstr "Kapat"
 
 #: .\templates\emails\confirmation_code.html:4
 #: .\templates\emails\confirmation_code.html:10

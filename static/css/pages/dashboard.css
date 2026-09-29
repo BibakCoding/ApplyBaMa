@@ -267,6 +267,68 @@
     overflow-y: auto;
 }
 
+/* ==========================================================================
+   Notification detail modal (shell-owned: templates/dashboard/main.html)
+   The wrapper is position:relative and spans the viewport, so the fixed
+   inset-0 scrim centres the dialog on the SCREEN, not on the page — reading a
+   message never needs scrolling. The scrim covers the main column; the
+   sidebar (z-40) stays above it, visible and clickable, per design.
+   ========================================================================== */
+.notification-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+.notification-modal.hidden {
+    display: none;
+}
+.notification-modal__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(17, 24, 39, 0.5);
+    backdrop-filter: blur(2px);
+    border: 0;
+    padding: 0;
+}
+.notification-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 32rem;
+    max-height: min(85vh, 100%);
+    overflow-y: auto;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+    padding: 1.5rem;
+}
+.notification-modal__close {
+    position: absolute;
+    top: 1rem;
+    inset-inline-end: 1rem;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: none;
+    border: 0;
+    color: #6b7280;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+.notification-modal__close:hover,
+.notification-modal__close:focus {
+    color: #374151;
+    background: #f3f4f6;
+}
+
 /* Persistent read-only banner shown while the account's email is unverified */
 .verification-banner {
     display: flex;

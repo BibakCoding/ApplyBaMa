@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-29 12:30+0330\n"
+"POT-Creation-Date: 2026-09-29 13:45+0330\n"
 "PO-Revision-Date: 2026-08-27 03:43+0000\n"
 "Last-Translator: <a@g.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -295,7 +295,7 @@ msgstr "رمز عبور با موفقیت به‌روزرسانی شد."
 msgid "This username is already taken."
 msgstr "این نام کاربری قبلاً گرفته شده است."
 
-#: .\authentication\views.py:519 .\dashboard\views.py:525
+#: .\authentication\views.py:519 .\dashboard\views.py:556
 msgid "Username updated successfully."
 msgstr "رمز عبور با موفقیت به‌روزرسانی شد."
 
@@ -1318,7 +1318,7 @@ msgstr "این ایمیل قبلاً استفاده شده است."
 msgid "Password must be at least 8 characters long."
 msgstr "رمز عبور باید حداقل ۸ کاراکتر باشد."
 
-#: .\dashboard\views.py:106
+#: .\dashboard\views.py:120
 msgid ""
 "Your email address is not verified, so your account is in read-only mode. "
 "Verify it from your profile page to continue."
@@ -1326,38 +1326,38 @@ msgstr ""
 "آدرس ایمیل شما تأیید نشده است، بنابراین حساب شما در حالت فقط‌خواندنی است. "
 "برای ادامه، آن را از صفحه پروفایل خود تأیید کنید."
 
-#: .\dashboard\views.py:148
+#: .\dashboard\views.py:162
 msgid "Page not found."
 msgstr "صفحه یافت نشد."
 
-#: .\dashboard\views.py:159 .\dashboard\views.py:433
+#: .\dashboard\views.py:173 .\dashboard\views.py:447
 msgid "You do not have permission to access this page."
 msgstr "شما مجوز دسترسی به این صفحه را ندارید."
 
-#: .\dashboard\views.py:425 .\dashboard\views.py:967 .\dashboard\views.py:1001
-#: .\dashboard\views.py:1116 .\dashboard\views.py:1148
-#: .\dashboard\views.py:1173 .\dashboard\views.py:1185
-#: .\dashboard\views.py:1207
+#: .\dashboard\views.py:439 .\dashboard\views.py:1006 .\dashboard\views.py:1040
+#: .\dashboard\views.py:1155 .\dashboard\views.py:1187
+#: .\dashboard\views.py:1212 .\dashboard\views.py:1224
+#: .\dashboard\views.py:1246
 msgid "Permission denied."
 msgstr "دسترسی ممنوع."
 
-#: .\dashboard\views.py:509
+#: .\dashboard\views.py:540
 msgid "Personal information updated successfully."
 msgstr "اطلاعات شخصی با موفقیت به‌روزرسانی شد."
 
-#: .\dashboard\views.py:517
+#: .\dashboard\views.py:548
 msgid "Identity and profile photo updated successfully."
 msgstr "پروفایل دانشجو با موفقیت به‌روزرسانی شد."
 
-#: .\dashboard\views.py:546
+#: .\dashboard\views.py:577
 msgid "Contact information updated successfully."
 msgstr "اطلاعات تماس با موفقیت به‌روزرسانی شد."
 
-#: .\dashboard\views.py:552
+#: .\dashboard\views.py:583
 msgid "This email address is already in use."
 msgstr "این آدرس ایمیل قبلاً استفاده شده است."
 
-#: .\dashboard\views.py:566
+#: .\dashboard\views.py:597
 #, python-format
 msgid ""
 "Contact information updated. We sent a verification link to %(email)s — "
@@ -1367,109 +1367,109 @@ msgstr ""
 "اطلاعات تماس به‌روزرسانی شد. لینک تأیید به %(email)s ارسال کردیم — برای "
 "فعال‌سازی تغییر، آن را تأیید کنید. تا آن زمان حساب شما در حالت فقط‌خواندنی است."
 
-#: .\dashboard\views.py:577
+#: .\dashboard\views.py:608
 msgid "Profile image updated successfully."
 msgstr "تصویر پروفایل با موفقیت به‌روزرسانی شد."
 
-#: .\dashboard\views.py:585
+#: .\dashboard\views.py:616
 msgid "Password changed successfully."
 msgstr "رمز عبور با موفقیت تغییر یافت."
 
-#: .\dashboard\views.py:592
+#: .\dashboard\views.py:623
 msgid "Student profile updated successfully."
 msgstr "پروفایل دانشجو با موفقیت به‌روزرسانی شد."
 
-#: .\dashboard\views.py:595
+#: .\dashboard\views.py:626
 msgid "Invalid form type."
 msgstr "نوع فرم نامعتبر است."
 
-#: .\dashboard\views.py:614 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:645 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your new email address"
 msgstr "آدرس ایمیل جدید خود را تأیید کنید"
 
-#: .\dashboard\views.py:616 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:647 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your email address"
 msgstr "آدرس ایمیل خود را تأیید کنید"
 
-#: .\dashboard\views.py:643 .\dashboard\views.py:658
+#: .\dashboard\views.py:674 .\dashboard\views.py:689
 msgid "There is no pending email change."
 msgstr "هیچ تغییر ایمیل در انتظاری وجود ندارد."
 
-#: .\dashboard\views.py:647
+#: .\dashboard\views.py:678
 #, python-format
 msgid "A new verification link was sent to %(email)s."
 msgstr "لینک تأیید جدید به %(email)s ارسال شد."
 
-#: .\dashboard\views.py:673
+#: .\dashboard\views.py:704
 #, python-format
 msgid ""
 "The email change to %(email)s was cancelled. Your account is fully active "
 "again."
 msgstr "تغییر ایمیل به %(email)s لغو شد. حساب شما دوباره کاملاً فعال است."
 
-#: .\dashboard\views.py:705
+#: .\dashboard\views.py:736
 msgid "Step updated."
 msgstr "مرحله به‌روزرسانی شد."
 
-#: .\dashboard\views.py:708
+#: .\dashboard\views.py:739
 msgid "Application deleted."
 msgstr "درخواست حذف شد."
 
-#: .\dashboard\views.py:739
+#: .\dashboard\views.py:770
 msgid "Application created successfully."
 msgstr "درخواست با موفقیت ایجاد شد."
 
-#: .\dashboard\views.py:745 .\dashboard\views.py:784 .\dashboard\views.py:794
-#: .\dashboard\views.py:836 .\dashboard\views.py:999 .\dashboard\views.py:1070
-#: .\dashboard\views.py:1100 .\dashboard\views.py:1171
-#: .\dashboard\views.py:1205
+#: .\dashboard\views.py:776 .\dashboard\views.py:823 .\dashboard\views.py:833
+#: .\dashboard\views.py:875 .\dashboard\views.py:1038 .\dashboard\views.py:1109
+#: .\dashboard\views.py:1139 .\dashboard\views.py:1210
+#: .\dashboard\views.py:1244
 msgid "Invalid request."
 msgstr "درخواست نامعتبر است."
 
-#: .\dashboard\views.py:765
+#: .\dashboard\views.py:796
 msgid ""
 "You have reached the maximum number of students (100). Please contact "
 "support."
 msgstr ""
 "به حداکثر تعداد دانشجویان (۱۰۰) رسیده‌اید. لطفاً با پشتیبانی تماس بگیرید."
 
-#: .\dashboard\views.py:780
+#: .\dashboard\views.py:819
 msgid "Student added successfully."
 msgstr "دانشجو با موفقیت اضافه شد."
 
-#: .\dashboard\views.py:824
+#: .\dashboard\views.py:863
 msgid "Your request has been sent! Our team will contact you soon."
 msgstr "درخواست شما ارسال شد! تیم ما به‌زودی با شما تماس خواهد گرفت."
 
-#: .\dashboard\views.py:832
+#: .\dashboard\views.py:871
 msgid "Failed to send request. Please try again."
 msgstr "ارسال درخواست ناموفق بود. لطفاً دوباره تلاش کنید."
 
-#: .\dashboard\views.py:1010 .\dashboard\views.py:1216
+#: .\dashboard\views.py:1049 .\dashboard\views.py:1255
 msgid "All fields are required."
 msgstr "تمامی حقوق محفوظ است."
 
-#: .\dashboard\views.py:1013
+#: .\dashboard\views.py:1052
 msgid "Please select at least one user."
 msgstr "لطفاً حداقل یک کاربر انتخاب کنید."
 
-#: .\dashboard\views.py:1063
+#: .\dashboard\views.py:1102
 msgid "Notification sent successfully!"
 msgstr "درخواست با موفقیت ایجاد شد."
 
-#: .\dashboard\views.py:1093 .\dashboard\views.py:1179
-#: .\dashboard\views.py:1198 .\dashboard\views.py:1272
-#: .\dashboard\views.py:1302
+#: .\dashboard\views.py:1132 .\dashboard\views.py:1218
+#: .\dashboard\views.py:1237 .\dashboard\views.py:1311
+#: .\dashboard\views.py:1341
 msgid "Not found."
 msgstr "صفحه یافت نشد."
 
-#: .\dashboard\views.py:1177
+#: .\dashboard\views.py:1216
 msgid "Notification deleted."
 msgstr "درخواست حذف شد."
 
-#: .\dashboard\views.py:1270
+#: .\dashboard\views.py:1309
 msgid "Notification updated successfully!"
 msgstr "اطلاعات تماس با موفقیت به‌روزرسانی شد."
 
@@ -2263,13 +2263,37 @@ msgstr "هیچ درخواستی یافت نشد."
 msgid "My Notifications"
 msgstr "درخواست‌های من"
 
-#: .\templates\dashboard\fragments\my_notifications.html:6
+#: .\templates\dashboard\fragments\my_notifications.html:9
+msgid "Search title or message"
+msgstr "جستجو در عنوان یا متن"
+
+#: .\templates\dashboard\fragments\my_notifications.html:10
+msgid "Search notifications"
+msgstr "جستجوی اعلان‌ها"
+
+#: .\templates\dashboard\fragments\my_notifications.html:14
 msgid "Mark all as read"
 msgstr "علامت‌گذاری همه به‌عنوان خوانده‌شده"
 
-#: .\templates\dashboard\fragments\my_notifications.html:35
+#: .\templates\dashboard\fragments\my_notifications.html:45
+msgid "No notifications match your search."
+msgstr "هیچ اعلانی با جستجوی شما مطابقت ندارد."
+
+#: .\templates\dashboard\fragments\my_notifications.html:45
 msgid "You have no notifications."
 msgstr "شما از حساب کاربری خود خارج شدید."
+
+#: .\templates\dashboard\fragments\my_notifications.html:58
+#: .\templates\dashboard\fragments\programs.html:223
+#: .\templates\dashboard\fragments\universities.html:195
+msgid "Prev"
+msgstr "قبلی"
+
+#: .\templates\dashboard\fragments\my_notifications.html:76
+#: .\templates\dashboard\fragments\programs.html:246
+#: .\templates\dashboard\fragments\universities.html:218
+msgid "Next"
+msgstr "بعدی"
 
 #: .\templates\dashboard\fragments\my_students.html:5
 #: .\templates\dashboard\main.html:111
@@ -2609,16 +2633,6 @@ msgstr "هیچ برنامه‌ای با فیلترهای فعلی شما مطا�
 msgid "First"
 msgstr "اول"
 
-#: .\templates\dashboard\fragments\programs.html:223
-#: .\templates\dashboard\fragments\universities.html:195
-msgid "Prev"
-msgstr "قبلی"
-
-#: .\templates\dashboard\fragments\programs.html:246
-#: .\templates\dashboard\fragments\universities.html:218
-msgid "Next"
-msgstr "بعدی"
-
 #: .\templates\dashboard\fragments\programs.html:250
 #: .\templates\dashboard\fragments\universities.html:222
 msgid "Last"
@@ -2873,6 +2887,10 @@ msgstr "همین حالا تأیید کنید"
 #: .\templates\dashboard\main.html:183
 msgid "Loading..."
 msgstr "در حال بارگذاری..."
+
+#: .\templates\dashboard\main.html:200
+msgid "Close"
+msgstr "بستن"
 
 #: .\templates\emails\confirmation_code.html:4
 #: .\templates\emails\confirmation_code.html:10

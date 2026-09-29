@@ -184,6 +184,26 @@
                 </div>
             </div>
         </main>
+
+        {% comment %}
+        The notification detail modal lives in the SHELL, not in the
+        my_notifications fragment. It is positioned against the wrapper, so it
+        centres on the viewport (fixed inset-0) rather than on the fragment,
+        and no re-render of a fragment can delete it mid-read. The scrim sits
+        above the main column only — the sidebar stays visible and clickable
+        above it (z-40 > the scrim's z-30).
+        {% endcomment %}
+        <div id="notificationModal" class="notification-modal hidden">
+            <div class="notification-modal__scrim" data-modal-close="notificationModal"></div>
+            <div class="notification-modal__panel" role="dialog" aria-modal="true" aria-labelledby="notificationModalTitle">
+                <button id="closeModalBtn" class="notification-modal__close" aria-label="{% trans 'Close' %}">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div id="modalContent">
+                    <!-- Populated by JS when a notification row is clicked -->
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block js %}
