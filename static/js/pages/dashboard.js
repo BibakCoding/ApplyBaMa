@@ -7,6 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const contentContainer = document.getElementById("dashboard-content");
   const navLinks = document.querySelectorAll(".nav-link");
 
+  // Set when a realtime event wants the "My Notifications" fragment refreshed
+  // while its detail modal is open; closeNotificationModal runs it on close.
+  let myNotificationsRefreshPending = false;
+
   // Sidebar toggle logic for mobile view
   if (sidebarToggle)
     sidebarToggle.addEventListener("click", () => {
@@ -60,6 +64,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         closeSidebar();
+
+        // A fresh fragment has nothing left to refresh (see
+        // myNotificationsRefreshPending above).
+        myNotificationsRefreshPending = false;
 
         // Initialize page-specific logic after the new DOM elements are injected
         initProfileScripts();
@@ -733,6 +741,31 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSelectedUI();
   }
 
+  // The detail modal lives inside the fragment, so a re-render replaces the
+  // node the click handler just opened. These helpers keep that in one place:
+  // mark a row read in place (no reload), and close the modal (running any
+  // refresh that was deferred while it was open).
+  function markNotificationItemRead(item) {
+    const dot = item.querySelector(".w-3.h-3.bg-blue-600");
+    if (dot) dot.remove();
+    item.classList.remove("bg-blue-50", "border-blue-200");
+    item.classList.add("bg-gray-50", "border-gray-200");
+  }
+
+  function isNotificationModalOpen() {
+    const modal = document.getElementById("notificationModal");
+    return !!modal && !modal.classList.contains("hidden");
+  }
+
+  function closeNotificationModal() {
+    const modal = document.getElementById("notificationModal");
+    if (modal) modal.classList.add("hidden");
+    if (myNotificationsRefreshPending) {
+      myNotificationsRefreshPending = false;
+      loadContent("my_notifications");
+    }
+  }
+
   function initMyNotificationsScripts() {
     const modal = document.getElementById("notificationModal");
     const modalContent = document.getElementById("modalContent");
@@ -765,10 +798,7 @@ document.addEventListener("DOMContentLoaded", function () {
               `;
               modal.classList.remove("hidden");
 
-              const dot = item.querySelector(".w-3.h-3.bg-blue-600");
-              if (dot) dot.remove();
-              item.classList.remove("bg-blue-50", "border-blue-200");
-              item.classList.add("bg-gray-50", "border-gray-200");
+              markNotificationItemRead(item);
 
               // The read event also reaches this tab through the WebSocket
               // (notifications.read -> ab:notifications-read in realtime.js),
@@ -780,9 +810,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     if (closeModalBtn) {
-      closeModalBtn.addEventListener("click", () => modal.classList.add("hidden"));
+      closeModalBtn.addEventListener("click", closeNotificationModal);
       modal.addEventListener("click", (e) => {
-        if (e.target === modal) modal.classList.add("hidden");
+        if (e.target === modal) closeNotificationModal();
       });
     }
 
@@ -800,7 +830,8 @@ document.addEventListener("DOMContentLoaded", function () {
           .then((data) => {
             if (data.success) {
               showToast("All notifications marked as read.", "success");
-              setTimeout(() => loadContent("my_notifications"), 500);
+              // No reload: the server pushes notifications.read for this
+              // action, and applyReadEvent re-styles every row in place.
             }
           });
       });
@@ -809,27 +840,46 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // --- Realtime notifications (WebSocket, see static/js/realtime.js) -------
   // realtime.js re-dispatches pushed server events as document CustomEvents.
-  // The sidebar badge and toasts are handled there for every page; this
-  // listener only keeps the open fragment fresh. No polling: the socket is
-  // the source of truth.
-  function refreshMyNotificationsIfOpen() {
-    // If the open fragment IS the notifications list, refresh it in place so
-    // it matches the pushed state without a manual reload. The composer page
-    // ("notifications") is deliberately not reloaded — a re-render would wipe
-    // the form the user is working in.
+  // The sidebar badge and toasts are handled there for every page; the
+  // listeners below only keep the open "My Notifications" fragment fresh. No
+  // polling: the socket is the source of truth.
+
+  function isMyNotificationsOpen() {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("page") === "my_notifications") {
-      loadContent("my_notifications");
-    }
+    return params.get("page") === "my_notifications";
   }
 
-  document.addEventListener("ab:notification-new", refreshMyNotificationsIfOpen);
+  // A read change never needs a re-render: the rows are already rendered and
+  // only their read styling changes. Reloading here used to delete the detail
+  // modal (it lives inside this fragment) immediately after the click that
+  // opened it — the badge moved and no modal ever appeared. The composer page
+  // ("notifications") is deliberately not touched: a re-render would wipe the
+  // form the user is working in.
+  function applyReadEvent(event) {
+    if (!isMyNotificationsOpen()) return;
+    const id = (event.detail || {}).id;
+    if (id) {
+      const item = document.querySelector(`.notification-item[data-id="${id}"]`);
+      if (item) markNotificationItemRead(item);
+      return;
+    }
+    // No id: "mark all as read", from this tab or another one.
+    document.querySelectorAll(".notification-item").forEach(markNotificationItemRead);
+  }
 
-  // Read-state sync: this tab (a modal click, or "mark all as read") or
-  // another tab of the same account marking things read pushes
-  // notifications.read, which realtime.js turns into a badge move — and into
-  // a refresh of the open list so read styling matches without a reload.
-  document.addEventListener("ab:notifications-read", refreshMyNotificationsIfOpen);
+  document.addEventListener("ab:notifications-read", applyReadEvent);
+
+  // A genuinely new notification needs new rows, so this one does reload the
+  // fragment — but not while the modal is open, or the reload would take the
+  // modal with it.
+  document.addEventListener("ab:notification-new", function () {
+    if (!isMyNotificationsOpen()) return;
+    if (isNotificationModalOpen()) {
+      myNotificationsRefreshPending = true;
+      return;
+    }
+    loadContent("my_notifications");
+  });
 
   function handleSendNotification(form) {
     const formData = new FormData(form);
