@@ -3,7 +3,7 @@ from urllib.parse import unquote
 from django.test import TestCase
 from django.urls import reverse
 
-from core.models import Application, CompanyProfile, User
+from core.models import Application, CompanyProfile, StudentProfile, User
 
 from .views import get_managed_students
 
@@ -129,3 +129,104 @@ class AddStudentPasswordControlTests(TestCase):
 
 		self.assertIn("کپی رمز عبور", html)
 		self.assertIn("رمز عبور کپی شد", html)
+
+
+class AddStudentOwnershipTests(TestCase):
+	"""A student an agent or company adds must be linked to that account.
+
+	Ownership lives on the application's agent field, and both "My Students" and
+	the "New Application" student picker read it back through
+	get_managed_students(), so a student created without one existed but never
+	appeared in the list the agent had just added them to.
+	"""
+
+	def setUp(self):
+		self.agent = User.objects.create_user(
+			username="owner-agent",
+			email="owner-agent@example.com",
+			password="Password123!",
+			user_type=User.UserType.AGENT,
+			email_verified=True,
+		)
+		self.company_user = User.objects.create_user(
+			username="owner-company",
+			email="owner-company@example.com",
+			password="Password123!",
+			user_type=User.UserType.COMPANY,
+			email_verified=True,
+		)
+		CompanyProfile.objects.create(
+			user=self.company_user,
+			company_name="Owner Agency",
+			company_email="owner@example.com",
+			tax_number="TAX-OWNER",
+			phone="+905000000001",
+		)
+
+	def add_student(self, username):
+		return self.client.post(
+			reverse("submit_add_student"),
+			{
+				"first_name": "New",
+				"last_name": "Student",
+				"username": username,
+				"email": f"{username}@example.com",
+				"password": "StrongPass123!",
+			},
+		)
+
+	def test_agent_manages_the_student_they_add(self):
+		self.client.force_login(self.agent)
+
+		response = self.add_student("added-by-agent")
+
+		self.assertEqual(response.status_code, 200)
+		self.assertTrue(response.json()["success"])
+		student = User.objects.get(username="added-by-agent")
+		self.assertTrue(StudentProfile.objects.filter(user=student).exists())
+		self.assertIn(student.pk, list(get_managed_students(self.agent)))
+
+	def test_company_manages_the_student_it_adds(self):
+		self.client.force_login(self.company_user)
+
+		self.add_student("added-by-company")
+
+		student = User.objects.get(username="added-by-company")
+		self.assertIn(student.pk, list(get_managed_students(self.company_user)))
+
+	def test_company_without_a_profile_still_manages_its_students(self):
+		"""Regression: user.company_profile raises when the row is missing, and the
+		old bare except turned that into an empty student list."""
+		profileless_company = User.objects.create_user(
+			username="profileless-company",
+			email="profileless@example.com",
+			password="Password123!",
+			user_type=User.UserType.COMPANY,
+			email_verified=True,
+		)
+		self.assertFalse(CompanyProfile.objects.filter(user=profileless_company).exists())
+		self.client.force_login(profileless_company)
+
+		self.add_student("added-by-profileless-company")
+
+		student = User.objects.get(username="added-by-profileless-company")
+		self.assertIn(student.pk, list(get_managed_students(profileless_company)))
+		fragment = self.client.get(
+			reverse("dashboard_content", kwargs={"page": "my_students"})
+		).content.decode()
+		self.assertIn("added-by-profileless-company@example.com", fragment)
+
+	def test_added_student_is_listed_and_selectable_for_an_application(self):
+		self.client.force_login(self.agent)
+
+		self.add_student("added-by-agent")
+
+		students_page = self.client.get(
+			reverse("dashboard_content", kwargs={"page": "my_students"})
+		).content.decode()
+		picker_page = self.client.get(
+			reverse("dashboard_content", kwargs={"page": "new_application"})
+		).content.decode()
+
+		self.assertIn("added-by-agent", students_page)
+		self.assertIn("added-by-agent", picker_page)

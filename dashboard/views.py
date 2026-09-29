@@ -17,11 +17,13 @@ import string
 from urllib.parse import parse_qs, unquote, urlencode
 from decimal import Decimal
 
+from django.db import transaction
 from django.db.models import (
     Case,
     DecimalField,
     F,
     IntegerField,
+    Q,
     Value,
     When,
 )
@@ -36,6 +38,7 @@ from authentication.views import dispatch_email
 from core.models import (
     User,
     StudentProfile,
+    CompanyProfile,
     Application,
     University,
     Program,
@@ -59,7 +62,19 @@ from .forms import (
 
 
 def get_managed_students(user):
-    """Returns student IDs managed by an Agent or a Company's agents."""
+    """Returns student IDs managed by an Agent or a Company's agents.
+
+    Ownership is recorded on the application's ``agent`` field, which holds the
+    acting account — an agent, or the company itself when the company adds a
+    student or opens an application of its own. A company therefore manages both
+    its own students and those of its agents.
+
+    The company's own applications are read without touching
+    ``user.company_profile``: that reverse one-to-one raises when no profile row
+    exists, and the previous bare ``except`` turned that into an empty list — so
+    a company account without a profile saw no students at all, including the
+    ones it had just added. The profile is only what reaches its agents' students.
+    """
     if user.user_type == User.UserType.AGENT:
         return (
             Application.objects.filter(agent=user)
@@ -67,16 +82,15 @@ def get_managed_students(user):
             .distinct()
         )
     elif user.user_type == User.UserType.COMPANY:
-        try:
-            company_profile = user.company_profile
+        agent_users = User.objects.none()
+        company_profile = CompanyProfile.objects.filter(user=user).first()
+        if company_profile is not None:
             agent_users = User.objects.filter(agent_profile__agency=company_profile)
-            return (
-                Application.objects.filter(agent__in=agent_users)
-                .values_list("student_id", flat=True)
-                .distinct()
-            )
-        except Exception:
-            return []
+        return (
+            Application.objects.filter(Q(agent=user) | Q(agent__in=agent_users))
+            .values_list("student_id", flat=True)
+            .distinct()
+        )
     return []
 
 
@@ -767,15 +781,23 @@ def submit_add_student(request):
                     }
                 )
 
-            user = User.objects.create_user(
-                username=form.cleaned_data["username"],
-                email=form.cleaned_data["email"],
-                password=form.cleaned_data["password"],
-                first_name=form.cleaned_data["first_name"],
-                last_name=form.cleaned_data["last_name"],
-                user_type=User.UserType.DEFAULT,
-            )
-            StudentProfile.objects.create(user=user, stage="freshman")
+            # One transaction: a student whose linking row is missing would be
+            # invisible in "My Students" and unselectable in "New Application"
+            # (both read ownership off the applications this account holds).
+            with transaction.atomic():
+                user = User.objects.create_user(
+                    username=form.cleaned_data["username"],
+                    email=form.cleaned_data["email"],
+                    password=form.cleaned_data["password"],
+                    first_name=form.cleaned_data["first_name"],
+                    last_name=form.cleaned_data["last_name"],
+                    user_type=User.UserType.DEFAULT,
+                )
+                StudentProfile.objects.create(user=user, stage="freshman")
+                # The student record the account now manages. It carries no
+                # program yet — the lists render that as "Unassigned" until the
+                # agent files the application for it.
+                Application.objects.create(agent=request.user, student=user)
             return JsonResponse(
                 {"success": True, "message": _("Student added successfully.")}
             )
