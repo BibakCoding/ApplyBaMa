@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-29 12:17+0330\n"
+"POT-Creation-Date: 2026-09-29 12:30+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2257,18 +2257,24 @@ msgid "No students added yet."
 msgstr ""
 
 #: .\templates\dashboard\fragments\my_students.html:99
+#: .\templates\dashboard\fragments\my_students.html:100
+#: .\templates\dashboard\fragments\my_students.html:101
 msgid "Copy password"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:105
+#: .\templates\dashboard\fragments\my_students.html:102
+msgid "Password copied"
+msgstr ""
+
+#: .\templates\dashboard\fragments\my_students.html:108
 msgid "Generate password"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:111
+#: .\templates\dashboard\fragments\my_students.html:114
 msgid "Show/hide password"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:120
+#: .\templates\dashboard\fragments\my_students.html:123
 msgid "Create Student Account"
 msgstr ""
 

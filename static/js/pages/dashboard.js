@@ -215,6 +215,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Copy the generated temporary password into the clipboard. The styles for
+    // the acknowledgement (.copy-pwd-btn.copied) already existed; only this
+    // handler was missing, so the button did nothing at all.
+    const copyPwdBtn = e.target.closest("#copyPwdBtn");
+    if (copyPwdBtn) copyTemporaryPassword(copyPwdBtn);
+
     const pwdToggle = e.target.closest(".pwd-toggle-dash, .pwd-toggle");
     if (pwdToggle) {
       const targetId = pwdToggle.dataset.target;
@@ -310,6 +316,69 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("editNotifModal").classList.add("hidden");
     }
   });
+
+  // --- Temporary password: copy, then acknowledge it on the button ---------
+  // The copy button shows an icon and nothing else, so its *state* has to carry
+  // the message: the check icon, the green `.copied` tint (existing CSS in
+  // pages/dashboard.css), and the title/aria-label the fragment renders for that
+  // state. Static JS is never rendered as a template, so those two translated
+  // strings arrive as data- attributes on the button.
+  let copyPwdStateTimer = null;
+
+  function setCopyPwdButtonState(button, copied) {
+    const label = copied ? button.dataset.copiedTitle : button.dataset.copyTitle;
+    const icon = button.querySelector("i");
+
+    button.classList.toggle("copied", copied);
+    if (icon) {
+      icon.classList.replace(
+        copied ? "fa-copy" : "fa-check",
+        copied ? "fa-check" : "fa-copy",
+      );
+    }
+    if (label) {
+      button.title = label;
+      button.setAttribute("aria-label", label);
+    }
+  }
+
+  function copyTemporaryPassword(button) {
+    const wrapper = button.closest(".password-wrapper");
+    const input = wrapper
+      ? wrapper.querySelector('input[name="password"]')
+      : null;
+    if (!input || !input.value) return;
+
+    const acknowledge = () => {
+      setCopyPwdButtonState(button, true);
+      clearTimeout(copyPwdStateTimer);
+      copyPwdStateTimer = setTimeout(
+        () => setCopyPwdButtonState(button, false),
+        1800,
+      );
+    };
+
+    // clipboard.writeText needs a secure context (https, or localhost in dev).
+    // Over plain http on a LAN it is undefined, and silently doing nothing is
+    // exactly the bug this fixes — so fall back to selecting the field, which
+    // also shows the user what was copied.
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(input.value).then(acknowledge, () => {
+        if (selectAndCopy(input)) acknowledge();
+      });
+      return;
+    }
+    if (selectAndCopy(input)) acknowledge();
+  }
+
+  function selectAndCopy(input) {
+    input.select();
+    try {
+      return document.execCommand("copy");
+    } catch (err) {
+      return false;
+    }
+  }
 
   // Initializes specific UI components (like dropdowns and phone inputs) when a new fragment loads
   function initProfileScripts() {

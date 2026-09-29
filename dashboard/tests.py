@@ -81,3 +81,51 @@ class DashboardAccessTests(TestCase):
 		application = Application.objects.create(agent=agent_user, student=self.student)
 
 		self.assertEqual(list(get_managed_students(company_user)), [application.student_id])
+
+
+class AddStudentPasswordControlTests(TestCase):
+	"""The copy control's contract with static/js/pages/dashboard.js.
+
+	The script finds the button by #copyPwdBtn and reads the two labels it needs
+	from data attributes — static JS is never rendered as a template, so the
+	translated strings have to come from the fragment. If those attributes are
+	dropped, the copy loses its acknowledgement text instead of failing loudly.
+	"""
+
+	def setUp(self):
+		self.company_user = User.objects.create_user(
+			username="copy-company",
+			email="copy-company@example.com",
+			password="Password123!",
+			user_type=User.UserType.COMPANY,
+			# Unverified accounts get the read-only gate instead of the fragment.
+			email_verified=True,
+		)
+		self.client.force_login(self.company_user)
+
+	def test_add_student_fragment_wires_the_password_copy_button(self):
+		response = self.client.get(
+			reverse("dashboard_content", kwargs={"page": "my_students"})
+		)
+		html = response.content.decode()
+
+		self.assertEqual(response.status_code, 200)
+		self.assertIn('id="copyPwdBtn"', html)
+		self.assertIn('class="copy-pwd-btn"', html)
+
+		copy_title = html.split('data-copy-title="', 1)[1].split('"', 1)[0]
+		copied_title = html.split('data-copied-title="', 1)[1].split('"', 1)[0]
+		self.assertTrue(copy_title)
+		self.assertTrue(copied_title)
+		# The acknowledgement is its own string, not the default one echoed twice.
+		self.assertNotEqual(copy_title, copied_title)
+
+	def test_copy_labels_are_translated(self):
+		from django.utils.translation import override
+
+		with override("fa"):
+			url = reverse("dashboard_content", kwargs={"page": "my_students"})
+		html = self.client.get(url).content.decode()
+
+		self.assertIn("کپی رمز عبور", html)
+		self.assertIn("رمز عبور کپی شد", html)
