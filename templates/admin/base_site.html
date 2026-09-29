@@ -29,6 +29,32 @@
 {% endblock %}
 
 {% block nav-global %}
+    {% comment %}
+        Language switcher. Django's own admin ships none, and /admin/ sits
+        outside i18n_patterns, so there is no URL prefix to change: the choice
+        is POSTed to the same set_language view the site's switcher uses. That
+        stores the language in Django's django_language cookie — the one source
+        of truth the admin can read — and redirects back to this page in it, so
+        the admin follows the language chosen on the site instead of the
+        browser's Accept-Language.
+    {% endcomment %}
+    {% get_current_language as admin_language %}
+    {% get_available_languages as admin_languages %}
+    <form class="admin-lang-switch" method="post" action="{% url 'set_language' %}"
+          role="group" aria-label="{% trans 'Choose language' %}">
+        {% csrf_token %}
+        {# The full path keeps the current page (and its query string) after the redirect. #}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        {% for lang_code, lang_name in admin_languages %}
+            <button type="submit" name="language" value="{{ lang_code }}"
+                    title="{{ lang_name }}" aria-label="{{ lang_name }}"
+                    class="admin-lang-switch__item{% if lang_code == admin_language %} admin-lang-switch__item--active{% endif %}"
+                    {% if lang_code == admin_language %}aria-current="true"{% endif %}>
+                <img src="{% static 'images/flag-'|add:lang_code|add:'.png' %}" alt="">
+            </button>
+        {% endfor %}
+    </form>
+
     <nav class="admin-header-nav" aria-label="{% trans 'Admin quick links' %}">
         <a class="admin-header-link" href="{% url 'admin:index' %}">{% trans "Dashboard" %}</a>
         {% if site_url %}

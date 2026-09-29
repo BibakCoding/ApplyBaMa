@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-28 20:36+0330\n"
+"POT-Creation-Date: 2026-09-29 12:17+0330\n"
 "PO-Revision-Date: 2026-08-27 03:43+0000\n"
 "Last-Translator: <a@g.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -300,7 +300,7 @@ msgid "Username updated successfully."
 msgstr "رمز عبور با موفقیت به‌روزرسانی شد."
 
 #: .\core\admin.py:61 .\templates\admin\base_site.html:25
-#: .\templates\admin\base_site.html:51
+#: .\templates\admin\base_site.html:78
 msgid "Apply BM Control Center"
 msgstr "مرکز کنترل اپلای بی‌ام"
 
@@ -1036,16 +1036,16 @@ msgstr "تنظیمات سایت"
 msgid "Journey Step"
 msgstr "مرحله مسیر"
 
-#: .\core\models.py:680 .\core\templatetags\custom_filters.py:49
+#: .\core\models.py:680 .\core\templatetags\custom_filters.py:45
 msgid "Associate & Bachelor"
 msgstr "کاردانی و کارشناسی"
 
-#: .\core\models.py:681 .\core\templatetags\custom_filters.py:50
+#: .\core\models.py:681 .\core\templatetags\custom_filters.py:46
 #: .\templates\core\main.html:118
 msgid "Master"
 msgstr "کارشناسی ارشد"
 
-#: .\core\models.py:682 .\core\templatetags\custom_filters.py:51
+#: .\core\models.py:682 .\core\templatetags\custom_filters.py:47
 #: .\templates\core\main.html:119
 msgid "PhD"
 msgstr "دکتری"
@@ -1489,38 +1489,43 @@ msgstr "ConnectSIDهای ذخیرهشده"
 msgid "Admin"
 msgstr "مدیریت"
 
-#: .\templates\admin\base_site.html:32
+#: .\templates\admin\base_site.html:45
+#: .\templates\partials\language_switcher.html:17
+msgid "Choose language"
+msgstr "زبان"
+
+#: .\templates\admin\base_site.html:59
 msgid "Admin quick links"
 msgstr "دسترسی‌های سریع مدیریت"
 
-#: .\templates\admin\base_site.html:33 .\templates\core\main.html:30
+#: .\templates\admin\base_site.html:60 .\templates\core\main.html:30
 #: .\templates\core\main.html:57 .\templates\dashboard\main.html:4
 #: .\templates\dashboard\main.html:59
 msgid "Dashboard"
 msgstr "داشبورد"
 
-#: .\templates\admin\base_site.html:35
+#: .\templates\admin\base_site.html:62
 msgid "View site"
 msgstr "مشاهده سایت"
 
-#: .\templates\admin\base_site.html:37 .\templates\admin\index.html:55
+#: .\templates\admin\base_site.html:64 .\templates\admin\index.html:55
 msgid "Translations"
 msgstr "ترجمه‌ها"
 
-#: .\templates\admin\base_site.html:38
+#: .\templates\admin\base_site.html:65
 msgid "Scheduled tasks"
 msgstr "کارهای زمان‌بندی‌شده"
 
-#: .\templates\admin\base_site.html:54
+#: .\templates\admin\base_site.html:81
 #, python-format
 msgid "Signed in as %(username)s"
 msgstr "واردشده با نام %(username)s"
 
-#: .\templates\admin\base_site.html:56
+#: .\templates\admin\base_site.html:83
 msgid "Change password"
 msgstr "تغییر گذرواژه"
 
-#: .\templates\admin\base_site.html:58
+#: .\templates\admin\base_site.html:85
 msgid "Press / to filter the sidebar"
 msgstr "برای جست‌وجو در نوار کناری / را بزنید"
 
@@ -3047,7 +3052,3 @@ msgid ""
 msgstr ""
 "این ایمیل را دریافت کرده‌اید چون آدرس ایمیل حساب %(site_name)s شما نیاز به "
 "تأیید دارد."
-
-#: .\templates\partials\language_switcher.html:6
-msgid "Choose language"
-msgstr "زبان"

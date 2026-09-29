@@ -1,20 +1,29 @@
 {# templates/partials/language_switcher.html #}
-{% load i18n static custom_filters %}
+{% load i18n static %}
 {% get_current_language as CURRENT_LANGUAGE %}
 {% get_available_languages as LANGUAGES %}
-<div class="flex justify-center">
-  <div class="language-switcher flex space-x-2" role="group" aria-label="{% trans 'Choose language' %}">
+{% comment %}
+    The choice is POSTed to Django's set_language view instead of linked.
+
+    A link could only rewrite the URL prefix, and only i18n_patterns routes have
+    one: the admin panel lives outside them, so it can never follow a language
+    that was not stored. set_language writes Django's own django_language cookie
+    and redirects back to this page in the chosen language — LocaleMiddleware
+    resolves a non-prefixed path (URL prefix -> cookie -> Accept-Language), so
+    /admin/ then opens in the language chosen here instead of the browser's.
+{% endcomment %}
+<form class="language-switcher flex justify-center space-x-2" method="post"
+      action="{% url 'set_language' %}" role="group"
+      aria-label="{% trans 'Choose language' %}">
+    {% csrf_token %}
+    {# The full path keeps the current page (and its query string) after the redirect. #}
+    <input type="hidden" name="next" value="{{ request.get_full_path }}">
     {% for lang_code, lang_name in LANGUAGES %}
-      {% if lang_code == CURRENT_LANGUAGE %}
-        <a href="{{ request.path|translate_path:lang_code }}" title="{{ lang_name }}"
-           aria-current="true"
-           class="p-1 rounded bg-gray-200">
-      {% else %}
-        <a href="{{ request.path|translate_path:lang_code }}" title="{{ lang_name }}"
-           class="p-1 rounded">
-      {% endif %}
-      <img src="{% static 'images/flag-'|add:lang_code|add:'.png' %}" alt="{{ lang_name }}" class="w-6 h-4">
-    </a>
+        <button type="submit" name="language" value="{{ lang_code }}"
+                title="{{ lang_name }}" aria-label="{{ lang_name }}"
+                class="p-1 rounded{% if lang_code == CURRENT_LANGUAGE %} bg-gray-200{% endif %}"
+                {% if lang_code == CURRENT_LANGUAGE %}aria-current="true"{% endif %}>
+            <img src="{% static 'images/flag-'|add:lang_code|add:'.png' %}" alt="" class="w-6 h-4">
+        </button>
     {% endfor %}
-  </div>
-</div>
+</form>

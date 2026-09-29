@@ -1,5 +1,4 @@
 from django import template
-from django.urls import translate_url
 from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 
@@ -38,9 +37,6 @@ def filter_params(filters, **overrides):
     encoded = urlencode(params)
     return f"&{encoded}" if encoded else ""
 
-@register.filter
-def translate_path(path, lang_code):
-    return translate_url(path, lang_code)
 
 @register.filter
 def translate_doc_level(value):

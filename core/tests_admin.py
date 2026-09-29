@@ -399,3 +399,62 @@ class AdminFormHardeningTests(AdminBaseTestCase):
         self.assertNotIn("Signed in as", html)
         self.assertNotIn(reverse("admin:password_change"), html)
         self.assertIn("admin-footer-row", html)
+
+
+class AdminLanguageTests(AdminBaseTestCase):
+    """The admin must follow the language the user chose on the site.
+
+    /admin/ is outside i18n_patterns, so it has no URL prefix to read and used
+    to fall back to the browser's Accept-Language — a Persian system got a
+    Persian admin even after switching the site to English. It can only follow
+    the choice if the switcher *stores* it, which is what these cover: the
+    switcher POSTs to set_language, that writes the django_language cookie, and
+    LocaleMiddleware resolves the admin from it.
+    """
+
+    def test_switch_redirects_to_the_same_page_in_the_chosen_language(self):
+        response = self.client.post(
+            reverse("set_language"), {"language": "fa", "next": "/en/auth/login/"}
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response["Location"], "/fa/auth/login/")
+        self.assertEqual(response.cookies[settings.LANGUAGE_COOKIE_NAME].value, "fa")
+
+    def test_switch_keeps_the_query_string_of_the_current_page(self):
+        response = self.client.post(
+            reverse("set_language"),
+            {"language": "fa", "next": "/en/dashboard/?page=my_notifications"},
+        )
+
+        self.assertEqual(response["Location"], "/fa/dashboard/?page=my_notifications")
+
+    def test_admin_language_follows_the_stored_choice_not_the_browser(self):
+        farsi = self.client.get(reverse("admin:index"), HTTP_ACCEPT_LANGUAGE="fa")
+        self.assertContains(farsi, '<html lang="fa"')
+
+        self.client.post(reverse("set_language"), {"language": "en", "next": "/admin/"})
+        english = self.client.get(reverse("admin:index"), HTTP_ACCEPT_LANGUAGE="fa")
+
+        self.assertContains(english, '<html lang="en"')
+
+    def test_site_switcher_stores_the_choice_instead_of_only_linking(self):
+        """The site switcher used to be plain links to the language prefix, so
+        nothing was ever stored and the admin kept using the browser's language.
+        """
+        self.client.logout()
+        response = self.client.get("/en/auth/login/")
+        html = response.content.decode()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(f'action="{reverse("set_language")}"', html)
+        self.assertIn('name="language"', html)
+
+    def test_admin_renders_the_switcher_for_every_configured_language(self):
+        response = self.client.get(reverse("admin:index"))
+        html = response.content.decode()
+
+        for lang_code, lang_name in settings.LANGUAGES:
+            self.assertIn(f'value="{lang_code}"', html, msg=f"{lang_code} is missing")
+            self.assertIn(f'aria-label="{lang_name}"', html)
+

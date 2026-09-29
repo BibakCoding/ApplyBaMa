@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-28 20:36+0330\n"
+"POT-Creation-Date: 2026-09-29 12:17+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -299,7 +299,7 @@ msgid "Username updated successfully."
 msgstr ""
 
 #: .\core\admin.py:61 .\templates\admin\base_site.html:25
-#: .\templates\admin\base_site.html:51
+#: .\templates\admin\base_site.html:78
 msgid "Apply BM Control Center"
 msgstr ""
 
@@ -1030,16 +1030,16 @@ msgstr ""
 msgid "Journey Step"
 msgstr ""
 
-#: .\core\models.py:680 .\core\templatetags\custom_filters.py:49
+#: .\core\models.py:680 .\core\templatetags\custom_filters.py:45
 msgid "Associate & Bachelor"
 msgstr ""
 
-#: .\core\models.py:681 .\core\templatetags\custom_filters.py:50
+#: .\core\models.py:681 .\core\templatetags\custom_filters.py:46
 #: .\templates\core\main.html:118
 msgid "Master"
 msgstr ""
 
-#: .\core\models.py:682 .\core\templatetags\custom_filters.py:51
+#: .\core\models.py:682 .\core\templatetags\custom_filters.py:47
 #: .\templates\core\main.html:119
 msgid "PhD"
 msgstr ""
@@ -1472,38 +1472,43 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: .\templates\admin\base_site.html:32
+#: .\templates\admin\base_site.html:45
+#: .\templates\partials\language_switcher.html:17
+msgid "Choose language"
+msgstr ""
+
+#: .\templates\admin\base_site.html:59
 msgid "Admin quick links"
 msgstr ""
 
-#: .\templates\admin\base_site.html:33 .\templates\core\main.html:30
+#: .\templates\admin\base_site.html:60 .\templates\core\main.html:30
 #: .\templates\core\main.html:57 .\templates\dashboard\main.html:4
 #: .\templates\dashboard\main.html:59
 msgid "Dashboard"
 msgstr ""
 
-#: .\templates\admin\base_site.html:35
+#: .\templates\admin\base_site.html:62
 msgid "View site"
 msgstr ""
 
-#: .\templates\admin\base_site.html:37 .\templates\admin\index.html:55
+#: .\templates\admin\base_site.html:64 .\templates\admin\index.html:55
 msgid "Translations"
 msgstr ""
 
-#: .\templates\admin\base_site.html:38
+#: .\templates\admin\base_site.html:65
 msgid "Scheduled tasks"
 msgstr ""
 
-#: .\templates\admin\base_site.html:54
+#: .\templates\admin\base_site.html:81
 #, python-format
 msgid "Signed in as %(username)s"
 msgstr ""
 
-#: .\templates\admin\base_site.html:56
+#: .\templates\admin\base_site.html:83
 msgid "Change password"
 msgstr ""
 
-#: .\templates\admin\base_site.html:58
+#: .\templates\admin\base_site.html:85
 msgid "Press / to filter the sidebar"
 msgstr ""
 
@@ -2965,8 +2970,4 @@ msgstr ""
 msgid ""
 "You received this email because your %(site_name)s account email address "
 "needs confirmation."
-msgstr ""
-
-#: .\templates\partials\language_switcher.html:6
-msgid "Choose language"
 msgstr ""

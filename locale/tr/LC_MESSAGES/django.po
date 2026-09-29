@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-28 20:36+0330\n"
+"POT-Creation-Date: 2026-09-29 12:17+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -299,7 +299,7 @@ msgid "Username updated successfully."
 msgstr "Şifre başarıyla güncellendi."
 
 #: .\core\admin.py:61 .\templates\admin\base_site.html:25
-#: .\templates\admin\base_site.html:51
+#: .\templates\admin\base_site.html:78
 msgid "Apply BM Control Center"
 msgstr "Apply BM Kontrol Merkezi"
 
@@ -1040,16 +1040,16 @@ msgstr "Site Ayarları"
 msgid "Journey Step"
 msgstr "Yolculuk Adımı"
 
-#: .\core\models.py:680 .\core\templatetags\custom_filters.py:49
+#: .\core\models.py:680 .\core\templatetags\custom_filters.py:45
 msgid "Associate & Bachelor"
 msgstr "Ön Lisans ve Lisans"
 
-#: .\core\models.py:681 .\core\templatetags\custom_filters.py:50
+#: .\core\models.py:681 .\core\templatetags\custom_filters.py:46
 #: .\templates\core\main.html:118
 msgid "Master"
 msgstr "Yüksek Lisans"
 
-#: .\core\models.py:682 .\core\templatetags\custom_filters.py:51
+#: .\core\models.py:682 .\core\templatetags\custom_filters.py:47
 #: .\templates\core\main.html:119
 msgid "PhD"
 msgstr "Doktora"
@@ -1499,38 +1499,43 @@ msgstr "Kayıtlı ConnectSID kayıtları"
 msgid "Admin"
 msgstr "Yönetim"
 
-#: .\templates\admin\base_site.html:32
+#: .\templates\admin\base_site.html:45
+#: .\templates\partials\language_switcher.html:17
+msgid "Choose language"
+msgstr "Dil"
+
+#: .\templates\admin\base_site.html:59
 msgid "Admin quick links"
 msgstr "Yönetim hızlı bağlantıları"
 
-#: .\templates\admin\base_site.html:33 .\templates\core\main.html:30
+#: .\templates\admin\base_site.html:60 .\templates\core\main.html:30
 #: .\templates\core\main.html:57 .\templates\dashboard\main.html:4
 #: .\templates\dashboard\main.html:59
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: .\templates\admin\base_site.html:35
+#: .\templates\admin\base_site.html:62
 msgid "View site"
 msgstr "Siteyi görüntüle"
 
-#: .\templates\admin\base_site.html:37 .\templates\admin\index.html:55
+#: .\templates\admin\base_site.html:64 .\templates\admin\index.html:55
 msgid "Translations"
 msgstr "Çeviriler"
 
-#: .\templates\admin\base_site.html:38
+#: .\templates\admin\base_site.html:65
 msgid "Scheduled tasks"
 msgstr "Zamanlanmış görevler"
 
-#: .\templates\admin\base_site.html:54
+#: .\templates\admin\base_site.html:81
 #, python-format
 msgid "Signed in as %(username)s"
 msgstr "%(username)s olarak giriş yapıldı"
 
-#: .\templates\admin\base_site.html:56
+#: .\templates\admin\base_site.html:83
 msgid "Change password"
 msgstr "Parolayı değiştir"
 
-#: .\templates\admin\base_site.html:58
+#: .\templates\admin\base_site.html:85
 msgid "Press / to filter the sidebar"
 msgstr "Kenar çubuğunu filtrelemek için / tuşuna basın"
 
@@ -3069,7 +3074,3 @@ msgid ""
 msgstr ""
 "Bu e-postayı, %(site_name)s hesabınızın e-posta adresinin onaylanması "
 "gerektiği için aldınız."
-
-#: .\templates\partials\language_switcher.html:6
-msgid "Choose language"
-msgstr "Dil"
