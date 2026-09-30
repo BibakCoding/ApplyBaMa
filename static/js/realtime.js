@@ -28,8 +28,11 @@
     var RECONNECT_MAX_MS = 30000;
 
     var socket = null;
+    var chatSocket = null;
     var reconnectAttempt = 0;
     var reconnectTimer = null;
+    var chatReconnectAttempt = 0;
+    var chatReconnectTimer = null;
     var deliberatelyClosed = false;
 
     function wsUrl() {
@@ -40,6 +43,13 @@
         // (wss behind HTTPS proxies, ws on plain-http development).
         var scheme = window.location.protocol === "https:" ? "wss:" : "ws:";
         return scheme + "//" + window.location.host + cfg.urls.notifySocket;
+    }
+
+    function chatWsUrl() {
+        var cfg = window.AppConfig || {};
+        if (!cfg.urls || !cfg.urls.chatSocket || !cfg.isLoggedIn) return null;
+        var scheme = window.location.protocol === "https:" ? "wss:" : "ws:";
+        return scheme + "//" + window.location.host + cfg.urls.chatSocket;
     }
 
     function connect() {
@@ -79,6 +89,76 @@
             // onclose fires after onerror; reconnection is handled there.
         };
     }
+
+    /* ------------------------------------------------------------------
+       Chat socket: same patterns as the notify socket (origin-absolute URL,
+       exponential reconnect, visibility wake-up), but bidirectional — the
+       chat page sends typing/read markers through ab:chat-send and every
+       server event is re-dispatched as one ab:chat-event CustomEvent.
+    ------------------------------------------------------------------ */
+
+    function connectChat() {
+        var url = chatWsUrl();
+        if (!url) return;
+        if (chatSocket && (chatSocket.readyState === WebSocket.OPEN ||
+                           chatSocket.readyState === WebSocket.CONNECTING)) return;
+
+        try {
+            chatSocket = new WebSocket(url);
+        } catch (e) {
+            scheduleChatReconnect();
+            return;
+        }
+
+        chatSocket.onopen = function () {
+            chatReconnectAttempt = 0;
+        };
+
+        chatSocket.onmessage = function (event) {
+            var data;
+            try {
+                data = JSON.parse(event.data);
+            } catch (e) {
+                return;
+            }
+            if (data && typeof data.type === "string" && data.type !== "error.unsupported") {
+                document.dispatchEvent(new CustomEvent("ab:chat-event", { detail: data }));
+                // connection.established also drives the generic connected hook
+                if (data.type === "connection.established") {
+                    document.dispatchEvent(new CustomEvent("ab:chat-connected"));
+                }
+            }
+        };
+
+        chatSocket.onclose = function () {
+            chatSocket = null;
+            scheduleChatReconnect();
+        };
+
+        chatSocket.onerror = function () {};
+    }
+
+    function scheduleChatReconnect() {
+        if (chatReconnectTimer) return;
+        var delay = Math.min(
+            RECONNECT_BASE_MS * Math.pow(2, chatReconnectAttempt),
+            RECONNECT_MAX_MS
+        );
+        chatReconnectAttempt += 1;
+        chatReconnectTimer = setTimeout(function () {
+            chatReconnectTimer = null;
+            connectChat();
+        }, delay);
+    }
+
+    // Any script may emit a lightweight chat event; it goes out only when the
+    // socket is open, otherwise it is dropped (the HTTP fallbacks in chat.js
+    // keep state correct without it).
+    document.addEventListener("ab:chat-send", function (event) {
+        if (chatSocket && chatSocket.readyState === WebSocket.OPEN) {
+            chatSocket.send(JSON.stringify(event.detail || {}));
+        }
+    });
 
     function scheduleReconnect() {
         if (reconnectTimer) return;
@@ -188,10 +268,15 @@
 
     // Reconnect when the tab becomes visible again: laptops sleep, sockets die.
     document.addEventListener("visibilitychange", function () {
-        if (document.visibilityState === "visible" &&
-            (!socket || socket.readyState === WebSocket.CLOSED)) {
-            reconnectAttempt = 0;
-            connect();
+        if (document.visibilityState === "visible") {
+            if (!socket || socket.readyState === WebSocket.CLOSED) {
+                reconnectAttempt = 0;
+                connect();
+            }
+            if (!chatSocket || chatSocket.readyState === WebSocket.CLOSED) {
+                chatReconnectAttempt = 0;
+                connectChat();
+            }
         }
     });
 
@@ -202,5 +287,8 @@
         } else {
             cb();
         }
-    })(connect);
+    })(function () {
+        connect();
+        connectChat();
+    });
 })();

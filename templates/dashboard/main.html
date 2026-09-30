@@ -7,6 +7,7 @@
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'vendor/intl-tel-input/css/intlTelInput.css' %}">
     <link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages/chat.css' %}">
 {% endblock %}
 {% block content %}
     <div class="dashboard-wrapper">
@@ -72,6 +73,14 @@
                             <i class="fas fa-bell"></i>
                             <span>{% trans "My Notifications" %}</span>
                             <span id="notifBadge" class="ml-2 px-2 py-0.5 text-xs font-bold text-white bg-red-500 rounded-full hidden"></span>
+                        </a>
+                    </li>
+                    <!-- Chat -->
+                    <li>
+                        <a href="#" data-page="chat" class="nav-link">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>{% trans "Messages" %}</span>
+                            <span id="chatBadge" class="ml-2 px-2 py-0.5 text-xs font-bold text-white bg-emerald-500 rounded-full hidden"></span>
                         </a>
                     </li>
                     <!-- Universities -->
@@ -204,6 +213,12 @@
                 </div>
             </div>
         </div>
+
+        {% comment %}
+        Chat file-permission grant modal, shared by the My Students rows and
+        the admin chat header; opened by chat.js's grant helper.
+        {% endcomment %}
+        {% include "dashboard/fragments/partials/chat_file_grant.html" %}
     </div>
 {% endblock %}
 {% block js %}
@@ -215,5 +230,6 @@
     {% endcomment %}
     <script src="{% static 'js/jwt-auth.js' %}" defer></script>
     <script src="{% static 'js/pages/dashboard.js' %}" defer></script>
+    <script src="{% static 'js/pages/chat.js' %}" defer></script>
     <script src="{% static 'vendor/intl-tel-input/js/intlTelInput.min.js' %}" defer></script>
 {% endblock %}

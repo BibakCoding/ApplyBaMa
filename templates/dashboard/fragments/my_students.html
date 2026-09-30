@@ -38,6 +38,20 @@
                                         class="text-[var(--ab-primary)] hover:underline text-sm font-medium">
                                     {% trans "View Applications" %}
                                 </button>
+                                {% comment %}
+                                Chat file-permission grant: opens the shared grant
+                                modal (chat_file_grant.html). The per-row defaults
+                                carry the site setting and the student's current
+                                state, so chat.js's grant helper works from here.
+                                {% endcomment %}
+                                <button type="button"
+                                        class="chat-grant-btn ml-3 text-emerald-600 hover:underline text-sm font-medium"
+                                        data-student-id="{{ student.pk }}"
+                                        data-student-name="{{ student.get_full_name|default:student.username }}"
+                                        data-current-mb="{{ student.chat_file_permission.max_file_mb|default:'' }}"
+                                        data-current-active="{{ student.chat_file_permission.is_active|default:'' }}">
+                                    <i class="fas fa-paperclip mr-1"></i>{% trans "Files" %}
+                                </button>
                             </td>
                         </tr>
                     {% empty %}

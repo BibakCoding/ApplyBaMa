@@ -61,10 +61,66 @@
       fee_desc:
         document.body.dataset.i18nSortFeeDesc || "Sort: Fee (High to Low)",
       founded_asc:
-        document.body.dataset.i18nSortFoundedAsc || "Sort: Founded (Oldest First)",
-      founded_desc:
-        document.body.dataset.i18nSortFoundedDesc || "Sort: Founded (Newest First)",
+        document.body.dataset.i18nSortFoundedAsc || "Sort: Founded (Oldest First)",      founded_desc:
+        document.body.dataset.i18nSortFoundedDesc ||
+        "Sort: Founded (Newest First)",
     },
+    /* Chat page strings (pages/chat.js), rendered into <body> by base.html. */
+    chatNoConversations:
+      document.body.dataset.i18nChatNoConversations || "No conversations yet.",
+    chatNoConversationsSub:
+      document.body.dataset.i18nChatNoConversationsSub ||
+      "You can always message Support here; students an agent or company adds appear automatically.",
+    chatNoMessages:
+      document.body.dataset.i18nChatNoMessages || "No messages yet",
+    chatSupportTag:
+      document.body.dataset.i18nChatSupportTag || "Support",
+    chatOnline: document.body.dataset.i18nChatOnline || "online",
+    chatOffline: document.body.dataset.i18nChatOffline || "offline",
+    chatTyping: document.body.dataset.i18nChatTyping || "typing…",
+    chatDeletedMessage:
+      document.body.dataset.i18nChatDeletedMessage || "Message deleted",
+    chatEdited: document.body.dataset.i18nChatEdited || "(edited)",
+    chatForwarded: document.body.dataset.i18nChatForwarded || "Forwarded",
+    chatAttachment:
+      document.body.dataset.i18nChatAttachment || "📎 Attachment",
+    chatReply: document.body.dataset.i18nChatReply || "Reply",
+    chatForward: document.body.dataset.i18nChatForward || "Forward",
+    chatEdit: document.body.dataset.i18nChatEdit || "Edit",
+    chatUnpin: document.body.dataset.i18nChatUnpin || "Unpin",
+    chatPin: document.body.dataset.i18nChatPin || "Pin",
+    chatDelete: document.body.dataset.i18nChatDelete || "Delete",
+    chatDeleteConfirm:
+      document.body.dataset.i18nChatDeleteConfirm ||
+      "Delete this message for both sides?",
+    chatRead: document.body.dataset.i18nChatRead || "Read",
+    chatSent: document.body.dataset.i18nChatSent || "Sent",
+    chatError: document.body.dataset.i18nChatError || "Something went wrong.",
+    chatLoadError:
+      document.body.dataset.i18nChatLoadError ||
+      "Could not open the conversation.",
+    chatFileNotAllowed:
+      document.body.dataset.i18nChatFileNotAllowed ||
+      "File sending is not enabled for your account. Ask the support team.",
+    chatFileLimit:
+      document.body.dataset.i18nChatFileLimit || "Files up to __MB MB",
+    chatFileTooBig:
+      document.body.dataset.i18nChatFileTooBig ||
+      "This file is too large. Your limit is __MB MB.",
+    chatForwardPrompt:
+      document.body.dataset.i18nChatForwardPrompt ||
+      "Forward this message to which conversation?\n\n",
+    chatForwardedDone:
+      document.body.dataset.i18nChatForwardedDone || "Message forwarded.",
+    chatStartConversation:
+      document.body.dataset.i18nChatStartConversation || "Start a conversation",
+    chatGrantDone:
+      document.body.dataset.i18nChatGrantDone || "File permission updated.",
+    chatRevokeConfirm:
+      document.body.dataset.i18nChatRevokeConfirm ||
+      "Revoke this student's file permission?",
+    chatRevoked:
+      document.body.dataset.i18nChatRevoked || "File permission revoked.",
   };
 
   const ApplyBaMa = {

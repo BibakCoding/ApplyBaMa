@@ -37,6 +37,25 @@ def unread_counts_for_users(user_ids):
     return {row["user_id"]: row["unread"] for row in rows}
 
 
+def push_to_user(user_id, payload):
+    """Push a pre-shaped chat event to one user's chat sockets.
+
+    Separate from ``notify_user`` so notification producers keep their default
+    ``type`` behaviour; the chat consumer group-multiplexes through the same
+    channel layer. Never raises, like every push in this module.
+    """
+    try:
+        layer = get_channel_layer()
+        if layer is None:
+            return
+        async_to_sync(layer.group_send)(
+            f"chat.user.{user_id}",
+            {"type": "chat.event", "payload": payload},
+        )
+    except Exception:
+        logger.warning("realtime: chat push to user %s failed", user_id, exc_info=True)
+
+
 def notify_user(user_id, payload, type="notification.new"):
     """Push a realtime event to one user's open sockets.
 

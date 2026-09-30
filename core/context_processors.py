@@ -16,7 +16,7 @@ from django.conf import settings
 from django.urls import NoReverseMatch, reverse
 from django.utils.translation import gettext_lazy as _
 
-from realtime.routing import WS_NOTIFY_PATH
+from realtime.routing import WS_CHAT_PATH, WS_NOTIFY_PATH
 
 
 def _url(name, *args):
@@ -45,10 +45,18 @@ def _detail_url(name, pk=0):
 def app_config(request):
     user = getattr(request, "user", None)
 
+    # The grant dialog's pre-filled value (SiteSettings.chat_default_file_mb).
+    from core.models import SiteSettings
+
+    chat_default_file_mb = SiteSettings.objects.get_or_create(pk=1)[0].chat_default_file_mb
+
     return {
+        "chat_default_file_mb": chat_default_file_mb,
         "AB_APP_CONFIG": {
             "staticUrl": settings.STATIC_URL,
             "isLoggedIn": bool(user and user.is_authenticated),
+            "userId": user.pk if user and user.is_authenticated else None,
+            "chatDefaultFileMb": chat_default_file_mb,
             "urls": {
                 # Public site
                 "register": _url("register"),
@@ -65,6 +73,18 @@ def app_config(request):
                 "cancelEmailChange": _url("cancel_email_change"),
                 # Notifications
                 "notifySocket": "/" + WS_NOTIFY_PATH,
+                # Chat
+                "chatSocket": "/" + WS_CHAT_PATH,
+                "chatConversations": _url("chat_conversations"),
+                "chatThread": _detail_url("chat_thread"),
+                "chatSend": _url("chat_send"),
+                "chatUpload": _detail_url("chat_upload"),
+                "chatEdit": _detail_url("chat_edit"),
+                "chatDelete": _detail_url("chat_delete"),
+                "chatPin": _detail_url("chat_pin"),
+                "chatForward": _detail_url("chat_forward"),
+                "chatRead": _detail_url("chat_read"),
+                "chatGrant": _detail_url("chat_grant"),
                 "sendNotification": _url("send_notification"),
                 "searchUsers": _url("search_users_for_notification"),
                 "getGroupUsers": _url("get_group_user_ids"),
@@ -87,6 +107,8 @@ def app_config(request):
                 "emailVerifiedReload": _(
                     "Email verified! Your account is fully active again."
                 ),
+                # Chat
+                "chatConnected": _("Chat connected"),
             },
         }
     }

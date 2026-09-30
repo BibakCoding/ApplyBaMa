@@ -39,10 +39,14 @@ from .models import (
     AgentProfile,
     City,
     CompanyProfile,
+    Conversation,
     Country,
     DocumentRequirement,
     Faculty,
+    FilePermission,
     HowItWorksStep,
+    Message,
+    MessageAttachment,
     Notification,
     NotificationRecipient,
     Program,
@@ -799,6 +803,17 @@ class SiteSettingsAdmin(TranslationAdmin, SingletonModelAdmin):
                 )
             },
         ),
+        (
+            _("Chat file transfers"),
+            {
+                "fields": ("chat_default_file_mb", "chat_max_total_storage_mb"),
+                "description": _(
+                    "The default pre-fills the per-student grant dialog; students "
+                    "without a grant cannot send files. The ceiling bounds the "
+                    "total size of every chat upload on the site."
+                ),
+            },
+        ),
     )
 
 
@@ -1118,3 +1133,100 @@ class NotificationRecipientAdmin(admin.ModelAdmin):
             % {"count": updated},
             messages.SUCCESS,
         )
+
+
+# ---------------------------------------------------------------------------
+# Chat
+# ---------------------------------------------------------------------------
+@admin.register(FilePermission)
+class FilePermissionAdmin(admin.ModelAdmin):
+    """Grant and revoke students' chat file allowances.
+
+    The admin sets the size limit here (or from the chat header / My Students
+    on the site); students without an active row cannot upload at all. The
+    value is clamped in FilePermission.grant/clean — this form cannot create
+    an allowance above the hard ceiling either.
+    """
+
+    list_display = ("student", "max_file_mb", "is_active", "granted_by", "updated_at")
+    list_editable = ("is_active",)
+    list_filter = ("is_active",)
+    search_fields = ("student__username", "student__email", "granted_by__username")
+    autocomplete_fields = ("student", "granted_by")
+    list_select_related = ("student", "granted_by")
+    ordering = ("-updated_at",)
+    actions = ("activate", "deactivate", "delete_selected")
+
+    @admin.action(description=_("Activate selected file permissions"), permissions=["change"])
+    def activate(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(
+            request,
+            ngettext(
+                "%(count)d file permission activated.",
+                "%(count)d file permissions activated.",
+                updated,
+            )
+            % {"count": updated},
+            messages.SUCCESS,
+        )
+
+    @admin.action(description=_("Deactivate selected file permissions"), permissions=["change"])
+    def deactivate(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(
+            request,
+            ngettext(
+                "%(count)d file permission deactivated.",
+                "%(count)d file permissions deactivated.",
+                updated,
+            )
+            % {"count": updated},
+            messages.SUCCESS,
+        )
+
+
+@admin.register(Conversation)
+class ConversationAdmin(admin.ModelAdmin):
+    """Audit view over the 1-to-1 threads (read markers, presence)."""
+
+    list_display = ("id", "user_low", "user_high", "last_message_at", "updated_at")
+    search_fields = ("user_low__username", "user_high__username")
+    autocomplete_fields = ("user_low", "user_high")
+    list_select_related = ("user_low", "user_high")
+    ordering = ("-last_message_at",)
+
+
+@admin.register(Message)
+class MessageAdmin(admin.ModelAdmin):
+    """Moderation/audit surface. Deletion here is a hard delete — the in-chat
+    delete is the soft one described on the model; use it only for legal/
+    storage reasons."""
+
+    list_display = (
+        "id",
+        "conversation",
+        "sender",
+        "body_preview",
+        "is_deleted",
+        "is_edited",
+        "is_pinned",
+        "created_at",
+    )
+    list_filter = ("is_deleted", "is_edited", "is_pinned", "created_at")
+    search_fields = ("body", "sender__username")
+    list_select_related = ("sender", "conversation")
+    ordering = ("-created_at",)
+    readonly_fields = ("created_at", "updated_at", "deleted_at")
+
+    @admin.display(description=_("Body"))
+    def body_preview(self, obj):
+        return (obj.body or "—")[:80]
+
+
+@admin.register(MessageAttachment)
+class MessageAttachmentAdmin(admin.ModelAdmin):
+    list_display = ("id", "message", "original_name", "size", "is_image", "created_at")
+    search_fields = ("original_name", "message__body")
+    list_filter = ("is_image",)
+    readonly_fields = ("created_at",)

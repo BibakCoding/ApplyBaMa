@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-29 13:45+0330\n"
+"POT-Creation-Date: 2026-09-30 20:20+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,7 +91,7 @@ msgstr "معلمات ترقيم الصفحات غير صالحة"
 msgid "Lifetime"
 msgstr "مدة الصلاحية"
 
-#: .\authentication\admin.py:57 .\core\admin.py:501 .\core\admin.py:976
+#: .\authentication\admin.py:57 .\core\admin.py:505 .\core\admin.py:991
 #: .\templates\dashboard\fragments\notifications.html:62
 msgid "Type"
 msgstr "النوع"
@@ -179,7 +179,7 @@ msgstr "تأكيد كلمة المرور"
 
 #: .\authentication\forms.py:60 .\authentication\forms.py:86
 #: .\templates\dashboard\fragments\my_students.html:26
-#: .\templates\dashboard\fragments\my_students.html:89
+#: .\templates\dashboard\fragments\my_students.html:104
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
@@ -303,47 +303,47 @@ msgstr "تم تحديث كلمة المرور بنجاح."
 msgid "This username is already taken."
 msgstr "اسم المستخدم مستخدم بالفعل."
 
-#: .\authentication\views.py:519 .\dashboard\views.py:556
+#: .\authentication\views.py:519 .\dashboard\views.py:557
 msgid "Username updated successfully."
 msgstr "تم تحديث كلمة المرور بنجاح."
 
-#: .\core\admin.py:61 .\templates\admin\base_site.html:25
+#: .\core\admin.py:65 .\templates\admin\base_site.html:25
 #: .\templates\admin\base_site.html:78
 msgid "Apply BM Control Center"
 msgstr "مركز تحكم Apply BM"
 
-#: .\core\admin.py:62
+#: .\core\admin.py:66
 msgid "Apply BM Admin"
 msgstr "إدارة Apply BM"
 
-#: .\core\admin.py:99 .\core\admin.py:141 .\core\admin.py:217
-#: .\core\models.py:278 .\core\templatetags\admin_extras.py:238
+#: .\core\admin.py:103 .\core\admin.py:145 .\core\admin.py:221
+#: .\core\models.py:279 .\core\templatetags\admin_extras.py:238
 #: .\templates\dashboard\fragments\programs.html:4
-#: .\templates\dashboard\main.html:88
+#: .\templates\dashboard\main.html:97
 msgid "Programs"
 msgstr "البرامج"
 
-#: .\core\admin.py:114 .\core\models.py:172
+#: .\core\admin.py:118 .\core\models.py:173
 msgid "Faculties"
 msgstr "الكليات"
 
-#: .\core\admin.py:137 .\core\models.py:244
+#: .\core\admin.py:141 .\core\models.py:245
 #: .\core\templatetags\admin_extras.py:246
 #: .\templates\authentication\login.html:28
 #: .\templates\dashboard\fragments\universities.html:4
-#: .\templates\dashboard\main.html:81
+#: .\templates\dashboard\main.html:90
 msgid "Universities"
 msgstr "الجامعات"
 
-#: .\core\admin.py:213
+#: .\core\admin.py:217
 msgid "Logo"
 msgstr "الشعار"
 
-#: .\core\admin.py:221
+#: .\core\admin.py:225
 msgid "Show selected universities on the homepage"
 msgstr "إظهار الجامعات المحددة في الصفحة الرئيسية"
 
-#: .\core\admin.py:227
+#: .\core\admin.py:231
 #, python-format
 msgid "%(count)d university is now on the homepage."
 msgid_plural "%(count)d universities are now on the homepage."
@@ -354,11 +354,11 @@ msgstr[3] "تمت إضافة %(count)d جامعة إلى الصفحة الرئي
 msgstr[4] "تمت إضافة %(count)d جامعة إلى الصفحة الرئيسية."
 msgstr[5] "تمت إضافة %(count)d جامعة إلى الصفحة الرئيسية."
 
-#: .\core\admin.py:235
+#: .\core\admin.py:239
 msgid "Hide selected universities from the homepage"
 msgstr "إخفاء الجامعات المحددة من الصفحة الرئيسية"
 
-#: .\core\admin.py:241
+#: .\core\admin.py:245
 #, python-format
 msgid "%(count)d university was removed from the homepage."
 msgid_plural "%(count)d universities were removed from the homepage."
@@ -369,11 +369,11 @@ msgstr[3] "تمت إزالة %(count)d جامعة من الصفحة الرئيس
 msgstr[4] "تمت إزالة %(count)d جامعة من الصفحة الرئيسية."
 msgstr[5] "تمت إزالة %(count)d جامعة من الصفحة الرئيسية."
 
-#: .\core\admin.py:249
+#: .\core\admin.py:253
 msgid "Activate selected universities"
 msgstr "تفعيل الجامعات المحددة"
 
-#: .\core\admin.py:254
+#: .\core\admin.py:258
 #, python-format
 msgid "%(count)d university activated."
 msgid_plural "%(count)d universities activated."
@@ -384,11 +384,11 @@ msgstr[3] "تم تفعيل %(count)d جامعة."
 msgstr[4] "تم تفعيل %(count)d جامعة."
 msgstr[5] "تم تفعيل %(count)d جامعة."
 
-#: .\core\admin.py:259
+#: .\core\admin.py:263
 msgid "Deactivate selected universities"
 msgstr "تعطيل الجامعات المحددة"
 
-#: .\core\admin.py:265
+#: .\core\admin.py:269
 #, python-format
 msgid "%(count)d university deactivated."
 msgid_plural "%(count)d universities deactivated."
@@ -399,35 +399,35 @@ msgstr[3] "تم تعطيل %(count)d جامعة."
 msgstr[4] "تم تعطيل %(count)d جامعة."
 msgstr[5] "تم تعطيل %(count)d جامعة."
 
-#: .\core\admin.py:275
+#: .\core\admin.py:279
 msgid "discount"
 msgstr "الخصم"
 
-#: .\core\admin.py:279
+#: .\core\admin.py:283
 msgid "Has an offer"
 msgstr "يوجد خصم"
 
-#: .\core\admin.py:279
+#: .\core\admin.py:283
 msgid "No offer"
 msgstr "لا يوجد خصم"
 
-#: .\core\admin.py:346 .\core\admin.py:707
+#: .\core\admin.py:350 .\core\admin.py:711
 msgid "Status"
 msgstr "الحالة"
 
-#: .\core\admin.py:351
+#: .\core\admin.py:355
 msgid "Price"
 msgstr "السعر"
 
-#: .\core\admin.py:360
+#: .\core\admin.py:364
 msgid "offer"
 msgstr "خصم"
 
-#: .\core\admin.py:364
+#: .\core\admin.py:368
 msgid "Mark selected programs as available"
 msgstr "وضع علامة متاح على البرامج المحددة"
 
-#: .\core\admin.py:370
+#: .\core\admin.py:374
 #, python-format
 msgid "%(count)d program is now available."
 msgid_plural "%(count)d programs are now available."
@@ -438,11 +438,11 @@ msgstr[3] "%(count)d برنامج متاح الآن."
 msgstr[4] "%(count)d برنامج متاح الآن."
 msgstr[5] "%(count)d برنامج متاح الآن."
 
-#: .\core\admin.py:376
+#: .\core\admin.py:380
 msgid "Mark selected programs as quota full"
 msgstr "وضع علامة اكتمل العدد على البرامج المحددة"
 
-#: .\core\admin.py:382
+#: .\core\admin.py:386
 #, python-format
 msgid "%(count)d program marked as quota full."
 msgid_plural "%(count)d programs marked as quota full."
@@ -453,11 +453,11 @@ msgstr[3] "تم وضع علامة اكتمل العدد على %(count)d برن�
 msgstr[4] "تم وضع علامة اكتمل العدد على %(count)d برنامج."
 msgstr[5] "تم وضع علامة اكتمل العدد على %(count)d برنامج."
 
-#: .\core\admin.py:390
+#: .\core\admin.py:394
 msgid "Activate selected programs"
 msgstr "تفعيل البرامج المحددة"
 
-#: .\core\admin.py:395
+#: .\core\admin.py:399
 #, python-format
 msgid "%(count)d program activated."
 msgid_plural "%(count)d programs activated."
@@ -468,11 +468,11 @@ msgstr[3] "تم تفعيل %(count)d برنامج."
 msgstr[4] "تم تفعيل %(count)d برنامج."
 msgstr[5] "تم تفعيل %(count)d برنامج."
 
-#: .\core\admin.py:400
+#: .\core\admin.py:404
 msgid "Deactivate selected programs"
 msgstr "تعطيل البرامج المحددة"
 
-#: .\core\admin.py:405
+#: .\core\admin.py:409
 #, python-format
 msgid "%(count)d program deactivated."
 msgid_plural "%(count)d programs deactivated."
@@ -483,25 +483,25 @@ msgstr[3] "تم تعطيل %(count)d برنامج."
 msgstr[4] "تم تعطيل %(count)d برنامج."
 msgstr[5] "تم تعطيل %(count)d برنامج."
 
-#: .\core\admin.py:450 .\templates\dashboard\fragments\welcome.html:18
-#: .\templates\dashboard\main.html:66
+#: .\core\admin.py:454 .\templates\dashboard\fragments\welcome.html:18
+#: .\templates\dashboard\main.html:67
 msgid "Profile"
 msgstr "الملف الشخصي"
 
-#: .\core\admin.py:506 .\core\admin.py:576 .\core\models.py:553
+#: .\core\admin.py:510 .\core\admin.py:580 .\core\models.py:554
 #: .\core\templatetags\admin_extras.py:50
 #: .\core\templatetags\admin_extras.py:230
 #: .\templates\dashboard\fragments\my_students.html:27
 #: .\templates\dashboard\fragments\welcome.html:64
-#: .\templates\dashboard\main.html:94
+#: .\templates\dashboard\main.html:103
 msgid "Applications"
 msgstr "الطلبات"
 
-#: .\core\admin.py:510
+#: .\core\admin.py:514
 msgid "Activate selected users"
 msgstr "تفعيل المستخدمين المحددين"
 
-#: .\core\admin.py:515
+#: .\core\admin.py:519
 #, python-format
 msgid "%(count)d user activated."
 msgid_plural "%(count)d users activated."
@@ -512,11 +512,11 @@ msgstr[3] "تم تفعيل %(count)d مستخدم."
 msgstr[4] "تم تفعيل %(count)d مستخدم."
 msgstr[5] "تم تفعيل %(count)d مستخدم."
 
-#: .\core\admin.py:520
+#: .\core\admin.py:524
 msgid "Deactivate selected users"
 msgstr "تعطيل المستخدمين المحددين"
 
-#: .\core\admin.py:525
+#: .\core\admin.py:529
 #, python-format
 msgid "%(count)d user deactivated."
 msgid_plural "%(count)d users deactivated."
@@ -527,120 +527,135 @@ msgstr[3] "تم تعطيل %(count)d مستخدم."
 msgstr[4] "تم تعطيل %(count)d مستخدم."
 msgstr[5] "تم تعطيل %(count)d مستخدم."
 
-#: .\core\admin.py:553 .\core\templatetags\admin_extras.py:211
+#: .\core\admin.py:557 .\core\templatetags\admin_extras.py:211
 msgid "Agents"
 msgstr "الوكلاء"
 
-#: .\core\admin.py:599 .\templates\dashboard\fragments\profile.html:233
+#: .\core\admin.py:603 .\templates\dashboard\fragments\profile.html:233
 msgid "Stage"
 msgstr "المرحلة"
 
-#: .\core\admin.py:610
+#: .\core\admin.py:614
 msgid "needs attention"
 msgstr "بحاجة إلى متابعة"
 
-#: .\core\admin.py:615
+#: .\core\admin.py:619
 msgid "Still in progress"
 msgstr "قيد التنفيذ"
 
-#: .\core\admin.py:616
+#: .\core\admin.py:620
 msgid "No update for 30+ days"
 msgstr "بدون تحديث منذ 30 يومًا أو أكثر"
 
-#: .\core\admin.py:617
+#: .\core\admin.py:621
 msgid "No program chosen yet"
 msgstr "لم يتم اختيار برنامج بعد"
 
-#: .\core\admin.py:666
+#: .\core\admin.py:670
 msgid "Identifiers"
 msgstr "المعرّفات"
 
-#: .\core\admin.py:667
+#: .\core\admin.py:671
 msgid "Parties"
 msgstr "الأطراف"
 
-#: .\core\admin.py:668 .\core\admin.py:711
+#: .\core\admin.py:672 .\core\admin.py:715
 msgid "Progress"
 msgstr "التقدم"
 
-#: .\core\admin.py:669 .\templates\core\main.html:20
+#: .\core\admin.py:673 .\templates\core\main.html:20
 #: .\templates\core\main.html:54
 msgid "Documents"
 msgstr "الوثائق"
 
-#: .\core\admin.py:699
+#: .\core\admin.py:703
 #: .\templates\dashboard\fragments\application_detail.html:42
-#: .\templates\dashboard\main.html:47
+#: .\templates\dashboard\main.html:48
 msgid "Student"
 msgstr "طالب"
 
-#: .\core\admin.py:703 .\core\models.py:388 .\templates\dashboard\main.html:43
+#: .\core\admin.py:707 .\core\chat.py:115 .\core\models.py:389
+#: .\templates\dashboard\main.html:44
 msgid "Agent"
 msgstr "وكيل"
 
-#: .\core\admin.py:746
+#: .\core\admin.py:750
 msgid "Mark selected applications as finished"
 msgstr "وضع علامة مكتمل على الطلبات المحددة"
 
-#: .\core\admin.py:752
+#: .\core\admin.py:756
 #, python-format
 msgid "%(count)d application marked as finished."
 msgstr "تم وضع علامة مكتمل على %(count)d طلب."
 
-#: .\core\admin.py:753
+#: .\core\admin.py:757
 #, python-format
 msgid "%(count)d applications marked as finished."
 msgstr "تم وضع علامة مكتمل على %(count)d طلب."
 
-#: .\core\admin.py:756
+#: .\core\admin.py:760
 msgid "Mark selected applications as failed"
 msgstr "وضع علامة فاشل على الطلبات المحددة"
 
-#: .\core\admin.py:762
+#: .\core\admin.py:766
 #, python-format
 msgid "%(count)d application marked as failed."
 msgstr "تم وضع علامة فاشل على %(count)d طلب."
 
-#: .\core\admin.py:763
+#: .\core\admin.py:767
 #, python-format
 msgid "%(count)d applications marked as failed."
 msgstr "تم وضع علامة فاشل على %(count)d طلب."
 
-#: .\core\admin.py:766
+#: .\core\admin.py:770
 msgid "Reopen selected applications"
 msgstr "إعادة فتح الطلبات المحددة"
 
-#: .\core\admin.py:772
+#: .\core\admin.py:776
 #, python-format
 msgid "%(count)d application reopened."
 msgstr "تمت إعادة فتح %(count)d طلب."
 
-#: .\core\admin.py:773
+#: .\core\admin.py:777
 #, python-format
 msgid "%(count)d applications reopened."
 msgstr "تمت إعادة فتح %(count)d طلب."
 
-#: .\core\admin.py:789
+#: .\core\admin.py:793
 msgid "Hero section"
 msgstr "قسم الواجهة"
 
-#: .\core\admin.py:791
+#: .\core\admin.py:795
 msgid "Contact & social"
 msgstr "التواصل والشبكات الاجتماعية"
 
-#: .\core\admin.py:832
+#: .\core\admin.py:807
+msgid "Chat file transfers"
+msgstr "نقل ملفات المحادثة"
+
+#: .\core\admin.py:811
+msgid ""
+"The default pre-fills the per-student grant dialog; students without a grant "
+"cannot send files. The ceiling bounds the total size of every chat upload on "
+"the site."
+msgstr ""
+"القيمة الافتراضية تُملأ مسبقًا في نافذة منح الإذن لكل طالب؛ الطلاب الذين لا "
+"يملكون إذنًا لا يمكنهم إرسال الملفات. ويقيّد الحد الأقصى الحجم الإجمالي لكل "
+"ملفات المحادثة في الموقع."
+
+#: .\core\admin.py:847
 msgid "Level"
 msgstr "المستوى"
 
-#: .\core\admin.py:862
+#: .\core\admin.py:877
 msgid "Photo"
 msgstr "الصورة"
 
-#: .\core\admin.py:866
+#: .\core\admin.py:881
 msgid "Publish selected success stories"
 msgstr "نشر قصص النجاح المحددة"
 
-#: .\core\admin.py:872
+#: .\core\admin.py:887
 #, python-format
 msgid "%(count)d success story published."
 msgid_plural "%(count)d success stories published."
@@ -651,11 +666,11 @@ msgstr[3] "تم نشر %(count)d قصة نجاح."
 msgstr[4] "تم نشر %(count)d قصة نجاح."
 msgstr[5] "تم نشر %(count)d قصة نجاح."
 
-#: .\core\admin.py:880
+#: .\core\admin.py:895
 msgid "Unpublish selected success stories"
 msgstr "إلغاء نشر قصص النجاح المحددة"
 
-#: .\core\admin.py:886
+#: .\core\admin.py:901
 #, python-format
 msgid "%(count)d success story hidden from the homepage."
 msgid_plural "%(count)d success stories hidden from the homepage."
@@ -666,17 +681,17 @@ msgstr[3] "تم إخفاء %(count)d قصة نجاح من الصفحة الرئ�
 msgstr[4] "تم إخفاء %(count)d قصة نجاح من الصفحة الرئيسية."
 msgstr[5] "تم إخفاء %(count)d قصة نجاح من الصفحة الرئيسية."
 
-#: .\core\admin.py:924 .\core\models.py:750
+#: .\core\admin.py:939 .\core\models.py:771
 #: .\templates\dashboard\fragments\notifications.html:14
 #: .\templates\dashboard\fragments\notifications.html:125
 msgid "Message"
 msgstr "الرسالة"
 
-#: .\core\admin.py:934
+#: .\core\admin.py:949
 msgid "Audience"
 msgstr "الجمهور المستهدف"
 
-#: .\core\admin.py:938
+#: .\core\admin.py:953
 msgid ""
 "Use “Specific users” from the dashboard notification composer: the admin "
 "cannot edit a through-model recipient list directly."
@@ -684,20 +699,20 @@ msgstr ""
 "استخدم خيار «مستخدمون محددون» من مُنشئ الإشعارات في لوحة التحكم؛ لا يمكن "
 "للوحة الإدارة تعديل قائمة مستلمي هذا النموذج الوسيط مباشرةً."
 
-#: .\core\admin.py:943 .\core\admin.py:988
+#: .\core\admin.py:958 .\core\admin.py:1003
 msgid "Delivery"
 msgstr "الإرسال"
 
-#: .\core\admin.py:980 .\core\models.py:774
+#: .\core\admin.py:995 .\core\models.py:795
 #: .\templates\dashboard\fragments\notifications.html:63
 msgid "Recipients"
 msgstr "المستلمون"
 
-#: .\core\admin.py:984 .\core\models.py:816
+#: .\core\admin.py:999 .\core\models.py:837 .\templates\base.html:64
 msgid "Read"
 msgstr "مقروء"
 
-#: .\core\admin.py:996
+#: .\core\admin.py:1011
 #, python-format
 msgid "%(count)d recipient,"
 msgid_plural "%(count)d recipients,"
@@ -708,15 +723,15 @@ msgstr[3] "%(count)d مستلم،"
 msgstr[4] "%(count)d مستلم،"
 msgstr[5] "%(count)d مستلم،"
 
-#: .\core\admin.py:1003
+#: .\core\admin.py:1018
 msgid "open the recipient list"
 msgstr "فتح قائمة المستلمين"
 
-#: .\core\admin.py:1006
+#: .\core\admin.py:1021
 msgid "Deliver to the selected audience"
 msgstr "الإرسال إلى الجمهور المستهدف"
 
-#: .\core\admin.py:1053
+#: .\core\admin.py:1068
 #, python-format
 msgid "%(count)d new delivery created."
 msgid_plural "%(count)d new deliveries created."
@@ -727,11 +742,11 @@ msgstr[3] "تم إنشاء %(count)d إرسال جديد."
 msgstr[4] "تم إنشاء %(count)d إرسال جديد."
 msgstr[5] "تم إنشاء %(count)d إرسال جديد."
 
-#: .\core\admin.py:1073
+#: .\core\admin.py:1088
 msgid "Mark selected deliveries as read"
 msgstr "وضع علامة مقروء على عمليات الإرسال المحددة"
 
-#: .\core\admin.py:1090
+#: .\core\admin.py:1105
 #, python-format
 msgid "%(count)d delivery marked as read."
 msgid_plural "%(count)d deliveries marked as read."
@@ -742,11 +757,11 @@ msgstr[3] "تم وضع علامة مقروء على %(count)d إرسال."
 msgstr[4] "تم وضع علامة مقروء على %(count)d إرسال."
 msgstr[5] "تم وضع علامة مقروء على %(count)d إرسال."
 
-#: .\core\admin.py:1095
+#: .\core\admin.py:1110
 msgid "Mark selected deliveries as unread"
 msgstr "وضع علامة غير مقروء على عمليات الإرسال المحددة"
 
-#: .\core\admin.py:1114
+#: .\core\admin.py:1129
 #, python-format
 msgid "%(count)d delivery marked as unread."
 msgid_plural "%(count)d deliveries marked as unread."
@@ -756,6 +771,40 @@ msgstr[2] "تم وضع علامة غير مقروء على %(count)d إرسال.
 msgstr[3] "تم وضع علامة غير مقروء على %(count)d إرسال."
 msgstr[4] "تم وضع علامة غير مقروء على %(count)d إرسال."
 msgstr[5] "تم وضع علامة غير مقروء على %(count)d إرسال."
+
+#: .\core\admin.py:1160
+msgid "Activate selected file permissions"
+msgstr "تفعيل أذونات الملفات المحددة"
+
+#: .\core\admin.py:1166
+#, python-format
+msgid "%(count)d file permission activated."
+msgid_plural "%(count)d file permissions activated."
+msgstr[0] "تم تفعيل %(count)d إذن ملف."
+msgstr[1] "تم تفعيل %(count)d إذن ملف."
+msgstr[2] "تم تفعيل إذنَي ملفين."
+msgstr[3] "تم تفعيل %(count)d أذونات ملفات."
+msgstr[4] "تم تفعيل %(count)d إذن ملف."
+msgstr[5] "تم تفعيل %(count)d إذن ملف."
+
+#: .\core\admin.py:1174
+msgid "Deactivate selected file permissions"
+msgstr "تعطيل أذونات الملفات المحددة"
+
+#: .\core\admin.py:1180
+#, python-format
+msgid "%(count)d file permission deactivated."
+msgid_plural "%(count)d file permissions deactivated."
+msgstr[0] "تم تعطيل %(count)d إذن ملف."
+msgstr[1] "تم تعطيل %(count)d إذن ملف."
+msgstr[2] "تم تعطيل إذنَي ملفين."
+msgstr[3] "تم تعطيل %(count)d أذونات ملفات."
+msgstr[4] "تم تعطيل %(count)d إذن ملف."
+msgstr[5] "تم تعطيل %(count)d إذن ملف."
+
+#: .\core\admin.py:1222
+msgid "Body"
+msgstr "النص"
 
 #: .\core\admin_utils.py:53
 msgid "Yes"
@@ -780,33 +829,62 @@ msgstr[3] "تم تصدير %(count)d صف."
 msgstr[4] "تم تصدير %(count)d صف."
 msgstr[5] "تم تصدير %(count)d صف."
 
-#: .\core\context_processors.py:78
+#: .\core\chat.py:109 .\templates\base.html:49
+msgid "Support"
+msgstr "الدعم"
+
+#: .\core\chat.py:118 .\core\models.py:388 .\templates\dashboard\main.html:46
+msgid "Company"
+msgstr "شركة"
+
+#: .\core\chat.py:374
+msgid "That message was deleted."
+msgstr "تم حذف تلك الرسالة."
+
+#: .\core\chat.py:419
+msgid "You do not have permission to send files in chat."
+msgstr "ليس لديك إذن لإرسال ملفات في المحادثة."
+
+#: .\core\chat.py:424
+#, python-format
+msgid "This file is too large. Your limit is %(limit)s MB."
+msgstr "هذا الملف كبير جدًا. الحد المسموح لك هو %(limit)s ميغابايت."
+
+#: .\core\chat.py:436
+msgid "The site's chat storage is full. Please try again later."
+msgstr "مساحة تخزين المحادثة في الموقع ممتلئة. حاول مرة أخرى لاحقًا."
+
+#: .\core\context_processors.py:98
 msgid "Registration is required to see programs matching your search."
 msgstr "يلزم التسجيل لعرض البرامج المطابقة لبحثك."
 
-#: .\core\context_processors.py:81
+#: .\core\context_processors.py:101
 msgid "Thank you! You are on the scholarship alerts list."
 msgstr "شكراً لك! أنت في قائمة تنبيهات المنح الدراسية."
 
-#: .\core\context_processors.py:83
+#: .\core\context_processors.py:103
 msgid "Loading content..."
 msgstr "جارٍ تحميل المحتوى..."
 
-#: .\core\context_processors.py:84
+#: .\core\context_processors.py:104
 msgid "Loading Error"
 msgstr "خطأ في التحميل"
 
-#: .\core\context_processors.py:85
+#: .\core\context_processors.py:105
 msgid "Please try again or contact support"
 msgstr "يرجى المحاولة مرة أخرى أو التواصل مع الدعم"
 
-#: .\core\context_processors.py:86
+#: .\core\context_processors.py:106
 msgid "Reload Page"
 msgstr "إعادة تحميل الصفحة"
 
-#: .\core\context_processors.py:88
+#: .\core\context_processors.py:108
 msgid "Email verified! Your account is fully active again."
 msgstr "تم التحقق من البريد الإلكتروني! حسابك مفعّل بالكامل مرة أخرى."
+
+#: .\core\context_processors.py:111
+msgid "Chat connected"
+msgstr "المحادثة متصلة"
 
 #: .\core\forms.py:46
 msgid "Username is already taken."
@@ -844,379 +922,442 @@ msgstr "يرجى إدخال تفاصيلك لتسجيل الدخول."
 msgid "Invalid token"
 msgstr "نوع نموذج غير صالح."
 
-#: .\core\models.py:35
+#: .\core\models.py:36
 msgid "Unsupported file extension. Allowed: .jpg, .jpeg, .png, .gif, .webp"
 msgstr "امتداد ملف غير مدعوم. المسموح: .jpg, .jpeg, .png, .gif, .webp"
 
-#: .\core\models.py:45
+#: .\core\models.py:46
 msgid ""
 "Unsupported file extension. Allowed: .pdf, .doc, .docx, .jpg, .jpeg, .png"
 msgstr "امتداد ملف غير مدعوم. المسموح: .pdf, .doc, .docx, .jpg, .jpeg, .png"
 
-#: .\core\models.py:75 .\core\models.py:104 .\core\models.py:192
-#: .\core\models.py:295
+#: .\core\models.py:76 .\core\models.py:105 .\core\models.py:193
+#: .\core\models.py:296
 msgid "ID from info.studyfans.com"
 msgstr "المعرف من info.studyfans.com"
 
-#: .\core\models.py:79
+#: .\core\models.py:80
 msgid "Primary language"
 msgstr "اللغة الأساسية"
 
-#: .\core\models.py:82
+#: .\core\models.py:83
 msgid "Nationality adjective"
 msgstr "صفة الجنسية"
 
-#: .\core\models.py:86 .\templates\dashboard\fragments\profile.html:152
+#: .\core\models.py:87 .\templates\dashboard\fragments\profile.html:152
 msgid "Country"
 msgstr "الدولة"
 
-#: .\core\models.py:87 .\templates\authentication\login.html:29
+#: .\core\models.py:88 .\templates\authentication\login.html:29
 msgid "Countries"
 msgstr "الدول"
 
-#: .\core\models.py:116 .\templates\dashboard\fragments\profile.html:156
+#: .\core\models.py:117 .\templates\dashboard\fragments\profile.html:156
 msgid "City"
 msgstr "المدينة"
 
-#: .\core\models.py:117
+#: .\core\models.py:118
 msgid "Cities"
 msgstr "المدن"
 
-#: .\core\models.py:128
+#: .\core\models.py:129
 msgid "Term Option"
 msgstr "خيار الفصل"
 
-#: .\core\models.py:129
+#: .\core\models.py:130
 msgid "Term Options"
 msgstr "خيارات الفصل"
 
-#: .\core\models.py:148
+#: .\core\models.py:149
 msgid "Number of years—for example, '1', '1.5', '2', etc."
 msgstr "عدد السنوات - على سبيل المثال، '1'، '1.5'، '2'، إلخ."
 
-#: .\core\models.py:152
+#: .\core\models.py:153
 msgid "Year Option"
 msgstr "خيار السنة"
 
-#: .\core\models.py:153
+#: .\core\models.py:154
 msgid "Year Options"
 msgstr "خيارات السنة"
 
-#: .\core\models.py:166
+#: .\core\models.py:167
 msgid ""
 "Select one or more possible durations (in years) that this faculty offers."
 msgstr "اختر مدة أو أكثر (بالسنوات) التي تقدمها هذه الكلية."
 
-#: .\core\models.py:171
+#: .\core\models.py:172
 msgid "Faculty"
 msgstr "كلية"
 
-#: .\core\models.py:222
+#: .\core\models.py:223
 msgid "Parsed details (dates, exams, documents, fees, etc.) from the site"
 msgstr "تفاصيل مستخرجة (تواريخ، امتحانات، وثائق، رسوم، إلخ) من الموقع"
 
-#: .\core\models.py:228
+#: .\core\models.py:229
 msgid "Year founded, e.g. 2013"
 msgstr "سنة التأسيس، مثلاً 2013"
 
-#: .\core\models.py:232
+#: .\core\models.py:233
 msgid "University PIN code"
 msgstr "رمز PIN الجامعة"
 
-#: .\core\models.py:239
+#: .\core\models.py:240
 msgid "Which country languages are taught/used by this university"
 msgstr "لغات الدولة التي تُدرس/تُستخدم في هذه الجامعة"
 
-#: .\core\models.py:243
+#: .\core\models.py:244
 msgid "University"
 msgstr "جامعة"
 
-#: .\core\models.py:277
+#: .\core\models.py:278
 #: .\templates\dashboard\fragments\application_detail.html:47
 msgid "Program"
 msgstr "البرنامج"
 
-#: .\core\models.py:281
+#: .\core\models.py:282
 msgid "Available"
 msgstr "متاح"
 
-#: .\core\models.py:282
+#: .\core\models.py:283
 msgid "Near to Close"
 msgstr "يوشك على الإغلاق"
 
-#: .\core\models.py:283
+#: .\core\models.py:284
 msgid "Quota Full"
 msgstr "الحصة مكتملة"
 
-#: .\core\models.py:284
+#: .\core\models.py:285
 msgid "Closed"
 msgstr "مغلق"
 
-#: .\core\models.py:322
+#: .\core\models.py:323
 msgid "Duration in years; should be one of the faculty's year options"
 msgstr "المدة بالسنوات؛ يجب أن تكون أحد خيارات سنوات الكلية"
 
-#: .\core\models.py:332
+#: .\core\models.py:333
 msgid "Fee per semester"
 msgstr "الرسوم لكل فصل دراسي"
 
-#: .\core\models.py:340
+#: .\core\models.py:341
 msgid "Scholarship or discount offered"
 msgstr "منحة دراسية أو خصم مقدم"
 
-#: .\core\models.py:348
+#: .\core\models.py:349
 msgid "Language of instruction, e.g. English, Turkish"
 msgstr "لغة التعليم، مثل الإنجليزية والتركية"
 
-#: .\core\models.py:351
+#: .\core\models.py:352
 msgid "Currency code, e.g. USD, EUR, TRY"
 msgstr "رمز العملة، مثل USD وEUR وTRY"
 
-#: .\core\models.py:386
+#: .\core\models.py:387
 msgid "Default"
 msgstr "افتراضي"
 
-#: .\core\models.py:387 .\templates\dashboard\main.html:45
-msgid "Company"
-msgstr "شركة"
-
-#: .\core\models.py:391
+#: .\core\models.py:392
 msgid "Male"
 msgstr "ذكر"
 
-#: .\core\models.py:392
+#: .\core\models.py:393
 msgid "Female"
 msgstr "أنثى"
 
-#: .\core\models.py:429
+#: .\core\models.py:430
 msgid "Profile Image"
 msgstr "صورة الملف الشخصي"
 
-#: .\core\models.py:430
+#: .\core\models.py:431
 msgid "Upload a profile image (max 2MB)"
 msgstr "تحميل صورة الملف الشخصي (الحد الأقصى 2 ميجابايت)"
 
-#: .\core\models.py:436
+#: .\core\models.py:437
 msgid "Designates whether this student can access representative features"
 msgstr "يحدد ما إذا كان بإمكان هذا الطالب الوصول إلى ميزات الممثل"
 
-#: .\core\models.py:446
+#: .\core\models.py:447
 msgid ""
 "New email address awaiting verification; empty when no change is in progress"
 msgstr ""
 
-#: .\core\models.py:453
+#: .\core\models.py:454
 msgid "The current email address has been confirmed"
 msgstr ""
 
-#: .\core\models.py:471
+#: .\core\models.py:472
 msgid "Only student users can be representatives"
 msgstr "يمكن لمستخدمي الطلاب فقط أن يكونوا ممثلين"
 
-#: .\core\models.py:486
+#: .\core\models.py:487
 msgid "Company Profile"
 msgstr "ملف الشركة"
 
-#: .\core\models.py:487
+#: .\core\models.py:488
 msgid "Company Profiles"
 msgstr "ملفات الشركات"
 
-#: .\core\models.py:504
+#: .\core\models.py:505
 msgid "Agent Profile"
 msgstr "ملف الوكيل"
 
-#: .\core\models.py:505
+#: .\core\models.py:506
 msgid "Agent Profiles"
 msgstr "ملفات الوكلاء"
 
-#: .\core\models.py:520
+#: .\core\models.py:521
 msgid "Student Profile"
 msgstr "ملف الطالب"
 
-#: .\core\models.py:521
+#: .\core\models.py:522
 msgid "Student Profiles"
 msgstr "ملفات الطلاب"
 
-#: .\core\models.py:540
+#: .\core\models.py:541
 msgid "Select the country whose language you speak"
 msgstr "اختر الدولة التي تتحدث لغتها"
 
-#: .\core\models.py:552
+#: .\core\models.py:553
 msgid "Application"
 msgstr "طلب"
 
-#: .\core\models.py:556
+#: .\core\models.py:557
 msgid "In Progress"
 msgstr "قيد التنفيذ"
 
-#: .\core\models.py:557
+#: .\core\models.py:558
 msgid "Finished"
 msgstr "منتهي"
 
-#: .\core\models.py:558
+#: .\core\models.py:559
 msgid "Failed"
 msgstr "فشل"
 
-#: .\core\models.py:561
+#: .\core\models.py:562
 msgid "Step One"
 msgstr "الخطوة الأولى"
 
-#: .\core\models.py:562
+#: .\core\models.py:563
 msgid "Step Two"
 msgstr "الخطوة الثانية"
 
-#: .\core\models.py:563
+#: .\core\models.py:564
 msgid "Step Three"
 msgstr "الخطوة الثالثة"
 
-#: .\core\models.py:564
+#: .\core\models.py:565
 msgid "Step Four"
 msgstr "الخطوة الرابعة"
 
-#: .\core\models.py:565
+#: .\core\models.py:566
 msgid "Step Five"
 msgstr "الخطوة الخامسة"
 
-#: .\core\models.py:566
+#: .\core\models.py:567
 msgid "Step Six"
 msgstr "الخطوة السادسة"
 
-#: .\core\models.py:567
+#: .\core\models.py:568
 msgid "Step Seven"
 msgstr "الخطوة السابعة"
 
-#: .\core\models.py:570
+#: .\core\models.py:571
 msgid "Transfer Student"
 msgstr "طالب تحويل"
 
-#: .\core\models.py:571
+#: .\core\models.py:572
 msgid "First-Year Student"
 msgstr "طالب سنة أولى"
 
-#: .\core\models.py:604
+#: .\core\models.py:605
 msgid "Auto-generated application code"
 msgstr "رمز طلب تم إنشاؤه تلقائياً"
 
-#: .\core\models.py:610
+#: .\core\models.py:611
 msgid "Application Documents"
 msgstr "وثائق الطلب"
 
-#: .\core\models.py:650 .\core\models.py:651
+#: .\core\models.py:657
+msgid ""
+"Default per-student file size limit (MB) pre-filled when a chat file "
+"permission is granted. Students without a grant cannot send files at all."
+msgstr ""
+"حد حجم الملف الافتراضي لكل طالب (بالميغابايت) يُملأ مسبقًا عند منح إذن إرسال "
+"الملفات في المحادثة. الطلاب الذين لا يملكون إذنًا لا يمكنهم إرسال الملفات "
+"إطلاقًا."
+
+#: .\core\models.py:665
+msgid ""
+"Site-wide ceiling (MB) on the total size of all chat uploads. Uploads are "
+"refused once it is reached."
+msgstr ""
+"الحد الأقصى على مستوى الموقع (بالميغابايت) لإجمالي حجم كل ملفات المحادثة. "
+"تُرفض الملفات عند بلوغه."
+
+#: .\core\models.py:671 .\core\models.py:672
 msgid "Site Settings"
 msgstr "إعدادات الموقع"
 
-#: .\core\models.py:671
+#: .\core\models.py:692
 msgid "Journey Step"
 msgstr "خطوة المسار"
 
-#: .\core\models.py:680 .\core\templatetags\custom_filters.py:45
+#: .\core\models.py:701 .\core\templatetags\custom_filters.py:45
 msgid "Associate & Bachelor"
 msgstr "دبلومة وبكالوريوس"
 
-#: .\core\models.py:681 .\core\templatetags\custom_filters.py:46
+#: .\core\models.py:702 .\core\templatetags\custom_filters.py:46
 #: .\templates\core\main.html:118
 msgid "Master"
 msgstr "ماجستير"
 
-#: .\core\models.py:682 .\core\templatetags\custom_filters.py:47
+#: .\core\models.py:703 .\core\templatetags\custom_filters.py:47
 #: .\templates\core\main.html:119
 msgid "PhD"
 msgstr "دكتوراه"
 
-#: .\core\models.py:690
+#: .\core\models.py:711
 msgid "Document Requirement"
 msgstr "مستند مطلوب"
 
-#: .\core\models.py:715
+#: .\core\models.py:736
 msgid "Success Story"
 msgstr "قصة نجاح"
 
-#: .\core\models.py:716 .\templates\core\main.html:21
+#: .\core\models.py:737 .\templates\core\main.html:21
 msgid "Success Stories"
 msgstr "قصص النجاح"
 
-#: .\core\models.py:736
+#: .\core\models.py:757
 msgid "Information"
 msgstr "معلومات"
 
-#: .\core\models.py:737
+#: .\core\models.py:758
 msgid "Warning"
 msgstr "تحذير"
 
-#: .\core\models.py:738
+#: .\core\models.py:759
 msgid "Success"
 msgstr "نجاح"
 
-#: .\core\models.py:739
+#: .\core\models.py:760
 msgid "Error"
 msgstr "خطأ"
 
-#: .\core\models.py:740
+#: .\core\models.py:761
 msgid "Reminder"
 msgstr "تذكير"
 
-#: .\core\models.py:743
+#: .\core\models.py:764
 msgid "All Users"
 msgstr "جميع المستخدمين"
 
-#: .\core\models.py:744
+#: .\core\models.py:765
 msgid "Students (Default)"
 msgstr "الطلاب (افتراضي)"
 
-#: .\core\models.py:745
+#: .\core\models.py:766
 msgid "Company Users"
 msgstr "مستخدمو الشركة"
 
-#: .\core\models.py:746
+#: .\core\models.py:767
 msgid "Agent Users"
 msgstr "مستخدمو الوكيل"
 
-#: .\core\models.py:747
+#: .\core\models.py:768
 msgid "Specific Users"
 msgstr "مستخدمون محددون"
 
-#: .\core\models.py:749 .\templates\dashboard\fragments\notifications.html:9
+#: .\core\models.py:770 .\templates\dashboard\fragments\notifications.html:9
 #: .\templates\dashboard\fragments\notifications.html:61
 #: .\templates\dashboard\fragments\notifications.html:121
 msgid "Title"
 msgstr "العنوان"
 
-#: .\core\models.py:755 .\templates\dashboard\fragments\notifications.html:19
+#: .\core\models.py:776 .\templates\dashboard\fragments\notifications.html:19
 #: .\templates\dashboard\fragments\notifications.html:129
 msgid "Notification Type"
 msgstr "نوع الإشعار"
 
-#: .\core\models.py:761
+#: .\core\models.py:782
 msgid "Recipient Type"
 msgstr "نوع المستلم"
 
-#: .\core\models.py:768
+#: .\core\models.py:789
 msgid "Sent By"
 msgstr "المرسل"
 
-#: .\core\models.py:776
+#: .\core\models.py:797
 msgid "Created At"
 msgstr "تاريخ الإنشاء"
 
-#: .\core\models.py:780
+#: .\core\models.py:801
 msgid "Notification"
 msgstr "إشعار"
 
-#: .\core\models.py:781 .\core\templatetags\admin_extras.py:55
+#: .\core\models.py:802 .\core\templatetags\admin_extras.py:55
 msgid "Notifications"
 msgstr "الإشعارات"
 
-#: .\core\models.py:817
+#: .\core\models.py:838
 msgid "Read At"
 msgstr "وقت القراءة"
 
-#: .\core\models.py:821
+#: .\core\models.py:842
 msgid "Notification Recipient"
 msgstr "مستلم الإشعار"
 
-#: .\core\models.py:822
+#: .\core\models.py:843
 msgid "Notification Recipients"
 msgstr "مستلمو الإشعار"
+
+#: .\core\models.py:879
+msgid "Chat conversation"
+msgstr "محادثة"
+
+#: .\core\models.py:880
+msgid "Chat conversations"
+msgstr "المحادثات"
+
+#: .\core\models.py:930
+msgid "Chat participant"
+msgstr "مشارك في المحادثة"
+
+#: .\core\models.py:931
+msgid "Chat participants"
+msgstr "المشاركون في المحادثة"
+
+#: .\core\models.py:959
+msgid "Chat attachment"
+msgstr "مرفق محادثة"
+
+#: .\core\models.py:960
+msgid "Chat attachments"
+msgstr "مرفقات المحادثة"
+
+#: .\core\models.py:970
+msgid "Chat message"
+msgstr "رسالة محادثة"
+
+#: .\core\models.py:971
+msgid "Chat messages"
+msgstr "رسائل المحادثة"
+
+#: .\core\models.py:1071
+#: .\templates\dashboard\fragments\partials\chat_file_grant.html:18
+msgid "Chat file permission"
+msgstr "إذن إرسال الملفات في المحادثة"
+
+#: .\core\models.py:1072
+msgid "Chat file permissions"
+msgstr "أذونات إرسال الملفات في المحادثة"
+
+#: .\core\models.py:1084
+#, python-format
+msgid "Cannot exceed the %(ceiling)s MB ceiling."
+msgstr "لا يمكن تجاوز الحد الأقصى البالغ %(ceiling)s ميغابايت."
+
+#: .\core\models.py:1089
+msgid "Must be at least 1 MB."
+msgstr "يجب ألا يقل عن 1 ميغابايت."
 
 #: .\core\templatetags\admin_extras.py:35
 msgid "Homepage content"
@@ -1329,14 +1470,71 @@ msgid ""
 "available."
 msgstr "تم تأكيد عنوان بريدك الإلكتروني. جميع ميزات حسابك متاحة الآن."
 
+#: .\dashboard\chat_views.py:39
+msgid "You cannot message this user."
+msgstr "لا يمكنك مراسلة هذا المستخدم."
+
+#: .\dashboard\chat_views.py:109 .\templates\base.html:53
+msgid "Message deleted"
+msgstr "تم حذف الرسالة"
+
+#: .\dashboard\chat_views.py:113 .\templates\base.html:56
+msgid "📎 Attachment"
+msgstr "📎 مرفق"
+
+#: .\dashboard\chat_views.py:218 .\dashboard\chat_views.py:355
+#: .\dashboard\chat_views.py:448 .\dashboard\chat_views.py:506
+#: .\dashboard\views.py:777 .\dashboard\views.py:843 .\dashboard\views.py:853
+#: .\dashboard\views.py:895 .\dashboard\views.py:1058 .\dashboard\views.py:1129
+#: .\dashboard\views.py:1159 .\dashboard\views.py:1230
+#: .\dashboard\views.py:1264
+msgid "Invalid request."
+msgstr "طلب غير صالح."
+
+#: .\dashboard\chat_views.py:224 .\dashboard\chat_views.py:360
+msgid "Message cannot be empty."
+msgstr "لا يمكن أن تكون الرسالة فارغة."
+
+#: .\dashboard\chat_views.py:228
+msgid "Message is too long (max 4000 characters)."
+msgstr "الرسالة طويلة جدًا (4000 حرف كحد أقصى)."
+
+#: .\dashboard\chat_views.py:288
+msgid "Send a message first."
+msgstr "أرسل رسالة أولًا."
+
+#: .\dashboard\chat_views.py:294
+msgid "No file received."
+msgstr "لم يتم استلام أي ملف."
+
+#: .\dashboard\chat_views.py:350
+msgid "You can only edit your own messages."
+msgstr "يمكنك تعديل رسائلك فقط."
+
+#: .\dashboard\chat_views.py:379
+msgid "You can only delete your own messages."
+msgstr "يمكنك حذف رسائلك فقط."
+
+#: .\dashboard\chat_views.py:395
+msgid "You can only pin your own messages."
+msgstr "يمكنك تثبيت رسائلك فقط."
+
+#: .\dashboard\chat_views.py:458
+msgid "Pick a different conversation."
+msgstr "اختر محادثة أخرى."
+
+#: .\dashboard\chat_views.py:501
+msgid "You can only manage your own students."
+msgstr "يمكنك إدارة طلابك فقط."
+
 #: .\dashboard\forms.py:33 .\dashboard\forms.py:212
-#: .\templates\dashboard\fragments\my_students.html:76
+#: .\templates\dashboard\fragments\my_students.html:91
 #: .\templates\dashboard\fragments\profile.html:58
 msgid "First Name"
 msgstr "الاسم الأول"
 
 #: .\dashboard\forms.py:36 .\dashboard\forms.py:218
-#: .\templates\dashboard\fragments\my_students.html:80
+#: .\templates\dashboard\fragments\my_students.html:95
 #: .\templates\dashboard\fragments\profile.html:62
 msgid "Last Name"
 msgstr "اسم العائلة"
@@ -1351,7 +1549,7 @@ msgstr "اسم الأم"
 
 #: .\dashboard\forms.py:57 .\dashboard\forms.py:79 .\dashboard\forms.py:224
 #: .\templates\authentication\username_selection.html:57
-#: .\templates\dashboard\fragments\my_students.html:85
+#: .\templates\dashboard\fragments\my_students.html:100
 #: .\templates\dashboard\fragments\profile.html:122
 msgid "Username"
 msgstr "اسم المستخدم"
@@ -1374,7 +1572,8 @@ msgstr "رقم جواز السفر"
 msgid "Email Address"
 msgstr "عنوان البريد الإلكتروني"
 
-#: .\dashboard\forms.py:234 .\templates\dashboard\fragments\my_students.html:93
+#: .\dashboard\forms.py:234
+#: .\templates\dashboard\fragments\my_students.html:108
 msgid "Temporary Password"
 msgstr "كلمة المرور المؤقتة"
 
@@ -1398,38 +1597,38 @@ msgstr ""
 "لم يتم تأكيد بريدك الإلكتروني، لذلك حسابك في وضع القراءة فقط. لتتمكن من "
 "المتابعة، أكّده من صفحة ملفك الشخصي."
 
-#: .\dashboard\views.py:162
+#: .\dashboard\views.py:163
 msgid "Page not found."
 msgstr "الصفحة غير موجودة."
 
-#: .\dashboard\views.py:173 .\dashboard\views.py:447
+#: .\dashboard\views.py:174 .\dashboard\views.py:448
 msgid "You do not have permission to access this page."
 msgstr "ليس لديك إذن للوصول إلى هذه الصفحة."
 
-#: .\dashboard\views.py:439 .\dashboard\views.py:1006 .\dashboard\views.py:1040
-#: .\dashboard\views.py:1155 .\dashboard\views.py:1187
-#: .\dashboard\views.py:1212 .\dashboard\views.py:1224
-#: .\dashboard\views.py:1246
+#: .\dashboard\views.py:440 .\dashboard\views.py:1026 .\dashboard\views.py:1060
+#: .\dashboard\views.py:1175 .\dashboard\views.py:1207
+#: .\dashboard\views.py:1232 .\dashboard\views.py:1244
+#: .\dashboard\views.py:1266
 msgid "Permission denied."
 msgstr "تم رفض الإذن."
 
-#: .\dashboard\views.py:540
+#: .\dashboard\views.py:541
 msgid "Personal information updated successfully."
 msgstr "تم تحديث المعلومات الشخصية بنجاح."
 
-#: .\dashboard\views.py:548
+#: .\dashboard\views.py:549
 msgid "Identity and profile photo updated successfully."
 msgstr "تم تحديث ملف الطالب بنجاح."
 
-#: .\dashboard\views.py:577
+#: .\dashboard\views.py:578
 msgid "Contact information updated successfully."
 msgstr "تم تحديث معلومات الاتصال بنجاح."
 
-#: .\dashboard\views.py:583
+#: .\dashboard\views.py:584
 msgid "This email address is already in use."
 msgstr "هذا البريد الإلكتروني مستخدم بالفعل."
 
-#: .\dashboard\views.py:597
+#: .\dashboard\views.py:598
 #, python-format
 msgid ""
 "Contact information updated. We sent a verification link to %(email)s — "
@@ -1439,42 +1638,42 @@ msgstr ""
 "تم تحديث معلومات الاتصال. أرسلنا رابط تحقق إلى %(email)s — أكّده لتفعيل "
 "التغيير. حتى ذلك الحين، حسابك في وضع القراءة فقط."
 
-#: .\dashboard\views.py:608
+#: .\dashboard\views.py:609
 msgid "Profile image updated successfully."
 msgstr "تم تحديث صورة الملف الشخصي بنجاح."
 
-#: .\dashboard\views.py:616
+#: .\dashboard\views.py:617
 msgid "Password changed successfully."
 msgstr "تم تغيير كلمة المرور بنجاح."
 
-#: .\dashboard\views.py:623
+#: .\dashboard\views.py:624
 msgid "Student profile updated successfully."
 msgstr "تم تحديث ملف الطالب بنجاح."
 
-#: .\dashboard\views.py:626
+#: .\dashboard\views.py:627
 msgid "Invalid form type."
 msgstr "نوع نموذج غير صالح."
 
-#: .\dashboard\views.py:645 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:646 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your new email address"
 msgstr "تحقّق من عنوان بريدك الإلكتروني الجديد"
 
-#: .\dashboard\views.py:647 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:648 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your email address"
 msgstr "تحقّق من عنوان بريدك الإلكتروني"
 
-#: .\dashboard\views.py:674 .\dashboard\views.py:689
+#: .\dashboard\views.py:675 .\dashboard\views.py:690
 msgid "There is no pending email change."
 msgstr "لا يوجد تغيير بريد إلكتروني قيد الانتظار."
 
-#: .\dashboard\views.py:678
+#: .\dashboard\views.py:679
 #, python-format
 msgid "A new verification link was sent to %(email)s."
 msgstr "تم إرسال رابط تحقق جديد إلى %(email)s."
 
-#: .\dashboard\views.py:704
+#: .\dashboard\views.py:705
 #, python-format
 msgid ""
 "The email change to %(email)s was cancelled. Your account is fully active "
@@ -1482,66 +1681,59 @@ msgid ""
 msgstr ""
 "تم إلغاء تغيير البريد الإلكتروني إلى %(email)s. حسابك مفعّل بالكامل مرة أخرى."
 
-#: .\dashboard\views.py:736
+#: .\dashboard\views.py:737
 msgid "Step updated."
 msgstr "تم تحديث الخطوة."
 
-#: .\dashboard\views.py:739
+#: .\dashboard\views.py:740
 msgid "Application deleted."
 msgstr "تم حذف الطلب."
 
-#: .\dashboard\views.py:770
+#: .\dashboard\views.py:771
 msgid "Application created successfully."
 msgstr "تم إنشاء الطلب بنجاح."
 
-#: .\dashboard\views.py:776 .\dashboard\views.py:823 .\dashboard\views.py:833
-#: .\dashboard\views.py:875 .\dashboard\views.py:1038 .\dashboard\views.py:1109
-#: .\dashboard\views.py:1139 .\dashboard\views.py:1210
-#: .\dashboard\views.py:1244
-msgid "Invalid request."
-msgstr "طلب غير صالح."
-
-#: .\dashboard\views.py:796
+#: .\dashboard\views.py:797
 msgid ""
 "You have reached the maximum number of students (100). Please contact "
 "support."
 msgstr "لقد وصلت إلى الحد الأقصى لعدد الطلاب (100). يرجى الاتصال بالدعم."
 
-#: .\dashboard\views.py:819
+#: .\dashboard\views.py:839
 msgid "Student added successfully."
 msgstr "تمت إضافة الطالب بنجاح."
 
-#: .\dashboard\views.py:863
+#: .\dashboard\views.py:883
 msgid "Your request has been sent! Our team will contact you soon."
 msgstr "تم إرسال طلبك! سيتواصل معك فريقنا قريباً."
 
-#: .\dashboard\views.py:871
+#: .\dashboard\views.py:891
 msgid "Failed to send request. Please try again."
 msgstr "فشل إرسال الطلب. يرجى المحاولة مرة أخرى."
 
-#: .\dashboard\views.py:1049 .\dashboard\views.py:1255
+#: .\dashboard\views.py:1069 .\dashboard\views.py:1275
 msgid "All fields are required."
 msgstr "جميع الحقوق محفوظة."
 
-#: .\dashboard\views.py:1052
+#: .\dashboard\views.py:1072
 msgid "Please select at least one user."
 msgstr "يرجى اختيار مستخدم واحد على الأقل."
 
-#: .\dashboard\views.py:1102
+#: .\dashboard\views.py:1122
 msgid "Notification sent successfully!"
 msgstr "تم إنشاء الطلب بنجاح."
 
-#: .\dashboard\views.py:1132 .\dashboard\views.py:1218
-#: .\dashboard\views.py:1237 .\dashboard\views.py:1311
-#: .\dashboard\views.py:1341
+#: .\dashboard\views.py:1152 .\dashboard\views.py:1238
+#: .\dashboard\views.py:1257 .\dashboard\views.py:1331
+#: .\dashboard\views.py:1361
 msgid "Not found."
 msgstr "الصفحة غير موجودة."
 
-#: .\dashboard\views.py:1216
+#: .\dashboard\views.py:1236
 msgid "Notification deleted."
 msgstr "تم حذف الطلب."
 
-#: .\dashboard\views.py:1309
+#: .\dashboard\views.py:1329
 msgid "Notification updated successfully!"
 msgstr "تم تحديث معلومات الاتصال بنجاح."
 
@@ -1572,7 +1764,7 @@ msgstr "روابط سريعة للإدارة"
 
 #: .\templates\admin\base_site.html:60 .\templates\core\main.html:30
 #: .\templates\core\main.html:57 .\templates\dashboard\main.html:4
-#: .\templates\dashboard\main.html:59
+#: .\templates\dashboard\main.html:60
 msgid "Dashboard"
 msgstr "لوحة التحكم"
 
@@ -2069,6 +2261,121 @@ msgstr "الترتيب: سنة التأسيس (الأقدم أولاً)"
 msgid "Sort: Founded (Newest First)"
 msgstr "الترتيب: سنة التأسيس (الأحدث أولاً)"
 
+#: .\templates\base.html:46 .\templates\dashboard\fragments\chat.html:18
+msgid "No conversations yet."
+msgstr "لا توجد محادثات بعد."
+
+#: .\templates\base.html:47 .\templates\dashboard\fragments\chat.html:20
+msgid ""
+"You can always message Support here; students an agent or company adds "
+"appear automatically."
+msgstr ""
+"يمكنك دائمًا مراسلة الدعم من هنا؛ والطلاب الذين يضيفهم الوكيل أو الشركة "
+"يظهرون تلقائيًا."
+
+#: .\templates\base.html:48
+msgid "No messages yet"
+msgstr "لا توجد رسائل بعد"
+
+#: .\templates\base.html:50
+msgid "online"
+msgstr "متصل"
+
+#: .\templates\base.html:51
+msgid "offline"
+msgstr "غير متصل"
+
+#: .\templates\base.html:52 .\templates\dashboard\fragments\chat.html:39
+msgid "typing…"
+msgstr "يكتب…"
+
+#: .\templates\base.html:54
+msgid "(edited)"
+msgstr "(تم التعديل)"
+
+#: .\templates\base.html:55
+msgid "Forwarded"
+msgstr "مُعاد توجيهها"
+
+#: .\templates\base.html:57
+msgid "Reply"
+msgstr "رد"
+
+#: .\templates\base.html:58
+msgid "Forward"
+msgstr "إعادة توجيه"
+
+#: .\templates\base.html:59
+#: .\templates\dashboard\fragments\notifications.html:90
+msgid "Edit"
+msgstr "تعديل"
+
+#: .\templates\base.html:60
+msgid "Unpin"
+msgstr "إلغاء التثبيت"
+
+#: .\templates\base.html:61
+msgid "Pin"
+msgstr "تثبيت"
+
+#: .\templates\base.html:62
+#: .\templates\dashboard\fragments\application_detail.html:17
+#: .\templates\dashboard\fragments\notifications.html:95
+msgid "Delete"
+msgstr "حذف"
+
+#: .\templates\base.html:63
+msgid "Delete this message for both sides?"
+msgstr "حذف هذه الرسالة للطرفين؟"
+
+#: .\templates\base.html:65
+msgid "Sent"
+msgstr "تم الإرسال"
+
+#: .\templates\base.html:66
+msgid "Something went wrong."
+msgstr "حدث خطأ ما."
+
+#: .\templates\base.html:67
+msgid "Could not open the conversation."
+msgstr "تعذّر فتح المحادثة."
+
+#: .\templates\base.html:68
+msgid "File sending is not enabled for your account. Ask the support team."
+msgstr "إرسال الملفات غير مُفعّل لحسابك. تواصل مع فريق الدعم."
+
+#: .\templates\base.html:69
+msgid "Files up to __MB MB"
+msgstr "ملفات حتى __MB ميغابايت"
+
+#: .\templates\base.html:70
+msgid "This file is too large. Your limit is __MB MB."
+msgstr "هذا الملف كبير جدًا. الحد المسموح لك هو __MB ميغابايت."
+
+#: .\templates\base.html:71
+msgid "Forward this message to which conversation?"
+msgstr "إلى أي محادثة تريد إعادة توجيه هذه الرسالة؟"
+
+#: .\templates\base.html:72
+msgid "Message forwarded."
+msgstr "تمت إعادة توجيه الرسالة."
+
+#: .\templates\base.html:73
+msgid "Start a conversation"
+msgstr "بدء محادثة"
+
+#: .\templates\base.html:74
+msgid "File permission updated."
+msgstr "تم تحديث إذن الملف."
+
+#: .\templates\base.html:75
+msgid "Revoke this student's file permission?"
+msgstr "هل تريد سحب إذن الملف لهذا الطالب؟"
+
+#: .\templates\base.html:76
+msgid "File permission revoked."
+msgstr "تم سحب إذن الملف."
+
 #: .\templates\core\main.html:3
 msgid "Apply BM"
 msgstr "Apply BM"
@@ -2082,7 +2389,7 @@ msgid "How It Works"
 msgstr "كيف يعمل"
 
 #: .\templates\core\main.html:34 .\templates\core\main.html:60
-#: .\templates\dashboard\main.html:140
+#: .\templates\dashboard\main.html:149
 msgid "Logout"
 msgstr "تسجيل الخروج"
 
@@ -2258,11 +2565,6 @@ msgstr "العودة إلى الطلبات"
 msgid "Application Details"
 msgstr "تفاصيل الطلب"
 
-#: .\templates\dashboard\fragments\application_detail.html:17
-#: .\templates\dashboard\fragments\notifications.html:95
-msgid "Delete"
-msgstr "حذف"
-
 #: .\templates\dashboard\fragments\application_detail.html:37
 msgid "Current Step"
 msgstr "اللغة الحالية"
@@ -2284,9 +2586,34 @@ msgstr "تحديث الخطوة"
 msgid "Save"
 msgstr "حفظ"
 
+#: .\templates\dashboard\fragments\chat.html:12
+#: .\templates\dashboard\main.html:82
+msgid "Messages"
+msgstr "الرسائل"
+
+#: .\templates\dashboard\fragments\chat.html:28
+msgid "Back to conversations"
+msgstr "العودة إلى المحادثات"
+
+#: .\templates\dashboard\fragments\chat.html:54
+msgid "Cancel reply"
+msgstr "إلغاء الرد"
+
+#: .\templates\dashboard\fragments\chat.html:62
+msgid "Attach file"
+msgstr "إرفاق ملف"
+
+#: .\templates\dashboard\fragments\chat.html:66
+msgid "Write a message…"
+msgstr "اكتب رسالة…"
+
+#: .\templates\dashboard\fragments\chat.html:69
+msgid "Send message"
+msgstr "إرسال الرسالة"
+
 #: .\templates\dashboard\fragments\my_applications.html:5
 #: .\templates\dashboard\fragments\welcome.html:66
-#: .\templates\dashboard\main.html:105
+#: .\templates\dashboard\main.html:114
 msgid "My Applications"
 msgstr "طلباتي"
 
@@ -2297,7 +2624,7 @@ msgstr "تتبع تقدم طلباتك الجامعية."
 
 #: .\templates\dashboard\fragments\my_applications.html:10
 #: .\templates\dashboard\fragments\new_application.html:4
-#: .\templates\dashboard\main.html:99
+#: .\templates\dashboard\main.html:108
 msgid "New Application"
 msgstr "طلب جديد"
 
@@ -2319,7 +2646,7 @@ msgid "No applications found."
 msgstr "لم يتم العثور على طلبات."
 
 #: .\templates\dashboard\fragments\my_notifications.html:4
-#: .\templates\dashboard\main.html:73
+#: .\templates\dashboard\main.html:74
 msgid "My Notifications"
 msgstr "طلباتي"
 
@@ -2356,7 +2683,7 @@ msgid "Next"
 msgstr "التالي"
 
 #: .\templates\dashboard\fragments\my_students.html:5
-#: .\templates\dashboard\main.html:111
+#: .\templates\dashboard\main.html:120
 msgid "My Students"
 msgstr "طلابي"
 
@@ -2365,7 +2692,7 @@ msgid "Manage the students you are representing."
 msgstr "أدر الطلاب الذين تمثلهم."
 
 #: .\templates\dashboard\fragments\my_students.html:10
-#: .\templates\dashboard\fragments\my_students.html:64
+#: .\templates\dashboard\fragments\my_students.html:79
 msgid "Add New Student"
 msgstr "إضافة طالب جديد"
 
@@ -2383,29 +2710,33 @@ msgstr "الإجراءات"
 msgid "View Applications"
 msgstr "عرض الطلبات"
 
-#: .\templates\dashboard\fragments\my_students.html:48
+#: .\templates\dashboard\fragments\my_students.html:55
+msgid "Files"
+msgstr "الملفات"
+
+#: .\templates\dashboard\fragments\my_students.html:63
 msgid "No students added yet."
 msgstr "لم تتم إضافة طلاب بعد."
 
-#: .\templates\dashboard\fragments\my_students.html:99
-#: .\templates\dashboard\fragments\my_students.html:100
-#: .\templates\dashboard\fragments\my_students.html:101
+#: .\templates\dashboard\fragments\my_students.html:114
+#: .\templates\dashboard\fragments\my_students.html:115
+#: .\templates\dashboard\fragments\my_students.html:116
 msgid "Copy password"
 msgstr "نسخ كلمة المرور"
 
-#: .\templates\dashboard\fragments\my_students.html:102
+#: .\templates\dashboard\fragments\my_students.html:117
 msgid "Password copied"
 msgstr "تم نسخ كلمة المرور"
 
-#: .\templates\dashboard\fragments\my_students.html:108
+#: .\templates\dashboard\fragments\my_students.html:123
 msgid "Generate password"
 msgstr "إعادة تعيين كلمة المرور"
 
-#: .\templates\dashboard\fragments\my_students.html:114
+#: .\templates\dashboard\fragments\my_students.html:129
 msgid "Show/hide password"
 msgstr "تغيير كلمة المرور"
 
-#: .\templates\dashboard\fragments\my_students.html:123
+#: .\templates\dashboard\fragments\my_students.html:138
 msgid "Create Student Account"
 msgstr "إنشاء حساب طالب"
 
@@ -2469,10 +2800,6 @@ msgstr "الأمان والتحقق"
 msgid "Date"
 msgstr "التاريخ"
 
-#: .\templates\dashboard\fragments\notifications.html:90
-msgid "Edit"
-msgstr "تعديل"
-
 #: .\templates\dashboard\fragments\notifications.html:102
 msgid "No notifications sent yet."
 msgstr "لم يتم إرسال أي إشعارات بعد."
@@ -2484,6 +2811,39 @@ msgstr "الأمان والتحقق"
 #: .\templates\dashboard\fragments\notifications.html:151
 msgid "Update Notification"
 msgstr "تحديث معلومات الاتصال"
+
+#: .\templates\dashboard\fragments\partials\chat_file_grant.html:14
+#: .\templates\dashboard\main.html:209
+msgid "Close"
+msgstr "إغلاق"
+
+#: .\templates\dashboard\fragments\partials\chat_file_grant.html:21
+msgid "Allow"
+msgstr "السماح"
+
+#: .\templates\dashboard\fragments\partials\chat_file_grant.html:22
+msgid "to attach files in chat. Without a grant they cannot send files at all."
+msgstr "لإرفاق ملفات في المحادثة. وبدون إذن لا يمكنهم إرسال الملفات إطلاقًا."
+
+#: .\templates\dashboard\fragments\partials\chat_file_grant.html:27
+msgid "Size limit (MB)"
+msgstr "حد الحجم (بالميغابايت)"
+
+#: .\templates\dashboard\fragments\partials\chat_file_grant.html:33
+msgid ""
+"Pre-filled with the site default from Settings; you may raise or lower it "
+"per student (hard ceiling 50 MB)."
+msgstr ""
+"يُملأ مسبقًا بالقيمة الافتراضية للموقع من الإعدادات؛ ويمكنك رفعها أو خفضها لكل "
+"طالب (الحد الأقصى الصارم 50 ميغابايت)."
+
+#: .\templates\dashboard\fragments\partials\chat_file_grant.html:38
+msgid "Revoke permission"
+msgstr "سحب الإذن"
+
+#: .\templates\dashboard\fragments\partials\chat_file_grant.html:43
+msgid "Grant permission"
+msgstr "منح الإذن"
 
 #: .\templates\dashboard\fragments\profile.html:4
 #: .\templates\dashboard\fragments\welcome.html:20
@@ -2910,19 +3270,19 @@ msgstr "هل تحتاج إلى مساعدة؟"
 msgid "Contact our support team for assistance with your applications."
 msgstr "تواصل مع فريق الدعم لدينا للحصول على المساعدة في طلباتك."
 
-#: .\templates\dashboard\main.html:117
+#: .\templates\dashboard\main.html:126
 msgid "Administration"
 msgstr "تسجيل المنحة الدراسية"
 
-#: .\templates\dashboard\main.html:122
+#: .\templates\dashboard\main.html:131
 msgid "Send Notifications"
 msgstr "إرسال الإشعارات"
 
-#: .\templates\dashboard\main.html:128
+#: .\templates\dashboard\main.html:137
 msgid "Admin Panel"
 msgstr "لوحة الإدارة"
 
-#: .\templates\dashboard\main.html:169
+#: .\templates\dashboard\main.html:178
 msgid ""
 "Your account is in read-only mode — confirm your new email address from your "
 "profile page."
@@ -2930,7 +3290,7 @@ msgstr ""
 "حسابك في وضع القراءة فقط — أكّد عنوان بريدك الإلكتروني الجديد من صفحة ملفك "
 "الشخصي."
 
-#: .\templates\dashboard\main.html:171
+#: .\templates\dashboard\main.html:180
 msgid ""
 "Your account is in read-only mode — verify your email address from your "
 "profile page."
@@ -2938,17 +3298,13 @@ msgstr ""
 "حسابك في وضع القراءة فقط — تحقّق من عنوان بريدك الإلكتروني من صفحة ملفك "
 "الشخصي."
 
-#: .\templates\dashboard\main.html:175
+#: .\templates\dashboard\main.html:184
 msgid "Verify now"
 msgstr "تحقّق الآن"
 
-#: .\templates\dashboard\main.html:183
+#: .\templates\dashboard\main.html:192
 msgid "Loading..."
 msgstr "جارٍ التحميل..."
-
-#: .\templates\dashboard\main.html:200
-msgid "Close"
-msgstr "إغلاق"
 
 #: .\templates\emails\confirmation_code.html:4
 #: .\templates\emails\confirmation_code.html:10

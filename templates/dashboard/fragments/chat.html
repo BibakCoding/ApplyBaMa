@@ -1,13 +1,76 @@
-<div class="bg-white p-6 rounded-lg shadow">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">Chat</h2>
-    <div class="space-y-4">
-        <div class="p-4 border rounded-lg">
-            <h3 class="font-semibold text-lg">Sample Content Item</h3>
-            <p class="text-gray-600 mt-2">This is a placeholder for the chat page. Actual content will be added during implementation.</p>
+{% load i18n %}
+{% comment %}
+Chat page (SPA fragment). The markup is a shell only: chat.js fetches the
+conversation list and thread JSON (chat/data/, chat/thread/<id>/) and renders
+into these containers, so no user content is ever templated here. Loaded via
+dashboard_content like every other fragment.
+{% endcomment %}
+
+<div class="ab-chat" id="abChatRoot">
+    <div class="ab-chat__list" id="abChatList">
+        <div class="ab-chat__list-head">
+            <h2 class="ab-chat__title">{% trans "Messages" %}</h2>
+            <span id="abChatListHint" class="ab-chat__hint"></span>
         </div>
-        <div class="p-4 border rounded-lg">
-            <h3 class="font-semibold text-lg">Another Sample Item</h3>
-            <p class="text-gray-600 mt-2">You can use this temporary view for layout testing.</p>
+        <div id="abChatItems" class="ab-chat__items" role="list">
+            <div class="ab-chat__empty">
+                <i class="fas fa-comments ab-chat__empty-icon"></i>
+                <p>{% trans "No conversations yet." %}</p>
+                <p class="ab-chat__empty-sub">
+                    {% trans "You can always message Support here; students an agent or company adds appear automatically." %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="ab-chat__thread" id="abChatThread" hidden>
+        <div class="ab-chat__thread-head">
+            <button type="button" id="abChatBack" class="ab-chat__back" aria-label="{% trans 'Back to conversations' %}">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="ab-chat__peer">
+                <span class="ab-chat__avatar" id="abChatPeerAvatar"><i class="fas fa-user"></i></span>
+                <span>
+                    <span class="ab-chat__peer-name" id="abChatPeerName"></span>
+                    <span class="ab-chat__peer-status" id="abChatPeerStatus"></span>
+                </span>
+            </div>
+            <span id="abChatTyping" class="ab-chat__typing" hidden>
+                {% trans "typing…" %}
+            </span>
+        </div>
+
+        <div class="ab-chat__pinned" id="abChatPinned" hidden>
+            <i class="fas fa-thumbtack"></i>
+            <span id="abChatPinnedBody"></span>
+        </div>
+
+        <div class="ab-chat__messages" id="abChatMessages" role="log" aria-live="polite"></div>
+
+        <div class="ab-chat__compose">
+            <div class="ab-chat__replybox" id="abChatReplyBox" hidden>
+                <i class="fas fa-reply"></i>
+                <span id="abChatReplyPreview"></span>
+                <button type="button" id="abChatReplyCancel" aria-label="{% trans 'Cancel reply' %}">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="ab-chat__compose-row">
+                <input type="file" id="abChatFile" class="ab-chat__file-input"
+                       accept=".jpg,.jpeg,.png,.webp,.gif,.pdf" multiple hidden>
+                <button type="button" id="abChatAttach" class="ab-chat__attach"
+                        title="{% trans 'Attach file' %}" aria-label="{% trans 'Attach file' %}">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <textarea id="abChatInput" class="ab-chat__input" rows="1"
+                          placeholder="{% trans 'Write a message…' %}"
+                          maxlength="4000"></textarea>
+                <button type="button" id="abChatSend" class="ab-chat__send"
+                        aria-label="{% trans 'Send message' %}">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <p class="ab-chat__file-hint" id="abChatFileHint"></p>
         </div>
     </div>
 </div>

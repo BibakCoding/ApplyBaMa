@@ -75,6 +75,9 @@ document.addEventListener("DOMContentLoaded", function () {
         initProgramAutocomplete();
         initNotificationsScripts();
         initMyNotificationsScripts();
+        // pages/chat.js owns its fragment's wiring (it is loaded with the
+        // shell, so it cannot bind to elements that do not exist yet).
+        if (typeof window.initChatScripts === "function") window.initChatScripts();
 
         // Update the browser's address bar to reflect the current SPA state
         const cleanParams = params.replace(/^\?/, "");
@@ -1007,6 +1010,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     loadContent("my_notifications");
   });
+
+  // Chat: when the chat page is the open fragment, an agent/company adding a
+  // student (or any thread-level refresh push) re-renders it. The badge and
+  // toasts are handled by chat.js/realtime.js on every other page.
+  document.addEventListener("ab:chat-event", function (event) {
+    const type = (event.detail || {}).type;
+    if (type === "chat.refresh" && isChatOpen()) loadContent("chat");
+  });
+
+  function isChatOpen() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("page") === "chat";
+  }
 
   function handleSendNotification(form) {
     const formData = new FormData(form);

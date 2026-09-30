@@ -98,7 +98,7 @@ def get_managed_students(user):
 # else listed in dashboard_content's content_map is read-only: profile (to
 # verify/cancel), notifications (read) and application_detail (read) remain
 # reachable; notifications and detail render normally.
-VERIFICATION_EXEMPT_PAGES = {"welcome", "profile", "notifications", "my_notifications", "application_detail"}
+VERIFICATION_EXEMPT_PAGES = {"welcome", "profile", "notifications", "my_notifications", "application_detail", "chat"}
 
 
 def email_verification_required(view):
@@ -156,6 +156,7 @@ def dashboard_content(request, page):
         "university_detail": "dashboard/fragments/university_detail.html",
         "notifications": "dashboard/fragments/notifications.html",
         "my_notifications": "dashboard/fragments/my_notifications.html",
+        "chat": "dashboard/fragments/chat.html",
     }
 
     if page not in content_map:
@@ -815,6 +816,25 @@ def submit_add_student(request):
                 # program yet — the lists render that as "Unassigned" until the
                 # agent files the application for it.
                 Application.objects.create(agent=request.user, student=user)
+                # The chat thread with the new student opens for both sides
+                # immediately (the defined framework: agents/companies reach
+                # the students they manage).
+                from core import chat as chat_domain
+                from realtime.push import push_to_user
+
+                conversation = chat_domain.get_or_create_conversation(
+                    request.user, user
+                )
+            # Push after commit: the sockets must never announce a thread whose
+            # rows are not visible yet.
+            push_to_user(
+                user.pk,
+                {"type": "chat.refresh", "conversation": conversation.pk},
+            )
+            push_to_user(
+                request.user.pk,
+                {"type": "chat.refresh", "conversation": conversation.pk},
+            )
             return JsonResponse(
                 {"success": True, "message": _("Student added successfully.")}
             )

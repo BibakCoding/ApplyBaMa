@@ -1,7 +1,7 @@
 # dashboard/urls.py
 from django.urls import path
 
-from . import views
+from . import chat_views, views
 
 urlpatterns = [
     path("", views.dashboard_main, name="dashboard"),
@@ -54,4 +54,15 @@ urlpatterns = [
     path("notifications/detail/<int:pk>/", views.notification_detail, name="notification_detail"),
     path("notifications/update/<int:pk>/", views.update_notification, name="update_notification"),
     path("notifications/recipients/<int:pk>/", views.get_notification_recipients, name="get_notification_recipients"),
+    # Chat
+    path("chat/data/", chat_views.conversations_data, name="chat_conversations"),
+    path("chat/thread/<int:pk>/", chat_views.thread_data, name="chat_thread"),
+    path("chat/send/", chat_views.send_message, name="chat_send"),
+    path("chat/upload/<int:pk>/", chat_views.upload_attachment, name="chat_upload"),
+    path("chat/message/<int:pk>/edit/", chat_views.edit_message, name="chat_edit"),
+    path("chat/message/<int:pk>/delete/", chat_views.delete_message, name="chat_delete"),
+    path("chat/message/<int:pk>/pin/", chat_views.pin_message, name="chat_pin"),
+    path("chat/message/<int:pk>/forward/", chat_views.forward_message, name="chat_forward"),
+    path("chat/read/<int:pk>/", chat_views.read_thread, name="chat_read"),
+    path("chat/grant/<int:student_id>/", chat_views.grant_file_permission, name="chat_grant"),
 ]

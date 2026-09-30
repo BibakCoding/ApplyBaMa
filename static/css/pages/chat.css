@@ -1,0 +1,585 @@
+/* ---------------------------------------------------------------------------
+   ApplyBaMa - pages/chat.css
+   The dashboard chat page (dashboard/fragments/chat.html + pages/chat.js).
+
+   All selectors are namespaced under .ab-chat so the fragment can never fight
+   the dashboard shell. Layout adapts at 640px: the conversation list and the
+   thread swap for each other on phones instead of shrinking side by side.
+--------------------------------------------------------------------------- */
+
+.ab-chat {
+    display: flex;
+    gap: 0;
+    height: calc(100vh - 190px);
+    min-height: 420px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+/* Conversation list ------------------------------------------------------- */
+
+.ab-chat__list {
+    width: 320px;
+    min-width: 260px;
+    border-inline-end: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+}
+
+.ab-chat__list-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 1rem 1rem 0.5rem;
+}
+
+.ab-chat__title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.ab-chat__hint {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.ab-chat__items {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 0.5rem;
+}
+
+.ab-chat__item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.ab-chat__item:hover,
+.ab-chat__item:focus-visible {
+    background: #f9fafb;
+    outline: none;
+}
+
+.ab-chat__item--unread {
+    background: #ecfdf5;
+}
+
+.ab-chat__item--unread:hover {
+    background: #d1fae5;
+}
+
+.ab-chat__item-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.ab-chat__item-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.ab-chat__staff-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #1e40af;
+    background: #dbeafe;
+    padding: 0.05rem 0.4rem;
+    border-radius: 999px;
+}
+
+.ab-chat__item-last {
+    font-size: 0.8rem;
+    color: #6b7280;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ab-chat__item-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+}
+
+.ab-chat__item-time {
+    font-size: 0.7rem;
+    color: #9ca3af;
+}
+
+.ab-chat__unread {
+    background: #10b981;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 0.05rem 0.45rem;
+}
+
+/* The read time next to the double check on own messages. */
+.ab-chat__msg-readat {
+    font-size: 0.65rem;
+    color: #059669;
+}
+
+/* Contacts (allowed partners without a thread yet) ------------------------ */
+
+.ab-chat__section {
+    padding: 0.6rem 1rem 0.3rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #9ca3af;
+    border-top: 1px solid #f3f4f6;
+}
+
+.ab-chat__item--contact {
+    background: #fbfdff;
+}
+
+.ab-chat__contact-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.ab-chat__contact-go {
+    margin-inline-start: auto;
+    color: #1e40af;
+    font-size: 0.85rem;
+}
+
+.ab-chat__empty {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: #6b7280;
+}
+
+.ab-chat__empty-icon {
+    font-size: 2rem;
+    color: #d1d5db;
+    margin-bottom: 0.5rem;
+}
+
+.ab-chat__empty-sub {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-top: 0.35rem;
+}
+
+/* Avatars + presence ------------------------------------------------------ */
+
+.ab-chat__avatar {
+    position: relative;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #1e3a8a, #172554);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ab-chat__avatar--online::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: 0;
+    bottom: 0;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 999px;
+    background: #10b981;
+    border: 2px solid #fff;
+}
+
+/* Thread ------------------------------------------------------------------ */
+
+.ab-chat__thread {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.ab-chat__thread[hidden] {
+    display: none;
+}
+
+.ab-chat__thread-head {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.ab-chat__back {
+    border: none;
+    background: transparent;
+    color: #374151;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.5rem;
+    display: none;
+}
+
+.ab-chat__back:hover {
+    background: #f3f4f6;
+}
+
+.ab-chat__peer {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+}
+
+.ab-chat__peer-name {
+    display: block;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #111827;
+}
+
+.ab-chat__peer-status {
+    display: block;
+    font-size: 0.72rem;
+    color: #6b7280;
+}
+
+.ab-chat__typing {
+    margin-inline-start: auto;
+    font-size: 0.75rem;
+    color: #059669;
+}
+
+.ab-chat__pinned {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    background: #fffbeb;
+    border-bottom: 1px solid #fde68a;
+    color: #92400e;
+    font-size: 0.8rem;
+}
+
+.ab-chat__pinned[hidden] {
+    display: none;
+}
+
+.ab-chat__messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background: #f9fafb;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ab-chat__msg {
+    position: relative;
+    max-width: 72%;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.9rem;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    align-self: flex-start;
+    box-shadow: 0 1px 1px rgb(0 0 0 / 0.03);
+}
+
+.ab-chat__msg--mine {
+    align-self: flex-end;
+    background: #dbeafe;
+    border-color: #bfdbfe;
+}
+
+.ab-chat__msg-forwarded {
+    font-size: 0.7rem;
+    font-style: italic;
+    color: #6b7280;
+    margin-bottom: 0.2rem;
+}
+
+.ab-chat__msg-quote {
+    border-inline-start: 3px solid #93c5fd;
+    background: rgb(255 255 255 / 0.6);
+    color: #4b5563;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.4rem;
+    margin-bottom: 0.3rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.ab-chat__msg-deleted {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #9ca3af;
+}
+
+.ab-chat__msg-body {
+    font-size: 0.875rem;
+    color: #111827;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.ab-chat__msg-foot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.3rem;
+    margin-top: 0.2rem;
+}
+
+.ab-chat__msg-time {
+    font-size: 0.65rem;
+    color: #9ca3af;
+}
+
+.ab-chat__msg-edited {
+    font-size: 0.65rem;
+    font-style: italic;
+    color: #9ca3af;
+}
+
+.ab-chat__tick {
+    font-size: 0.65rem;
+    color: #9ca3af;
+}
+
+.ab-chat__tick--read {
+    color: #059669;
+}
+
+/* Message action menu ----------------------------------------------------- */
+
+.ab-chat__msg-menu {
+    position: absolute;
+    top: -1.1rem;
+    inset-inline-end: 0.4rem;
+    display: none;
+    gap: 0.1rem;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    padding: 0.1rem 0.25rem;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.08);
+    z-index: 5;
+}
+
+.ab-chat__msg:hover .ab-chat__msg-menu,
+.ab-chat__msg:focus-within .ab-chat__msg-menu {
+    display: inline-flex;
+}
+
+.ab-chat__iconbtn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.7rem;
+    color: #6b7280;
+    padding: 0.2rem 0.35rem;
+    border-radius: 999px;
+}
+
+.ab-chat__iconbtn:hover {
+    background: #f3f4f6;
+    color: #1e3a8a;
+}
+
+.ab-chat__pin--active {
+    color: #d97706;
+}
+
+/* Attachments ------------------------------------------------------------- */
+
+.ab-chat__attachment {
+    margin: 0.15rem 0 0.25rem;
+}
+
+.ab-chat__attachment-image {
+    max-width: 240px;
+    max-height: 200px;
+    border-radius: 0.5rem;
+    display: block;
+    cursor: zoom-in;
+}
+
+.ab-chat__attachment-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: #1e40af;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 0.5rem;
+    padding: 0.35rem 0.6rem;
+}
+
+/* Composer ---------------------------------------------------------------- */
+
+.ab-chat__compose {
+    border-top: 1px solid #e5e7eb;
+    padding: 0.6rem 1rem 0.7rem;
+    background: #fff;
+}
+
+.ab-chat__replybox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f3f4f6;
+    border-radius: 0.5rem;
+    padding: 0.35rem 0.6rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    color: #4b5563;
+}
+
+.ab-chat__replybox[hidden] {
+    display: none;
+}
+
+.ab-chat__replybox i {
+    color: #1e3a8a;
+}
+
+.ab-chat__replybox span {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ab-chat__replybox button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.ab-chat__compose-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.ab-chat__attach {
+    border: none;
+    background: #f3f4f6;
+    color: #374151;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.ab-chat__attach:hover {
+    background: #e5e7eb;
+}
+
+.ab-chat__attach--disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.ab-chat__input {
+    flex: 1;
+    min-width: 0;
+    resize: none;
+    border: 1px solid #d1d5db;
+    border-radius: 0.75rem;
+    padding: 0.55rem 0.8rem;
+    font-size: 0.875rem;
+    max-height: 7rem;
+}
+
+.ab-chat__input:focus {
+    outline: 2px solid #93c5fd;
+    outline-offset: -1px;
+}
+
+.ab-chat__send {
+    border: none;
+    background: linear-gradient(135deg, #1e3a8a, #172554);
+    color: #fff;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.ab-chat__send:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.ab-chat__file-hint {
+    font-size: 0.7rem;
+    color: #9ca3af;
+    margin-top: 0.35rem;
+    min-height: 0.9rem;
+}
+
+.ab-chat__pending-file {
+    display: inline-block;
+    background: #eff6ff;
+    color: #1e40af;
+    border-radius: 999px;
+    padding: 0 0.45rem;
+    margin-inline-end: 0.3rem;
+}
+
+/* Phones ------------------------------------------------------------------ */
+
+@media (max-width: 640px) {
+    .ab-chat {
+        height: calc(100vh - 150px);
+        min-height: 360px;
+    }
+
+    .ab-chat__list {
+        width: 100%;
+        min-width: 0;
+        border-inline-end: none;
+    }
+
+    /* When the thread is open on a phone, the list gets out of the way. */
+    .ab-chat__list[hidden] {
+        display: none;
+    }
+
+    .ab-chat__back {
+        display: inline-block;
+    }
+
+    .ab-chat__msg {
+        max-width: 86%;
+    }
+}

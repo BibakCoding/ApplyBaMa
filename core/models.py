@@ -7,6 +7,7 @@ from django.db.models import JSONField
 from django.db.models.functions import Lower
 from django.urls import reverse
 from django.utils.crypto import get_random_string
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from .utils.image_processing import university_logo_upload_to, compress_image
@@ -646,6 +647,26 @@ class SiteSettings(models.Model):
         upload_to="home/", default="static/images/home/hero.jpg"
     )
 
+    # Chat file-transfer policy. The default pre-fills the grant dialog; an
+    # actual FilePermission row decides what a student may send. chat_max_
+    # total_storage_mb is the site-wide ceiling over all chat uploads, so a
+    # flood of grants cannot exhaust the disk either.
+    chat_default_file_mb = models.PositiveIntegerField(
+        default=5,
+        help_text=_(
+            "Default per-student file size limit (MB) pre-filled when a chat "
+            "file permission is granted. Students without a grant cannot send "
+            "files at all."
+        ),
+    )
+    chat_max_total_storage_mb = models.PositiveIntegerField(
+        default=1024,
+        help_text=_(
+            "Site-wide ceiling (MB) on the total size of all chat uploads. "
+            "Uploads are refused once it is reached."
+        ),
+    )
+
     class Meta:
         verbose_name = _("Site Settings")
         verbose_name_plural = _("Site Settings")
@@ -823,3 +844,302 @@ class NotificationRecipient(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.notification.title}"
+
+
+# ---------------------------------------------------------------------------
+# Chat (1-to-1 messaging: admin ↔ everyone, agent/company ↔ their students)
+# ---------------------------------------------------------------------------
+
+
+def chat_file_upload_to(instance, filename):
+    """Per-attachment upload path: ``chat/<conversation>/<message>/name``.
+
+    The folder ids come from the owning message, because ``upload_to`` runs
+    while the attachment row is still being inserted (``instance.pk`` is None
+    at that point) and an attachment itself only knows its message.
+    """
+    safe_name = os.path.basename(filename)
+    message = instance.message
+    conversation_id = message.conversation_id if message is not None else 0
+    message_id = message.pk if message is not None else 0
+    return f"chat/{conversation_id}/{message_id or 0}/{safe_name}"
+
+
+class Conversation(TimeStampedModel):
+    """A 1-to-1 chat thread, identified by the ordered user pair.
+
+    Storing ``(user_low, user_high)`` with ``user_low.pk < user_high.pk`` gives
+    every pair exactly one row regardless of who opened it first; all message,
+    read and pin state hangs off that row, so both parties always see the same
+    thread.
+    """
+
+    user_low = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="conversations_low"
+    )
+    user_high = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="conversations_high"
+    )
+    # Denormalized for the conversations list ordering; maintained by touch().
+    last_message_at = models.DateTimeField(default=timezone.now, db_index=True)
+
+    class Meta:
+        verbose_name = _("Chat conversation")
+        verbose_name_plural = _("Chat conversations")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user_low", "user_high"], name="chat_pair_unique"
+            )
+        ]
+        indexes = [
+            models.Index(fields=["user_low", "last_message_at"]),
+            models.Index(fields=["user_high", "last_message_at"]),
+        ]
+
+    def __str__(self):
+        return f"#{self.pk} {self.user_low_id}<->{self.user_high_id}"
+
+    def both_users(self):
+        """The two people in the thread, low first.
+
+        Named for the pair rather than ``participants`` on purpose: the reverse
+        accessor of ConversationParticipant.conversation (``participants``, the
+        per-user state rows) already owns that attribute, and Django's related
+        manager descriptor would silently replace this method if the names
+        collided.
+        """
+        return [self.user_low, self.user_high]
+
+    def is_participant(self, user):
+        return user.pk in (self.user_low_id, self.user_high_id)
+
+    def partner_of(self, user):
+        """The other participant, from ``user``'s perspective."""
+        return self.user_high if self.user_low_id == user.pk else self.user_low
+
+    def touch(self):
+        """Refresh list ordering after a message lands."""
+        self.last_message_at = timezone.now()
+        self.save(update_fields=["last_message_at"])
+
+
+class ConversationParticipant(models.Model):
+    """Per-participant chat state: read marker, presence, typing.
+
+    Split from Conversation so one participant's read marker or presence flag
+    never writes the row the other is reading.
+    """
+
+    conversation = models.ForeignKey(
+        Conversation, on_delete=models.CASCADE, related_name="participants"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="chat_participations"
+    )
+    # Read receipts: a message shows the double check when the peer's
+    # last_read_at is at or after the message's timestamp (Telegram's model).
+    last_read_at = models.DateTimeField(null=True, blank=True)
+    is_online = models.BooleanField(default=False)
+    is_typing = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = _("Chat participant")
+        verbose_name_plural = _("Chat participants")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["conversation", "user"], name="chat_participant_unique"
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.user_id}@conv{self.conversation_id}"
+
+
+class MessageAttachment(TimeStampedModel):
+    """One uploaded file on a chat message.
+
+    Kept off Message so a text message is a single-row insert and the site-wide
+    storage accounting is a cheap aggregate over this table.
+    """
+
+    message = models.ForeignKey(
+        "Message", on_delete=models.CASCADE, related_name="attachments"
+    )
+    file = models.FileField(upload_to=chat_file_upload_to, max_length=500)
+    original_name = models.CharField(max_length=255)
+    size = models.PositiveBigIntegerField()
+    content_type = models.CharField(max_length=100, blank=True)
+    is_image = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = _("Chat attachment")
+        verbose_name_plural = _("Chat attachments")
+
+    def __str__(self):
+        return self.original_name
+
+
+class Message(TimeStampedModel):
+    """One chat message. Never hard-deleted: ``is_deleted`` hides it."""
+
+    class Meta:
+        verbose_name = _("Chat message")
+        verbose_name_plural = _("Chat messages")
+        ordering = ["created_at"]
+        indexes = [
+            models.Index(fields=["conversation", "created_at"]),
+        ]
+
+    conversation = models.ForeignKey(
+        Conversation, on_delete=models.CASCADE, related_name="messages"
+    )
+    sender = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="chat_messages_sent"
+    )
+    body = models.TextField(blank=True)
+
+    # Soft delete: row and file stay in the database; the UI shows a
+    # placeholder. deleted_by records which side hid it.
+    is_deleted = models.BooleanField(default=False)
+    deleted_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="chat_messages_deleted",
+    )
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    is_edited = models.BooleanField(default=False)
+
+    # One pinned message per conversation (Telegram-style single pin).
+    is_pinned = models.BooleanField(default=False)
+
+    # Forwarding keeps a pointer to the origin for the "Forwarded" label; the
+    # label survives even if the origin is later deleted.
+    forwarded_from = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="forwards",
+    )
+
+    # Replies quote their parent; deleting the parent leaves the reply showing
+    # the standard "deleted" placeholder.
+    reply_to = models.ForeignKey(
+        "self", on_delete=models.SET_NULL, null=True, blank=True, related_name="replies"
+    )
+
+    def __str__(self):
+        preview = (self.body or "")[:30] or ("file" if self.has_file else "")
+        return f"{self.sender_id}: {preview}"
+
+    @property
+    def has_file(self):
+        return self.attachments.exists()
+
+    def can_modify(self, user):
+        """Only the sender edits, pins or deletes-for-everyone their message."""
+        return self.sender_id == user.pk
+
+    def soft_delete(self, user):
+        """Hide for both parties. Only the sender can do this."""
+        if not self.can_modify(user):
+            raise PermissionError("Only the sender can delete a message")
+        self.is_deleted = True
+        self.deleted_by = user
+        self.deleted_at = timezone.now()
+        if self.is_pinned:
+            self.is_pinned = False
+        self.save(
+            update_fields=[
+                "is_deleted",
+                "deleted_by",
+                "deleted_at",
+                "is_pinned",
+                "updated_at",
+            ]
+        )
+
+
+class FilePermission(models.Model):
+    """Whether a student may attach files in chat, and how large.
+
+    Without an active row a student cannot upload at all. With one, the
+    allowance is ``min(max_file_mb, core.chat.CHAT_FILE_MAX_MB)`` — the grant
+    dialog pre-fills the site default (SiteSettings.chat_default_file_mb) and
+    may raise or lower it per student, but never above the hard ceiling.
+    """
+
+    student = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="chat_file_permission"
+    )
+    granted_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name="chat_file_grants"
+    )
+    max_file_mb = models.PositiveIntegerField(default=5)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Chat file permission")
+        verbose_name_plural = _("Chat file permissions")
+
+    def __str__(self):
+        state = "on" if self.is_active else "off"
+        return f"{self.student_id}: {self.max_file_mb}MB ({state})"
+
+    def clean(self):
+        from core.chat import CHAT_FILE_MAX_MB
+
+        if self.max_file_mb > CHAT_FILE_MAX_MB:
+            raise ValidationError(
+                {
+                    "max_file_mb": _("Cannot exceed the %(ceiling)s MB ceiling.")
+                    % {"ceiling": CHAT_FILE_MAX_MB}
+                }
+            )
+        if self.max_file_mb < 1:
+            raise ValidationError({"max_file_mb": _("Must be at least 1 MB.")})
+
+    @classmethod
+    def allowance_mb_for(cls, user):
+        """The upload limit in MB for ``user``, or None when uploads are closed."""
+        row = cls.objects.filter(student=user, is_active=True).first()
+        if row is None:
+            return None
+        from core.chat import CHAT_FILE_MAX_MB
+
+        return min(row.max_file_mb, CHAT_FILE_MAX_MB)
+
+    @classmethod
+    def default_allowance_mb(cls):
+        """The site default from Site Settings, clamped to the hard ceiling.
+
+        Used when a granter leaves the size field alone: the dialog pre-fills
+        this value, and an API client that omits ``max_file_mb`` gets it too.
+        """
+        from core.chat import CHAT_FILE_MAX_MB
+
+        site = SiteSettings.objects.get_or_create(pk=1)[0]
+        return max(1, min(site.chat_default_file_mb, CHAT_FILE_MAX_MB))
+
+    @classmethod
+    def grant(cls, student, granted_by, max_file_mb=None):
+        """Create or update the student's permission, returning (row, created)."""
+        from core.chat import CHAT_FILE_MAX_MB
+
+        if max_file_mb is None:
+            max_file_mb = cls.default_allowance_mb()
+        max_file_mb = max(1, min(int(max_file_mb), CHAT_FILE_MAX_MB))
+        row, created = cls.objects.update_or_create(
+            student=student,
+            defaults={
+                "granted_by": granted_by,
+                "max_file_mb": max_file_mb,
+                "is_active": True,
+            },
+        )
+        return row, created
