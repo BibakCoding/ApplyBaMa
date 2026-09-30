@@ -341,6 +341,9 @@
         </div>
     </section>
 {% endblock %}
+{% block footer %}
+    {% include "partials/site_footer.html" %}
+{% endblock %}
 {% block js %}
     {{ block.super }}
     {% comment %}

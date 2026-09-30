@@ -121,6 +121,8 @@
       "Revoke this student's file permission?",
     chatRevoked:
       document.body.dataset.i18nChatRevoked || "File permission revoked.",
+    supportMinimize:
+      document.body.dataset.i18nSupportMinimize || "Minimize",
   };
 
   const ApplyBaMa = {

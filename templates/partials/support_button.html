@@ -1,0 +1,29 @@
+{% comment %}
+Floating "Contact Support" button, included by base.html so it is available on
+every page.
+
+Behaviour lives in static/js/support.js; this markup only declares it:
+  * the link opens the support chat — the dashboard's chat page when logged
+    in, otherwise the login form carrying ?next= back to it;
+  * dragging swaps the button between the left and right screen edges and
+    slides it vertically (never free movement into the page);
+  * the minus control minimizes it to a small bubble on the same spot.
+The state (side, height, minimized) is remembered in localStorage.
+{% endcomment %}
+{% load i18n static %}
+
+<span class="ab-support-rail" aria-hidden="true"></span>
+<a id="abSupportBtn"
+   class="ab-support ab-support--end"
+   href="{% if user.is_authenticated %}{% url 'dashboard' %}?page=chat{% else %}{% url 'login' %}?next={% url 'dashboard' %}%3Fpage%3Dchat{% endif %}"
+   data-support-min-label="{% trans 'Contact Support' %}"
+   aria-label="{% trans 'Contact Support' %}">
+    <span class="ab-support-icon"><i class="fas fa-headset"></i></span>
+    <span class="ab-support-label">{% trans "Contact Support" %}</span>
+    <button type="button"
+            class="ab-support-min"
+            aria-label="{% trans 'Minimize' %}"
+            title="{% trans 'Minimize' %}">
+        <i class="fas fa-minus"></i>
+    </button>
+</a>

@@ -17,6 +17,8 @@
         {% block css %}
             <link rel="stylesheet" href="{% static 'css/base.css' %}">
         {% endblock %}
+        {# Footer contact section + the floating support button. #}
+        <link rel="stylesheet" href="{% static 'css/pages/support.css' %}">
         <link rel="stylesheet" href="{% static 'vendor/notyf/notyf.min.css' %}">
         <link rel="stylesheet" href="{% static 'vendor/fontawesome/css/all.min.css' %}">
         {% comment %}
@@ -72,8 +74,16 @@
           data-i18n-chat-start-conversation="{% trans 'Start a conversation' %}"
           data-i18n-chat-grant-done="{% trans 'File permission updated.' %}"
           data-i18n-chat-revoke-confirm="{% trans "Revoke this student's file permission?" %}"
-          data-i18n-chat-revoked="{% trans 'File permission revoked.' %}">
+          data-i18n-chat-revoked="{% trans 'File permission revoked.' %}"
+          data-i18n-support-minimize="{% trans 'Minimize' %}">
         <div id="ab-scroll-progress"></div>
+
+        {% comment %}
+        Floating "Contact Support" button: present on every page, opens the
+        in-site chat with the admin (or the login form that returns to it).
+        Drag behaviour and minimize live in static/js/support.js.
+        {% endcomment %}
+        {% include "partials/support_button.html" %}
 
         {% comment %}
         The JavaScript runtime configuration (API URLs, static prefix,
@@ -117,6 +127,8 @@
     polling.
     {% endcomment %}
     <script src="{% static 'js/realtime.js' %}" defer></script>
+    {# Floating support button: drag between sides, minimize to a bubble. #}
+    <script src="{% static 'js/support.js' %}" defer></script>
     {% comment %}
     jwt-auth.js is NOT global: only the login flow stores tokens (login.js)
     and the dashboard is the SPA surface where they may be consumed. Pages

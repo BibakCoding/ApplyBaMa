@@ -1,0 +1,60 @@
+{% comment %}
+Site footer with the Contact Us section.
+
+Included from the home page's footer block. "Contact Support" is not a
+ticket form — it opens the 1-to-1 chat with the site admin (see the chat
+framework in core/chat.py). Visitors who are logged in land directly on
+?next=%2Fen%2Fdashboard%2F%3Fpage%3Dchat, which the login form carries
+through its hidden next input, so the dashboard reopens on the chat page
+after signing in.
+{% endcomment %}
+{% load i18n static %}
+
+<footer class="ab-footer">
+    <div class="ab-container ab-footer-inner">
+        <div class="ab-footer-brand">
+            <img src="{% static 'images/logo.png' %}" alt="" width="120" height="32">
+            <p class="ab-footer-tagline">
+                {% trans "Your gateway to fully funded scholarships abroad." %}
+            </p>
+            {% if settings.instagram_url or settings.telegram_url %}
+                <div class="ab-footer-social">
+                    {% if settings.instagram_url %}
+                        <a href="{{ settings.instagram_url }}" target="_blank" rel="noopener"
+                           aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    {% endif %}
+                    {% if settings.telegram_url %}
+                        <a href="{{ settings.telegram_url }}" target="_blank" rel="noopener"
+                           aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    {% endif %}
+                    <a href="https://wa.me/{{ settings.whatsapp_number|cut:'+' }}"
+                       target="_blank" rel="noopener" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="ab-footer-contact">
+            <h3 class="ab-footer-heading">{% trans "Contact Us" %}</h3>
+            {% if settings.email %}
+                <p class="ab-footer-line">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:{{ settings.email }}">{{ settings.email }}</a>
+                </p>
+            {% endif %}
+            {% if settings.whatsapp_number %}
+                <p class="ab-footer-line">
+                    <i class="fab fa-whatsapp"></i>
+                    <a href="https://wa.me/{{ settings.whatsapp_number|cut:'+' }}"
+                       target="_blank" rel="noopener">{{ settings.whatsapp_number }}</a>
+                </p>
+            {% endif %}
+            <a class="ab-btn ab-btn-primary ab-footer-chat-btn"
+               href="{% if user.is_authenticated %}{% url 'dashboard' %}?page=chat{% else %}{% url 'login' %}?next={% url 'dashboard' %}%3Fpage%3Dchat{% endif %}">
+                <i class="fas fa-headset"></i> {% trans "Contact Support" %}
+            </a>
+            <p class="ab-footer-note">{% trans "Opens our in-site chat with the support team." %}</p>
+        </div>
+    </div>
+</footer>

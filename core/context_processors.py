@@ -61,6 +61,10 @@ def app_config(request):
                 # Public site
                 "register": _url("register"),
                 "dashboard": _url("dashboard"),
+                # Support chat entry points: the footer link and the floating
+                # button both land on the chat page (or on the login form that
+                # carries ?next=...?page=chat back to it).
+                "login": _url("login"),
                 # Dashboard shell
                 "dashboardContent": _url("dashboard_content", "PAGE_PLACEHOLDER"),
                 "logout": _url("logout"),
@@ -96,6 +100,10 @@ def app_config(request):
             "translations": {
                 "searchInfo": _(
                     "Registration is required to see programs matching your search."
+                ),
+                "supportChatTitle": _("Contact Support"),
+                "supportChatHint": _(
+                    "Chat with the Apply BM team — log in if asked."
                 ),
                 "newsletterSuccess": _(
                     "Thank you! You are on the scholarship alerts list."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 20:20+0330\n"
+"POT-Creation-Date: 2026-09-30 21:49+0330\n"
 "PO-Revision-Date: 2026-08-27 03:43+0000\n"
 "Last-Translator: <a@g.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -520,7 +520,7 @@ msgstr "پیشرفت"
 msgid "Documents"
 msgstr "مدارک"
 
-#: .\core\admin.py:703
+#: .\core\admin.py:703 .\core\chat.py:128
 #: .\templates\dashboard\fragments\application_detail.html:42
 #: .\templates\dashboard\main.html:48
 msgid "Student"
@@ -653,7 +653,7 @@ msgstr "ارسال"
 msgid "Recipients"
 msgstr "گیرندگان"
 
-#: .\core\admin.py:999 .\core\models.py:837 .\templates\base.html:64
+#: .\core\admin.py:999 .\core\models.py:837 .\templates\base.html:66
 msgid "Read"
 msgstr "خوانده‌شده"
 
@@ -746,7 +746,7 @@ msgid_plural "%(count)d rows exported."
 msgstr[0] "%(count)d ردیف خروجی گرفته شد."
 msgstr[1] "%(count)d ردیف خروجی گرفته شد."
 
-#: .\core\chat.py:109 .\templates\base.html:49
+#: .\core\chat.py:109 .\templates\base.html:51
 msgid "Support"
 msgstr "پشتیبانی"
 
@@ -771,35 +771,46 @@ msgstr "این فایل بیش از حد بزرگ است. سقف شما %(limit)
 msgid "The site's chat storage is full. Please try again later."
 msgstr "فضای گفتگوی سایت پر است. بعداً دوباره تلاش کنید."
 
-#: .\core\context_processors.py:98
+#: .\core\context_processors.py:102
 msgid "Registration is required to see programs matching your search."
 msgstr "برای دیدن رشته‌های منطبق با جست‌وجوی شما، ثبت‌نام لازم است."
 
-#: .\core\context_processors.py:101
+#: .\core\context_processors.py:104 .\templates\partials\site_footer.html:55
+#: .\templates\partials\support_button.html:19
+#: .\templates\partials\support_button.html:20
+#: .\templates\partials\support_button.html:22
+msgid "Contact Support"
+msgstr "تماس با پشتیبانی"
+
+#: .\core\context_processors.py:106
+msgid "Chat with the Apply BM team — log in if asked."
+msgstr "با تیم اپلای بی‌ام گفتگو کنید — در صورت نیاز وارد شوید."
+
+#: .\core\context_processors.py:109
 msgid "Thank you! You are on the scholarship alerts list."
 msgstr "متشکریم! شما در فهرست هشدارهای بورس تحصیلی قرار دارید."
 
-#: .\core\context_processors.py:103
+#: .\core\context_processors.py:111
 msgid "Loading content..."
 msgstr "در حال بارگذاری محتوا..."
 
-#: .\core\context_processors.py:104
+#: .\core\context_processors.py:112
 msgid "Loading Error"
 msgstr "خطا در بارگذاری"
 
-#: .\core\context_processors.py:105
+#: .\core\context_processors.py:113
 msgid "Please try again or contact support"
 msgstr "لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید"
 
-#: .\core\context_processors.py:106
+#: .\core\context_processors.py:114
 msgid "Reload Page"
 msgstr "بارگذاری مجدد صفحه"
 
-#: .\core\context_processors.py:108
+#: .\core\context_processors.py:116
 msgid "Email verified! Your account is fully active again."
 msgstr "ایمیل تأیید شد! حساب شما دوباره کاملاً فعال است."
 
-#: .\core\context_processors.py:111
+#: .\core\context_processors.py:119
 msgid "Chat connected"
 msgstr "گفتگو متصل شد"
 
@@ -1227,53 +1238,53 @@ msgstr "گیرنده اعلان"
 msgid "Notification Recipients"
 msgstr "گیرندگان اعلان"
 
-#: .\core\models.py:879
+#: .\core\models.py:887
 msgid "Chat conversation"
 msgstr "مکالمهٔ گفتگو"
 
-#: .\core\models.py:880
+#: .\core\models.py:888
 msgid "Chat conversations"
 msgstr "مکالمه‌های گفتگو"
 
-#: .\core\models.py:930
+#: .\core\models.py:946
 msgid "Chat participant"
 msgstr "شرکت‌کنندهٔ گفتگو"
 
-#: .\core\models.py:931
+#: .\core\models.py:947
 msgid "Chat participants"
 msgstr "شرکت‌کننده‌های گفتگو"
 
-#: .\core\models.py:959
+#: .\core\models.py:975
 msgid "Chat attachment"
 msgstr "پیوست گفتگو"
 
-#: .\core\models.py:960
+#: .\core\models.py:976
 msgid "Chat attachments"
 msgstr "پیوست‌های گفتگو"
 
-#: .\core\models.py:970
+#: .\core\models.py:986
 msgid "Chat message"
 msgstr "پیام گفتگو"
 
-#: .\core\models.py:971
+#: .\core\models.py:987
 msgid "Chat messages"
 msgstr "پیام‌های گفتگو"
 
-#: .\core\models.py:1071
+#: .\core\models.py:1087
 #: .\templates\dashboard\fragments\partials\chat_file_grant.html:18
 msgid "Chat file permission"
 msgstr "مجوز فایل گفتگو"
 
-#: .\core\models.py:1072
+#: .\core\models.py:1088
 msgid "Chat file permissions"
 msgstr "مجوزهای فایل گفتگو"
 
-#: .\core\models.py:1084
+#: .\core\models.py:1100
 #, python-format
 msgid "Cannot exceed the %(ceiling)s MB ceiling."
 msgstr "نمی‌تواند از سقف %(ceiling)s مگابایت بیشتر شود."
 
-#: .\core\models.py:1089
+#: .\core\models.py:1105
 msgid "Must be at least 1 MB."
 msgstr "حداقل باید ۱ مگابایت باشد."
 
@@ -1393,16 +1404,16 @@ msgstr "آدرس ایمیل شما تأیید شد. همه امکانات حسا
 msgid "You cannot message this user."
 msgstr "شما نمی‌توانید به این کاربر پیام بدهید."
 
-#: .\dashboard\chat_views.py:109 .\templates\base.html:53
+#: .\dashboard\chat_views.py:109 .\templates\base.html:55
 msgid "Message deleted"
 msgstr "پیام حذف شد"
 
-#: .\dashboard\chat_views.py:113 .\templates\base.html:56
+#: .\dashboard\chat_views.py:113 .\templates\base.html:58
 msgid "📎 Attachment"
 msgstr "📎 پیوست"
 
-#: .\dashboard\chat_views.py:218 .\dashboard\chat_views.py:355
-#: .\dashboard\chat_views.py:448 .\dashboard\chat_views.py:506
+#: .\dashboard\chat_views.py:223 .\dashboard\chat_views.py:360
+#: .\dashboard\chat_views.py:453 .\dashboard\chat_views.py:511
 #: .\dashboard\views.py:777 .\dashboard\views.py:843 .\dashboard\views.py:853
 #: .\dashboard\views.py:895 .\dashboard\views.py:1058 .\dashboard\views.py:1129
 #: .\dashboard\views.py:1159 .\dashboard\views.py:1230
@@ -1410,39 +1421,39 @@ msgstr "📎 پیوست"
 msgid "Invalid request."
 msgstr "درخواست نامعتبر است."
 
-#: .\dashboard\chat_views.py:224 .\dashboard\chat_views.py:360
+#: .\dashboard\chat_views.py:229 .\dashboard\chat_views.py:365
 msgid "Message cannot be empty."
 msgstr "پیام نمی‌تواند خالی باشد."
 
-#: .\dashboard\chat_views.py:228
+#: .\dashboard\chat_views.py:233
 msgid "Message is too long (max 4000 characters)."
 msgstr "پیام بیش از حد طولانی است (حداکثر ۴۰۰۰ نویسه)."
 
-#: .\dashboard\chat_views.py:288
+#: .\dashboard\chat_views.py:293
 msgid "Send a message first."
 msgstr "اول پیامی بفرستید."
 
-#: .\dashboard\chat_views.py:294
+#: .\dashboard\chat_views.py:299
 msgid "No file received."
 msgstr "فایلی دریافت نشد."
 
-#: .\dashboard\chat_views.py:350
+#: .\dashboard\chat_views.py:355
 msgid "You can only edit your own messages."
 msgstr "فقط پیام‌های خودتان را می‌توانید ویرایش کنید."
 
-#: .\dashboard\chat_views.py:379
+#: .\dashboard\chat_views.py:384
 msgid "You can only delete your own messages."
 msgstr "فقط پیام‌های خودتان را می‌توانید حذف کنید."
 
-#: .\dashboard\chat_views.py:395
+#: .\dashboard\chat_views.py:400
 msgid "You can only pin your own messages."
 msgstr "فقط پیام‌های خودتان را می‌توانید سنجاق کنید."
 
-#: .\dashboard\chat_views.py:458
+#: .\dashboard\chat_views.py:463
 msgid "Pick a different conversation."
 msgstr "مکالمهٔ دیگری انتخاب کنید."
 
-#: .\dashboard\chat_views.py:501
+#: .\dashboard\chat_views.py:506
 msgid "You can only manage your own students."
 msgstr "فقط دانش‌آموزان خودتان را می‌توانید مدیریت کنید."
 
@@ -2142,56 +2153,56 @@ msgstr "درخواست لینک جدید"
 msgid "Scholarship Registration"
 msgstr "ثبت‌نام بورس تحصیلی"
 
-#: .\templates\base.html:34
+#: .\templates\base.html:36
 msgid "An unexpected error occurred."
 msgstr "خطای غیرمنتظره‌ای رخ داد."
 
-#: .\templates\base.html:36
+#: .\templates\base.html:38
 msgid "Sort By"
 msgstr "مرتب‌سازی بر اساس"
 
-#: .\templates\base.html:37 .\templates\dashboard\fragments\programs.html:111
+#: .\templates\base.html:39 .\templates\dashboard\fragments\programs.html:111
 #: .\templates\dashboard\fragments\universities.html:81
 msgid "Sort: Name (A-Z)"
 msgstr "ترتیب: نام (الف-ی)"
 
-#: .\templates\base.html:38 .\templates\dashboard\fragments\programs.html:114
+#: .\templates\base.html:40 .\templates\dashboard\fragments\programs.html:114
 #: .\templates\dashboard\fragments\universities.html:84
 msgid "Sort: Name (Z-A)"
 msgstr "ترتیب: نام (ی-الف)"
 
-#: .\templates\base.html:39 .\templates\dashboard\fragments\programs.html:118
+#: .\templates\base.html:41 .\templates\dashboard\fragments\programs.html:118
 msgid "Sort: University (A-Z)"
 msgstr "ترتیب: دانشگاه (الف-ی)"
 
-#: .\templates\base.html:40
+#: .\templates\base.html:42
 #: .\templates\dashboard\fragments\universities.html:88
 msgid "Sort: Country (A-Z)"
 msgstr "ترتیب: کشور (الف-ی)"
 
-#: .\templates\base.html:41 .\templates\dashboard\fragments\programs.html:120
+#: .\templates\base.html:43 .\templates\dashboard\fragments\programs.html:120
 msgid "Sort: Fee (Low to High)"
 msgstr "ترتیب: شهریه (کم به زیاد)"
 
-#: .\templates\base.html:42 .\templates\dashboard\fragments\programs.html:123
+#: .\templates\base.html:44 .\templates\dashboard\fragments\programs.html:123
 msgid "Sort: Fee (High to Low)"
 msgstr "ترتیب: شهریه (زیاد به کم)"
 
-#: .\templates\base.html:43
+#: .\templates\base.html:45
 #: .\templates\dashboard\fragments\universities.html:92
 msgid "Sort: Founded (Oldest First)"
 msgstr "ترتیب: سال تأسیس (قدیمی‌ترین)"
 
-#: .\templates\base.html:44
+#: .\templates\base.html:46
 #: .\templates\dashboard\fragments\universities.html:96
 msgid "Sort: Founded (Newest First)"
 msgstr "ترتیب: سال تأسیس (جدیدترین)"
 
-#: .\templates\base.html:46 .\templates\dashboard\fragments\chat.html:18
+#: .\templates\base.html:48 .\templates\dashboard\fragments\chat.html:18
 msgid "No conversations yet."
 msgstr "هنوز مکالمه‌ای نیست."
 
-#: .\templates\base.html:47 .\templates\dashboard\fragments\chat.html:20
+#: .\templates\base.html:49 .\templates\dashboard\fragments\chat.html:20
 msgid ""
 "You can always message Support here; students an agent or company adds "
 "appear automatically."
@@ -2199,108 +2210,113 @@ msgstr ""
 "همیشه می‌توانید اینجا به پشتیبانی پیام بدهید؛ دانش‌آموزانی که ایجنت یا شرکت "
 "اضافه می‌کند خودکار ظاهر می‌شوند."
 
-#: .\templates\base.html:48
+#: .\templates\base.html:50
 msgid "No messages yet"
 msgstr "هنوز پیامی نیست"
 
-#: .\templates\base.html:50
+#: .\templates\base.html:52
 msgid "online"
 msgstr "آنلاین"
 
-#: .\templates\base.html:51
+#: .\templates\base.html:53
 msgid "offline"
 msgstr "آفلاین"
 
-#: .\templates\base.html:52 .\templates\dashboard\fragments\chat.html:39
+#: .\templates\base.html:54 .\templates\dashboard\fragments\chat.html:39
 msgid "typing…"
 msgstr "در حال نوشتن…"
 
-#: .\templates\base.html:54
+#: .\templates\base.html:56
 msgid "(edited)"
 msgstr "(ویرایش‌شده)"
 
-#: .\templates\base.html:55
+#: .\templates\base.html:57
 msgid "Forwarded"
 msgstr "بازارسال‌شده"
 
-#: .\templates\base.html:57
+#: .\templates\base.html:59
 msgid "Reply"
 msgstr "پاسخ"
 
-#: .\templates\base.html:58
+#: .\templates\base.html:60
 msgid "Forward"
 msgstr "بازارسال"
 
-#: .\templates\base.html:59
+#: .\templates\base.html:61
 #: .\templates\dashboard\fragments\notifications.html:90
 msgid "Edit"
 msgstr "ویرایش"
 
-#: .\templates\base.html:60
+#: .\templates\base.html:62
 msgid "Unpin"
 msgstr "برداشتن سنجاق"
 
-#: .\templates\base.html:61
+#: .\templates\base.html:63
 msgid "Pin"
 msgstr "سنجاق"
 
-#: .\templates\base.html:62
+#: .\templates\base.html:64
 #: .\templates\dashboard\fragments\application_detail.html:17
 #: .\templates\dashboard\fragments\notifications.html:95
 msgid "Delete"
 msgstr "حذف"
 
-#: .\templates\base.html:63
+#: .\templates\base.html:65
 msgid "Delete this message for both sides?"
 msgstr "این پیام برای هر دو طرف حذف شود؟"
 
-#: .\templates\base.html:65
+#: .\templates\base.html:67
 msgid "Sent"
 msgstr "ارسال‌شده"
 
-#: .\templates\base.html:66
+#: .\templates\base.html:68
 msgid "Something went wrong."
 msgstr "خطایی رخ داد."
 
-#: .\templates\base.html:67
+#: .\templates\base.html:69
 msgid "Could not open the conversation."
 msgstr "باز کردن مکالمه ممکن نشد."
 
-#: .\templates\base.html:68
+#: .\templates\base.html:70
 msgid "File sending is not enabled for your account. Ask the support team."
 msgstr "ارسال فایل برای حساب شما فعال نیست. از تیم پشتیبانی بخواهید."
 
-#: .\templates\base.html:69
+#: .\templates\base.html:71
 msgid "Files up to __MB MB"
 msgstr "فایل‌ها تا __MB مگابایت"
 
-#: .\templates\base.html:70
+#: .\templates\base.html:72
 msgid "This file is too large. Your limit is __MB MB."
 msgstr "این فایل بیش از حد بزرگ است. سقف شما __MB مگابایت است."
 
-#: .\templates\base.html:71
+#: .\templates\base.html:73
 msgid "Forward this message to which conversation?"
 msgstr "این پیام به کدام مکالمه بازارسال شود؟"
 
-#: .\templates\base.html:72
+#: .\templates\base.html:74
 msgid "Message forwarded."
 msgstr "پیام بازارسال شد."
 
-#: .\templates\base.html:73
+#: .\templates\base.html:75
 msgid "Start a conversation"
 msgstr "شروع گفتگو"
 
-#: .\templates\base.html:74
+#: .\templates\base.html:76
 msgid "File permission updated."
 msgstr "مجوز فایل به‌روزرسانی شد."
 
-#: .\templates\base.html:75
+#: .\templates\base.html:77
 msgid "Revoke this student's file permission?"
 msgstr "مجوز فایل این دانشجو لغو شود؟"
 
-#: .\templates\base.html:76
+#: .\templates\base.html:78
 msgid "File permission revoked."
 msgstr "مجوز فایل لغو شد."
+
+#: .\templates\base.html:79 .\templates\partials\support_button.html:25
+#: .\templates\partials\support_button.html:26
+msgid "Minimize"
+msgstr "کوچک‌سازی"
 
 #: .\templates\core\main.html:3
 msgid "Apply BM"
@@ -3423,3 +3439,15 @@ msgid ""
 msgstr ""
 "این ایمیل را دریافت کرده‌اید چون آدرس ایمیل حساب %(site_name)s شما نیاز به "
 "تأیید دارد."
+
+#: .\templates\partials\site_footer.html:18
+msgid "Your gateway to fully funded scholarships abroad."
+msgstr "دروازهٔ شما برای بورسیه‌های کاملاً funded در خارج از کشور."
+
+#: .\templates\partials\site_footer.html:39
+msgid "Contact Us"
+msgstr "تماس با ما"
+
+#: .\templates\partials\site_footer.html:57
+msgid "Opens our in-site chat with the support team."
+msgstr "گفتگوی درون‌سایتی ما با تیم پشتیبانی را باز می‌کند."

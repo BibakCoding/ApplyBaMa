@@ -1,0 +1,293 @@
+/* ==========================================================================
+   ApplyBaMa - support.css
+   The support entry points: the footer's Contact Us section (rendered by
+   partials/site_footer.html on the home page) and the floating
+   "Contact Support" button (partials/support_button.html, included by
+   base.html so it exists on every public page).
+
+   The button is draggable within a rail: it never strays into the page or
+   away from the screen edges — dragging only swaps its side (left/right) and
+   slides it vertically. The chosen spot is remembered in localStorage. The
+   minimize control tucks it into a small pill anchored to the same rail, so
+   "get out of the way" never means "lost off-screen".
+========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Footer — Contact Us
+-------------------------------------------------------------------------- */
+
+.ab-footer {
+    background: var(--ab-primary-active, #172554);
+    color: rgba(255, 255, 255, 0.88);
+    padding-block: 2.5rem 2rem;
+    margin-top: 3rem;
+}
+
+.ab-footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    justify-content: space-between;
+}
+
+.ab-footer-brand {
+    max-width: 22rem;
+    display: grid;
+    gap: 0.9rem;
+    justify-items: start;
+}
+
+.ab-footer-brand img {
+    width: auto;
+    height: 2rem;
+}
+
+.ab-footer-tagline {
+    font-size: 0.925rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.ab-footer-social {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.ab-footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    font-size: 1rem;
+    transition: background var(--ab-transition, 0.2s), transform var(--ab-transition, 0.2s);
+}
+
+.ab-footer-social a:hover {
+    background: rgba(255, 255, 255, 0.24);
+    transform: translateY(-1px);
+}
+
+.ab-footer-contact {
+    display: grid;
+    gap: 0.65rem;
+    justify-items: start;
+}
+
+.ab-footer-heading {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+}
+
+.ab-footer-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.925rem;
+}
+
+.ab-footer-line i {
+    width: 1.1rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.ab-footer-line a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.ab-footer-line a:hover {
+    text-decoration: underline;
+}
+
+.ab-footer-chat-btn {
+    margin-top: 0.5rem;
+}
+
+.ab-footer-note {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 640px) {
+    .ab-footer-inner {
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Floating "Contact Support" button
+-------------------------------------------------------------------------- */
+
+/* The rail the button travels in: fixed to one side, spanning most of the
+   viewport height. The button's `inset-inline-end` is 0, so writing-direction
+   flips come free; JS moves it by setting the custom property below. */
+.ab-support-rail {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    z-index: 60;
+    inset-inline-end: 0;
+    pointer-events: none;
+}
+
+.ab-support {
+    /* The dragged vertical position as a fraction of the available travel. */
+    --ab-support-progress: 0.62;
+    position: fixed;
+    z-index: 60;
+    inset-inline-end: 1rem;
+    top: calc(
+        1.5rem +
+        (100dvh - 5rem) * var(--ab-support-progress) -
+        2.25rem
+    );
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.9rem;
+    padding: 0.55rem 1rem;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--ab-primary, #1E3A8A), var(--ab-primary-active, #172554));
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 10px 24px rgba(23, 37, 84, 0.35);
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    transition: box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.ab-support:hover {
+    box-shadow: 0 14px 30px rgba(23, 37, 84, 0.45);
+    transform: translateY(-1px);
+}
+
+.ab-support:active {
+    cursor: grabbing;
+}
+
+.ab-support:focus-visible {
+    outline: 2px solid var(--ab-primary-hover, #1E40AF);
+    outline-offset: 2px;
+}
+
+.ab-support--dragging {
+    cursor: grabbing;
+    transition: none;
+}
+
+/* Side selection is a class, not an inline style: both inset properties are
+   always fully specified, so a fixed-position element can never end up with
+   left AND right set (which stretches it across the viewport). */
+.ab-support--end {
+    inset-inline-end: 1rem;
+    inset-inline-start: auto;
+}
+
+.ab-support--start {
+    inset-inline-end: auto;
+    inset-inline-start: 1rem;
+}
+
+.ab-support-icon {
+    display: inline-flex;
+    font-size: 1.05rem;
+}
+
+.ab-support-label {
+    white-space: nowrap;
+}
+
+/* The close (minimize) affordance lives inside the button, top corner. */
+.ab-support-min {
+    position: absolute;
+    top: -0.45rem;
+    inset-inline-end: -0.45rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 999px;
+    background: var(--ab-primary-active, #172554);
+    color: #ffffff;
+    font-size: 0.6rem;
+    line-height: 1;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.ab-support-min:hover {
+    background: #0f1d43;
+}
+
+/* Minimized state: the button collapses to a small round bubble on the same
+   rail, so it is still reachable but out of the content's way. */
+.ab-support--minimized {
+    width: 2.9rem;
+    justify-content: center;
+    padding: 0;
+}
+
+.ab-support--minimized .ab-support-label,
+.ab-support--minimized .ab-support-min {
+    display: none;
+}
+
+/* While hidden, before restore: the bubble slides off the rail with a fade. */
+.ab-support--restoring {
+    animation: ab-support-pop 0.25s ease;
+}
+
+@keyframes ab-support-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 640px) {
+    .ab-support--end {
+        inset-inline-end: 0.65rem;
+    }
+
+    .ab-support--start {
+        inset-inline-start: 0.65rem;
+    }
+
+    .ab-support {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ab-support,
+    .ab-support:hover {
+        transition: none;
+        transform: none;
+    }
+    .ab-support--restoring {
+        animation: none;
+    }
+}

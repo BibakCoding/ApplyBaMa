@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 20:20+0330\n"
+"POT-Creation-Date: 2026-09-30 21:49+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -519,7 +519,7 @@ msgstr "İlerleme"
 msgid "Documents"
 msgstr "Belgeler"
 
-#: .\core\admin.py:703
+#: .\core\admin.py:703 .\core\chat.py:128
 #: .\templates\dashboard\fragments\application_detail.html:42
 #: .\templates\dashboard\main.html:48
 msgid "Student"
@@ -652,7 +652,7 @@ msgstr "Gönderim"
 msgid "Recipients"
 msgstr "Alıcılar"
 
-#: .\core\admin.py:999 .\core\models.py:837 .\templates\base.html:64
+#: .\core\admin.py:999 .\core\models.py:837 .\templates\base.html:66
 msgid "Read"
 msgstr "Okundu"
 
@@ -745,7 +745,7 @@ msgid_plural "%(count)d rows exported."
 msgstr[0] "%(count)d satır dışa aktarıldı."
 msgstr[1] "%(count)d satır dışa aktarıldı."
 
-#: .\core\chat.py:109 .\templates\base.html:49
+#: .\core\chat.py:109 .\templates\base.html:51
 msgid "Support"
 msgstr "Destek"
 
@@ -770,35 +770,46 @@ msgstr "Bu dosya çok büyük. Sınırınız %(limit)s MB."
 msgid "The site's chat storage is full. Please try again later."
 msgstr "Sitenin sohbet deposu dolu. Lütfen daha sonra tekrar deneyin."
 
-#: .\core\context_processors.py:98
+#: .\core\context_processors.py:102
 msgid "Registration is required to see programs matching your search."
 msgstr "Aramanızla eşleşen programları görmek için kayıt olmanız gerekir."
 
-#: .\core\context_processors.py:101
+#: .\core\context_processors.py:104 .\templates\partials\site_footer.html:55
+#: .\templates\partials\support_button.html:19
+#: .\templates\partials\support_button.html:20
+#: .\templates\partials\support_button.html:22
+msgid "Contact Support"
+msgstr "Destek ile iletişime geç"
+
+#: .\core\context_processors.py:106
+msgid "Chat with the Apply BM team — log in if asked."
+msgstr "Apply BM ekibiyle sohbet edin — istenirse giriş yapın."
+
+#: .\core\context_processors.py:109
 msgid "Thank you! You are on the scholarship alerts list."
 msgstr "Teşekkürler! Burs uyarıları listesindesiniz."
 
-#: .\core\context_processors.py:103
+#: .\core\context_processors.py:111
 msgid "Loading content..."
 msgstr "İçerik yükleniyor..."
 
-#: .\core\context_processors.py:104
+#: .\core\context_processors.py:112
 msgid "Loading Error"
 msgstr "Yükleme Hatası"
 
-#: .\core\context_processors.py:105
+#: .\core\context_processors.py:113
 msgid "Please try again or contact support"
 msgstr "Lütfen tekrar deneyin veya destek ile iletişime geçin"
 
-#: .\core\context_processors.py:106
+#: .\core\context_processors.py:114
 msgid "Reload Page"
 msgstr "Sayfayı Yenile"
 
-#: .\core\context_processors.py:108
+#: .\core\context_processors.py:116
 msgid "Email verified! Your account is fully active again."
 msgstr "E-posta doğrulandı! Hesabınız yeniden tamamen aktif."
 
-#: .\core\context_processors.py:111
+#: .\core\context_processors.py:119
 msgid "Chat connected"
 msgstr "Sohbet bağlandı"
 
@@ -1232,53 +1243,53 @@ msgstr "Bildirim alıcısı"
 msgid "Notification Recipients"
 msgstr "Bildirim alıcıları"
 
-#: .\core\models.py:879
+#: .\core\models.py:887
 msgid "Chat conversation"
 msgstr "Sohbet görüşmesi"
 
-#: .\core\models.py:880
+#: .\core\models.py:888
 msgid "Chat conversations"
 msgstr "Sohbet görüşmeleri"
 
-#: .\core\models.py:930
+#: .\core\models.py:946
 msgid "Chat participant"
 msgstr "Sohbet katılımcısı"
 
-#: .\core\models.py:931
+#: .\core\models.py:947
 msgid "Chat participants"
 msgstr "Sohbet katılımcıları"
 
-#: .\core\models.py:959
+#: .\core\models.py:975
 msgid "Chat attachment"
 msgstr "Sohbet eki"
 
-#: .\core\models.py:960
+#: .\core\models.py:976
 msgid "Chat attachments"
 msgstr "Sohbet ekleri"
 
-#: .\core\models.py:970
+#: .\core\models.py:986
 msgid "Chat message"
 msgstr "Sohbet mesajı"
 
-#: .\core\models.py:971
+#: .\core\models.py:987
 msgid "Chat messages"
 msgstr "Sohbet mesajları"
 
-#: .\core\models.py:1071
+#: .\core\models.py:1087
 #: .\templates\dashboard\fragments\partials\chat_file_grant.html:18
 msgid "Chat file permission"
 msgstr "Sohbet dosya izni"
 
-#: .\core\models.py:1072
+#: .\core\models.py:1088
 msgid "Chat file permissions"
 msgstr "Sohbet dosya izinleri"
 
-#: .\core\models.py:1084
+#: .\core\models.py:1100
 #, python-format
 msgid "Cannot exceed the %(ceiling)s MB ceiling."
 msgstr "%(ceiling)s MB üst sınırını aşamaz."
 
-#: .\core\models.py:1089
+#: .\core\models.py:1105
 msgid "Must be at least 1 MB."
 msgstr "En az 1 MB olmalı."
 
@@ -1400,16 +1411,16 @@ msgstr ""
 msgid "You cannot message this user."
 msgstr "Bu kullanıcıya mesaj gönderemezsiniz."
 
-#: .\dashboard\chat_views.py:109 .\templates\base.html:53
+#: .\dashboard\chat_views.py:109 .\templates\base.html:55
 msgid "Message deleted"
 msgstr "Mesaj silindi"
 
-#: .\dashboard\chat_views.py:113 .\templates\base.html:56
+#: .\dashboard\chat_views.py:113 .\templates\base.html:58
 msgid "📎 Attachment"
 msgstr "📎 Ek"
 
-#: .\dashboard\chat_views.py:218 .\dashboard\chat_views.py:355
-#: .\dashboard\chat_views.py:448 .\dashboard\chat_views.py:506
+#: .\dashboard\chat_views.py:223 .\dashboard\chat_views.py:360
+#: .\dashboard\chat_views.py:453 .\dashboard\chat_views.py:511
 #: .\dashboard\views.py:777 .\dashboard\views.py:843 .\dashboard\views.py:853
 #: .\dashboard\views.py:895 .\dashboard\views.py:1058 .\dashboard\views.py:1129
 #: .\dashboard\views.py:1159 .\dashboard\views.py:1230
@@ -1417,39 +1428,39 @@ msgstr "📎 Ek"
 msgid "Invalid request."
 msgstr "Geçersiz istek."
 
-#: .\dashboard\chat_views.py:224 .\dashboard\chat_views.py:360
+#: .\dashboard\chat_views.py:229 .\dashboard\chat_views.py:365
 msgid "Message cannot be empty."
 msgstr "Mesaj boş olamaz."
 
-#: .\dashboard\chat_views.py:228
+#: .\dashboard\chat_views.py:233
 msgid "Message is too long (max 4000 characters)."
 msgstr "Mesaj çok uzun (en fazla 4000 karakter)."
 
-#: .\dashboard\chat_views.py:288
+#: .\dashboard\chat_views.py:293
 msgid "Send a message first."
 msgstr "Önce bir mesaj gönderin."
 
-#: .\dashboard\chat_views.py:294
+#: .\dashboard\chat_views.py:299
 msgid "No file received."
 msgstr "Dosya alınmadı."
 
-#: .\dashboard\chat_views.py:350
+#: .\dashboard\chat_views.py:355
 msgid "You can only edit your own messages."
 msgstr "Yalnızca kendi mesajlarınızı düzenleyebilirsiniz."
 
-#: .\dashboard\chat_views.py:379
+#: .\dashboard\chat_views.py:384
 msgid "You can only delete your own messages."
 msgstr "Yalnızca kendi mesajlarınızı silebilirsiniz."
 
-#: .\dashboard\chat_views.py:395
+#: .\dashboard\chat_views.py:400
 msgid "You can only pin your own messages."
 msgstr "Yalnızca kendi mesajlarınızı sabitleyebilirsiniz."
 
-#: .\dashboard\chat_views.py:458
+#: .\dashboard\chat_views.py:463
 msgid "Pick a different conversation."
 msgstr "Farklı bir görüşme seçin."
 
-#: .\dashboard\chat_views.py:501
+#: .\dashboard\chat_views.py:506
 msgid "You can only manage your own students."
 msgstr "Yalnızca kendi öğrencilerinizi yönetebilirsiniz."
 
@@ -2155,56 +2166,56 @@ msgstr "Yeni bağlantı iste"
 msgid "Scholarship Registration"
 msgstr "Burs Kaydı"
 
-#: .\templates\base.html:34
+#: .\templates\base.html:36
 msgid "An unexpected error occurred."
 msgstr "Beklenmeyen bir hata oluştu."
 
-#: .\templates\base.html:36
+#: .\templates\base.html:38
 msgid "Sort By"
 msgstr "Sıralama ölçütü"
 
-#: .\templates\base.html:37 .\templates\dashboard\fragments\programs.html:111
+#: .\templates\base.html:39 .\templates\dashboard\fragments\programs.html:111
 #: .\templates\dashboard\fragments\universities.html:81
 msgid "Sort: Name (A-Z)"
 msgstr "Sırala: Ad (A-Z)"
 
-#: .\templates\base.html:38 .\templates\dashboard\fragments\programs.html:114
+#: .\templates\base.html:40 .\templates\dashboard\fragments\programs.html:114
 #: .\templates\dashboard\fragments\universities.html:84
 msgid "Sort: Name (Z-A)"
 msgstr "Sırala: Ad (Z-A)"
 
-#: .\templates\base.html:39 .\templates\dashboard\fragments\programs.html:118
+#: .\templates\base.html:41 .\templates\dashboard\fragments\programs.html:118
 msgid "Sort: University (A-Z)"
 msgstr "Sırala: Üniversite (A-Z)"
 
-#: .\templates\base.html:40
+#: .\templates\base.html:42
 #: .\templates\dashboard\fragments\universities.html:88
 msgid "Sort: Country (A-Z)"
 msgstr "Sırala: Ülke (A-Z)"
 
-#: .\templates\base.html:41 .\templates\dashboard\fragments\programs.html:120
+#: .\templates\base.html:43 .\templates\dashboard\fragments\programs.html:120
 msgid "Sort: Fee (Low to High)"
 msgstr "Sırala: Ücret (Düşükten Yükseğe)"
 
-#: .\templates\base.html:42 .\templates\dashboard\fragments\programs.html:123
+#: .\templates\base.html:44 .\templates\dashboard\fragments\programs.html:123
 msgid "Sort: Fee (High to Low)"
 msgstr "Sırala: Ücret (Yüksekten Düşüğe)"
 
-#: .\templates\base.html:43
+#: .\templates\base.html:45
 #: .\templates\dashboard\fragments\universities.html:92
 msgid "Sort: Founded (Oldest First)"
 msgstr "Sırala: Kuruluş (En Eskisi Önce)"
 
-#: .\templates\base.html:44
+#: .\templates\base.html:46
 #: .\templates\dashboard\fragments\universities.html:96
 msgid "Sort: Founded (Newest First)"
 msgstr "Sırala: Kuruluş (En Yenisi Önce)"
 
-#: .\templates\base.html:46 .\templates\dashboard\fragments\chat.html:18
+#: .\templates\base.html:48 .\templates\dashboard\fragments\chat.html:18
 msgid "No conversations yet."
 msgstr "Henüz görüşme yok."
 
-#: .\templates\base.html:47 .\templates\dashboard\fragments\chat.html:20
+#: .\templates\base.html:49 .\templates\dashboard\fragments\chat.html:20
 msgid ""
 "You can always message Support here; students an agent or company adds "
 "appear automatically."
@@ -2212,108 +2223,113 @@ msgstr ""
 "Buradan her zaman Destek'e mesaj gönderebilirsiniz; ajanın veya şirketin "
 "eklediği öğrenciler otomatik görünür."
 
-#: .\templates\base.html:48
+#: .\templates\base.html:50
 msgid "No messages yet"
 msgstr "Henüz mesaj yok"
 
-#: .\templates\base.html:50
+#: .\templates\base.html:52
 msgid "online"
 msgstr "çevrimiçi"
 
-#: .\templates\base.html:51
+#: .\templates\base.html:53
 msgid "offline"
 msgstr "çevrimdışı"
 
-#: .\templates\base.html:52 .\templates\dashboard\fragments\chat.html:39
+#: .\templates\base.html:54 .\templates\dashboard\fragments\chat.html:39
 msgid "typing…"
 msgstr "yazıyor…"
 
-#: .\templates\base.html:54
+#: .\templates\base.html:56
 msgid "(edited)"
 msgstr "(düzenlendi)"
 
-#: .\templates\base.html:55
+#: .\templates\base.html:57
 msgid "Forwarded"
 msgstr "İletildi"
 
-#: .\templates\base.html:57
+#: .\templates\base.html:59
 msgid "Reply"
 msgstr "Yanıtla"
 
-#: .\templates\base.html:58
+#: .\templates\base.html:60
 msgid "Forward"
 msgstr "İlet"
 
-#: .\templates\base.html:59
+#: .\templates\base.html:61
 #: .\templates\dashboard\fragments\notifications.html:90
 msgid "Edit"
 msgstr "Düzenle"
 
-#: .\templates\base.html:60
+#: .\templates\base.html:62
 msgid "Unpin"
 msgstr "Sabitlemeyi kaldır"
 
-#: .\templates\base.html:61
+#: .\templates\base.html:63
 msgid "Pin"
 msgstr "Sabitle"
 
-#: .\templates\base.html:62
+#: .\templates\base.html:64
 #: .\templates\dashboard\fragments\application_detail.html:17
 #: .\templates\dashboard\fragments\notifications.html:95
 msgid "Delete"
 msgstr "Sil"
 
-#: .\templates\base.html:63
+#: .\templates\base.html:65
 msgid "Delete this message for both sides?"
 msgstr "Bu mesaj her iki taraf için silinsin mi?"
 
-#: .\templates\base.html:65
+#: .\templates\base.html:67
 msgid "Sent"
 msgstr "Gönderildi"
 
-#: .\templates\base.html:66
+#: .\templates\base.html:68
 msgid "Something went wrong."
 msgstr "Bir şeyler ters gitti."
 
-#: .\templates\base.html:67
+#: .\templates\base.html:69
 msgid "Could not open the conversation."
 msgstr "Görüşme açılamadı."
 
-#: .\templates\base.html:68
+#: .\templates\base.html:70
 msgid "File sending is not enabled for your account. Ask the support team."
 msgstr "Hesabınız için dosya gönderme etkin değil. Destek ekibine sorun."
 
-#: .\templates\base.html:69
+#: .\templates\base.html:71
 msgid "Files up to __MB MB"
 msgstr "__MB MB'a kadar dosyalar"
 
-#: .\templates\base.html:70
+#: .\templates\base.html:72
 msgid "This file is too large. Your limit is __MB MB."
 msgstr "Bu dosya çok büyük. Sınırınız __MB MB."
 
-#: .\templates\base.html:71
+#: .\templates\base.html:73
 msgid "Forward this message to which conversation?"
 msgstr "Bu mesaj hangi görüşmeye iletilecek?"
 
-#: .\templates\base.html:72
+#: .\templates\base.html:74
 msgid "Message forwarded."
 msgstr "Mesaj iletildi."
 
-#: .\templates\base.html:73
+#: .\templates\base.html:75
 msgid "Start a conversation"
 msgstr "Sohbet başlat"
 
-#: .\templates\base.html:74
+#: .\templates\base.html:76
 msgid "File permission updated."
 msgstr "Dosya izni güncellendi."
 
-#: .\templates\base.html:75
+#: .\templates\base.html:77
 msgid "Revoke this student's file permission?"
 msgstr "Bu öğrencinin dosya izni kaldırılsın mı?"
 
-#: .\templates\base.html:76
+#: .\templates\base.html:78
 msgid "File permission revoked."
 msgstr "Dosya izni kaldırıldı."
+
+#: .\templates\base.html:79 .\templates\partials\support_button.html:25
+#: .\templates\partials\support_button.html:26
+msgid "Minimize"
+msgstr "Küçült"
 
 #: .\templates\core\main.html:3
 msgid "Apply BM"
@@ -3446,3 +3462,15 @@ msgid ""
 msgstr ""
 "Bu e-postayı, %(site_name)s hesabınızın e-posta adresinin onaylanması "
 "gerektiği için aldınız."
+
+#: .\templates\partials\site_footer.html:18
+msgid "Your gateway to fully funded scholarships abroad."
+msgstr "Yurt dışındaki tam burslu eğitimlere açılan kapınız."
+
+#: .\templates\partials\site_footer.html:39
+msgid "Contact Us"
+msgstr "Bize ulaşın"
+
+#: .\templates\partials\site_footer.html:57
+msgid "Opens our in-site chat with the support team."
+msgstr "Destek ekibiyle sitede içi sohbeti açar."
