@@ -55,6 +55,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
       .then((r) => {
+        // An expired session must not surface as "Error loading content": the
+        // shared handler hands the visitor to the login form with ?next=.
+        if (r.status === 401) {
+          window.ApplyBaMa.handleAuthExpired();
+          throw new Error("Auth expired");
+        }
         if (!r.ok) throw new Error("Network error");
         // Fragment requests must never inject the full dashboard layout
         // (e.g. login/permission redirects), which would nest a second sidebar
@@ -117,6 +123,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       })
       .catch((err) => {
+        // A 401 already sent the visitor to the login form (see above) and the
+        // shell is on its way out: it must not flash an error box or spam the
+        // console on the way.
+        if (err instanceof Error && err.message === "Auth expired") return;
         contentContainer.innerHTML =
           '<div class="text-center py-12 text-red-500">Error loading content. Please refresh.</div>';
         console.error(err);
@@ -496,7 +506,10 @@ document.addEventListener("DOMContentLoaded", function () {
         citySelect.innerHTML = '<option value="">---------</option>';
         if (!this.value) return;
 
-        fetch(`/dashboard/get-cities/?country_id=${this.value}`)
+        fetch(
+          `${window.AppConfig.urls.getCities || "/dashboard/get-cities/"}?country_id=${this.value}`,
+          { headers: { "X-Requested-With": "XMLHttpRequest" } },
+        )
           .then((res) => res.json())
           .then((data) => {
             if (data.cities) {
@@ -551,7 +564,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 resultsDiv.classList.add("hidden");
                 const form = input.closest("form");
                 if (form) {
-                  form.dispatchEvent(new Event("submit", { cancelable: true }));
+                  // bubbles: the filter forms are handled by the delegated
+                  // submit listener on contentContainer, so a non-bubbling
+                  // event reached nobody and the suggestion did nothing.
+                  form.dispatchEvent(
+                    new Event("submit", { cancelable: true, bubbles: true }),
+                  );
                 }
               };
               resultsDiv.appendChild(div);
@@ -593,7 +611,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let timeout;
 
     const fetchPrograms = (q) => {
-      fetch(`/dashboard/programs-search/?q=${encodeURIComponent(q || "")}`)
+      fetch(
+        `${window.AppConfig.urls.programsSearch || "/dashboard/programs-search/"}?q=${encodeURIComponent(q || "")}`,
+        { headers: { "X-Requested-With": "XMLHttpRequest" } },
+      )
         .then((r) => r.json())
         .then((data) => {
           resultsDiv.innerHTML = "";
@@ -953,7 +974,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // The list shows a truncated summary; replace it with the full body.
         // If anything goes wrong the modal stays open with the summary text.
-        fetch(`/dashboard/notifications/detail/${id}/`, {
+        fetch(`${window.AppConfig.urls.notificationDetail || "/dashboard/notifications/detail/"}${id}/`, {
           headers: { "X-Requested-With": "XMLHttpRequest" },
         })
           .then((r) => r.json())
@@ -977,7 +998,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // Record the read; the server pushes notifications.read back, which
         // realtime.js turns into the badge move in every tab, and
         // applyReadEvent below re-styles this row in place.
-        fetch(`/dashboard/notifications/mark-read/${id}/`, {
+        // AppConfig, not a literal path: the SPA lives under a language prefix
+        // (/en/dashboard/...), so "/dashboard/..." answers 302 and a POST
+        // follows that redirect as a GET -- the write never happens.
+        fetch(`${window.AppConfig.urls.markRead || "/dashboard/notifications/mark-read/"}${id}/`, {
           method: "POST",
           headers: {
             "X-Requested-With": "XMLHttpRequest",
@@ -1537,7 +1561,11 @@ document.addEventListener("DOMContentLoaded", function () {
         "X-CSRFToken": window.CSRF_TOKEN || (csrfToken ? csrfToken.value : ""),
       },
     })
-      .then((r) => r.json())
+      .then((r) => {
+        if (window.ApplyBaMa.isAuthFailure(r))
+          window.ApplyBaMa.handleAuthExpired();
+        return r.json();
+      })
       .then((data) => {
         if (data.success) {
           showToast(data.message || "Success", "success");

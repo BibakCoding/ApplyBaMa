@@ -92,6 +92,12 @@
 
     function request(url, options) {
         return fetch(url, options).then(function (r) {
+            // An expired session answers JSON 401 (core.middleware.ajax_auth)
+            // instead of the HTML login page; hand the visitor to the login
+            // form rather than letting the fragment fail to load.
+            if (r.status === 401 && window.ApplyBaMa) {
+                window.ApplyBaMa.handleAuthExpired();
+            }
             return r.json().then(function (data) {
                 if (!r.ok) throw data;
                 return data;

@@ -195,6 +195,28 @@
         ""
       );
     },
+
+    /* The session (or the CSRF token) died while the page was open.
+
+       The server answers an expired AJAX call with a JSON 401 rather than the
+       HTML login page (core.middleware.ajax_auth), so the caller can see what
+       happened. What to DO about it belongs here, once: send the visitor to
+       the login form with the current URL as ?next=, the same chain
+       @login_required uses, so the page they were on survives the sign-in. */
+    handleAuthExpired: function () {
+      if (window.__abAuthRedirect) return;
+      window.__abAuthRedirect = true;
+      const urls = (window.AppConfig && window.AppConfig.urls) || {};
+      const login = urls.login || "/auth/login/";
+      const next = window.location.pathname + window.location.search;
+      window.location.href =
+        login + "?next=" + encodeURIComponent(next);
+    },
+
+    /* True when a response says the visitor is no longer authenticated. */
+    isAuthFailure: function (response) {
+      return !!response && response.status === 401;
+    },
   };
 
   function initAlerts() {

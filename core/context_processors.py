@@ -72,6 +72,9 @@ def app_config(request):
                 "programApplyRequest": _url("program_apply_request"),
                 "programsSearch": _url("programs_search"),
                 "universitiesSearch": _url("universities_search"),
+                "getCities": _url("get_cities_by_country"),
+                "notificationDetail": _detail_url("notification_detail"),
+                "markRead": _detail_url("mark_notification_read"),
                 # Email verification (read-only mode escape hatches)
                 "resendEmailVerification": _url("resend_email_verification"),
                 "cancelEmailChange": _url("cancel_email_change"),
