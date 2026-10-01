@@ -764,6 +764,37 @@
     color: #15803D;
 }
 
+/* Copy button on the Requests page's "Your ID" card. The temporary-password
+   button above is an absolutely-positioned overlay inside .password-wrapper;
+   this one is a normal in-flow button, so it only shares the acknowledgement
+   states (the .copied tint and the icon swap, both driven by dashboard.js). */
+.copy-id-btn {
+    display: inline-flex;
+    align-items: center;
+    background: #DBEAFE;
+    border: none;
+    cursor: pointer;
+    color: var(--ab-primary, #1E3A8A);
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+.copy-id-btn:hover {
+    background: #BFDBFE;
+    color: var(--ab-primary-hover, #1E40AF);
+}
+
+.copy-id-btn.copied {
+    background: #DCFCE7;
+    color: #15803D;
+}
+
+[dir="rtl"] .copy-id-btn i {
+    transform: scaleX(-1);
+}
+
 /* Generate Password Button */
 .generate-pwd-btn {
     position: absolute;

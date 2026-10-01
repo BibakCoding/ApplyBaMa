@@ -5,10 +5,22 @@
             <h2 class="text-3xl font-bold text-[var(--ab-text)] font-serif">{% trans "My Students" %}</h2>
             <p class="text-[var(--ab-muted)] mt-2">{% trans "Manage the students you are representing." %}</p>
         </div>
-        <button data-modal-open="addStudentModal"
-                class="bg-[var(--ab-primary)] text-white px-4 py-2 rounded-lg hover:opacity-90 transition shadow-sm flex items-center">
-            <i class="fas fa-user-plus mr-2"></i> {% trans "Add New Student" %}
-        </button>
+        <div class="flex flex-wrap items-center gap-2">
+            {% comment %}
+            A user who already has an account cannot be added directly —
+            ownership is created by their own consent. They hand over the
+            16-digit ID shown on their Requests page, the agent looks it up
+            here and sends the request.
+            {% endcomment %}
+            <button data-modal-open="linkStudentModal"
+                    class="bg-white border border-[var(--ab-primary)] text-[var(--ab-primary)] px-4 py-2 rounded-lg hover:bg-gray-50 transition shadow-sm flex items-center">
+                <i class="fas fa-id-card mr-2"></i> {% trans "Request by ID" %}
+            </button>
+            <button data-modal-open="addStudentModal"
+                    class="bg-[var(--ab-primary)] text-white px-4 py-2 rounded-lg hover:opacity-90 transition shadow-sm flex items-center">
+                <i class="fas fa-user-plus mr-2"></i> {% trans "Add New Student" %}
+            </button>
+        </div>
     </div>
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {% comment %}
@@ -65,6 +77,53 @@
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
+<!-- Request by ID Modal: look up a registered user and ask to represent them -->
+<div id="linkStudentModal"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-backdrop" data-modal-close="linkStudentModal"></div>
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 animate-[auth-fade-in-up_0.4s_ease-out] relative z-10">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-800 font-serif">{% trans "Request by ID" %}</h2>
+            <button data-modal-close="linkStudentModal"
+                    class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        <p class="text-sm text-gray-500 mb-4">
+            {% trans "Ask the user for the 16-digit ID from their Requests page, then send the request for them to accept." %}
+        </p>
+        <label for="linkStudentIdInput" class="block text-sm font-medium text-gray-700 mb-1">{% trans "User ID" %}</label>
+        <div class="flex items-stretch gap-2">
+            <input type="text"
+                   id="linkStudentIdInput"
+                   inputmode="numeric"
+                   autocomplete="off"
+                   maxlength="16"
+                   placeholder="{% trans '1234567890123456' %}"
+                   class="flex-1 font-mono tracking-wider border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[var(--ab-primary)]">
+            <button type="button"
+                    id="linkStudentSearchBtn"
+                    class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition whitespace-nowrap">
+                <i class="fas fa-search mr-1"></i>{% trans "Look up" %}
+            </button>
+        </div>
+        <div id="linkStudentResult" class="mt-4" aria-live="polite"></div>
+        <div id="linkStudentMessageWrap" class="hidden mt-4">
+            <label for="linkStudentMessage" class="block text-sm font-medium text-gray-700 mb-1">{% trans "Message (optional)" %}</label>
+            <textarea id="linkStudentMessage"
+                      rows="3"
+                      maxlength="500"
+                      placeholder="{% trans 'Introduce yourself — for example, which universities you work with.' %}"
+                      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[var(--ab-primary)]"></textarea>
+        </div>
+        <button type="button"
+                id="linkStudentSendBtn"
+                disabled
+                class="w-full mt-4 bg-[var(--ab-primary)] text-white py-3 rounded-lg hover:opacity-90 transition font-semibold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+            {% trans "Send request" %}
+        </button>
     </div>
 </div>
 <!-- Add Student Modal with Matte Overlay -->

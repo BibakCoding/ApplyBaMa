@@ -48,6 +48,7 @@ from core.models import (
     Notification,
     NotificationRecipient
 )
+from core import agent_requests
 from .forms import (
     PersonalInfoForm,
     ContactInfoForm,
@@ -157,6 +158,7 @@ def dashboard_content(request, page):
         "notifications": "dashboard/fragments/notifications.html",
         "my_notifications": "dashboard/fragments/my_notifications.html",
         "chat": "dashboard/fragments/chat.html",
+        "requests": "dashboard/fragments/requests.html",
     }
 
     if page not in content_map:
@@ -471,6 +473,24 @@ def dashboard_content(request, page):
         context["search_query"] = search_query
         context["filters"] = {"q": search_query}
 
+    elif page == "requests":
+        # Representation requests: the consent gate in front of "My Students".
+        # Everyone sees the requests addressed to them; the accounts that
+        # represent others also see what they sent (and can withdraw it).
+        can_initiate = bool(
+            request.user.user_type in (User.UserType.AGENT, User.UserType.COMPANY)
+            or (
+                request.user.user_type == User.UserType.DEFAULT
+                and request.user.is_representative
+            )
+        )
+        context["received_requests"] = agent_requests.received_requests(request.user)
+        context["sent_requests"] = (
+            agent_requests.sent_requests(request.user) if can_initiate else None
+        )
+        context["can_initiate"] = can_initiate
+        context["pending_received"] = agent_requests.pending_received_count(request.user)
+
     return render(request, content_map[page], context=context)
 
 
@@ -503,7 +523,16 @@ def dashboard_main(request):
         response = redirect(f"{reverse('dashboard')}?{urlencode(params)}")
     else:
         response = render(
-            request, "dashboard/main.html", context={"user": request.user}
+            request,
+            "dashboard/main.html",
+            context={
+                "user": request.user,
+                # The sidebar badge: requests waiting for this account's
+                # answer. Realtime events keep it current after load.
+                "pending_request_count": agent_requests.pending_received_count(
+                    request.user
+                ),
+            },
         )
 
     if pending:
@@ -1365,5 +1394,6 @@ def notification_detail(request, pk):
         "title": n.title,
         "message": n.message,
         "type": n.notification_type,
-        "date": n.created_at.strftime("%Y-%m-%d %H:%M")
+        "date": n.created_at.strftime("%Y-%m-%d %H:%M"),
+        "action_url": n.action_url,
     })

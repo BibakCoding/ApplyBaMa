@@ -2,8 +2,8 @@
 import os
 
 from django.contrib.auth.models import AbstractUser
-from django.db import models
-from django.db.models import JSONField
+from django.db import IntegrityError, models
+from django.db.models import JSONField, Q
 from django.db.models.functions import Lower
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -453,6 +453,21 @@ class User(AbstractUser):
         default=False,
         help_text=_("The current email address has been confirmed"),
     )
+    # The 16-digit ID a student hands to an agent so the agent can find them
+    # for a representation request. Not the primary key, never a login
+    # credential — just a shareable handle. Unique (and backfilled in
+    # migration 0022), because it is the lookup key.
+    public_id = models.CharField(
+        max_length=16,
+        unique=True,
+        null=True,
+        blank=True,
+        db_index=True,
+        help_text=_(
+            "Shareable 16-digit ID. Give it to an agent so they can find you "
+            "and request to represent you."
+        ),
+    )
 
     @property
     def is_fully_verified(self):
@@ -472,6 +487,17 @@ class User(AbstractUser):
             raise ValidationError(_("Only student users can be representatives"))
 
     def save(self, *args, **kwargs):
+        # Every account has a shareable 16-digit ID (the lookup key for
+        # representation requests); assign one on the first save. The retry
+        # loop guards the astronomically unlikely collision.
+        if not self.public_id:
+            for _attempt in range(10):
+                candidate = get_random_string(16, "0123456789")
+                if not User.objects.filter(public_id=candidate).exists():
+                    self.public_id = candidate
+                    break
+            else:
+                raise IntegrityError("could not generate a unique public_id")
         # Compress profile image only if it's newly uploaded or changed
         if self.profile_image and hasattr(self.profile_image, "file"):
             if (
@@ -794,6 +820,11 @@ class Notification(models.Model):
         related_name="received_notifications",
         verbose_name=_("Recipients"),
     )
+    # Optional deep link: when set, the notifications page (and the realtime
+    # toast) offers a "Go" button that navigates the SPA to this dashboard
+    # page, e.g. "requests" for a representation request. A plain URL, never
+    # user input, so it is safe to render into an href.
+    action_url = models.CharField(max_length=200, blank=True, verbose_name=_("Action URL"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created At"))
 
     class Meta:
@@ -844,6 +875,87 @@ class NotificationRecipient(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.notification.title}"
+
+
+# ---------------------------------------------------------------------------
+# Representation requests (agent/company → user, approved by the user)
+# ---------------------------------------------------------------------------
+
+
+class AgentLinkRequest(TimeStampedModel):
+    """"Will you accept me as your agent?" — and the user's answer.
+
+    An agent or company cannot add an existing user to "My Students" by
+    themselves: ownership (Application.agent) is what the whole permission
+    model reads, so it must only ever be created with the user's consent.
+    This request is that consent, with a paper trail.
+
+    Any account may be the requester — agents and companies can also act as
+    students — and any account may be the target. The target approves or
+    declines; approval creates the Application link, which then opens both the
+    representation and the chat pair.
+    """
+
+    class Status(models.TextChoices):
+        PENDING = "pending", _("Pending")
+        APPROVED = "approved", _("Approved")
+        DECLINED = "declined", _("Declined")
+        CANCELLED = "cancelled", _("Cancelled")
+
+    requester = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="agent_requests_sent",
+        verbose_name=_("Requester"),
+    )
+    target = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="agent_requests_received",
+        verbose_name=_("Target"),
+    )
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.PENDING,
+        db_index=True,
+        verbose_name=_("Status"),
+    )
+    message = models.TextField(
+        blank=True,
+        max_length=500,
+        verbose_name=_("Message"),
+        help_text=_("A short note from the requester to the target."),
+    )
+    # Set when the request is answered; nothing is deleted, so the history of
+    # a target's decisions stays auditable.
+    responded_at = models.DateTimeField(null=True, blank=True, verbose_name=_("Responded At"))
+
+    class Meta:
+        verbose_name = _("Agent Link Request")
+        verbose_name_plural = _("Agent Link Requests")
+        ordering = ["-created_at"]
+        constraints = [
+            # One live request per pair: a second "pending" row would let a
+            # pushy requester spam the same target. The condition is a literal
+            # because Status is not reachable from inside the Meta body yet.
+            models.UniqueConstraint(
+                fields=["requester", "target"],
+                condition=Q(status="pending"),
+                name="agent_request_pending_unique",
+            ),
+            models.CheckConstraint(
+                check=~Q(requester=models.F("target")),
+                name="agent_request_not_self",
+            ),
+        ]
+        indexes = [
+            models.Index(fields=["target", "status"]),
+            models.Index(fields=["requester", "status"]),
+        ]
+
+    def __str__(self):
+        return f"{self.requester_id} -> {self.target_id} ({self.status})"
 
 
 # ---------------------------------------------------------------------------

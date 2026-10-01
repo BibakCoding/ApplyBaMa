@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 21:49+0330\n"
+"POT-Creation-Date: 2026-10-01 00:46+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,8 +169,8 @@ msgid "Confirm Password"
 msgstr ""
 
 #: .\authentication\forms.py:60 .\authentication\forms.py:86
-#: .\templates\dashboard\fragments\my_students.html:26
-#: .\templates\dashboard\fragments\my_students.html:104
+#: .\templates\dashboard\fragments\my_students.html:39
+#: .\templates\dashboard\fragments\my_students.html:164
 msgid "Email"
 msgstr ""
 
@@ -294,7 +294,7 @@ msgstr ""
 msgid "This username is already taken."
 msgstr ""
 
-#: .\authentication\views.py:519 .\dashboard\views.py:557
+#: .\authentication\views.py:519 .\dashboard\views.py:586
 msgid "Username updated successfully."
 msgstr ""
 
@@ -310,7 +310,7 @@ msgstr ""
 #: .\core\admin.py:103 .\core\admin.py:145 .\core\admin.py:221
 #: .\core\models.py:279 .\core\templatetags\admin_extras.py:238
 #: .\templates\dashboard\fragments\programs.html:4
-#: .\templates\dashboard\main.html:97
+#: .\templates\dashboard\main.html:107
 msgid "Programs"
 msgstr ""
 
@@ -322,7 +322,7 @@ msgstr ""
 #: .\core\templatetags\admin_extras.py:246
 #: .\templates\authentication\login.html:28
 #: .\templates\dashboard\fragments\universities.html:4
-#: .\templates\dashboard\main.html:90
+#: .\templates\dashboard\main.html:100
 msgid "Universities"
 msgstr ""
 
@@ -386,7 +386,7 @@ msgstr ""
 msgid "No offer"
 msgstr ""
 
-#: .\core\admin.py:350 .\core\admin.py:711
+#: .\core\admin.py:350 .\core\admin.py:711 .\core\models.py:922
 msgid "Status"
 msgstr ""
 
@@ -447,12 +447,12 @@ msgstr[1] ""
 msgid "Profile"
 msgstr ""
 
-#: .\core\admin.py:510 .\core\admin.py:580 .\core\models.py:554
+#: .\core\admin.py:510 .\core\admin.py:580 .\core\models.py:580
 #: .\core\templatetags\admin_extras.py:50
 #: .\core\templatetags\admin_extras.py:230
-#: .\templates\dashboard\fragments\my_students.html:27
+#: .\templates\dashboard\fragments\my_students.html:40
 #: .\templates\dashboard\fragments\welcome.html:64
-#: .\templates\dashboard\main.html:103
+#: .\templates\dashboard\main.html:113
 msgid "Applications"
 msgstr ""
 
@@ -621,7 +621,7 @@ msgid_plural "%(count)d success stories hidden from the homepage."
 msgstr[0] ""
 msgstr[1] ""
 
-#: .\core\admin.py:939 .\core\models.py:771
+#: .\core\admin.py:939 .\core\models.py:797 .\core\models.py:927
 #: .\templates\dashboard\fragments\notifications.html:14
 #: .\templates\dashboard\fragments\notifications.html:125
 msgid "Message"
@@ -641,12 +641,12 @@ msgstr ""
 msgid "Delivery"
 msgstr ""
 
-#: .\core\admin.py:995 .\core\models.py:795
+#: .\core\admin.py:995 .\core\models.py:821
 #: .\templates\dashboard\fragments\notifications.html:63
 msgid "Recipients"
 msgstr ""
 
-#: .\core\admin.py:999 .\core\models.py:837 .\templates\base.html:66
+#: .\core\admin.py:999 .\core\models.py:868 .\templates\base.html:66
 msgid "Read"
 msgstr ""
 
@@ -739,6 +739,65 @@ msgid_plural "%(count)d rows exported."
 msgstr[0] ""
 msgstr[1] ""
 
+#: .\core\agent_requests.py:112
+msgid "No account matches that ID. Ask the student to check it and try again."
+msgstr ""
+
+#: .\core\agent_requests.py:114
+msgid "You cannot send a representation request to yourself."
+msgstr ""
+
+#: .\core\agent_requests.py:115
+msgid "That account is not active."
+msgstr ""
+
+#: .\core\agent_requests.py:116
+msgid "That user is already one of your students."
+msgstr ""
+
+#: .\core\agent_requests.py:117
+msgid "You already have a pending request for that user."
+msgstr ""
+
+#: .\core\agent_requests.py:119
+msgid "This request could not be sent."
+msgstr ""
+
+#: .\core\agent_requests.py:154 .\core\agent_requests.py:191
+msgid "This request has already been answered."
+msgstr ""
+
+#: .\core\agent_requests.py:257
+msgid "New representation request"
+msgstr ""
+
+#: .\core\agent_requests.py:259
+#, python-format
+msgid ""
+"%(name)s asks to represent you as your agent. Open Requests to accept or "
+"decline."
+msgstr ""
+
+#: .\core\agent_requests.py:275
+msgid "Representation request accepted"
+msgstr ""
+
+#: .\core\agent_requests.py:277
+#, python-format
+msgid ""
+"%(name)s accepted your request. They are now one of your students and you "
+"can message them."
+msgstr ""
+
+#: .\core\agent_requests.py:281
+msgid "Representation request declined"
+msgstr ""
+
+#: .\core\agent_requests.py:282
+#, python-format
+msgid "%(name)s declined your representation request."
+msgstr ""
+
 #: .\core\chat.py:109 .\templates\base.html:51
 msgid "Support"
 msgstr ""
@@ -764,46 +823,46 @@ msgstr ""
 msgid "The site's chat storage is full. Please try again later."
 msgstr ""
 
-#: .\core\context_processors.py:102
+#: .\core\context_processors.py:107
 msgid "Registration is required to see programs matching your search."
 msgstr ""
 
-#: .\core\context_processors.py:104 .\templates\partials\site_footer.html:55
+#: .\core\context_processors.py:109 .\templates\partials\site_footer.html:55
 #: .\templates\partials\support_button.html:19
 #: .\templates\partials\support_button.html:20
 #: .\templates\partials\support_button.html:22
 msgid "Contact Support"
 msgstr ""
 
-#: .\core\context_processors.py:106
+#: .\core\context_processors.py:111
 msgid "Chat with the Apply BM team — log in if asked."
 msgstr ""
 
-#: .\core\context_processors.py:109
+#: .\core\context_processors.py:114
 msgid "Thank you! You are on the scholarship alerts list."
 msgstr ""
 
-#: .\core\context_processors.py:111
+#: .\core\context_processors.py:116
 msgid "Loading content..."
 msgstr ""
 
-#: .\core\context_processors.py:112
+#: .\core\context_processors.py:117
 msgid "Loading Error"
 msgstr ""
 
-#: .\core\context_processors.py:113
+#: .\core\context_processors.py:118
 msgid "Please try again or contact support"
 msgstr ""
 
-#: .\core\context_processors.py:114
+#: .\core\context_processors.py:119
 msgid "Reload Page"
 msgstr ""
 
-#: .\core\context_processors.py:116
+#: .\core\context_processors.py:121
 msgid "Email verified! Your account is fully active again."
 msgstr ""
 
-#: .\core\context_processors.py:119
+#: .\core\context_processors.py:124
 msgid "Chat connected"
 msgstr ""
 
@@ -1004,274 +1063,324 @@ msgstr ""
 msgid "The current email address has been confirmed"
 msgstr ""
 
-#: .\core\models.py:472
-msgid "Only student users can be representatives"
+#: .\core\models.py:467
+msgid ""
+"Shareable 16-digit ID. Give it to an agent so they can find you and request "
+"to represent you."
 msgstr ""
 
 #: .\core\models.py:487
+msgid "Only student users can be representatives"
+msgstr ""
+
+#: .\core\models.py:513
 msgid "Company Profile"
 msgstr ""
 
-#: .\core\models.py:488
+#: .\core\models.py:514
 msgid "Company Profiles"
 msgstr ""
 
-#: .\core\models.py:505
+#: .\core\models.py:531
 msgid "Agent Profile"
 msgstr ""
 
-#: .\core\models.py:506
+#: .\core\models.py:532
 msgid "Agent Profiles"
 msgstr ""
 
-#: .\core\models.py:521
+#: .\core\models.py:547
 msgid "Student Profile"
 msgstr ""
 
-#: .\core\models.py:522
+#: .\core\models.py:548
 msgid "Student Profiles"
 msgstr ""
 
-#: .\core\models.py:541
+#: .\core\models.py:567
 msgid "Select the country whose language you speak"
 msgstr ""
 
-#: .\core\models.py:553
+#: .\core\models.py:579
 msgid "Application"
 msgstr ""
 
-#: .\core\models.py:557
+#: .\core\models.py:583
 msgid "In Progress"
 msgstr ""
 
-#: .\core\models.py:558
+#: .\core\models.py:584
 msgid "Finished"
 msgstr ""
 
-#: .\core\models.py:559
+#: .\core\models.py:585
 msgid "Failed"
 msgstr ""
 
-#: .\core\models.py:562
+#: .\core\models.py:588
 msgid "Step One"
 msgstr ""
 
-#: .\core\models.py:563
+#: .\core\models.py:589
 msgid "Step Two"
 msgstr ""
 
-#: .\core\models.py:564
+#: .\core\models.py:590
 msgid "Step Three"
 msgstr ""
 
-#: .\core\models.py:565
+#: .\core\models.py:591
 msgid "Step Four"
 msgstr ""
 
-#: .\core\models.py:566
+#: .\core\models.py:592
 msgid "Step Five"
 msgstr ""
 
-#: .\core\models.py:567
+#: .\core\models.py:593
 msgid "Step Six"
 msgstr ""
 
-#: .\core\models.py:568
+#: .\core\models.py:594
 msgid "Step Seven"
 msgstr ""
 
-#: .\core\models.py:571
+#: .\core\models.py:597
 msgid "Transfer Student"
 msgstr ""
 
-#: .\core\models.py:572
+#: .\core\models.py:598
 msgid "First-Year Student"
 msgstr ""
 
-#: .\core\models.py:605
+#: .\core\models.py:631
 msgid "Auto-generated application code"
 msgstr ""
 
-#: .\core\models.py:611
+#: .\core\models.py:637
 msgid "Application Documents"
 msgstr ""
 
-#: .\core\models.py:657
+#: .\core\models.py:683
 msgid ""
 "Default per-student file size limit (MB) pre-filled when a chat file "
 "permission is granted. Students without a grant cannot send files at all."
 msgstr ""
 
-#: .\core\models.py:665
+#: .\core\models.py:691
 msgid ""
 "Site-wide ceiling (MB) on the total size of all chat uploads. Uploads are "
 "refused once it is reached."
 msgstr ""
 
-#: .\core\models.py:671 .\core\models.py:672
+#: .\core\models.py:697 .\core\models.py:698
 msgid "Site Settings"
 msgstr ""
 
-#: .\core\models.py:692
+#: .\core\models.py:718
 msgid "Journey Step"
 msgstr ""
 
-#: .\core\models.py:701 .\core\templatetags\custom_filters.py:45
+#: .\core\models.py:727 .\core\templatetags\custom_filters.py:45
 msgid "Associate & Bachelor"
 msgstr ""
 
-#: .\core\models.py:702 .\core\templatetags\custom_filters.py:46
+#: .\core\models.py:728 .\core\templatetags\custom_filters.py:46
 #: .\templates\core\main.html:118
 msgid "Master"
 msgstr ""
 
-#: .\core\models.py:703 .\core\templatetags\custom_filters.py:47
+#: .\core\models.py:729 .\core\templatetags\custom_filters.py:47
 #: .\templates\core\main.html:119
 msgid "PhD"
 msgstr ""
 
-#: .\core\models.py:711
+#: .\core\models.py:737
 msgid "Document Requirement"
 msgstr ""
 
-#: .\core\models.py:736
+#: .\core\models.py:762
 msgid "Success Story"
 msgstr ""
 
-#: .\core\models.py:737 .\templates\core\main.html:21
+#: .\core\models.py:763 .\templates\core\main.html:21
 msgid "Success Stories"
 msgstr ""
 
-#: .\core\models.py:757
+#: .\core\models.py:783
 msgid "Information"
 msgstr ""
 
-#: .\core\models.py:758
+#: .\core\models.py:784
 msgid "Warning"
 msgstr ""
 
-#: .\core\models.py:759
+#: .\core\models.py:785
 msgid "Success"
 msgstr ""
 
-#: .\core\models.py:760
+#: .\core\models.py:786
 msgid "Error"
 msgstr ""
 
-#: .\core\models.py:761
+#: .\core\models.py:787
 msgid "Reminder"
 msgstr ""
 
-#: .\core\models.py:764
+#: .\core\models.py:790
 msgid "All Users"
 msgstr ""
 
-#: .\core\models.py:765
+#: .\core\models.py:791
 msgid "Students (Default)"
 msgstr ""
 
-#: .\core\models.py:766
+#: .\core\models.py:792
 msgid "Company Users"
 msgstr ""
 
-#: .\core\models.py:767
+#: .\core\models.py:793
 msgid "Agent Users"
 msgstr ""
 
-#: .\core\models.py:768
+#: .\core\models.py:794
 msgid "Specific Users"
 msgstr ""
 
-#: .\core\models.py:770 .\templates\dashboard\fragments\notifications.html:9
+#: .\core\models.py:796 .\templates\dashboard\fragments\notifications.html:9
 #: .\templates\dashboard\fragments\notifications.html:61
 #: .\templates\dashboard\fragments\notifications.html:121
 msgid "Title"
 msgstr ""
 
-#: .\core\models.py:776 .\templates\dashboard\fragments\notifications.html:19
+#: .\core\models.py:802 .\templates\dashboard\fragments\notifications.html:19
 #: .\templates\dashboard\fragments\notifications.html:129
 msgid "Notification Type"
 msgstr ""
 
-#: .\core\models.py:782
+#: .\core\models.py:808
 msgid "Recipient Type"
 msgstr ""
 
-#: .\core\models.py:789
+#: .\core\models.py:815
 msgid "Sent By"
 msgstr ""
 
-#: .\core\models.py:797
+#: .\core\models.py:827
+msgid "Action URL"
+msgstr ""
+
+#: .\core\models.py:828
 msgid "Created At"
 msgstr ""
 
-#: .\core\models.py:801
+#: .\core\models.py:832
 msgid "Notification"
 msgstr ""
 
-#: .\core\models.py:802 .\core\templatetags\admin_extras.py:55
+#: .\core\models.py:833 .\core\templatetags\admin_extras.py:55
 msgid "Notifications"
 msgstr ""
 
-#: .\core\models.py:838
+#: .\core\models.py:869
 msgid "Read At"
 msgstr ""
 
-#: .\core\models.py:842
+#: .\core\models.py:873
 msgid "Notification Recipient"
 msgstr ""
 
-#: .\core\models.py:843
+#: .\core\models.py:874
 msgid "Notification Recipients"
 msgstr ""
 
-#: .\core\models.py:887
+#: .\core\models.py:900
+msgid "Pending"
+msgstr ""
+
+#: .\core\models.py:901
+msgid "Approved"
+msgstr ""
+
+#: .\core\models.py:902
+msgid "Declined"
+msgstr ""
+
+#: .\core\models.py:903
+msgid "Cancelled"
+msgstr ""
+
+#: .\core\models.py:909
+msgid "Requester"
+msgstr ""
+
+#: .\core\models.py:915
+msgid "Target"
+msgstr ""
+
+#: .\core\models.py:928
+msgid "A short note from the requester to the target."
+msgstr ""
+
+#: .\core\models.py:932
+msgid "Responded At"
+msgstr ""
+
+#: .\core\models.py:935
+msgid "Agent Link Request"
+msgstr ""
+
+#: .\core\models.py:936
+msgid "Agent Link Requests"
+msgstr ""
+
+#: .\core\models.py:999
 msgid "Chat conversation"
 msgstr ""
 
-#: .\core\models.py:888
+#: .\core\models.py:1000
 msgid "Chat conversations"
 msgstr ""
 
-#: .\core\models.py:946
+#: .\core\models.py:1058
 msgid "Chat participant"
 msgstr ""
 
-#: .\core\models.py:947
+#: .\core\models.py:1059
 msgid "Chat participants"
 msgstr ""
 
-#: .\core\models.py:975
+#: .\core\models.py:1087
 msgid "Chat attachment"
 msgstr ""
 
-#: .\core\models.py:976
+#: .\core\models.py:1088
 msgid "Chat attachments"
 msgstr ""
 
-#: .\core\models.py:986
+#: .\core\models.py:1098
 msgid "Chat message"
 msgstr ""
 
-#: .\core\models.py:987
+#: .\core\models.py:1099
 msgid "Chat messages"
 msgstr ""
 
-#: .\core\models.py:1087
+#: .\core\models.py:1199
 #: .\templates\dashboard\fragments\partials\chat_file_grant.html:18
 msgid "Chat file permission"
 msgstr ""
 
-#: .\core\models.py:1088
+#: .\core\models.py:1200
 msgid "Chat file permissions"
 msgstr ""
 
-#: .\core\models.py:1100
+#: .\core\models.py:1212
 #, python-format
 msgid "Cannot exceed the %(ceiling)s MB ceiling."
 msgstr ""
 
-#: .\core\models.py:1105
+#: .\core\models.py:1217
 msgid "Must be at least 1 MB."
 msgstr ""
 
@@ -1349,7 +1458,7 @@ msgstr ""
 msgid "Applications waiting on a decision"
 msgstr ""
 
-#: .\core\tests_notifications.py:109 .\core\utils\notifications.py:90
+#: .\core\tests_notifications.py:109 .\core\utils\notifications.py:98
 msgid "Welcome to ApplyBaMa!"
 msgstr ""
 
@@ -1357,7 +1466,7 @@ msgstr ""
 msgid "Invalid refresh token"
 msgstr ""
 
-#: .\core\utils\notifications.py:92
+#: .\core\utils\notifications.py:100
 msgid ""
 "Thank you for registering with ApplyBaMa! We're here to help you find your "
 "dream university and program. Explore our dashboard to search universities, "
@@ -1365,17 +1474,17 @@ msgid ""
 "feel free to contact our support team."
 msgstr ""
 
-#: .\core\utils\notifications.py:122 .\core\utils\notifications.py:128
+#: .\core\utils\notifications.py:130 .\core\utils\notifications.py:136
 msgid "Email address verified"
 msgstr ""
 
-#: .\core\utils\notifications.py:124
+#: .\core\utils\notifications.py:132
 msgid ""
 "Your new email address has been confirmed and your account is fully active "
 "again. Everything works as normal."
 msgstr ""
 
-#: .\core\utils\notifications.py:130
+#: .\core\utils\notifications.py:138
 msgid ""
 "Your email address has been confirmed. All features of your account are now "
 "available."
@@ -1395,10 +1504,10 @@ msgstr ""
 
 #: .\dashboard\chat_views.py:223 .\dashboard\chat_views.py:360
 #: .\dashboard\chat_views.py:453 .\dashboard\chat_views.py:511
-#: .\dashboard\views.py:777 .\dashboard\views.py:843 .\dashboard\views.py:853
-#: .\dashboard\views.py:895 .\dashboard\views.py:1058 .\dashboard\views.py:1129
-#: .\dashboard\views.py:1159 .\dashboard\views.py:1230
-#: .\dashboard\views.py:1264
+#: .\dashboard\views.py:806 .\dashboard\views.py:872 .\dashboard\views.py:882
+#: .\dashboard\views.py:924 .\dashboard\views.py:1087 .\dashboard\views.py:1158
+#: .\dashboard\views.py:1188 .\dashboard\views.py:1259
+#: .\dashboard\views.py:1293
 msgid "Invalid request."
 msgstr ""
 
@@ -1439,13 +1548,13 @@ msgid "You can only manage your own students."
 msgstr ""
 
 #: .\dashboard\forms.py:33 .\dashboard\forms.py:212
-#: .\templates\dashboard\fragments\my_students.html:91
+#: .\templates\dashboard\fragments\my_students.html:151
 #: .\templates\dashboard\fragments\profile.html:58
 msgid "First Name"
 msgstr ""
 
 #: .\dashboard\forms.py:36 .\dashboard\forms.py:218
-#: .\templates\dashboard\fragments\my_students.html:95
+#: .\templates\dashboard\fragments\my_students.html:155
 #: .\templates\dashboard\fragments\profile.html:62
 msgid "Last Name"
 msgstr ""
@@ -1460,7 +1569,7 @@ msgstr ""
 
 #: .\dashboard\forms.py:57 .\dashboard\forms.py:79 .\dashboard\forms.py:224
 #: .\templates\authentication\username_selection.html:57
-#: .\templates\dashboard\fragments\my_students.html:100
+#: .\templates\dashboard\fragments\my_students.html:160
 #: .\templates\dashboard\fragments\profile.html:122
 msgid "Username"
 msgstr ""
@@ -1484,7 +1593,7 @@ msgid "Email Address"
 msgstr ""
 
 #: .\dashboard\forms.py:234
-#: .\templates\dashboard\fragments\my_students.html:108
+#: .\templates\dashboard\fragments\my_students.html:168
 msgid "Temporary Password"
 msgstr ""
 
@@ -1500,44 +1609,71 @@ msgstr ""
 msgid "Password must be at least 8 characters long."
 msgstr ""
 
-#: .\dashboard\views.py:120
+#: .\dashboard\request_views.py:72 .\dashboard\request_views.py:104
+msgid "Only agents and companies can send representation requests."
+msgstr ""
+
+#: .\dashboard\request_views.py:125
+#, python-format
+msgid ""
+"Request sent to %(name)s. They will appear in My Students once they accept."
+msgstr ""
+
+#: .\dashboard\request_views.py:139 .\dashboard\request_views.py:163
+msgid "Request not found."
+msgstr ""
+
+#: .\dashboard\request_views.py:149
+#, python-format
+msgid "%(name)s is now one of your agents and you can message them."
+msgstr ""
+
+#: .\dashboard\request_views.py:152
+msgid "You declined the representation request."
+msgstr ""
+
+#: .\dashboard\request_views.py:174
+msgid "The representation request was withdrawn."
+msgstr ""
+
+#: .\dashboard\views.py:121
 msgid ""
 "Your email address is not verified, so your account is in read-only mode. "
 "Verify it from your profile page to continue."
 msgstr ""
 
-#: .\dashboard\views.py:163
+#: .\dashboard\views.py:165
 msgid "Page not found."
 msgstr ""
 
-#: .\dashboard\views.py:174 .\dashboard\views.py:448
+#: .\dashboard\views.py:176 .\dashboard\views.py:450
 msgid "You do not have permission to access this page."
 msgstr ""
 
-#: .\dashboard\views.py:440 .\dashboard\views.py:1026 .\dashboard\views.py:1060
-#: .\dashboard\views.py:1175 .\dashboard\views.py:1207
-#: .\dashboard\views.py:1232 .\dashboard\views.py:1244
-#: .\dashboard\views.py:1266
+#: .\dashboard\views.py:442 .\dashboard\views.py:1055 .\dashboard\views.py:1089
+#: .\dashboard\views.py:1204 .\dashboard\views.py:1236
+#: .\dashboard\views.py:1261 .\dashboard\views.py:1273
+#: .\dashboard\views.py:1295
 msgid "Permission denied."
 msgstr ""
 
-#: .\dashboard\views.py:541
+#: .\dashboard\views.py:570
 msgid "Personal information updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:549
+#: .\dashboard\views.py:578
 msgid "Identity and profile photo updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:578
+#: .\dashboard\views.py:607
 msgid "Contact information updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:584
+#: .\dashboard\views.py:613
 msgid "This email address is already in use."
 msgstr ""
 
-#: .\dashboard\views.py:598
+#: .\dashboard\views.py:627
 #, python-format
 msgid ""
 "Contact information updated. We sent a verification link to %(email)s — "
@@ -1545,101 +1681,101 @@ msgid ""
 "mode."
 msgstr ""
 
-#: .\dashboard\views.py:609
+#: .\dashboard\views.py:638
 msgid "Profile image updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:617
+#: .\dashboard\views.py:646
 msgid "Password changed successfully."
 msgstr ""
 
-#: .\dashboard\views.py:624
+#: .\dashboard\views.py:653
 msgid "Student profile updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:627
+#: .\dashboard\views.py:656
 msgid "Invalid form type."
 msgstr ""
 
-#: .\dashboard\views.py:646 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:675 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your new email address"
 msgstr ""
 
-#: .\dashboard\views.py:648 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:677 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your email address"
 msgstr ""
 
-#: .\dashboard\views.py:675 .\dashboard\views.py:690
+#: .\dashboard\views.py:704 .\dashboard\views.py:719
 msgid "There is no pending email change."
 msgstr ""
 
-#: .\dashboard\views.py:679
+#: .\dashboard\views.py:708
 #, python-format
 msgid "A new verification link was sent to %(email)s."
 msgstr ""
 
-#: .\dashboard\views.py:705
+#: .\dashboard\views.py:734
 #, python-format
 msgid ""
 "The email change to %(email)s was cancelled. Your account is fully active "
 "again."
 msgstr ""
 
-#: .\dashboard\views.py:737
+#: .\dashboard\views.py:766
 msgid "Step updated."
 msgstr ""
 
-#: .\dashboard\views.py:740
+#: .\dashboard\views.py:769
 msgid "Application deleted."
 msgstr ""
 
-#: .\dashboard\views.py:771
+#: .\dashboard\views.py:800
 msgid "Application created successfully."
 msgstr ""
 
-#: .\dashboard\views.py:797
+#: .\dashboard\views.py:826
 msgid ""
 "You have reached the maximum number of students (100). Please contact "
 "support."
 msgstr ""
 
-#: .\dashboard\views.py:839
+#: .\dashboard\views.py:868
 msgid "Student added successfully."
 msgstr ""
 
-#: .\dashboard\views.py:883
+#: .\dashboard\views.py:912
 msgid "Your request has been sent! Our team will contact you soon."
 msgstr ""
 
-#: .\dashboard\views.py:891
+#: .\dashboard\views.py:920
 msgid "Failed to send request. Please try again."
 msgstr ""
 
-#: .\dashboard\views.py:1069 .\dashboard\views.py:1275
+#: .\dashboard\views.py:1098 .\dashboard\views.py:1304
 msgid "All fields are required."
 msgstr ""
 
-#: .\dashboard\views.py:1072
+#: .\dashboard\views.py:1101
 msgid "Please select at least one user."
 msgstr ""
 
-#: .\dashboard\views.py:1122
+#: .\dashboard\views.py:1151
 msgid "Notification sent successfully!"
 msgstr ""
 
-#: .\dashboard\views.py:1152 .\dashboard\views.py:1238
-#: .\dashboard\views.py:1257 .\dashboard\views.py:1331
-#: .\dashboard\views.py:1361
+#: .\dashboard\views.py:1181 .\dashboard\views.py:1267
+#: .\dashboard\views.py:1286 .\dashboard\views.py:1360
+#: .\dashboard\views.py:1390
 msgid "Not found."
 msgstr ""
 
-#: .\dashboard\views.py:1236
+#: .\dashboard\views.py:1265
 msgid "Notification deleted."
 msgstr ""
 
-#: .\dashboard\views.py:1329
+#: .\dashboard\views.py:1358
 msgid "Notification updated successfully!"
 msgstr ""
 
@@ -2216,7 +2352,7 @@ msgstr ""
 msgid "Delete this message for both sides?"
 msgstr ""
 
-#: .\templates\base.html:67
+#: .\templates\base.html:67 .\templates\dashboard\fragments\requests.html:127
 msgid "Sent"
 msgstr ""
 
@@ -2269,6 +2405,30 @@ msgstr ""
 msgid "Minimize"
 msgstr ""
 
+#: .\templates\base.html:80
+#: .\templates\dashboard\fragments\my_notifications.html:49
+#: .\templates\dashboard\fragments\programs.html:271
+#: .\templates\dashboard\fragments\universities.html:243
+msgid "Go"
+msgstr ""
+
+#: .\templates\base.html:81
+msgid "Enter the full 16-digit ID."
+msgstr ""
+
+#: .\templates\base.html:82
+msgid "Sending…"
+msgstr ""
+
+#: .\templates\base.html:83
+#: .\templates\dashboard\fragments\my_students.html:128
+msgid "Send request"
+msgstr ""
+
+#: .\templates\base.html:84
+msgid "Decline this representation request?"
+msgstr ""
+
 #: .\templates\core\main.html:3
 msgid "Apply BM"
 msgstr ""
@@ -2282,7 +2442,7 @@ msgid "How It Works"
 msgstr ""
 
 #: .\templates\core\main.html:34 .\templates\core\main.html:60
-#: .\templates\dashboard\main.html:149
+#: .\templates\dashboard\main.html:159
 msgid "Logout"
 msgstr ""
 
@@ -2504,7 +2664,7 @@ msgstr ""
 
 #: .\templates\dashboard\fragments\my_applications.html:5
 #: .\templates\dashboard\fragments\welcome.html:66
-#: .\templates\dashboard\main.html:114
+#: .\templates\dashboard\main.html:124
 msgid "My Applications"
 msgstr ""
 
@@ -2515,7 +2675,7 @@ msgstr ""
 
 #: .\templates\dashboard\fragments\my_applications.html:10
 #: .\templates\dashboard\fragments\new_application.html:4
-#: .\templates\dashboard\main.html:108
+#: .\templates\dashboard\main.html:118
 msgid "New Application"
 msgstr ""
 
@@ -2553,28 +2713,28 @@ msgstr ""
 msgid "Mark all as read"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_notifications.html:45
+#: .\templates\dashboard\fragments\my_notifications.html:61
 msgid "No notifications match your search."
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_notifications.html:45
+#: .\templates\dashboard\fragments\my_notifications.html:61
 msgid "You have no notifications."
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_notifications.html:58
+#: .\templates\dashboard\fragments\my_notifications.html:74
 #: .\templates\dashboard\fragments\programs.html:223
 #: .\templates\dashboard\fragments\universities.html:195
 msgid "Prev"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_notifications.html:76
+#: .\templates\dashboard\fragments\my_notifications.html:92
 #: .\templates\dashboard\fragments\programs.html:246
 #: .\templates\dashboard\fragments\universities.html:218
 msgid "Next"
 msgstr ""
 
 #: .\templates\dashboard\fragments\my_students.html:5
-#: .\templates\dashboard\main.html:120
+#: .\templates\dashboard\main.html:130
 msgid "My Students"
 msgstr ""
 
@@ -2582,52 +2742,83 @@ msgstr ""
 msgid "Manage the students you are representing."
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:10
-#: .\templates\dashboard\fragments\my_students.html:79
+#: .\templates\dashboard\fragments\my_students.html:18
+#: .\templates\dashboard\fragments\my_students.html:91
+msgid "Request by ID"
+msgstr ""
+
+#: .\templates\dashboard\fragments\my_students.html:22
+#: .\templates\dashboard\fragments\my_students.html:139
 msgid "Add New Student"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:25
+#: .\templates\dashboard\fragments\my_students.html:38
 msgid "Name"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:28
+#: .\templates\dashboard\fragments\my_students.html:41
 #: .\templates\dashboard\fragments\notifications.html:65
 msgid "Actions"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:40
+#: .\templates\dashboard\fragments\my_students.html:53
 #: .\templates\dashboard\fragments\welcome.html:70
 msgid "View Applications"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:55
+#: .\templates\dashboard\fragments\my_students.html:68
 msgid "Files"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:63
+#: .\templates\dashboard\fragments\my_students.html:76
 msgid "No students added yet."
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:114
-#: .\templates\dashboard\fragments\my_students.html:115
-#: .\templates\dashboard\fragments\my_students.html:116
-msgid "Copy password"
+#: .\templates\dashboard\fragments\my_students.html:98
+msgid ""
+"Ask the user for the 16-digit ID from their Requests page, then send the "
+"request for them to accept."
+msgstr ""
+
+#: .\templates\dashboard\fragments\my_students.html:100
+msgid "User ID"
+msgstr ""
+
+#: .\templates\dashboard\fragments\my_students.html:107
+msgid "1234567890123456"
+msgstr ""
+
+#: .\templates\dashboard\fragments\my_students.html:112
+msgid "Look up"
 msgstr ""
 
 #: .\templates\dashboard\fragments\my_students.html:117
+msgid "Message (optional)"
+msgstr ""
+
+#: .\templates\dashboard\fragments\my_students.html:121
+msgid "Introduce yourself — for example, which universities you work with."
+msgstr ""
+
+#: .\templates\dashboard\fragments\my_students.html:174
+#: .\templates\dashboard\fragments\my_students.html:175
+#: .\templates\dashboard\fragments\my_students.html:176
+msgid "Copy password"
+msgstr ""
+
+#: .\templates\dashboard\fragments\my_students.html:177
 msgid "Password copied"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:123
+#: .\templates\dashboard\fragments\my_students.html:183
 msgid "Generate password"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:129
+#: .\templates\dashboard\fragments\my_students.html:189
 msgid "Show/hide password"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_students.html:138
+#: .\templates\dashboard\fragments\my_students.html:198
 msgid "Create Student Account"
 msgstr ""
 
@@ -2704,7 +2895,7 @@ msgid "Update Notification"
 msgstr ""
 
 #: .\templates\dashboard\fragments\partials\chat_file_grant.html:14
-#: .\templates\dashboard\main.html:209
+#: .\templates\dashboard\main.html:219
 msgid "Close"
 msgstr ""
 
@@ -2959,9 +3150,69 @@ msgstr ""
 msgid "Go to"
 msgstr ""
 
-#: .\templates\dashboard\fragments\programs.html:271
-#: .\templates\dashboard\fragments\universities.html:243
-msgid "Go"
+#: .\templates\dashboard\fragments\requests.html:14
+msgid "Representation Requests"
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:16
+msgid ""
+"A student must accept before they become one of your students. Requests you "
+"receive are listed here too."
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:24
+msgid "Your ID"
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:39
+#: .\templates\dashboard\fragments\requests.html:40
+#: .\templates\dashboard\fragments\requests.html:41
+msgid "Copy ID"
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:42
+msgid "ID copied"
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:48
+msgid "Give this ID to anyone who should be able to send you a request."
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:50
+msgid ""
+"Give this ID to your agent so they can send you a representation request."
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:56
+msgid "Send a request by ID from My Students"
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:66
+msgid "Received"
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:90
+msgid "No message was attached."
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:102
+msgid "Accept"
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:108
+msgid "Decline"
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:117
+msgid "No representation requests yet."
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:152
+msgid "Withdraw"
+msgstr ""
+
+#: .\templates\dashboard\fragments\requests.html:160
+msgid "You have not sent any requests yet."
 msgstr ""
 
 #: .\templates\dashboard\fragments\universities.html:5
@@ -3153,35 +3404,39 @@ msgstr ""
 msgid "Contact our support team for assistance with your applications."
 msgstr ""
 
-#: .\templates\dashboard\main.html:126
+#: .\templates\dashboard\main.html:92
+msgid "Requests"
+msgstr ""
+
+#: .\templates\dashboard\main.html:136
 msgid "Administration"
 msgstr ""
 
-#: .\templates\dashboard\main.html:131
+#: .\templates\dashboard\main.html:141
 msgid "Send Notifications"
 msgstr ""
 
-#: .\templates\dashboard\main.html:137
+#: .\templates\dashboard\main.html:147
 msgid "Admin Panel"
 msgstr ""
 
-#: .\templates\dashboard\main.html:178
+#: .\templates\dashboard\main.html:188
 msgid ""
 "Your account is in read-only mode — confirm your new email address from your "
 "profile page."
 msgstr ""
 
-#: .\templates\dashboard\main.html:180
+#: .\templates\dashboard\main.html:190
 msgid ""
 "Your account is in read-only mode — verify your email address from your "
 "profile page."
 msgstr ""
 
-#: .\templates\dashboard\main.html:184
+#: .\templates\dashboard\main.html:194
 msgid "Verify now"
 msgstr ""
 
-#: .\templates\dashboard\main.html:192
+#: .\templates\dashboard\main.html:202
 msgid "Loading..."
 msgstr ""
 

@@ -75,6 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
         initProgramAutocomplete();
         initNotificationsScripts();
         initMyNotificationsScripts();
+        initAgentRequestScripts();
         // pages/chat.js owns its fragment's wiring (it is loaded with the
         // shell, so it cannot bind to elements that do not exist yet).
         if (typeof window.initChatScripts === "function") window.initChatScripts();
@@ -126,6 +127,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!trigger) return;
 
     e.preventDefault();
+    // A "Go" button inside the notification modal navigates away; without this
+    // the modal would stay layered over the page that just loaded.
+    if (target.closest(".notification-go-btn")) closeNotificationModal();
     loadContent(
       trigger.getAttribute("data-page"),
       trigger.getAttribute("data-page-params") || ""
@@ -197,6 +201,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Global event delegation for dynamic click actions (password toggles, apply buttons, etc.)
   contentContainer.addEventListener("click", function (e) {
+    // Representation requests: accept/decline what I received, withdraw what I
+    // sent, copy my own ID. Declarative in the markup (data-request-*,
+    // .copy-id-btn), handled here so the freshly injected fragment needs no
+    // wiring of its own.
+    const respondBtn = e.target.closest("[data-request-respond]");
+    if (respondBtn) {
+      respondRequest(respondBtn);
+      return;
+    }
+    const withdrawBtn = e.target.closest("[data-request-cancel]");
+    if (withdrawBtn) {
+      withdrawRequest(withdrawBtn);
+      return;
+    }
+    const copyIdBtn = e.target.closest(".copy-id-btn");
+    if (copyIdBtn) {
+      copyPublicId(copyIdBtn);
+      return;
+    }
+
     // Email verification escape hatches (read-only mode banner + profile page)
     if (
       e.target.closest("#resend-email-verification") ||
@@ -873,12 +897,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!modal) return;
 
+    // A row may carry an action button (notification.action_url — e.g. a
+    // representation request links to the Requests page). The delegated
+    // data-page listener navigates; this row handler must stand aside, or the
+    // modal would open on top of the page the button just loaded.
+    const isActionButton = (node) => !!node.closest("[data-page]");
+
     // ONE click does everything: the modal opens at once with the row's own
     // text (zero waiting), then the read is recorded. Filling the modal from
     // the server response would need a round trip before anything appeared —
     // which is exactly the "second click" behaviour this replaces.
     document.querySelectorAll(".notification-item").forEach((item) => {
-      item.addEventListener("click", function () {
+      item.addEventListener("click", function (event) {
+        if (isActionButton(event.target)) return;
         const id = this.dataset.id;
         const title = this.querySelector("h3");
         const message = this.querySelector("p.text-gray-600");
@@ -901,11 +932,17 @@ document.addEventListener("DOMContentLoaded", function () {
           .then((r) => r.json())
           .then((data) => {
             if (!data.success || !isNotificationModalOpen()) return;
+            // The deep link, when the notification carries one: clicking it
+            // navigates the SPA (data-page) and closes the modal first.
+            const actionHtml = data.action_url
+              ? `<button type="button" data-page="${data.action_url}" class="notification-go-btn mt-4 px-4 py-2 text-sm font-semibold text-white bg-[var(--ab-primary)] rounded-lg hover:opacity-90 transition">${window.I18N.notificationGo} <i class="fas fa-arrow-right ml-1"></i></button>`
+              : "";
             document.getElementById("modalContent").innerHTML = `
               <div class="mb-4">${notificationTypeBadge(data.type)}</div>
               <h3 id="notificationModalTitle" class="text-xl font-bold text-gray-900 mb-2">${data.title}</h3>
               <p class="text-gray-600 mb-4 whitespace-pre-wrap">${data.message}</p>
               <p class="text-sm text-gray-500"><i class="far fa-clock mr-1"></i>${data.date}</p>
+              ${actionHtml}
             `;
           })
           .catch(() => {});
@@ -968,6 +1005,290 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // --- Representation requests -------------------------------------------
+  // The Requests fragment and the "Add by ID" dialog in My Students. Every
+  // POST goes through core.agent_requests on the server, which owns the rules
+  // (no self-requests, one live request per pair, target-only answers); the
+  // code here only collects input and reports the answer.
+
+  function postRequestAction(url, body, button, reloadPage) {
+    if (button) button.disabled = true;
+    return fetch(url, {
+      method: "POST",
+      body,
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": window.ApplyBaMa.getCsrfToken(),
+      },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        showToast(data.message || window.I18N.unexpectedError, data.success ? "success" : "error");
+        if (data.success) {
+          loadContent(reloadPage || "requests");
+        } else if (button) {
+          button.disabled = false;
+        }
+      })
+      .catch(() => {
+        if (button) button.disabled = false;
+        showToast(window.I18N.unexpectedError, "error");
+      });
+  }
+
+  function respondRequest(button) {
+    const accept = button.getAttribute("data-request-respond") === "accept";
+    if (!accept && !confirm(window.I18N.requestDeclineConfirm)) return;
+    const body = new FormData();
+    body.append("action", accept ? "accept" : "decline");
+    postRequestAction(
+      window.AppConfig.urls.agentRequestRespond +
+        button.getAttribute("data-request-id") +
+        "/",
+      body,
+      button,
+      "requests",
+    );
+  }
+
+  function withdrawRequest(button) {
+    const body = new FormData();
+    postRequestAction(
+      window.AppConfig.urls.agentRequestCancel +
+        button.getAttribute("data-request-cancel") +
+        "/",
+      body,
+      button,
+      "requests",
+    );
+  }
+
+  // The public ID is shown as selectable text; this copies it without the
+  // selection dance where the clipboard API is available. Same acknowledgement
+  // as the temporary-password button (icon swap + .copied tint).
+  function copyPublicId(button) {
+    const value = button.getAttribute("data-copy-value") || "";
+    if (!value) return;
+
+    const acknowledge = () => {
+      setCopyPwdButtonState(button, true);
+      clearTimeout(copyPwdStateTimer);
+      copyPwdStateTimer = setTimeout(
+        () => setCopyPwdButtonState(button, false),
+        1800,
+      );
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(value).then(acknowledge, () => {
+        if (copyThroughTextarea(value)) acknowledge();
+      });
+      return;
+    }
+    if (copyThroughTextarea(value)) acknowledge();
+  }
+
+  function copyThroughTextarea(value) {
+    const holder = document.createElement("textarea");
+    holder.value = value;
+    holder.setAttribute("readonly", "readonly");
+    // .sr-only (already in the bundle) keeps it out of sight while selectable:
+    // execCommand("copy") needs a visible-to-the-DOM selection.
+    holder.className = "sr-only";
+    document.body.appendChild(holder);
+    holder.select();
+    let copied = false;
+    try {
+      copied = document.execCommand("copy");
+    } catch (err) {
+      copied = false;
+    }
+    document.body.removeChild(holder);
+    return copied;
+  }
+
+  function initAgentRequestScripts() {
+    const idInput = document.getElementById("linkStudentIdInput");
+    const searchBtn = document.getElementById("linkStudentSearchBtn");
+    const resultBox = document.getElementById("linkStudentResult");
+    const messageWrap = document.getElementById("linkStudentMessageWrap");
+    const messageInput = document.getElementById("linkStudentMessage");
+    const sendBtn = document.getElementById("linkStudentSendBtn");
+
+    if (!idInput || !searchBtn || !resultBox || !sendBtn) return;
+
+    const sendLabel = sendBtn.innerHTML;
+    // Only a server-confirmed lookup may be sent: the ID in the box at send
+    // time is not trusted, this value is.
+    let confirmedId = null;
+    let searchTimer;
+
+    function resetResult() {
+      confirmedId = null;
+      resultBox.textContent = "";
+      sendBtn.disabled = true;
+      if (messageWrap) messageWrap.classList.add("hidden");
+    }
+
+    function renderMessage(text, isError) {
+      const box = document.createElement("div");
+      box.className =
+        "text-sm rounded-lg p-3 " +
+        (isError ? "bg-red-50 text-red-700" : "bg-emerald-50 text-emerald-800");
+      box.textContent = text;
+      resultBox.textContent = "";
+      resultBox.appendChild(box);
+    }
+
+    function renderCandidate(candidate) {
+      const card = document.createElement("div");
+      card.className = "border border-gray-200 rounded-lg p-3";
+      const name = document.createElement("p");
+      name.className = "font-semibold text-gray-900";
+      name.textContent = candidate.name;
+      const meta = document.createElement("p");
+      meta.className = "text-xs text-gray-600 mt-1";
+      meta.textContent = [candidate.username, candidate.email, candidate.role]
+        .filter(Boolean)
+        .join(" · ");
+      card.appendChild(name);
+      card.appendChild(meta);
+      resultBox.textContent = "";
+      resultBox.appendChild(card);
+    }
+
+    function lookUp() {
+      const value = (idInput.value || "").trim();
+      if (!/^[0-9]{16}$/.test(value)) {
+        resetResult();
+        renderMessage(window.I18N.requestIdIncomplete, true);
+        return;
+      }
+      searchBtn.disabled = true;
+      fetch(
+        window.AppConfig.urls.agentRequestSearch +
+          "?public_id=" +
+          encodeURIComponent(value),
+        { headers: { "X-Requested-With": "XMLHttpRequest" } },
+      )
+        .then((r) => r.json())
+        .then((data) => {
+          if (!data.success || !data.found) {
+            resetResult();
+            renderMessage(data.message || window.I18N.unexpectedError, true);
+            return;
+          }
+          renderCandidate(data.candidate);
+          if (!data.can_send) {
+            renderMessage(data.message, true);
+            return;
+          }
+          confirmedId = value;
+          sendBtn.disabled = false;
+          if (messageWrap) messageWrap.classList.remove("hidden");
+        })
+        .catch(() => {
+          resetResult();
+          renderMessage(window.I18N.unexpectedError, true);
+        })
+        .finally(() => {
+          searchBtn.disabled = false;
+        });
+    }
+
+    searchBtn.addEventListener("click", lookUp);
+    idInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        lookUp();
+      }
+    });
+    // A pasted ID is looked up as soon as it is complete; typing is left alone
+    // until the user asks (the button or Enter), so half-typed digits never
+    // hit the endpoint.
+    idInput.addEventListener("input", function () {
+      resetResult();
+      clearTimeout(searchTimer);
+      const value = idInput.value.trim();
+      if (!/^[0-9]{16}$/.test(value)) return;
+      // Pasted or typed in full: look it up after a beat, so a fast typist does
+      // not fire a request on the 16th digit of a still-changing value.
+      searchTimer = setTimeout(lookUp, 250);
+    });
+
+    sendBtn.addEventListener("click", function () {
+      if (!confirmedId) return;
+      const body = new FormData();
+      body.append("public_id", confirmedId);
+      body.append("message", messageInput ? messageInput.value : "");
+      sendBtn.disabled = true;
+      sendBtn.innerHTML =
+        '<i class="fas fa-spinner fa-spin mr-2"></i>' + window.I18N.requestSending;
+      fetch(window.AppConfig.urls.agentRequestSend, {
+        method: "POST",
+        body,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRFToken": window.ApplyBaMa.getCsrfToken(),
+        },
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.success) {
+            showToast(data.message || "", "success");
+            const modal = document.getElementById("linkStudentModal");
+            if (modal) modal.classList.add("hidden");
+            loadContent("my_students");
+            return;
+          }
+          showToast(data.message || window.I18N.unexpectedError, "error");
+          sendBtn.disabled = false;
+          sendBtn.innerHTML = sendLabel;
+        })
+        .catch(() => {
+          showToast(window.I18N.unexpectedError, "error");
+          sendBtn.disabled = false;
+          sendBtn.innerHTML = sendLabel;
+        });
+    });
+
+    // Reopening the dialog starts clean: the previous lookup (and its result)
+    // must not be resendable by a second click.
+    document
+      .querySelectorAll('[data-modal-open="linkStudentModal"]')
+      .forEach((trigger) =>
+        trigger.addEventListener("click", function () {
+          idInput.value = "";
+          if (messageInput) messageInput.value = "";
+          sendBtn.innerHTML = sendLabel;
+          resetResult();
+        }),
+      );
+  }
+
+  function setRequestsBadge(count) {
+    const badge = document.getElementById("requestsBadge");
+    if (!badge) return;
+    if (count > 0) {
+      badge.textContent = count;
+      badge.classList.remove("hidden");
+    } else {
+      badge.classList.add("hidden");
+    }
+  }
+
+  function isRequestsOpen() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("page") === "requests";
+  }
+
+  document.addEventListener("ab:requests-refresh", function (event) {
+    const pending = (event.detail || {}).pending;
+    if (typeof pending === "number") setRequestsBadge(pending);
+    // The page lists exactly these rows, so a change redraws it.
+    if (isRequestsOpen()) loadContent("requests");
+  });
+
   // --- Realtime notifications (WebSocket, see static/js/realtime.js) -------
   // realtime.js re-dispatches pushed server events as document CustomEvents.
   // The sidebar badge and toasts are handled there for every page; the
@@ -1002,7 +1323,12 @@ document.addEventListener("DOMContentLoaded", function () {
   // A genuinely new notification needs new rows, so this one does reload the
   // fragment — but not while the modal is open, or the reload would take the
   // modal with it.
-  document.addEventListener("ab:notification-new", function () {
+  document.addEventListener("ab:notification-new", function (event) {
+    // A representation request also arrives as a notification; when the
+    // Requests page is the open fragment it lists that row, so redraw it.
+    if (isRequestsOpen() && (event.detail || {}).action_url === "requests") {
+      loadContent("requests");
+    }
     if (!isMyNotificationsOpen()) return;
     if (isNotificationModalOpen()) {
       myNotificationsRefreshPending = true;

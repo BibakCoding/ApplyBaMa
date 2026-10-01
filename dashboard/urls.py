@@ -1,7 +1,7 @@
 # dashboard/urls.py
 from django.urls import path
 
-from . import chat_views, views
+from . import chat_views, request_views, views
 
 urlpatterns = [
     path("", views.dashboard_main, name="dashboard"),
@@ -65,4 +65,21 @@ urlpatterns = [
     path("chat/message/<int:pk>/forward/", chat_views.forward_message, name="chat_forward"),
     path("chat/read/<int:pk>/", chat_views.read_thread, name="chat_read"),
     path("chat/grant/<int:student_id>/", chat_views.grant_file_permission, name="chat_grant"),
+    # Representation requests (agent/company → user, approved by the user)
+    path("requests/search/", request_views.search_candidate, name="agent_request_search"),
+    path("requests/send/", request_views.send_request, name="agent_request_send"),
+    # The pk is the LAST segment: core.context_processors._detail_url strips the
+    # placeholder by removing the first "0/", and static/js appends the real id
+    # to the stripped URL — a mid-path pk would leave the id in the wrong place
+    # (every chat route follows the same shape for the same reason).
+    path(
+        "requests/respond/<int:pk>/",
+        request_views.respond_request,
+        name="agent_request_respond",
+    ),
+    path(
+        "requests/cancel/<int:pk>/",
+        request_views.cancel_request,
+        name="agent_request_cancel",
+    ),
 ]

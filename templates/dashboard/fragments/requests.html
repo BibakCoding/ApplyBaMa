@@ -1,0 +1,164 @@
+{% load i18n %}
+{% comment %}
+Representation-request management. Rendered as an SPA fragment, so it holds
+only what belongs inside #dashboard-content: no <html>/<head>/<body>, no
+sidebar, no script tags. Navigation and the accept/decline/cancel buttons are
+declarative — dashboard.js owns the single delegated listener that reacts to
+data-page / data-request-* (AGENTS.md §7).
+{% endcomment %}
+<div class="max-w-5xl mx-auto animate-[auth-fade-in-up_0.6s_ease-out]"
+     data-requests-page="1">
+
+    <div class="flex justify-between items-start mb-8 border-l-4 border-[var(--ab-primary)] pl-4">
+        <div>
+            <h2 class="text-3xl font-bold text-[var(--ab-text)] font-serif">{% trans "Representation Requests" %}</h2>
+            <p class="text-[var(--ab-muted)] mt-2">
+                {% trans "A student must accept before they become one of your students. Requests you receive are listed here too." %}
+            </p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{% trans "Your ID" %}</p>
+                {% comment %}
+                The 16-digit ID a user gives an agent so the agent can find
+                them. Rendered as selectable text plus a copy button — never a
+                credential, and never shown to anyone but its owner.
+                {% endcomment %}
+                <p id="publicIdValue"
+                   class="font-mono text-lg tracking-widest text-gray-800 select-all"
+                   data-public-id="{{ user.public_id }}">{{ user.public_id }}</p>
+            </div>
+            <button type="button"
+                    id="copyPublicIdBtn"
+                    class="copy-id-btn"
+                    data-copy-value="{{ user.public_id }}"
+                    title="{% trans 'Copy ID' %}"
+                    aria-label="{% trans 'Copy ID' %}"
+                    data-copy-title="{% trans 'Copy ID' %}"
+                    data-copied-title="{% trans 'ID copied' %}">
+                <i class="fas fa-copy"></i>
+            </button>
+        </div>
+        <p class="text-sm text-gray-500 mt-3">
+            {% if can_initiate %}
+                {% trans "Give this ID to anyone who should be able to send you a request." %}
+            {% else %}
+                {% trans "Give this ID to your agent so they can send you a representation request." %}
+            {% endif %}
+        </p>
+        {% if can_initiate %}
+            <button data-page="my_students"
+                    class="mt-4 inline-flex items-center text-[var(--ab-primary)] hover:underline text-sm font-medium">
+                <i class="fas fa-user-plus mr-1"></i> {% trans "Send a request by ID from My Students" %}
+            </button>
+        {% endif %}
+    </div>
+
+    {% comment %}Received — the section every account has.{% endcomment %}
+    <section class="mb-10">
+        <h3 class="flex items-center gap-2 text-xl font-bold text-gray-800 mb-4">
+            <i class="fas fa-inbox text-[var(--ab-primary)]"></i>
+            {% trans "Received" %}
+            {% if pending_received %}
+                <span class="px-2 py-0.5 text-xs font-bold text-white bg-red-500 rounded-full">{{ pending_received }}</span>
+            {% endif %}
+        </h3>
+        <div class="space-y-4">
+            {% for link in received_requests %}
+                <div class="p-4 border rounded-lg transition-all duration-200 hover:shadow-md {% if link.status == 'pending' %}bg-blue-50 border-blue-200{% else %}bg-gray-50 border-gray-200{% endif %}">
+                    <div class="flex flex-wrap justify-between items-start gap-3">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h4 class="text-lg font-semibold text-gray-900">{{ link.requester.get_full_name|default:link.requester.username }}</h4>
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">{{ link.requester.get_user_type_display }}</span>
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                    {% if link.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                    {% elif link.status == 'approved' %}bg-green-100 text-green-800
+                                    {% elif link.status == 'declined' %}bg-red-100 text-red-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    {{ link.get_status_display }}
+                                </span>
+                            </div>
+                            {% if link.message %}
+                                <p class="text-gray-700 text-sm whitespace-pre-wrap">{{ link.message }}</p>
+                            {% else %}
+                                <p class="text-gray-500 text-sm italic">{% trans "No message was attached." %}</p>
+                            {% endif %}
+                            <p class="text-xs text-gray-600 mt-2">
+                                <i class="far fa-clock mr-1"></i>{{ link.created_at|date:"Y-m-d H:i" }}
+                            </p>
+                        </div>
+                        {% if link.status == 'pending' %}
+                            <div class="flex items-center gap-2 shrink-0">
+                                <button type="button"
+                                        data-request-respond="accept"
+                                        data-request-id="{{ link.pk }}"
+                                        class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-semibold hover:opacity-90 transition shadow-sm">
+                                    <i class="fas fa-check mr-1"></i>{% trans "Accept" %}
+                                </button>
+                                <button type="button"
+                                        data-request-respond="decline"
+                                        data-request-id="{{ link.pk }}"
+                                        class="px-4 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition">
+                                    <i class="fas fa-times mr-1"></i>{% trans "Decline" %}
+                                </button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <div class="bg-white rounded-xl border border-dashed border-gray-200 p-8 text-center text-gray-500">
+                    <i class="fas fa-inbox text-3xl text-gray-300 mb-2"></i>
+                    <p>{% trans "No representation requests yet." %}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% if sent_requests is not None %}
+        <section>
+            <h3 class="flex items-center gap-2 text-xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-paper-plane text-[var(--ab-primary)]"></i>
+                {% trans "Sent" %}
+            </h3>
+            <div class="space-y-4">
+                {% for link in sent_requests %}
+                    <div class="p-4 border rounded-lg transition-all duration-200 hover:shadow-md {% if link.status == 'pending' %}bg-white border-gray-200{% else %}bg-gray-50 border-gray-200{% endif %}">
+                        <div class="flex flex-wrap justify-between items-start gap-3">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex flex-wrap items-center gap-2 mb-1">
+                                    <h4 class="text-lg font-semibold text-gray-900">{{ link.target.get_full_name|default:link.target.username }}</h4>
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                        {% if link.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                        {% elif link.status == 'approved' %}bg-green-100 text-green-800
+                                        {% elif link.status == 'declined' %}bg-red-100 text-red-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {{ link.get_status_display }}
+                                    </span>
+                                </div>
+                                <p class="text-xs text-gray-600">
+                                    <i class="far fa-clock mr-1"></i>{{ link.created_at|date:"Y-m-d H:i" }}
+                                </p>
+                            </div>
+                            {% if link.status == 'pending' %}
+                                <button type="button"
+                                        data-request-cancel="{{ link.pk }}"
+                                        class="shrink-0 px-4 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition">
+                                    <i class="fas fa-ban mr-1"></i>{% trans "Withdraw" %}
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="bg-white rounded-xl border border-dashed border-gray-200 p-8 text-center text-gray-500">
+                        <i class="fas fa-paper-plane text-3xl text-gray-300 mb-2"></i>
+                        <p>{% trans "You have not sent any requests yet." %}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+</div>

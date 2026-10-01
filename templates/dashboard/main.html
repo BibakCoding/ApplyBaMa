@@ -83,6 +83,16 @@
                             <span id="chatBadge" class="ml-2 px-2 py-0.5 text-xs font-bold text-white bg-emerald-500 rounded-full hidden"></span>
                         </a>
                     </li>
+                    <!-- Representation requests: the consent gate in front of
+                         "My Students". The badge counts the requests still
+                         waiting for this account's answer. -->
+                    <li>
+                        <a href="#" data-page="requests" class="nav-link">
+                            <i class="fas fa-handshake"></i>
+                            <span>{% trans "Requests" %}</span>
+                            <span id="requestsBadge" class="ml-2 px-2 py-0.5 text-xs font-bold text-white bg-red-500 rounded-full {% if not pending_request_count %}hidden{% endif %}">{% if pending_request_count %}{{ pending_request_count }}{% endif %}</span>
+                        </a>
+                    </li>
                     <!-- Universities -->
                     <li>
                         <a href="#" data-page="universities" class="nav-link">

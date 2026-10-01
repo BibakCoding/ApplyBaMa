@@ -13,7 +13,9 @@ from realtime.push import notify_user
 User = get_user_model()
 
 
-def send_notification(user, title, message, notification_type='info', sender=None):
+def send_notification(
+    user, title, message, notification_type='info', sender=None, action_url=''
+):
     """
     Send a notification to a specific user.
 
@@ -23,6 +25,10 @@ def send_notification(user, title, message, notification_type='info', sender=Non
         message: Notification message (str)
         notification_type: Type of notification - 'info', 'warning', 'success', 'error', 'reminder'
         sender: User instance who is sending the notification (optional, defaults to system)
+        action_url: Optional deep link (a dashboard page key such as "requests");
+            it reaches both the notifications list and the realtime toast, which
+            render it as a "Go" button. Always a value the server chooses, never
+            user input.
 
     Returns:
         NotificationRecipient: The created notification recipient object
@@ -51,6 +57,7 @@ def send_notification(user, title, message, notification_type='info', sender=Non
         notification_type=notification_type,
         recipient_type=Notification.RecipientType.SPECIFIC_USERS,
         sender=sender,
+        action_url=action_url or '',
     )
 
     # Link notification to user
@@ -70,6 +77,7 @@ def send_notification(user, title, message, notification_type='info', sender=Non
             "title": notification.title,
             "message": notification.message,
             "notification_type": notification.notification_type,
+            "action_url": notification.action_url,
             "unread_count": unread_count,
         },
     )

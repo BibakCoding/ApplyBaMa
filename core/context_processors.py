@@ -89,6 +89,11 @@ def app_config(request):
                 "chatForward": _detail_url("chat_forward"),
                 "chatRead": _detail_url("chat_read"),
                 "chatGrant": _detail_url("chat_grant"),
+                # Representation requests (Requests page + "Add by ID" dialog)
+                "agentRequestSearch": _url("agent_request_search"),
+                "agentRequestSend": _url("agent_request_send"),
+                "agentRequestRespond": _detail_url("agent_request_respond"),
+                "agentRequestCancel": _detail_url("agent_request_cancel"),
                 "sendNotification": _url("send_notification"),
                 "searchUsers": _url("search_users_for_notification"),
                 "getGroupUsers": _url("get_group_user_ids"),

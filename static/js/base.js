@@ -123,6 +123,18 @@
       document.body.dataset.i18nChatRevoked || "File permission revoked.",
     supportMinimize:
       document.body.dataset.i18nSupportMinimize || "Minimize",
+    /* Representation requests (pages/dashboard.js): the notification's "Go"
+       deep link and the "Add by ID" dialog, rendered into <body> by
+       base.html. */
+    notificationGo: document.body.dataset.i18nNotificationGo || "Go",
+    requestIdIncomplete:
+      document.body.dataset.i18nRequestIdIncomplete ||
+      "Enter the full 16-digit ID.",
+    requestSending: document.body.dataset.i18nRequestSending || "Sending…",
+    requestSent: document.body.dataset.i18nRequestSent || "Send request",
+    requestDeclineConfirm:
+      document.body.dataset.i18nRequestDeclineConfirm ||
+      "Decline this representation request?",
   };
 
   const ApplyBaMa = {
