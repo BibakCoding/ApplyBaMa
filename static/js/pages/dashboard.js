@@ -42,6 +42,14 @@ document.addEventListener("DOMContentLoaded", function () {
       window.AppConfig.urls.dashboardContent.replace("PAGE_PLACEHOLDER", page) +
       queryString;
 
+    // Typing in a search box re-renders the whole fragment (the debounced
+    // input handler calls loadContent), which would otherwise drop the field
+    // and its caret mid-word. Elements opt in with data-restore-focus="key"
+    // so the caret returns to the same box after the reload.
+    const focusKey =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement.getAttribute("data-restore-focus")
+        : null;
     contentContainer.innerHTML =
       '<div class="content-loading"><div class="spinner"></div><p>Loading...</p></div>';
 
@@ -90,6 +98,23 @@ document.addEventListener("DOMContentLoaded", function () {
         window.history.pushState({ page: page }, "", newUrl);
 
         contentContainer.scrollTop = 0;
+
+        // Hand focus back to the element that triggered the reload (the
+        // notifications search box), so typing continues without a click.
+        if (focusKey) {
+          const restored = contentContainer.querySelector(
+            '[data-restore-focus="' + focusKey + '"]',
+          );
+          if (restored) {
+            restored.focus();
+            try {
+              const end = restored.value.length;
+              restored.setSelectionRange(end, end);
+            } catch (error) {
+              // Input types without a caret (e.g. number) cannot restore it.
+            }
+          }
+        }
       })
       .catch((err) => {
         contentContainer.innerHTML =
@@ -893,6 +918,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("notificationModal");
     const closeModalBtn = document.getElementById("closeModalBtn");
     const markAllBtn = document.getElementById("markAllReadBtn");
+    // Resolved before the modal guard below, because the search box is wired
+    // from the fragment, not from the shell modal.
     const searchForm = document.getElementById("notifSearchForm");
 
     if (!modal) return;
@@ -978,7 +1005,12 @@ document.addEventListener("DOMContentLoaded", function () {
         clearTimeout(searchTimer);
         const term = this.value;
         searchTimer = setTimeout(() => {
-          loadContent("my_notifications", "q=" + encodeURIComponent(term));
+          // data-section matches the form's own fragment (same value as the
+          // delegated submit handler uses below).
+          loadContent(
+            searchForm.dataset.section || "my_notifications",
+            "q=" + encodeURIComponent(term),
+          );
         }, 350);
       });
     }

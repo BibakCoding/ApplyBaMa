@@ -4,11 +4,19 @@
         <h2 class="text-2xl font-bold text-gray-800">{% trans "My Notifications" %}</h2>
         <div class="flex items-center gap-2">
             <form id="notifSearchForm" data-section="my_notifications" class="relative" role="search">
-                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                {% comment %}
+                start-3 / ps-9 are the logical (direction-aware) pair: the icon
+                and the text gap both sit on the reading side, so in Arabic the
+                icon flips to the right edge instead of floating over the text
+                the way the old physical left-3/pl-9 left it. The icon is
+                click-through, so clicking the magnifier focuses the field.
+                {% endcomment %}
+                <i class="fas fa-search pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" aria-hidden="true"></i>
                 <input type="search" name="q" value="{{ search_query|default:'' }}"
+                       data-restore-focus="notif-search"
                        placeholder="{% trans 'Search title or message' %}"
                        aria-label="{% trans 'Search notifications' %}"
-                       class="pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:border-[#1E3A8A] w-48 sm:w-64">
+                       class="ps-9 pe-3 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:border-[var(--ab-primary)] w-48 sm:w-64">
             </form>
             <button id="markAllReadBtn" class="px-4 py-2 text-sm font-medium text-[#1E3A8A] border border-[#1E3A8A] rounded-lg hover:bg-[#1E3A8A] hover:!text-white transition-all duration-200">
                 <i class="fas fa-check-double mr-1"></i> {% trans "Mark all as read" %}
