@@ -43,6 +43,9 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "core.middleware.jwt_auth.JWTAuthenticationMiddleware",  # JWT authentication for API
+    # JSON 401 (instead of the HTML login page) for an AJAX caller whose
+    # session expired -- AGENTS.md §4.6.
+    "core.middleware.ajax_auth.AjaxAuthMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -119,6 +122,10 @@ PASSWORD_RESET_TIMEOUT = 1 * 60 * 60
 # the auth views feed back into their redirects so dashboard deep links
 # (?page=profile, ?page=my_applications, ...) survive the round-trip.
 LOGIN_URL = "login"
+
+# The CSRF failure page must stay HTML for a page POST and turn into JSON for
+# an AJAX POST (AGENTS.md §4.6).
+CSRF_FAILURE_VIEW = "core.views.csrf_failure"
 
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
