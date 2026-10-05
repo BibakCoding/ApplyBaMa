@@ -5,7 +5,7 @@
         <p class="text-[var(--ab-muted)] mt-2">{% trans "Start a new university application for one of your students." %}</p>
     </div>
     <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-        <form id="newAppForm" class="space-y-6" enctype="multipart/form-data">
+        <form id="newAppForm" action="{% url 'submit_new_application' %}" class="space-y-6" enctype="multipart/form-data">
             {% csrf_token %}
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Select Student" %}</label>

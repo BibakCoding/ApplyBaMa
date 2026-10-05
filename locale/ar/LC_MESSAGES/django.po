@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-01 00:46+0330\n"
+"POT-Creation-Date: 2026-10-05 19:41+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -303,9 +303,9 @@ msgstr "تم تحديث كلمة المرور بنجاح."
 msgid "This username is already taken."
 msgstr "اسم المستخدم مستخدم بالفعل."
 
-#: .\authentication\views.py:519 .\dashboard\views.py:586
+#: .\authentication\views.py:519 .\dashboard\views.py:595
 msgid "Username updated successfully."
-msgstr "تم تحديث كلمة المرور بنجاح."
+msgstr "تم تحديث اسم المستخدم بنجاح."
 
 #: .\core\admin.py:65 .\templates\admin\base_site.html:25
 #: .\templates\admin\base_site.html:78
@@ -832,8 +832,8 @@ msgstr[5] "تم تصدير %(count)d صف."
 #: .\core\agent_requests.py:112
 msgid "No account matches that ID. Ask the student to check it and try again."
 msgstr ""
-"لا يوجد حساب مطابق لهذا المعرّف. اطلب من المستخدم التحقق منه والمحاولة م"
-"رة أخرى."
+"لا يوجد حساب مطابق لهذا المعرّف. اطلب من المستخدم التحقق منه والمحاولة مرة "
+"أخرى."
 
 #: .\core\agent_requests.py:114
 msgid "You cannot send a representation request to yourself."
@@ -855,35 +855,38 @@ msgstr "لديك بالفعل طلب قيد الانتظار لهذا المست
 msgid "This request could not be sent."
 msgstr "لم يتم إرسال هذا الطلب."
 
-#: .\core\agent_requests.py:154 .\core\agent_requests.py:191
+#: .\core\agent_requests.py:154 .\core\agent_requests.py:194
 msgid "This request has already been answered."
 msgstr "تم الرد على هذا الطلب بالفعل."
 
-#: .\core\agent_requests.py:257
+#: .\core\agent_requests.py:263
 msgid "New representation request"
 msgstr "طلب تمثيل جديد"
 
-#: .\core\agent_requests.py:259
+#: .\core\agent_requests.py:265
+#, python-format
 msgid ""
 "%(name)s asks to represent you as your agent. Open Requests to accept or "
 "decline."
 msgstr "يرغب %(name)s في أن يكون وكيلك. افتح صفحة الطلبات للقبول أو الرفض."
 
-#: .\core\agent_requests.py:275
+#: .\core\agent_requests.py:281
 msgid "Representation request accepted"
 msgstr "تم قبول طلب التمثيل"
 
-#: .\core\agent_requests.py:277
+#: .\core\agent_requests.py:283
+#, python-format
 msgid ""
 "%(name)s accepted your request. They are now one of your students and you "
 "can message them."
 msgstr "قبل %(name)s طلبك. أصبح الآن أحد طلابك ويمكنك مراسلته."
 
-#: .\core\agent_requests.py:281
+#: .\core\agent_requests.py:287
 msgid "Representation request declined"
 msgstr "تم رفض طلب التمثيل"
 
-#: .\core\agent_requests.py:282
+#: .\core\agent_requests.py:288
+#, python-format
 msgid "%(name)s declined your representation request."
 msgstr "رفض %(name)s طلب التمثيل الخاص بك."
 
@@ -912,46 +915,47 @@ msgstr "هذا الملف كبير جدًا. الحد المسموح لك هو %
 msgid "The site's chat storage is full. Please try again later."
 msgstr "مساحة تخزين المحادثة في الموقع ممتلئة. حاول مرة أخرى لاحقًا."
 
-#: .\core\context_processors.py:107
+#: .\core\context_processors.py:110
 msgid "Registration is required to see programs matching your search."
 msgstr "يلزم التسجيل لعرض البرامج المطابقة لبحثك."
 
-#: .\core\context_processors.py:109 .\templates\partials\site_footer.html:55
+#: .\core\context_processors.py:112 .\templates\partials\site_footer.html:55
 #: .\templates\partials\support_button.html:19
 #: .\templates\partials\support_button.html:20
 #: .\templates\partials\support_button.html:22
 msgid "Contact Support"
 msgstr "اتصل بالدعم"
 
-#: .\core\context_processors.py:111
+#: .\core\context_processors.py:114
 msgid "Chat with the Apply BM team — log in if asked."
 msgstr "تحدث مع فريق Apply BM — سجّل الدخول إذا طُلب منك."
 
-#: .\core\context_processors.py:114
+#: .\core\context_processors.py:117
 msgid "Thank you! You are on the scholarship alerts list."
 msgstr "شكراً لك! أنت في قائمة تنبيهات المنح الدراسية."
 
-#: .\core\context_processors.py:116
+#: .\core\context_processors.py:119
 msgid "Loading content..."
 msgstr "جارٍ تحميل المحتوى..."
 
-#: .\core\context_processors.py:117
+#: .\core\context_processors.py:120
 msgid "Loading Error"
 msgstr "خطأ في التحميل"
 
-#: .\core\context_processors.py:118
+#: .\core\context_processors.py:121 .\core\middleware\ajax_auth.py:48
+#: .\core\views.py:34
 msgid "Please try again or contact support"
 msgstr "يرجى المحاولة مرة أخرى أو التواصل مع الدعم"
 
-#: .\core\context_processors.py:119
+#: .\core\context_processors.py:122
 msgid "Reload Page"
 msgstr "إعادة تحميل الصفحة"
 
-#: .\core\context_processors.py:121
+#: .\core\context_processors.py:124
 msgid "Email verified! Your account is fully active again."
 msgstr "تم التحقق من البريد الإلكتروني! حسابك مفعّل بالكامل مرة أخرى."
 
-#: .\core\context_processors.py:124
+#: .\core\context_processors.py:127
 msgid "Chat connected"
 msgstr "المحادثة متصلة"
 
@@ -1157,8 +1161,8 @@ msgid ""
 "Shareable 16-digit ID. Give it to an agent so they can find you and request "
 "to represent you."
 msgstr ""
-"معرّف قابل للمشاركة مكوّن من 16 رقمًا. أعطه للوكيل ليتمكن من العثور عليك"
-" وإرسال طلب التمثيل."
+"معرّف قابل للمشاركة مكوّن من 16 رقمًا. أعطه للوكيل ليتمكن من العثور عليك وإرسال "
+"طلب التمثيل."
 
 #: .\core\models.py:487
 msgid "Only student users can be representatives"
@@ -1603,48 +1607,48 @@ msgstr "تم حذف الرسالة"
 msgid "📎 Attachment"
 msgstr "📎 مرفق"
 
-#: .\dashboard\chat_views.py:223 .\dashboard\chat_views.py:360
-#: .\dashboard\chat_views.py:453 .\dashboard\chat_views.py:511
-#: .\dashboard\views.py:806 .\dashboard\views.py:872 .\dashboard\views.py:882
-#: .\dashboard\views.py:924 .\dashboard\views.py:1087 .\dashboard\views.py:1158
-#: .\dashboard\views.py:1188 .\dashboard\views.py:1259
-#: .\dashboard\views.py:1293
+#: .\dashboard\chat_views.py:223 .\dashboard\chat_views.py:365
+#: .\dashboard\chat_views.py:458 .\dashboard\chat_views.py:516
+#: .\dashboard\views.py:818 .\dashboard\views.py:884 .\dashboard\views.py:894
+#: .\dashboard\views.py:941 .\dashboard\views.py:1130 .\dashboard\views.py:1201
+#: .\dashboard\views.py:1231 .\dashboard\views.py:1302
+#: .\dashboard\views.py:1336
 msgid "Invalid request."
 msgstr "طلب غير صالح."
 
-#: .\dashboard\chat_views.py:229 .\dashboard\chat_views.py:365
+#: .\dashboard\chat_views.py:234 .\dashboard\chat_views.py:370
 msgid "Message cannot be empty."
 msgstr "لا يمكن أن تكون الرسالة فارغة."
 
-#: .\dashboard\chat_views.py:233
+#: .\dashboard\chat_views.py:238
 msgid "Message is too long (max 4000 characters)."
 msgstr "الرسالة طويلة جدًا (4000 حرف كحد أقصى)."
 
-#: .\dashboard\chat_views.py:293
+#: .\dashboard\chat_views.py:298
 msgid "Send a message first."
 msgstr "أرسل رسالة أولًا."
 
-#: .\dashboard\chat_views.py:299
+#: .\dashboard\chat_views.py:304
 msgid "No file received."
 msgstr "لم يتم استلام أي ملف."
 
-#: .\dashboard\chat_views.py:355
+#: .\dashboard\chat_views.py:360
 msgid "You can only edit your own messages."
 msgstr "يمكنك تعديل رسائلك فقط."
 
-#: .\dashboard\chat_views.py:384
+#: .\dashboard\chat_views.py:389
 msgid "You can only delete your own messages."
 msgstr "يمكنك حذف رسائلك فقط."
 
-#: .\dashboard\chat_views.py:400
+#: .\dashboard\chat_views.py:405
 msgid "You can only pin your own messages."
 msgstr "يمكنك تثبيت رسائلك فقط."
 
-#: .\dashboard\chat_views.py:463
+#: .\dashboard\chat_views.py:468
 msgid "Pick a different conversation."
 msgstr "اختر محادثة أخرى."
 
-#: .\dashboard\chat_views.py:506
+#: .\dashboard\chat_views.py:511
 msgid "You can only manage your own students."
 msgstr "يمكنك إدارة طلابك فقط."
 
@@ -1715,6 +1719,7 @@ msgid "Only agents and companies can send representation requests."
 msgstr "يمكن للوكلاء والشركات فقط إرسال طلبات التمثيل."
 
 #: .\dashboard\request_views.py:125
+#, python-format
 msgid ""
 "Request sent to %(name)s. They will appear in My Students once they accept."
 msgstr "أُرسل الطلب إلى %(name)s. سيظهر في «طلابي» بعد القبول."
@@ -1724,6 +1729,7 @@ msgid "Request not found."
 msgstr "لم يتم العثور على الطلب."
 
 #: .\dashboard\request_views.py:149
+#, python-format
 msgid "%(name)s is now one of your agents and you can message them."
 msgstr "%(name)s أصبح الآن أحد وكلائك ويمكنك مراسلته."
 
@@ -1747,34 +1753,34 @@ msgstr ""
 msgid "Page not found."
 msgstr "الصفحة غير موجودة."
 
-#: .\dashboard\views.py:176 .\dashboard\views.py:450
+#: .\dashboard\views.py:176 .\dashboard\views.py:459
 msgid "You do not have permission to access this page."
 msgstr "ليس لديك إذن للوصول إلى هذه الصفحة."
 
-#: .\dashboard\views.py:442 .\dashboard\views.py:1055 .\dashboard\views.py:1089
-#: .\dashboard\views.py:1204 .\dashboard\views.py:1236
-#: .\dashboard\views.py:1261 .\dashboard\views.py:1273
-#: .\dashboard\views.py:1295
+#: .\dashboard\views.py:451 .\dashboard\views.py:1098 .\dashboard\views.py:1132
+#: .\dashboard\views.py:1247 .\dashboard\views.py:1279
+#: .\dashboard\views.py:1304 .\dashboard\views.py:1316
+#: .\dashboard\views.py:1338
 msgid "Permission denied."
 msgstr "تم رفض الإذن."
 
-#: .\dashboard\views.py:570
+#: .\dashboard\views.py:579
 msgid "Personal information updated successfully."
 msgstr "تم تحديث المعلومات الشخصية بنجاح."
 
-#: .\dashboard\views.py:578
+#: .\dashboard\views.py:587
 msgid "Identity and profile photo updated successfully."
 msgstr "تم تحديث ملف الطالب بنجاح."
 
-#: .\dashboard\views.py:607
+#: .\dashboard\views.py:616
 msgid "Contact information updated successfully."
 msgstr "تم تحديث معلومات الاتصال بنجاح."
 
-#: .\dashboard\views.py:613
+#: .\dashboard\views.py:622
 msgid "This email address is already in use."
 msgstr "هذا البريد الإلكتروني مستخدم بالفعل."
 
-#: .\dashboard\views.py:627
+#: .\dashboard\views.py:636
 #, python-format
 msgid ""
 "Contact information updated. We sent a verification link to %(email)s — "
@@ -1784,42 +1790,42 @@ msgstr ""
 "تم تحديث معلومات الاتصال. أرسلنا رابط تحقق إلى %(email)s — أكّده لتفعيل "
 "التغيير. حتى ذلك الحين، حسابك في وضع القراءة فقط."
 
-#: .\dashboard\views.py:638
+#: .\dashboard\views.py:647
 msgid "Profile image updated successfully."
 msgstr "تم تحديث صورة الملف الشخصي بنجاح."
 
-#: .\dashboard\views.py:646
+#: .\dashboard\views.py:655
 msgid "Password changed successfully."
 msgstr "تم تغيير كلمة المرور بنجاح."
 
-#: .\dashboard\views.py:653
+#: .\dashboard\views.py:662
 msgid "Student profile updated successfully."
 msgstr "تم تحديث ملف الطالب بنجاح."
 
-#: .\dashboard\views.py:656
+#: .\dashboard\views.py:665
 msgid "Invalid form type."
 msgstr "نوع نموذج غير صالح."
 
-#: .\dashboard\views.py:675 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:684 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your new email address"
 msgstr "تحقّق من عنوان بريدك الإلكتروني الجديد"
 
-#: .\dashboard\views.py:677 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:686 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your email address"
 msgstr "تحقّق من عنوان بريدك الإلكتروني"
 
-#: .\dashboard\views.py:704 .\dashboard\views.py:719
+#: .\dashboard\views.py:713 .\dashboard\views.py:728
 msgid "There is no pending email change."
 msgstr "لا يوجد تغيير بريد إلكتروني قيد الانتظار."
 
-#: .\dashboard\views.py:708
+#: .\dashboard\views.py:717
 #, python-format
 msgid "A new verification link was sent to %(email)s."
 msgstr "تم إرسال رابط تحقق جديد إلى %(email)s."
 
-#: .\dashboard\views.py:734
+#: .\dashboard\views.py:743
 #, python-format
 msgid ""
 "The email change to %(email)s was cancelled. Your account is fully active "
@@ -1827,59 +1833,60 @@ msgid ""
 msgstr ""
 "تم إلغاء تغيير البريد الإلكتروني إلى %(email)s. حسابك مفعّل بالكامل مرة أخرى."
 
-#: .\dashboard\views.py:766
+#: .\dashboard\views.py:767 .\dashboard\views.py:901 .\dashboard\views.py:1224
+#: .\dashboard\views.py:1310 .\dashboard\views.py:1329
+#: .\dashboard\views.py:1403 .\dashboard\views.py:1436
+#: .\dashboard\views.py:1439
+msgid "Not found."
+msgstr "الصفحة غير موجودة."
+
+#: .\dashboard\views.py:778
 msgid "Step updated."
 msgstr "تم تحديث الخطوة."
 
-#: .\dashboard\views.py:769
+#: .\dashboard\views.py:781
 msgid "Application deleted."
 msgstr "تم حذف الطلب."
 
-#: .\dashboard\views.py:800
+#: .\dashboard\views.py:812
 msgid "Application created successfully."
 msgstr "تم إنشاء الطلب بنجاح."
 
-#: .\dashboard\views.py:826
+#: .\dashboard\views.py:838
 msgid ""
 "You have reached the maximum number of students (100). Please contact "
 "support."
 msgstr "لقد وصلت إلى الحد الأقصى لعدد الطلاب (100). يرجى الاتصال بالدعم."
 
-#: .\dashboard\views.py:868
+#: .\dashboard\views.py:880
 msgid "Student added successfully."
 msgstr "تمت إضافة الطالب بنجاح."
 
-#: .\dashboard\views.py:912
+#: .\dashboard\views.py:929
 msgid "Your request has been sent! Our team will contact you soon."
 msgstr "تم إرسال طلبك! سيتواصل معك فريقنا قريباً."
 
-#: .\dashboard\views.py:920
+#: .\dashboard\views.py:937
 msgid "Failed to send request. Please try again."
 msgstr "فشل إرسال الطلب. يرجى المحاولة مرة أخرى."
 
-#: .\dashboard\views.py:1098 .\dashboard\views.py:1304
+#: .\dashboard\views.py:1141 .\dashboard\views.py:1347
 msgid "All fields are required."
 msgstr "جميع الحقوق محفوظة."
 
-#: .\dashboard\views.py:1101
+#: .\dashboard\views.py:1144
 msgid "Please select at least one user."
 msgstr "يرجى اختيار مستخدم واحد على الأقل."
 
-#: .\dashboard\views.py:1151
+#: .\dashboard\views.py:1194
 msgid "Notification sent successfully!"
 msgstr "تم إنشاء الطلب بنجاح."
 
-#: .\dashboard\views.py:1181 .\dashboard\views.py:1267
-#: .\dashboard\views.py:1286 .\dashboard\views.py:1360
-#: .\dashboard\views.py:1390
-msgid "Not found."
-msgstr "الصفحة غير موجودة."
-
-#: .\dashboard\views.py:1265
+#: .\dashboard\views.py:1308
 msgid "Notification deleted."
 msgstr "تم حذف الطلب."
 
-#: .\dashboard\views.py:1358
+#: .\dashboard\views.py:1401
 msgid "Notification updated successfully!"
 msgstr "تم تحديث معلومات الاتصال بنجاح."
 
@@ -2528,7 +2535,7 @@ msgid "Minimize"
 msgstr "تصغير"
 
 #: .\templates\base.html:80
-#: .\templates\dashboard\fragments\my_notifications.html:49
+#: .\templates\dashboard\fragments\my_notifications.html:58
 #: .\templates\dashboard\fragments\programs.html:271
 #: .\templates\dashboard\fragments\universities.html:243
 msgid "Go"
@@ -2825,33 +2832,33 @@ msgstr "لم يتم العثور على طلبات."
 msgid "My Notifications"
 msgstr "طلباتي"
 
-#: .\templates\dashboard\fragments\my_notifications.html:9
+#: .\templates\dashboard\fragments\my_notifications.html:18
 msgid "Search title or message"
 msgstr "ابحث في العنوان أو الرسالة"
 
-#: .\templates\dashboard\fragments\my_notifications.html:10
+#: .\templates\dashboard\fragments\my_notifications.html:19
 msgid "Search notifications"
 msgstr "بحث الإشعارات"
 
-#: .\templates\dashboard\fragments\my_notifications.html:14
+#: .\templates\dashboard\fragments\my_notifications.html:23
 msgid "Mark all as read"
 msgstr "وضع علامة مقروء على الكل"
 
-#: .\templates\dashboard\fragments\my_notifications.html:61
+#: .\templates\dashboard\fragments\my_notifications.html:70
 msgid "No notifications match your search."
 msgstr "لا توجد إشعارات تطابق بحثك."
 
-#: .\templates\dashboard\fragments\my_notifications.html:61
+#: .\templates\dashboard\fragments\my_notifications.html:70
 msgid "You have no notifications."
 msgstr "تم تسجيل الخروج."
 
-#: .\templates\dashboard\fragments\my_notifications.html:74
+#: .\templates\dashboard\fragments\my_notifications.html:83
 #: .\templates\dashboard\fragments\programs.html:223
 #: .\templates\dashboard\fragments\universities.html:195
 msgid "Prev"
 msgstr "السابق"
 
-#: .\templates\dashboard\fragments\my_notifications.html:92
+#: .\templates\dashboard\fragments\my_notifications.html:101
 #: .\templates\dashboard\fragments\programs.html:246
 #: .\templates\dashboard\fragments\universities.html:218
 msgid "Next"
@@ -2903,8 +2910,8 @@ msgid ""
 "Ask the user for the 16-digit ID from their Requests page, then send the "
 "request for them to accept."
 msgstr ""
-"اطلب من المستخدم المعرّف المكوّن من 16 رقمًا من صفحة الطلبات، ثم أرسل ال"
-"طلب ليتمكن من قبوله."
+"اطلب من المستخدم المعرّف المكوّن من 16 رقمًا من صفحة الطلبات، ثم أرسل الطلب "
+"ليتمكن من قبوله."
 
 #: .\templates\dashboard\fragments\my_students.html:100
 msgid "User ID"
@@ -3289,8 +3296,8 @@ msgid ""
 "A student must accept before they become one of your students. Requests you "
 "receive are listed here too."
 msgstr ""
-"يجب أن يقبل المستخدم قبل أن يصبح أحد طلابك. الطلبات التي تستقبلها تظهر ه"
-"نا أيضًا."
+"يجب أن يقبل المستخدم قبل أن يصبح أحد طلابك. الطلبات التي تستقبلها تظهر هنا "
+"أيضًا."
 
 #: .\templates\dashboard\fragments\requests.html:24
 msgid "Your ID"
@@ -3579,6 +3586,13 @@ msgstr "تحقّق الآن"
 #: .\templates\dashboard\main.html:202
 msgid "Loading..."
 msgstr "جارٍ التحميل..."
+
+#: .\templates\dashboard\pdf_export.html:24
+#, python-format
+msgid ""
+"Showing the first %(limit)s of %(total)s matching records. Narrow the "
+"filters to export the rest."
+msgstr "يُعرض أول %(limit)s من أصل %(total)s سجلاً مطابقاً. ضيّق عوامل التصفية لتصدير البقية."
 
 #: .\templates\emails\confirmation_code.html:4
 #: .\templates\emails\confirmation_code.html:10

@@ -59,10 +59,14 @@ urlpatterns = [
     path("chat/thread/<int:pk>/", chat_views.thread_data, name="chat_thread"),
     path("chat/send/", chat_views.send_message, name="chat_send"),
     path("chat/upload/<int:pk>/", chat_views.upload_attachment, name="chat_upload"),
-    path("chat/message/<int:pk>/edit/", chat_views.edit_message, name="chat_edit"),
-    path("chat/message/<int:pk>/delete/", chat_views.delete_message, name="chat_delete"),
-    path("chat/message/<int:pk>/pin/", chat_views.pin_message, name="chat_pin"),
-    path("chat/message/<int:pk>/forward/", chat_views.forward_message, name="chat_forward"),
+    # pk is the LAST segment here too: _detail_url strips the placeholder and
+    # the page script appends the real id, so a mid-path pk would produce
+    # /chat/message/edit/<id>/ — a 404 for every edit/pin/delete/forward the
+    # chat UI fires.
+    path("chat/message/edit/<int:pk>/", chat_views.edit_message, name="chat_edit"),
+    path("chat/message/delete/<int:pk>/", chat_views.delete_message, name="chat_delete"),
+    path("chat/message/pin/<int:pk>/", chat_views.pin_message, name="chat_pin"),
+    path("chat/message/forward/<int:pk>/", chat_views.forward_message, name="chat_forward"),
     path("chat/read/<int:pk>/", chat_views.read_thread, name="chat_read"),
     path("chat/grant/<int:student_id>/", chat_views.grant_file_permission, name="chat_grant"),
     # Representation requests (agent/company → user, approved by the user)

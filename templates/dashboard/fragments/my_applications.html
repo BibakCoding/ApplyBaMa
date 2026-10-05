@@ -5,7 +5,7 @@
             <h2 class="text-3xl font-bold text-[var(--ab-text)] font-serif">{% trans "My Applications" %}</h2>
             <p class="text-[var(--ab-muted)] mt-2">{% trans "Track the progress of your university applications." %}</p>
         </div>
-        {% if user.user_type == 'agent' %}
+        {% if user.user_type == 'company' or user.user_type == 'agent' or user.user_type == 'student' and user.is_representative %}
         <button data-page="new_application" class="bg-[var(--ab-primary)] text-white px-4 py-2 rounded-lg hover:opacity-90 transition shadow-sm flex items-center">
             <i class="fas fa-plus mr-2"></i> {% trans "New Application" %}
         </button>
@@ -27,7 +27,7 @@
                 <span class="text-sm text-gray-500">#{{ app.application_name }}</span>
             </div>
             <h3 class="text-lg font-semibold text-gray-800 mb-2">
-                {% if user.user_type == 'agent' %}
+                {% if user.user_type == 'company' or user.user_type == 'agent' or user.user_type == 'student' and user.is_representative %}
                     {{ app.student.get_full_name|default:app.student.username }}
                 {% else %}
                     {{ app.program.name|default:_("Unassigned Program") }}

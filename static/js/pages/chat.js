@@ -648,6 +648,10 @@
                 })
                 .catch(function (err) {
                     state.sending = false;
+                    // Leave edit mode even when the save failed: otherwise the
+                    // next send retries the edit instead of sending the text
+                    // the user sees in the composer.
+                    clearComposerModes();
                     toast((err && err.message) || t("chatError", "Something went wrong."), "error");
                 });
             return;
@@ -655,6 +659,10 @@
 
         if (!body && !state.pendingAttachments.length) return;
         var payload = { partner: state.thread.peer.id, body: body };
+        // Attachment-only send: an empty body is refused server-side unless the
+        // files that justify it are declared here (they are uploaded to this
+        // very message right after the POST resolves).
+        if (!body && state.pendingAttachments.length) payload.has_files = true;
         if (state.replyTo) payload.reply_to = state.replyTo;
         // No conversation yet (a contact row): the send endpoint creates it and
         // answers with the new conversation id, which the upload endpoint and
@@ -670,6 +678,11 @@
                 els.replyBox.hidden = true;
                 var files = state.pendingAttachments.slice();
                 state.pendingAttachments = [];
+                // The chips in the hint are pure DOM state (the change handler
+                // appends them, nothing else removed them), so clear them with
+                // the state they mirror — otherwise a sent file keeps showing
+                // as "pending" until the thread is reopened.
+                renderFileHint();
                 if (isNew) state.activeId = data.message.conversation;
                 return uploadFiles(data.message, files).then(function () {
                     state.sending = false;
@@ -710,6 +723,16 @@
                 }).then(function (r) {
                     return r.json().then(function (data) {
                         if (!r.ok) throw data;
+                        // The upload response carries the attachment in the
+                        // very shape the message payload uses. Record it on
+                        // the row now: the caller's final upsert repaints from
+                        // THIS object, which still holds the pre-upload
+                        // (attachment-less) copy — without this the paint
+                        // erases the file the socket push just drew.
+                        if (data.attachment) {
+                            messageRow.attachments = messageRow.attachments || [];
+                            messageRow.attachments.push(data.attachment);
+                        }
                         return data;
                     });
                 });
@@ -733,12 +756,15 @@
     }
 
     function forwardMessage(m) {
+        // The id in the prompt is the PEER's user id, not the conversation id:
+        // the endpoint resolves `partner` as a user to message (a conversation
+        // id only ever matched by coincidence, so the forward was refused).
         var options = state.conversations
             .filter(function (c) {
                 return c.id !== state.activeId;
             })
             .map(function (c) {
-                return c.peer.name + " (id:" + c.id + ")";
+                return c.peer.name + " (id:" + c.peer.id + ")";
             })
             .join("\n");
         var choice = window.prompt(
@@ -967,10 +993,14 @@
             btn.dataset.studentName || "";
         var mbInput = document.getElementById("chatGrantMb");
         var prefill = parseInt(btn.dataset.currentMb, 10);
-        if (prefill) {
+        // A revoked grant keeps its row (is_active=False), so the stored MB
+        // is stale: only an ACTIVE grant may seed the field, otherwise the
+        // dialog would offer to "grant" a limit the student no longer has.
+        var isActive = btn.dataset.currentActive === "True";
+        if (prefill && isActive) {
             mbInput.value = prefill;
         } else {
-            // No personal grant yet: pre-fill the site default.
+            // No personal grant (or a revoked one): pre-fill the site default.
             mbInput.value = window.AppConfig.chatDefaultFileMb ||
                 window.AppConfig.chat_default_file_mb || 5;
         }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-01 00:46+0330\n"
+"POT-Creation-Date: 2026-10-05 19:41+0330\n"
 "PO-Revision-Date: 2026-08-27 03:43+0000\n"
 "Last-Translator: <a@g.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -295,9 +295,9 @@ msgstr "رمز عبور با موفقیت به‌روزرسانی شد."
 msgid "This username is already taken."
 msgstr "این نام کاربری قبلاً گرفته شده است."
 
-#: .\authentication\views.py:519 .\dashboard\views.py:586
+#: .\authentication\views.py:519 .\dashboard\views.py:595
 msgid "Username updated successfully."
-msgstr "رمز عبور با موفقیت به‌روزرسانی شد."
+msgstr "نام کاربری با موفقیت به‌روزرسانی شد."
 
 #: .\core\admin.py:65 .\templates\admin\base_site.html:25
 #: .\templates\admin\base_site.html:78
@@ -749,8 +749,8 @@ msgstr[1] "%(count)d ردیف خروجی گرفته شد."
 #: .\core\agent_requests.py:112
 msgid "No account matches that ID. Ask the student to check it and try again."
 msgstr ""
-"هیچ حسابی با این شناسه پیدا نشد. از کاربر بخواهید شناسه را بررسی کند و د"
-"وباره تلاش کند."
+"هیچ حسابی با این شناسه پیدا نشد. از کاربر بخواهید شناسه را بررسی کند و "
+"دوباره تلاش کند."
 
 #: .\core\agent_requests.py:114
 msgid "You cannot send a representation request to yourself."
@@ -772,39 +772,42 @@ msgstr "شما از قبل یک درخواست در انتظار برای این
 msgid "This request could not be sent."
 msgstr "این درخواست ارسال نشد."
 
-#: .\core\agent_requests.py:154 .\core\agent_requests.py:191
+#: .\core\agent_requests.py:154 .\core\agent_requests.py:194
 msgid "This request has already been answered."
 msgstr "پاسخ این درخواست قبلاً داده شده است."
 
-#: .\core\agent_requests.py:257
+#: .\core\agent_requests.py:263
 msgid "New representation request"
 msgstr "درخواست نمایندگی جدید"
 
-#: .\core\agent_requests.py:259
+#: .\core\agent_requests.py:265
+#, python-format
 msgid ""
 "%(name)s asks to represent you as your agent. Open Requests to accept or "
 "decline."
 msgstr ""
-"%(name)s می‌خواهد به‌عنوان نماینده شما فعالیت کند. برای پذیرش یا رد، بخش"
-" «درخواست‌ها» را باز کنید."
+"%(name)s می‌خواهد به‌عنوان نماینده شما فعالیت کند. برای پذیرش یا رد، بخش "
+"«درخواست‌ها» را باز کنید."
 
-#: .\core\agent_requests.py:275
+#: .\core\agent_requests.py:281
 msgid "Representation request accepted"
 msgstr "درخواست نمایندگی پذیرفته شد"
 
-#: .\core\agent_requests.py:277
+#: .\core\agent_requests.py:283
+#, python-format
 msgid ""
 "%(name)s accepted your request. They are now one of your students and you "
 "can message them."
 msgstr ""
-"%(name)s درخواست شما را پذیرفت. او اکنون یکی از دانشجویان شماست و می‌توا"
-"نید به او پیام بدهید."
+"%(name)s درخواست شما را پذیرفت. او اکنون یکی از دانشجویان شماست و می‌توانید "
+"به او پیام بدهید."
 
-#: .\core\agent_requests.py:281
+#: .\core\agent_requests.py:287
 msgid "Representation request declined"
 msgstr "درخواست نمایندگی رد شد"
 
-#: .\core\agent_requests.py:282
+#: .\core\agent_requests.py:288
+#, python-format
 msgid "%(name)s declined your representation request."
 msgstr "%(name)s درخواست نمایندگی شما را رد کرد."
 
@@ -833,46 +836,47 @@ msgstr "این فایل بیش از حد بزرگ است. سقف شما %(limit)
 msgid "The site's chat storage is full. Please try again later."
 msgstr "فضای گفتگوی سایت پر است. بعداً دوباره تلاش کنید."
 
-#: .\core\context_processors.py:107
+#: .\core\context_processors.py:110
 msgid "Registration is required to see programs matching your search."
 msgstr "برای دیدن رشته‌های منطبق با جست‌وجوی شما، ثبت‌نام لازم است."
 
-#: .\core\context_processors.py:109 .\templates\partials\site_footer.html:55
+#: .\core\context_processors.py:112 .\templates\partials\site_footer.html:55
 #: .\templates\partials\support_button.html:19
 #: .\templates\partials\support_button.html:20
 #: .\templates\partials\support_button.html:22
 msgid "Contact Support"
 msgstr "تماس با پشتیبانی"
 
-#: .\core\context_processors.py:111
+#: .\core\context_processors.py:114
 msgid "Chat with the Apply BM team — log in if asked."
 msgstr "با تیم اپلای بی‌ام گفتگو کنید — در صورت نیاز وارد شوید."
 
-#: .\core\context_processors.py:114
+#: .\core\context_processors.py:117
 msgid "Thank you! You are on the scholarship alerts list."
 msgstr "متشکریم! شما در فهرست هشدارهای بورس تحصیلی قرار دارید."
 
-#: .\core\context_processors.py:116
+#: .\core\context_processors.py:119
 msgid "Loading content..."
 msgstr "در حال بارگذاری محتوا..."
 
-#: .\core\context_processors.py:117
+#: .\core\context_processors.py:120
 msgid "Loading Error"
 msgstr "خطا در بارگذاری"
 
-#: .\core\context_processors.py:118
+#: .\core\context_processors.py:121 .\core\middleware\ajax_auth.py:48
+#: .\core\views.py:34
 msgid "Please try again or contact support"
 msgstr "لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید"
 
-#: .\core\context_processors.py:119
+#: .\core\context_processors.py:122
 msgid "Reload Page"
 msgstr "بارگذاری مجدد صفحه"
 
-#: .\core\context_processors.py:121
+#: .\core\context_processors.py:124
 msgid "Email verified! Your account is fully active again."
 msgstr "ایمیل تأیید شد! حساب شما دوباره کاملاً فعال است."
 
-#: .\core\context_processors.py:124
+#: .\core\context_processors.py:127
 msgid "Chat connected"
 msgstr "گفتگو متصل شد"
 
@@ -1080,8 +1084,8 @@ msgid ""
 "Shareable 16-digit ID. Give it to an agent so they can find you and request "
 "to represent you."
 msgstr ""
-"شناسه ۱۶ رقمی قابل اشتراک. آن را به نماینده بدهید تا شما را پیدا کند و د"
-"رخواست نمایندگی بفرستد."
+"شناسه ۱۶ رقمی قابل اشتراک. آن را به نماینده بدهید تا شما را پیدا کند و "
+"درخواست نمایندگی بفرستد."
 
 #: .\core\models.py:487
 msgid "Only student users can be representatives"
@@ -1526,48 +1530,48 @@ msgstr "پیام حذف شد"
 msgid "📎 Attachment"
 msgstr "📎 پیوست"
 
-#: .\dashboard\chat_views.py:223 .\dashboard\chat_views.py:360
-#: .\dashboard\chat_views.py:453 .\dashboard\chat_views.py:511
-#: .\dashboard\views.py:806 .\dashboard\views.py:872 .\dashboard\views.py:882
-#: .\dashboard\views.py:924 .\dashboard\views.py:1087 .\dashboard\views.py:1158
-#: .\dashboard\views.py:1188 .\dashboard\views.py:1259
-#: .\dashboard\views.py:1293
+#: .\dashboard\chat_views.py:223 .\dashboard\chat_views.py:365
+#: .\dashboard\chat_views.py:458 .\dashboard\chat_views.py:516
+#: .\dashboard\views.py:818 .\dashboard\views.py:884 .\dashboard\views.py:894
+#: .\dashboard\views.py:941 .\dashboard\views.py:1130 .\dashboard\views.py:1201
+#: .\dashboard\views.py:1231 .\dashboard\views.py:1302
+#: .\dashboard\views.py:1336
 msgid "Invalid request."
 msgstr "درخواست نامعتبر است."
 
-#: .\dashboard\chat_views.py:229 .\dashboard\chat_views.py:365
+#: .\dashboard\chat_views.py:234 .\dashboard\chat_views.py:370
 msgid "Message cannot be empty."
 msgstr "پیام نمی‌تواند خالی باشد."
 
-#: .\dashboard\chat_views.py:233
+#: .\dashboard\chat_views.py:238
 msgid "Message is too long (max 4000 characters)."
 msgstr "پیام بیش از حد طولانی است (حداکثر ۴۰۰۰ نویسه)."
 
-#: .\dashboard\chat_views.py:293
+#: .\dashboard\chat_views.py:298
 msgid "Send a message first."
 msgstr "اول پیامی بفرستید."
 
-#: .\dashboard\chat_views.py:299
+#: .\dashboard\chat_views.py:304
 msgid "No file received."
 msgstr "فایلی دریافت نشد."
 
-#: .\dashboard\chat_views.py:355
+#: .\dashboard\chat_views.py:360
 msgid "You can only edit your own messages."
 msgstr "فقط پیام‌های خودتان را می‌توانید ویرایش کنید."
 
-#: .\dashboard\chat_views.py:384
+#: .\dashboard\chat_views.py:389
 msgid "You can only delete your own messages."
 msgstr "فقط پیام‌های خودتان را می‌توانید حذف کنید."
 
-#: .\dashboard\chat_views.py:400
+#: .\dashboard\chat_views.py:405
 msgid "You can only pin your own messages."
 msgstr "فقط پیام‌های خودتان را می‌توانید سنجاق کنید."
 
-#: .\dashboard\chat_views.py:463
+#: .\dashboard\chat_views.py:468
 msgid "Pick a different conversation."
 msgstr "مکالمهٔ دیگری انتخاب کنید."
 
-#: .\dashboard\chat_views.py:506
+#: .\dashboard\chat_views.py:511
 msgid "You can only manage your own students."
 msgstr "فقط دانش‌آموزان خودتان را می‌توانید مدیریت کنید."
 
@@ -1638,17 +1642,19 @@ msgid "Only agents and companies can send representation requests."
 msgstr "فقط نمایندگان و شرکت‌ها می‌توانند درخواست نمایندگی بفرستند."
 
 #: .\dashboard\request_views.py:125
+#, python-format
 msgid ""
 "Request sent to %(name)s. They will appear in My Students once they accept."
 msgstr ""
-"درخواست برای %(name)s ارسال شد. پس از پذیرش، در «دانشجویان من» نمایش داد"
-"ه می‌شود."
+"درخواست برای %(name)s ارسال شد. پس از پذیرش، در «دانشجویان من» نمایش داده "
+"می‌شود."
 
 #: .\dashboard\request_views.py:139 .\dashboard\request_views.py:163
 msgid "Request not found."
 msgstr "درخواست پیدا نشد."
 
 #: .\dashboard\request_views.py:149
+#, python-format
 msgid "%(name)s is now one of your agents and you can message them."
 msgstr "%(name)s اکنون یکی از نمایندگان شماست و می‌توانید به او پیام بدهید."
 
@@ -1672,34 +1678,34 @@ msgstr ""
 msgid "Page not found."
 msgstr "صفحه یافت نشد."
 
-#: .\dashboard\views.py:176 .\dashboard\views.py:450
+#: .\dashboard\views.py:176 .\dashboard\views.py:459
 msgid "You do not have permission to access this page."
 msgstr "شما مجوز دسترسی به این صفحه را ندارید."
 
-#: .\dashboard\views.py:442 .\dashboard\views.py:1055 .\dashboard\views.py:1089
-#: .\dashboard\views.py:1204 .\dashboard\views.py:1236
-#: .\dashboard\views.py:1261 .\dashboard\views.py:1273
-#: .\dashboard\views.py:1295
+#: .\dashboard\views.py:451 .\dashboard\views.py:1098 .\dashboard\views.py:1132
+#: .\dashboard\views.py:1247 .\dashboard\views.py:1279
+#: .\dashboard\views.py:1304 .\dashboard\views.py:1316
+#: .\dashboard\views.py:1338
 msgid "Permission denied."
 msgstr "دسترسی ممنوع."
 
-#: .\dashboard\views.py:570
+#: .\dashboard\views.py:579
 msgid "Personal information updated successfully."
 msgstr "اطلاعات شخصی با موفقیت به‌روزرسانی شد."
 
-#: .\dashboard\views.py:578
+#: .\dashboard\views.py:587
 msgid "Identity and profile photo updated successfully."
 msgstr "پروفایل دانشجو با موفقیت به‌روزرسانی شد."
 
-#: .\dashboard\views.py:607
+#: .\dashboard\views.py:616
 msgid "Contact information updated successfully."
 msgstr "اطلاعات تماس با موفقیت به‌روزرسانی شد."
 
-#: .\dashboard\views.py:613
+#: .\dashboard\views.py:622
 msgid "This email address is already in use."
 msgstr "این آدرس ایمیل قبلاً استفاده شده است."
 
-#: .\dashboard\views.py:627
+#: .\dashboard\views.py:636
 #, python-format
 msgid ""
 "Contact information updated. We sent a verification link to %(email)s — "
@@ -1709,102 +1715,103 @@ msgstr ""
 "اطلاعات تماس به‌روزرسانی شد. لینک تأیید به %(email)s ارسال کردیم — برای "
 "فعال‌سازی تغییر، آن را تأیید کنید. تا آن زمان حساب شما در حالت فقط‌خواندنی است."
 
-#: .\dashboard\views.py:638
+#: .\dashboard\views.py:647
 msgid "Profile image updated successfully."
 msgstr "تصویر پروفایل با موفقیت به‌روزرسانی شد."
 
-#: .\dashboard\views.py:646
+#: .\dashboard\views.py:655
 msgid "Password changed successfully."
 msgstr "رمز عبور با موفقیت تغییر یافت."
 
-#: .\dashboard\views.py:653
+#: .\dashboard\views.py:662
 msgid "Student profile updated successfully."
 msgstr "پروفایل دانشجو با موفقیت به‌روزرسانی شد."
 
-#: .\dashboard\views.py:656
+#: .\dashboard\views.py:665
 msgid "Invalid form type."
 msgstr "نوع فرم نامعتبر است."
 
-#: .\dashboard\views.py:675 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:684 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your new email address"
 msgstr "آدرس ایمیل جدید خود را تأیید کنید"
 
-#: .\dashboard\views.py:677 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:686 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your email address"
 msgstr "آدرس ایمیل خود را تأیید کنید"
 
-#: .\dashboard\views.py:704 .\dashboard\views.py:719
+#: .\dashboard\views.py:713 .\dashboard\views.py:728
 msgid "There is no pending email change."
 msgstr "هیچ تغییر ایمیل در انتظاری وجود ندارد."
 
-#: .\dashboard\views.py:708
+#: .\dashboard\views.py:717
 #, python-format
 msgid "A new verification link was sent to %(email)s."
 msgstr "لینک تأیید جدید به %(email)s ارسال شد."
 
-#: .\dashboard\views.py:734
+#: .\dashboard\views.py:743
 #, python-format
 msgid ""
 "The email change to %(email)s was cancelled. Your account is fully active "
 "again."
 msgstr "تغییر ایمیل به %(email)s لغو شد. حساب شما دوباره کاملاً فعال است."
 
-#: .\dashboard\views.py:766
+#: .\dashboard\views.py:767 .\dashboard\views.py:901 .\dashboard\views.py:1224
+#: .\dashboard\views.py:1310 .\dashboard\views.py:1329
+#: .\dashboard\views.py:1403 .\dashboard\views.py:1436
+#: .\dashboard\views.py:1439
+msgid "Not found."
+msgstr "صفحه یافت نشد."
+
+#: .\dashboard\views.py:778
 msgid "Step updated."
 msgstr "مرحله به‌روزرسانی شد."
 
-#: .\dashboard\views.py:769
+#: .\dashboard\views.py:781
 msgid "Application deleted."
 msgstr "درخواست حذف شد."
 
-#: .\dashboard\views.py:800
+#: .\dashboard\views.py:812
 msgid "Application created successfully."
 msgstr "درخواست با موفقیت ایجاد شد."
 
-#: .\dashboard\views.py:826
+#: .\dashboard\views.py:838
 msgid ""
 "You have reached the maximum number of students (100). Please contact "
 "support."
 msgstr ""
 "به حداکثر تعداد دانشجویان (۱۰۰) رسیده‌اید. لطفاً با پشتیبانی تماس بگیرید."
 
-#: .\dashboard\views.py:868
+#: .\dashboard\views.py:880
 msgid "Student added successfully."
 msgstr "دانشجو با موفقیت اضافه شد."
 
-#: .\dashboard\views.py:912
+#: .\dashboard\views.py:929
 msgid "Your request has been sent! Our team will contact you soon."
 msgstr "درخواست شما ارسال شد! تیم ما به‌زودی با شما تماس خواهد گرفت."
 
-#: .\dashboard\views.py:920
+#: .\dashboard\views.py:937
 msgid "Failed to send request. Please try again."
 msgstr "ارسال درخواست ناموفق بود. لطفاً دوباره تلاش کنید."
 
-#: .\dashboard\views.py:1098 .\dashboard\views.py:1304
+#: .\dashboard\views.py:1141 .\dashboard\views.py:1347
 msgid "All fields are required."
 msgstr "تمامی حقوق محفوظ است."
 
-#: .\dashboard\views.py:1101
+#: .\dashboard\views.py:1144
 msgid "Please select at least one user."
 msgstr "لطفاً حداقل یک کاربر انتخاب کنید."
 
-#: .\dashboard\views.py:1151
+#: .\dashboard\views.py:1194
 msgid "Notification sent successfully!"
 msgstr "درخواست با موفقیت ایجاد شد."
 
-#: .\dashboard\views.py:1181 .\dashboard\views.py:1267
-#: .\dashboard\views.py:1286 .\dashboard\views.py:1360
-#: .\dashboard\views.py:1390
-msgid "Not found."
-msgstr "صفحه یافت نشد."
-
-#: .\dashboard\views.py:1265
+#: .\dashboard\views.py:1308
 msgid "Notification deleted."
 msgstr "درخواست حذف شد."
 
-#: .\dashboard\views.py:1358
+#: .\dashboard\views.py:1401
 msgid "Notification updated successfully!"
 msgstr "اطلاعات تماس با موفقیت به‌روزرسانی شد."
 
@@ -2460,7 +2467,7 @@ msgid "Minimize"
 msgstr "کوچک‌سازی"
 
 #: .\templates\base.html:80
-#: .\templates\dashboard\fragments\my_notifications.html:49
+#: .\templates\dashboard\fragments\my_notifications.html:58
 #: .\templates\dashboard\fragments\programs.html:271
 #: .\templates\dashboard\fragments\universities.html:243
 msgid "Go"
@@ -2762,33 +2769,33 @@ msgstr "هیچ درخواستی یافت نشد."
 msgid "My Notifications"
 msgstr "درخواست‌های من"
 
-#: .\templates\dashboard\fragments\my_notifications.html:9
+#: .\templates\dashboard\fragments\my_notifications.html:18
 msgid "Search title or message"
 msgstr "جستجو در عنوان یا متن"
 
-#: .\templates\dashboard\fragments\my_notifications.html:10
+#: .\templates\dashboard\fragments\my_notifications.html:19
 msgid "Search notifications"
 msgstr "جستجوی اعلان‌ها"
 
-#: .\templates\dashboard\fragments\my_notifications.html:14
+#: .\templates\dashboard\fragments\my_notifications.html:23
 msgid "Mark all as read"
 msgstr "علامت‌گذاری همه به‌عنوان خوانده‌شده"
 
-#: .\templates\dashboard\fragments\my_notifications.html:61
+#: .\templates\dashboard\fragments\my_notifications.html:70
 msgid "No notifications match your search."
 msgstr "هیچ اعلانی با جستجوی شما مطابقت ندارد."
 
-#: .\templates\dashboard\fragments\my_notifications.html:61
+#: .\templates\dashboard\fragments\my_notifications.html:70
 msgid "You have no notifications."
 msgstr "شما از حساب کاربری خود خارج شدید."
 
-#: .\templates\dashboard\fragments\my_notifications.html:74
+#: .\templates\dashboard\fragments\my_notifications.html:83
 #: .\templates\dashboard\fragments\programs.html:223
 #: .\templates\dashboard\fragments\universities.html:195
 msgid "Prev"
 msgstr "قبلی"
 
-#: .\templates\dashboard\fragments\my_notifications.html:92
+#: .\templates\dashboard\fragments\my_notifications.html:101
 #: .\templates\dashboard\fragments\programs.html:246
 #: .\templates\dashboard\fragments\universities.html:218
 msgid "Next"
@@ -2840,8 +2847,8 @@ msgid ""
 "Ask the user for the 16-digit ID from their Requests page, then send the "
 "request for them to accept."
 msgstr ""
-"شناسه ۱۶ رقمی را از صفحه «درخواست‌ها» کاربر بخواهید، سپس درخواست را بفرس"
-"تید تا آن را بپذیرد."
+"شناسه ۱۶ رقمی را از صفحه «درخواست‌ها» کاربر بخواهید، سپس درخواست را بفرستید "
+"تا آن را بپذیرد."
 
 #: .\templates\dashboard\fragments\my_students.html:100
 msgid "User ID"
@@ -3227,8 +3234,8 @@ msgid ""
 "A student must accept before they become one of your students. Requests you "
 "receive are listed here too."
 msgstr ""
-"پذیرش کاربر لازم است تا به دانشجویان شما اضافه شود. درخواست‌هایی که دریا"
-"فت می‌کنید نیز همین‌جا فهرست می‌شوند."
+"پذیرش کاربر لازم است تا به دانشجویان شما اضافه شود. درخواست‌هایی که دریافت "
+"می‌کنید نیز همین‌جا فهرست می‌شوند."
 
 #: .\templates\dashboard\fragments\requests.html:24
 msgid "Your ID"
@@ -3252,8 +3259,7 @@ msgstr "این شناسه را به هر کسی بدهید که باید بتو�
 msgid ""
 "Give this ID to your agent so they can send you a representation request."
 msgstr ""
-"این شناسه را به نماینده خود بدهید تا بتواند برای شما درخواست نمایندگی بف"
-"رستد."
+"این شناسه را به نماینده خود بدهید تا بتواند برای شما درخواست نمایندگی بفرستد."
 
 #: .\templates\dashboard\fragments\requests.html:56
 msgid "Send a request by ID from My Students"
@@ -3520,6 +3526,13 @@ msgstr "همین حالا تأیید کنید"
 #: .\templates\dashboard\main.html:202
 msgid "Loading..."
 msgstr "در حال بارگذاری..."
+
+#: .\templates\dashboard\pdf_export.html:24
+#, python-format
+msgid ""
+"Showing the first %(limit)s of %(total)s matching records. Narrow the "
+"filters to export the rest."
+msgstr "نمایش %(limit)s مورد اول از %(total)s مورد منطبق. برای خروجی گرفتن از بقیه، فیلترها را محدودتر کنید."
 
 #: .\templates\emails\confirmation_code.html:4
 #: .\templates\emails\confirmation_code.html:10

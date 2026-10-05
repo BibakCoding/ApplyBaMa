@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-01 00:46+0330\n"
+"POT-Creation-Date: 2026-10-05 19:41+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -294,7 +294,7 @@ msgstr ""
 msgid "This username is already taken."
 msgstr ""
 
-#: .\authentication\views.py:519 .\dashboard\views.py:586
+#: .\authentication\views.py:519 .\dashboard\views.py:595
 msgid "Username updated successfully."
 msgstr ""
 
@@ -763,37 +763,37 @@ msgstr ""
 msgid "This request could not be sent."
 msgstr ""
 
-#: .\core\agent_requests.py:154 .\core\agent_requests.py:191
+#: .\core\agent_requests.py:154 .\core\agent_requests.py:194
 msgid "This request has already been answered."
 msgstr ""
 
-#: .\core\agent_requests.py:257
+#: .\core\agent_requests.py:263
 msgid "New representation request"
 msgstr ""
 
-#: .\core\agent_requests.py:259
+#: .\core\agent_requests.py:265
 #, python-format
 msgid ""
 "%(name)s asks to represent you as your agent. Open Requests to accept or "
 "decline."
 msgstr ""
 
-#: .\core\agent_requests.py:275
+#: .\core\agent_requests.py:281
 msgid "Representation request accepted"
 msgstr ""
 
-#: .\core\agent_requests.py:277
+#: .\core\agent_requests.py:283
 #, python-format
 msgid ""
 "%(name)s accepted your request. They are now one of your students and you "
 "can message them."
 msgstr ""
 
-#: .\core\agent_requests.py:281
+#: .\core\agent_requests.py:287
 msgid "Representation request declined"
 msgstr ""
 
-#: .\core\agent_requests.py:282
+#: .\core\agent_requests.py:288
 #, python-format
 msgid "%(name)s declined your representation request."
 msgstr ""
@@ -823,46 +823,47 @@ msgstr ""
 msgid "The site's chat storage is full. Please try again later."
 msgstr ""
 
-#: .\core\context_processors.py:107
+#: .\core\context_processors.py:110
 msgid "Registration is required to see programs matching your search."
 msgstr ""
 
-#: .\core\context_processors.py:109 .\templates\partials\site_footer.html:55
+#: .\core\context_processors.py:112 .\templates\partials\site_footer.html:55
 #: .\templates\partials\support_button.html:19
 #: .\templates\partials\support_button.html:20
 #: .\templates\partials\support_button.html:22
 msgid "Contact Support"
 msgstr ""
 
-#: .\core\context_processors.py:111
+#: .\core\context_processors.py:114
 msgid "Chat with the Apply BM team — log in if asked."
 msgstr ""
 
-#: .\core\context_processors.py:114
+#: .\core\context_processors.py:117
 msgid "Thank you! You are on the scholarship alerts list."
 msgstr ""
 
-#: .\core\context_processors.py:116
+#: .\core\context_processors.py:119
 msgid "Loading content..."
 msgstr ""
 
-#: .\core\context_processors.py:117
+#: .\core\context_processors.py:120
 msgid "Loading Error"
 msgstr ""
 
-#: .\core\context_processors.py:118
+#: .\core\context_processors.py:121 .\core\middleware\ajax_auth.py:48
+#: .\core\views.py:34
 msgid "Please try again or contact support"
 msgstr ""
 
-#: .\core\context_processors.py:119
+#: .\core\context_processors.py:122
 msgid "Reload Page"
 msgstr ""
 
-#: .\core\context_processors.py:121
+#: .\core\context_processors.py:124
 msgid "Email verified! Your account is fully active again."
 msgstr ""
 
-#: .\core\context_processors.py:124
+#: .\core\context_processors.py:127
 msgid "Chat connected"
 msgstr ""
 
@@ -1502,48 +1503,48 @@ msgstr ""
 msgid "📎 Attachment"
 msgstr ""
 
-#: .\dashboard\chat_views.py:223 .\dashboard\chat_views.py:360
-#: .\dashboard\chat_views.py:453 .\dashboard\chat_views.py:511
-#: .\dashboard\views.py:806 .\dashboard\views.py:872 .\dashboard\views.py:882
-#: .\dashboard\views.py:924 .\dashboard\views.py:1087 .\dashboard\views.py:1158
-#: .\dashboard\views.py:1188 .\dashboard\views.py:1259
-#: .\dashboard\views.py:1293
+#: .\dashboard\chat_views.py:223 .\dashboard\chat_views.py:365
+#: .\dashboard\chat_views.py:458 .\dashboard\chat_views.py:516
+#: .\dashboard\views.py:818 .\dashboard\views.py:884 .\dashboard\views.py:894
+#: .\dashboard\views.py:941 .\dashboard\views.py:1130 .\dashboard\views.py:1201
+#: .\dashboard\views.py:1231 .\dashboard\views.py:1302
+#: .\dashboard\views.py:1336
 msgid "Invalid request."
 msgstr ""
 
-#: .\dashboard\chat_views.py:229 .\dashboard\chat_views.py:365
+#: .\dashboard\chat_views.py:234 .\dashboard\chat_views.py:370
 msgid "Message cannot be empty."
 msgstr ""
 
-#: .\dashboard\chat_views.py:233
+#: .\dashboard\chat_views.py:238
 msgid "Message is too long (max 4000 characters)."
 msgstr ""
 
-#: .\dashboard\chat_views.py:293
+#: .\dashboard\chat_views.py:298
 msgid "Send a message first."
 msgstr ""
 
-#: .\dashboard\chat_views.py:299
+#: .\dashboard\chat_views.py:304
 msgid "No file received."
 msgstr ""
 
-#: .\dashboard\chat_views.py:355
+#: .\dashboard\chat_views.py:360
 msgid "You can only edit your own messages."
 msgstr ""
 
-#: .\dashboard\chat_views.py:384
+#: .\dashboard\chat_views.py:389
 msgid "You can only delete your own messages."
 msgstr ""
 
-#: .\dashboard\chat_views.py:400
+#: .\dashboard\chat_views.py:405
 msgid "You can only pin your own messages."
 msgstr ""
 
-#: .\dashboard\chat_views.py:463
+#: .\dashboard\chat_views.py:468
 msgid "Pick a different conversation."
 msgstr ""
 
-#: .\dashboard\chat_views.py:506
+#: .\dashboard\chat_views.py:511
 msgid "You can only manage your own students."
 msgstr ""
 
@@ -1646,34 +1647,34 @@ msgstr ""
 msgid "Page not found."
 msgstr ""
 
-#: .\dashboard\views.py:176 .\dashboard\views.py:450
+#: .\dashboard\views.py:176 .\dashboard\views.py:459
 msgid "You do not have permission to access this page."
 msgstr ""
 
-#: .\dashboard\views.py:442 .\dashboard\views.py:1055 .\dashboard\views.py:1089
-#: .\dashboard\views.py:1204 .\dashboard\views.py:1236
-#: .\dashboard\views.py:1261 .\dashboard\views.py:1273
-#: .\dashboard\views.py:1295
+#: .\dashboard\views.py:451 .\dashboard\views.py:1098 .\dashboard\views.py:1132
+#: .\dashboard\views.py:1247 .\dashboard\views.py:1279
+#: .\dashboard\views.py:1304 .\dashboard\views.py:1316
+#: .\dashboard\views.py:1338
 msgid "Permission denied."
 msgstr ""
 
-#: .\dashboard\views.py:570
+#: .\dashboard\views.py:579
 msgid "Personal information updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:578
+#: .\dashboard\views.py:587
 msgid "Identity and profile photo updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:607
+#: .\dashboard\views.py:616
 msgid "Contact information updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:613
+#: .\dashboard\views.py:622
 msgid "This email address is already in use."
 msgstr ""
 
-#: .\dashboard\views.py:627
+#: .\dashboard\views.py:636
 #, python-format
 msgid ""
 "Contact information updated. We sent a verification link to %(email)s — "
@@ -1681,101 +1682,102 @@ msgid ""
 "mode."
 msgstr ""
 
-#: .\dashboard\views.py:638
+#: .\dashboard\views.py:647
 msgid "Profile image updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:646
+#: .\dashboard\views.py:655
 msgid "Password changed successfully."
 msgstr ""
 
-#: .\dashboard\views.py:653
+#: .\dashboard\views.py:662
 msgid "Student profile updated successfully."
 msgstr ""
 
-#: .\dashboard\views.py:656
+#: .\dashboard\views.py:665
 msgid "Invalid form type."
 msgstr ""
 
-#: .\dashboard\views.py:675 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:684 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your new email address"
 msgstr ""
 
-#: .\dashboard\views.py:677 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:686 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your email address"
 msgstr ""
 
-#: .\dashboard\views.py:704 .\dashboard\views.py:719
+#: .\dashboard\views.py:713 .\dashboard\views.py:728
 msgid "There is no pending email change."
 msgstr ""
 
-#: .\dashboard\views.py:708
+#: .\dashboard\views.py:717
 #, python-format
 msgid "A new verification link was sent to %(email)s."
 msgstr ""
 
-#: .\dashboard\views.py:734
+#: .\dashboard\views.py:743
 #, python-format
 msgid ""
 "The email change to %(email)s was cancelled. Your account is fully active "
 "again."
 msgstr ""
 
-#: .\dashboard\views.py:766
+#: .\dashboard\views.py:767 .\dashboard\views.py:901 .\dashboard\views.py:1224
+#: .\dashboard\views.py:1310 .\dashboard\views.py:1329
+#: .\dashboard\views.py:1403 .\dashboard\views.py:1436
+#: .\dashboard\views.py:1439
+msgid "Not found."
+msgstr ""
+
+#: .\dashboard\views.py:778
 msgid "Step updated."
 msgstr ""
 
-#: .\dashboard\views.py:769
+#: .\dashboard\views.py:781
 msgid "Application deleted."
 msgstr ""
 
-#: .\dashboard\views.py:800
+#: .\dashboard\views.py:812
 msgid "Application created successfully."
 msgstr ""
 
-#: .\dashboard\views.py:826
+#: .\dashboard\views.py:838
 msgid ""
 "You have reached the maximum number of students (100). Please contact "
 "support."
 msgstr ""
 
-#: .\dashboard\views.py:868
+#: .\dashboard\views.py:880
 msgid "Student added successfully."
 msgstr ""
 
-#: .\dashboard\views.py:912
+#: .\dashboard\views.py:929
 msgid "Your request has been sent! Our team will contact you soon."
 msgstr ""
 
-#: .\dashboard\views.py:920
+#: .\dashboard\views.py:937
 msgid "Failed to send request. Please try again."
 msgstr ""
 
-#: .\dashboard\views.py:1098 .\dashboard\views.py:1304
+#: .\dashboard\views.py:1141 .\dashboard\views.py:1347
 msgid "All fields are required."
 msgstr ""
 
-#: .\dashboard\views.py:1101
+#: .\dashboard\views.py:1144
 msgid "Please select at least one user."
 msgstr ""
 
-#: .\dashboard\views.py:1151
+#: .\dashboard\views.py:1194
 msgid "Notification sent successfully!"
 msgstr ""
 
-#: .\dashboard\views.py:1181 .\dashboard\views.py:1267
-#: .\dashboard\views.py:1286 .\dashboard\views.py:1360
-#: .\dashboard\views.py:1390
-msgid "Not found."
-msgstr ""
-
-#: .\dashboard\views.py:1265
+#: .\dashboard\views.py:1308
 msgid "Notification deleted."
 msgstr ""
 
-#: .\dashboard\views.py:1358
+#: .\dashboard\views.py:1401
 msgid "Notification updated successfully!"
 msgstr ""
 
@@ -2406,7 +2408,7 @@ msgid "Minimize"
 msgstr ""
 
 #: .\templates\base.html:80
-#: .\templates\dashboard\fragments\my_notifications.html:49
+#: .\templates\dashboard\fragments\my_notifications.html:58
 #: .\templates\dashboard\fragments\programs.html:271
 #: .\templates\dashboard\fragments\universities.html:243
 msgid "Go"
@@ -2701,33 +2703,33 @@ msgstr ""
 msgid "My Notifications"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_notifications.html:9
+#: .\templates\dashboard\fragments\my_notifications.html:18
 msgid "Search title or message"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_notifications.html:10
+#: .\templates\dashboard\fragments\my_notifications.html:19
 msgid "Search notifications"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_notifications.html:14
+#: .\templates\dashboard\fragments\my_notifications.html:23
 msgid "Mark all as read"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_notifications.html:61
+#: .\templates\dashboard\fragments\my_notifications.html:70
 msgid "No notifications match your search."
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_notifications.html:61
+#: .\templates\dashboard\fragments\my_notifications.html:70
 msgid "You have no notifications."
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_notifications.html:74
+#: .\templates\dashboard\fragments\my_notifications.html:83
 #: .\templates\dashboard\fragments\programs.html:223
 #: .\templates\dashboard\fragments\universities.html:195
 msgid "Prev"
 msgstr ""
 
-#: .\templates\dashboard\fragments\my_notifications.html:92
+#: .\templates\dashboard\fragments\my_notifications.html:101
 #: .\templates\dashboard\fragments\programs.html:246
 #: .\templates\dashboard\fragments\universities.html:218
 msgid "Next"
@@ -3438,6 +3440,13 @@ msgstr ""
 
 #: .\templates\dashboard\main.html:202
 msgid "Loading..."
+msgstr ""
+
+#: .\templates\dashboard\pdf_export.html:24
+#, python-format
+msgid ""
+"Showing the first %(limit)s of %(total)s matching records. Narrow the "
+"filters to export the rest."
 msgstr ""
 
 #: .\templates\emails\confirmation_code.html:4

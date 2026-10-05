@@ -224,7 +224,12 @@ def send_message(request):
 
     partner_id = payload.get("partner")
     body = (payload.get("body") or "").strip()
-    if not partner_id or not body:
+    # An attachment-only send carries no text: chat.js declares the files with
+    # ``has_files`` and the upload endpoint attaches them to the empty message
+    # this creates (its documented "text/empty message" flow). Plain empty
+    # text — no files declared — is still refused, which is what the tests pin.
+    has_files = bool(payload.get("has_files"))
+    if not partner_id or (not body and not has_files):
         return JsonResponse(
             {"success": False, "message": _("Message cannot be empty.")}, status=400
         )

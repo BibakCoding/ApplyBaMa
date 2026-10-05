@@ -1108,7 +1108,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function withdrawRequest(button) {
+    // The endpoint reads nothing from the body, but an EMPTY multipart body is
+    // answered with a bare 400 by the ASGI server before Django ever sees it
+    // (Twisted's form parser rejects a multipart body with no parts), so the
+    // request carries one explicit field.
     const body = new FormData();
+    body.append("action", "cancel");
     postRequestAction(
       window.AppConfig.urls.agentRequestCancel +
         button.getAttribute("data-request-cancel") +
@@ -1547,11 +1552,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const btn = form.querySelector('button[type="submit"]');
+    const originalBtnHtml = btn ? btn.innerHTML : "";
     if (btn) {
       btn.disabled = true;
       btn.innerHTML =
         '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
     }
+
+    const restoreButton = () => {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = originalBtnHtml || "Submit";
+      }
+    };
 
     fetch(form.action, {
       method: "POST",
@@ -1591,11 +1604,17 @@ document.addEventListener("DOMContentLoaded", function () {
           } else {
             showToast(data.message || "Error", "error");
           }
-          if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = "Submit";
-          }
+          restoreButton();
         }
+      })
+      .catch(() => {
+        // A non-JSON response (HTML error page) or a network failure would
+        // otherwise leave the button stuck on "Processing..." with no feedback.
+        showToast(
+          (window.I18N && window.I18N.unexpectedError) || "Unexpected error.",
+          "error",
+        );
+        restoreButton();
       });
   }
 

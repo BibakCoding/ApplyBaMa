@@ -410,9 +410,18 @@ def dashboard_content(request, page):
             return redirect("dashboard")
 
     elif page == "my_applications":
-        if request.user.user_type == User.UserType.AGENT:
+        # The accounts that represent others track the applications of the
+        # students they manage — the same ownership rule as My Students, not
+        # just the applications the account filed with itself (a company was
+        # falling into the student branch below and seeing an empty page).
+        if (
+            request.user.user_type in ["company", "agent"]
+            or (request.user.user_type == "student" and request.user.is_representative)
+        ):
             applications = (
-                Application.objects.filter(agent=request.user)
+                Application.objects.filter(
+                    student_id__in=get_managed_students(request.user)
+                )
                 .select_related("student", "program", "program__university")
                 .order_by("-created_at")
             )
@@ -752,7 +761,10 @@ def _form_error_response(form):
 @login_required
 @email_verification_required
 def application_action(request, pk):
-    app = get_object_or_404(Application, pk=pk)
+    # A JSON caller must never receive Django's HTML 404 page (AGENTS.md §4.6).
+    app = Application.objects.filter(pk=pk).first()
+    if app is None:
+        return JsonResponse({"success": False, "message": _("Not found.")}, status=404)
     if request.user != app.agent and request.user != app.student:
         return JsonResponse({"success": False, "message": "Permission denied."})
 
@@ -882,7 +894,12 @@ def program_apply_request(request):
                 {"success": False, "message": str(_("Invalid request."))}
             )
 
-        program = get_object_or_404(Program, pk=program_id)
+        # A JSON caller must never receive Django's HTML 404 page (AGENTS.md §4.6).
+        program = Program.objects.filter(pk=program_id).first()
+        if program is None:
+            return JsonResponse(
+                {"success": False, "message": str(_("Not found."))}, status=404
+            )
         user = request.user
 
         subject = (
@@ -946,6 +963,14 @@ def programs_search(request):
     return JsonResponse({"results": results})
 
 
+# xhtml2pdf lays a table's rows out in one pass and its cost grows faster than
+# the row count: a few hundred rows render in seconds, the full 7,000-program
+# catalogue never finishes — the request outlives every proxy timeout and the
+# download never starts. The render is capped at this many rows and the PDF
+# says so, because a silently truncated "export" is a lie.
+PDF_EXPORT_ROW_LIMIT = 1000
+
+
 @login_required
 def export_universities_pdf(request):
     qs = (
@@ -982,8 +1007,17 @@ def export_universities_pdf(request):
     else:
         qs = qs.order_by("name")
 
+    total = qs.count()
     template = get_template("dashboard/pdf_export.html")
-    html = template.render({"data": qs, "title": "Universities", "request": request})
+    html = template.render(
+        {
+            "data": qs[:PDF_EXPORT_ROW_LIMIT],
+            "title": "Universities",
+            "request": request,
+            "total": total,
+            "limit": PDF_EXPORT_ROW_LIMIT,
+        }
+    )
 
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = 'attachment; filename="universities.pdf"'
@@ -1037,8 +1071,17 @@ def export_programs_pdf(request):
     else:
         qs = qs.order_by("name")
 
+    total = qs.count()
     template = get_template("dashboard/pdf_export.html")
-    html = template.render({"data": qs, "title": "Programs", "request": request})
+    html = template.render(
+        {
+            "data": qs[:PDF_EXPORT_ROW_LIMIT],
+            "title": "Programs",
+            "request": request,
+            "total": total,
+            "limit": PDF_EXPORT_ROW_LIMIT,
+        }
+    )
 
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = 'attachment; filename="programs.pdf"'
@@ -1385,7 +1428,13 @@ def notification_detail(request, pk):
         n = nr.notification
     except NotificationRecipient.DoesNotExist:
         if request.user.is_staff or request.user.is_superuser:
-            n = get_object_or_404(Notification, pk=pk)
+            # A JSON caller must never receive Django's HTML 404 page (§4.6);
+            # the staff branch answers exactly like the branch below it.
+            n = Notification.objects.filter(pk=pk).first()
+            if n is None:
+                return JsonResponse(
+                    {"success": False, "message": _("Not found.")}, status=404
+                )
         else:
             return JsonResponse({"success": False, "message": _("Not found.")}, status=404)
 

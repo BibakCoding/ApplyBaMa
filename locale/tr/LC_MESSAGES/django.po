@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-01 00:46+0330\n"
+"POT-Creation-Date: 2026-10-05 19:41+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -294,9 +294,9 @@ msgstr "Şifre başarıyla güncellendi."
 msgid "This username is already taken."
 msgstr "Kullanıcı adı zaten alınmış."
 
-#: .\authentication\views.py:519 .\dashboard\views.py:586
+#: .\authentication\views.py:519 .\dashboard\views.py:595
 msgid "Username updated successfully."
-msgstr "Şifre başarıyla güncellendi."
+msgstr "Kullanıcı adı başarıyla güncellendi."
 
 #: .\core\admin.py:65 .\templates\admin\base_site.html:25
 #: .\templates\admin\base_site.html:78
@@ -771,39 +771,42 @@ msgstr "Bu kullanıcı için zaten bekleyen bir talebiniz var."
 msgid "This request could not be sent."
 msgstr "Bu talep gönderilemedi."
 
-#: .\core\agent_requests.py:154 .\core\agent_requests.py:191
+#: .\core\agent_requests.py:154 .\core\agent_requests.py:194
 msgid "This request has already been answered."
 msgstr "Bu talep zaten yanıtlandı."
 
-#: .\core\agent_requests.py:257
+#: .\core\agent_requests.py:263
 msgid "New representation request"
 msgstr "Yeni temsilci talebi"
 
-#: .\core\agent_requests.py:259
+#: .\core\agent_requests.py:265
+#, python-format
 msgid ""
 "%(name)s asks to represent you as your agent. Open Requests to accept or "
 "decline."
 msgstr ""
-"%(name)s sizin temsilciniz olmak istiyor. Kabul etmek veya reddetmek içi"
-"n Talepler sayfasını açın."
+"%(name)s sizin temsilciniz olmak istiyor. Kabul etmek veya reddetmek için "
+"Talepler sayfasını açın."
 
-#: .\core\agent_requests.py:275
+#: .\core\agent_requests.py:281
 msgid "Representation request accepted"
 msgstr "Temsilci talebi kabul edildi"
 
-#: .\core\agent_requests.py:277
+#: .\core\agent_requests.py:283
+#, python-format
 msgid ""
 "%(name)s accepted your request. They are now one of your students and you "
 "can message them."
 msgstr ""
-"%(name)s talebinizi kabul etti. Artık öğrencilerinizden biri ve ona mesa"
-"j gönderebilirsiniz."
+"%(name)s talebinizi kabul etti. Artık öğrencilerinizden biri ve ona mesaj "
+"gönderebilirsiniz."
 
-#: .\core\agent_requests.py:281
+#: .\core\agent_requests.py:287
 msgid "Representation request declined"
 msgstr "Temsilci talebi reddedildi"
 
-#: .\core\agent_requests.py:282
+#: .\core\agent_requests.py:288
+#, python-format
 msgid "%(name)s declined your representation request."
 msgstr "%(name)s temsilci talebinizi reddetti."
 
@@ -832,46 +835,47 @@ msgstr "Bu dosya çok büyük. Sınırınız %(limit)s MB."
 msgid "The site's chat storage is full. Please try again later."
 msgstr "Sitenin sohbet deposu dolu. Lütfen daha sonra tekrar deneyin."
 
-#: .\core\context_processors.py:107
+#: .\core\context_processors.py:110
 msgid "Registration is required to see programs matching your search."
 msgstr "Aramanızla eşleşen programları görmek için kayıt olmanız gerekir."
 
-#: .\core\context_processors.py:109 .\templates\partials\site_footer.html:55
+#: .\core\context_processors.py:112 .\templates\partials\site_footer.html:55
 #: .\templates\partials\support_button.html:19
 #: .\templates\partials\support_button.html:20
 #: .\templates\partials\support_button.html:22
 msgid "Contact Support"
 msgstr "Destek ile iletişime geç"
 
-#: .\core\context_processors.py:111
+#: .\core\context_processors.py:114
 msgid "Chat with the Apply BM team — log in if asked."
 msgstr "Apply BM ekibiyle sohbet edin — istenirse giriş yapın."
 
-#: .\core\context_processors.py:114
+#: .\core\context_processors.py:117
 msgid "Thank you! You are on the scholarship alerts list."
 msgstr "Teşekkürler! Burs uyarıları listesindesiniz."
 
-#: .\core\context_processors.py:116
+#: .\core\context_processors.py:119
 msgid "Loading content..."
 msgstr "İçerik yükleniyor..."
 
-#: .\core\context_processors.py:117
+#: .\core\context_processors.py:120
 msgid "Loading Error"
 msgstr "Yükleme Hatası"
 
-#: .\core\context_processors.py:118
+#: .\core\context_processors.py:121 .\core\middleware\ajax_auth.py:48
+#: .\core\views.py:34
 msgid "Please try again or contact support"
 msgstr "Lütfen tekrar deneyin veya destek ile iletişime geçin"
 
-#: .\core\context_processors.py:119
+#: .\core\context_processors.py:122
 msgid "Reload Page"
 msgstr "Sayfayı Yenile"
 
-#: .\core\context_processors.py:121
+#: .\core\context_processors.py:124
 msgid "Email verified! Your account is fully active again."
 msgstr "E-posta doğrulandı! Hesabınız yeniden tamamen aktif."
 
-#: .\core\context_processors.py:124
+#: .\core\context_processors.py:127
 msgid "Chat connected"
 msgstr "Sohbet bağlandı"
 
@@ -1084,8 +1088,8 @@ msgid ""
 "Shareable 16-digit ID. Give it to an agent so they can find you and request "
 "to represent you."
 msgstr ""
-"Paylaşılabilir 16 haneli kimlik. Bir acenteye verin; sizi bulup temsil t"
-"alebi gönderebilsin."
+"Paylaşılabilir 16 haneli kimlik. Bir acenteye verin; sizi bulup temsil "
+"talebi gönderebilsin."
 
 #: .\core\models.py:487
 msgid "Only student users can be representatives"
@@ -1533,48 +1537,48 @@ msgstr "Mesaj silindi"
 msgid "📎 Attachment"
 msgstr "📎 Ek"
 
-#: .\dashboard\chat_views.py:223 .\dashboard\chat_views.py:360
-#: .\dashboard\chat_views.py:453 .\dashboard\chat_views.py:511
-#: .\dashboard\views.py:806 .\dashboard\views.py:872 .\dashboard\views.py:882
-#: .\dashboard\views.py:924 .\dashboard\views.py:1087 .\dashboard\views.py:1158
-#: .\dashboard\views.py:1188 .\dashboard\views.py:1259
-#: .\dashboard\views.py:1293
+#: .\dashboard\chat_views.py:223 .\dashboard\chat_views.py:365
+#: .\dashboard\chat_views.py:458 .\dashboard\chat_views.py:516
+#: .\dashboard\views.py:818 .\dashboard\views.py:884 .\dashboard\views.py:894
+#: .\dashboard\views.py:941 .\dashboard\views.py:1130 .\dashboard\views.py:1201
+#: .\dashboard\views.py:1231 .\dashboard\views.py:1302
+#: .\dashboard\views.py:1336
 msgid "Invalid request."
 msgstr "Geçersiz istek."
 
-#: .\dashboard\chat_views.py:229 .\dashboard\chat_views.py:365
+#: .\dashboard\chat_views.py:234 .\dashboard\chat_views.py:370
 msgid "Message cannot be empty."
 msgstr "Mesaj boş olamaz."
 
-#: .\dashboard\chat_views.py:233
+#: .\dashboard\chat_views.py:238
 msgid "Message is too long (max 4000 characters)."
 msgstr "Mesaj çok uzun (en fazla 4000 karakter)."
 
-#: .\dashboard\chat_views.py:293
+#: .\dashboard\chat_views.py:298
 msgid "Send a message first."
 msgstr "Önce bir mesaj gönderin."
 
-#: .\dashboard\chat_views.py:299
+#: .\dashboard\chat_views.py:304
 msgid "No file received."
 msgstr "Dosya alınmadı."
 
-#: .\dashboard\chat_views.py:355
+#: .\dashboard\chat_views.py:360
 msgid "You can only edit your own messages."
 msgstr "Yalnızca kendi mesajlarınızı düzenleyebilirsiniz."
 
-#: .\dashboard\chat_views.py:384
+#: .\dashboard\chat_views.py:389
 msgid "You can only delete your own messages."
 msgstr "Yalnızca kendi mesajlarınızı silebilirsiniz."
 
-#: .\dashboard\chat_views.py:400
+#: .\dashboard\chat_views.py:405
 msgid "You can only pin your own messages."
 msgstr "Yalnızca kendi mesajlarınızı sabitleyebilirsiniz."
 
-#: .\dashboard\chat_views.py:463
+#: .\dashboard\chat_views.py:468
 msgid "Pick a different conversation."
 msgstr "Farklı bir görüşme seçin."
 
-#: .\dashboard\chat_views.py:506
+#: .\dashboard\chat_views.py:511
 msgid "You can only manage your own students."
 msgstr "Yalnızca kendi öğrencilerinizi yönetebilirsiniz."
 
@@ -1645,17 +1649,19 @@ msgid "Only agents and companies can send representation requests."
 msgstr "Temsilci taleplerini yalnızca acenteler ve şirketler gönderebilir."
 
 #: .\dashboard\request_views.py:125
+#, python-format
 msgid ""
 "Request sent to %(name)s. They will appear in My Students once they accept."
 msgstr ""
-"Talep %(name)s kullanıcısına gönderildi. Kabul ettiğinde Öğrencilerim li"
-"stesinde görünecek."
+"Talep %(name)s kullanıcısına gönderildi. Kabul ettiğinde Öğrencilerim "
+"listesinde görünecek."
 
 #: .\dashboard\request_views.py:139 .\dashboard\request_views.py:163
 msgid "Request not found."
 msgstr "Talep bulunamadı."
 
 #: .\dashboard\request_views.py:149
+#, python-format
 msgid "%(name)s is now one of your agents and you can message them."
 msgstr "%(name)s artık temsilcilerinizden biri ve ona mesaj gönderebilirsiniz."
 
@@ -1679,34 +1685,34 @@ msgstr ""
 msgid "Page not found."
 msgstr "Sayfa bulunamadı."
 
-#: .\dashboard\views.py:176 .\dashboard\views.py:450
+#: .\dashboard\views.py:176 .\dashboard\views.py:459
 msgid "You do not have permission to access this page."
 msgstr "Bu sayfaya erişim izniniz yok."
 
-#: .\dashboard\views.py:442 .\dashboard\views.py:1055 .\dashboard\views.py:1089
-#: .\dashboard\views.py:1204 .\dashboard\views.py:1236
-#: .\dashboard\views.py:1261 .\dashboard\views.py:1273
-#: .\dashboard\views.py:1295
+#: .\dashboard\views.py:451 .\dashboard\views.py:1098 .\dashboard\views.py:1132
+#: .\dashboard\views.py:1247 .\dashboard\views.py:1279
+#: .\dashboard\views.py:1304 .\dashboard\views.py:1316
+#: .\dashboard\views.py:1338
 msgid "Permission denied."
 msgstr "İzin reddedildi."
 
-#: .\dashboard\views.py:570
+#: .\dashboard\views.py:579
 msgid "Personal information updated successfully."
 msgstr "Kişisel bilgiler başarıyla güncellendi."
 
-#: .\dashboard\views.py:578
+#: .\dashboard\views.py:587
 msgid "Identity and profile photo updated successfully."
 msgstr "Öğrenci profili başarıyla güncellendi."
 
-#: .\dashboard\views.py:607
+#: .\dashboard\views.py:616
 msgid "Contact information updated successfully."
 msgstr "İletişim bilgileri başarıyla güncellendi."
 
-#: .\dashboard\views.py:613
+#: .\dashboard\views.py:622
 msgid "This email address is already in use."
 msgstr "Bu e-posta adresi zaten kullanımda."
 
-#: .\dashboard\views.py:627
+#: .\dashboard\views.py:636
 #, python-format
 msgid ""
 "Contact information updated. We sent a verification link to %(email)s — "
@@ -1717,42 +1723,42 @@ msgstr ""
 "gönderdik — değişikliği etkinleştirmek için onaylayın. O zamana kadar "
 "hesabınız salt okunur modda."
 
-#: .\dashboard\views.py:638
+#: .\dashboard\views.py:647
 msgid "Profile image updated successfully."
 msgstr "Profil resmi başarıyla güncellendi."
 
-#: .\dashboard\views.py:646
+#: .\dashboard\views.py:655
 msgid "Password changed successfully."
 msgstr "Şifre başarıyla değiştirildi."
 
-#: .\dashboard\views.py:653
+#: .\dashboard\views.py:662
 msgid "Student profile updated successfully."
 msgstr "Öğrenci profili başarıyla güncellendi."
 
-#: .\dashboard\views.py:656
+#: .\dashboard\views.py:665
 msgid "Invalid form type."
 msgstr "Geçersiz form türü."
 
-#: .\dashboard\views.py:675 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:684 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your new email address"
 msgstr "Yeni e-posta adresinizi doğrulayın"
 
-#: .\dashboard\views.py:677 .\templates\emails\verify_email.html:4
+#: .\dashboard\views.py:686 .\templates\emails\verify_email.html:4
 #: .\templates\emails\verify_email.html:10
 msgid "Verify your email address"
 msgstr "E-posta adresinizi doğrulayın"
 
-#: .\dashboard\views.py:704 .\dashboard\views.py:719
+#: .\dashboard\views.py:713 .\dashboard\views.py:728
 msgid "There is no pending email change."
 msgstr "Bekleyen bir e-posta değişikliği yok."
 
-#: .\dashboard\views.py:708
+#: .\dashboard\views.py:717
 #, python-format
 msgid "A new verification link was sent to %(email)s."
 msgstr "Yeni bir doğrulama bağlantısı %(email)s adresine gönderildi."
 
-#: .\dashboard\views.py:734
+#: .\dashboard\views.py:743
 #, python-format
 msgid ""
 "The email change to %(email)s was cancelled. Your account is fully active "
@@ -1761,61 +1767,62 @@ msgstr ""
 "%(email)s adresine yapılan e-posta değişikliği iptal edildi. Hesabınız "
 "yeniden tamamen aktif."
 
-#: .\dashboard\views.py:766
+#: .\dashboard\views.py:767 .\dashboard\views.py:901 .\dashboard\views.py:1224
+#: .\dashboard\views.py:1310 .\dashboard\views.py:1329
+#: .\dashboard\views.py:1403 .\dashboard\views.py:1436
+#: .\dashboard\views.py:1439
+msgid "Not found."
+msgstr "Sayfa bulunamadı."
+
+#: .\dashboard\views.py:778
 msgid "Step updated."
 msgstr "Adım güncellendi."
 
-#: .\dashboard\views.py:769
+#: .\dashboard\views.py:781
 msgid "Application deleted."
 msgstr "Başvuru silindi."
 
-#: .\dashboard\views.py:800
+#: .\dashboard\views.py:812
 msgid "Application created successfully."
 msgstr "Başvuru başarıyla oluşturuldu."
 
-#: .\dashboard\views.py:826
+#: .\dashboard\views.py:838
 msgid ""
 "You have reached the maximum number of students (100). Please contact "
 "support."
 msgstr ""
 "Maksimum öğrenci sayısına (100) ulaştınız. Lütfen destekle iletişime geçin."
 
-#: .\dashboard\views.py:868
+#: .\dashboard\views.py:880
 msgid "Student added successfully."
 msgstr "Öğrenci başarıyla eklendi."
 
-#: .\dashboard\views.py:912
+#: .\dashboard\views.py:929
 msgid "Your request has been sent! Our team will contact you soon."
 msgstr ""
 "İsteğiniz gönderildi! Ekibimiz en kısa sürede sizinle iletişime geçecektir."
 
-#: .\dashboard\views.py:920
+#: .\dashboard\views.py:937
 msgid "Failed to send request. Please try again."
 msgstr "İstek gönderilemedi. Lütfen tekrar deneyin."
 
-#: .\dashboard\views.py:1098 .\dashboard\views.py:1304
+#: .\dashboard\views.py:1141 .\dashboard\views.py:1347
 msgid "All fields are required."
 msgstr "Tüm hakları saklıdır."
 
-#: .\dashboard\views.py:1101
+#: .\dashboard\views.py:1144
 msgid "Please select at least one user."
 msgstr "Lütfen en az bir kullanıcı seçin."
 
-#: .\dashboard\views.py:1151
+#: .\dashboard\views.py:1194
 msgid "Notification sent successfully!"
 msgstr "Başvuru başarıyla oluşturuldu."
 
-#: .\dashboard\views.py:1181 .\dashboard\views.py:1267
-#: .\dashboard\views.py:1286 .\dashboard\views.py:1360
-#: .\dashboard\views.py:1390
-msgid "Not found."
-msgstr "Sayfa bulunamadı."
-
-#: .\dashboard\views.py:1265
+#: .\dashboard\views.py:1308
 msgid "Notification deleted."
 msgstr "Başvuru silindi."
 
-#: .\dashboard\views.py:1358
+#: .\dashboard\views.py:1401
 msgid "Notification updated successfully!"
 msgstr "İletişim bilgileri başarıyla güncellendi."
 
@@ -2473,7 +2480,7 @@ msgid "Minimize"
 msgstr "Küçült"
 
 #: .\templates\base.html:80
-#: .\templates\dashboard\fragments\my_notifications.html:49
+#: .\templates\dashboard\fragments\my_notifications.html:58
 #: .\templates\dashboard\fragments\programs.html:271
 #: .\templates\dashboard\fragments\universities.html:243
 msgid "Go"
@@ -2778,33 +2785,33 @@ msgstr "Başvuru bulunamadı."
 msgid "My Notifications"
 msgstr "Başvurularım"
 
-#: .\templates\dashboard\fragments\my_notifications.html:9
+#: .\templates\dashboard\fragments\my_notifications.html:18
 msgid "Search title or message"
 msgstr "Başlık veya mesajda ara"
 
-#: .\templates\dashboard\fragments\my_notifications.html:10
+#: .\templates\dashboard\fragments\my_notifications.html:19
 msgid "Search notifications"
 msgstr "Bildirimlerde ara"
 
-#: .\templates\dashboard\fragments\my_notifications.html:14
+#: .\templates\dashboard\fragments\my_notifications.html:23
 msgid "Mark all as read"
 msgstr "Tümünü okundu işaretle"
 
-#: .\templates\dashboard\fragments\my_notifications.html:61
+#: .\templates\dashboard\fragments\my_notifications.html:70
 msgid "No notifications match your search."
 msgstr "Aramanızla eşleşen bildirim yok."
 
-#: .\templates\dashboard\fragments\my_notifications.html:61
+#: .\templates\dashboard\fragments\my_notifications.html:70
 msgid "You have no notifications."
 msgstr "Çıkış yaptınız."
 
-#: .\templates\dashboard\fragments\my_notifications.html:74
+#: .\templates\dashboard\fragments\my_notifications.html:83
 #: .\templates\dashboard\fragments\programs.html:223
 #: .\templates\dashboard\fragments\universities.html:195
 msgid "Prev"
 msgstr "Önceki"
 
-#: .\templates\dashboard\fragments\my_notifications.html:92
+#: .\templates\dashboard\fragments\my_notifications.html:101
 #: .\templates\dashboard\fragments\programs.html:246
 #: .\templates\dashboard\fragments\universities.html:218
 msgid "Next"
@@ -2856,8 +2863,8 @@ msgid ""
 "Ask the user for the 16-digit ID from their Requests page, then send the "
 "request for them to accept."
 msgstr ""
-"Kullanıcıdan Talepler sayfasındaki 16 haneli kimliği isteyin, ardından k"
-"abul etmesi için talebi gönderin."
+"Kullanıcıdan Talepler sayfasındaki 16 haneli kimliği isteyin, ardından kabul "
+"etmesi için talebi gönderin."
 
 #: .\templates\dashboard\fragments\my_students.html:100
 msgid "User ID"
@@ -3245,8 +3252,8 @@ msgid ""
 "A student must accept before they become one of your students. Requests you "
 "receive are listed here too."
 msgstr ""
-"Bir kullanıcının öğrencilerinizden biri olması için kabul etmesi gerekir"
-". Aldığınız talepler de burada listelenir."
+"Bir kullanıcının öğrencilerinizden biri olması için kabul etmesi gerekir. "
+"Aldığınız talepler de burada listelenir."
 
 #: .\templates\dashboard\fragments\requests.html:24
 msgid "Your ID"
@@ -3539,6 +3546,13 @@ msgstr "Şimdi doğrula"
 #: .\templates\dashboard\main.html:202
 msgid "Loading..."
 msgstr "Yükleniyor..."
+
+#: .\templates\dashboard\pdf_export.html:24
+#, python-format
+msgid ""
+"Showing the first %(limit)s of %(total)s matching records. Narrow the "
+"filters to export the rest."
+msgstr "Eşleşen %(total)s kayıttan ilk %(limit)s tanesi gösteriliyor. Kalanını dışa aktarmak için filtreleri daraltın."
 
 #: .\templates\emails\confirmation_code.html:4
 #: .\templates\emails\confirmation_code.html:10
