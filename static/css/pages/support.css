@@ -7,9 +7,10 @@
 
    The button is draggable within a rail: it never strays into the page or
    away from the screen edges — dragging only swaps its side (left/right) and
-   slides it vertically. The chosen spot is remembered in localStorage. The
-   minimize control tucks it into a small pill anchored to the same rail, so
-   "get out of the way" never means "lost off-screen".
+   moves it vertically to wherever it was released. The chosen spot is
+   remembered in localStorage. The minimize control tucks it into a small pill
+   anchored to the same rail, so "get out of the way" never means "lost
+   off-screen".
 ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -140,16 +141,14 @@
 }
 
 .ab-support {
-    /* The dragged vertical position as a fraction of the available travel. */
-    --ab-support-progress: 0.62;
+    /* The dragged vertical position, in pixels from the viewport top. Set by
+       support.js on every drag; the fallback keeps the button visible before
+       the first paint and for a visitor who has never moved it. */
+    --ab-support-top: 62vh;
     position: fixed;
     z-index: 60;
     inset-inline-end: 1rem;
-    top: calc(
-        1.5rem +
-        (100dvh - 5rem) * var(--ab-support-progress) -
-        2.25rem
-    );
+    top: var(--ab-support-top);
     pointer-events: auto;
     display: inline-flex;
     align-items: center;
