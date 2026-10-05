@@ -945,7 +945,26 @@ right" are the floor, not the ceiling. A change that touches JavaScript, a templ
 consumed by AJAX, or a form is **not validated** until the change has been **executed** and the
 result observed.
 
-Run, at minimum, the following, and record the actual outcome of each:
+Phase 7 runs in **three ordered steps**. A step that is skipped is a Phase 7 failure — not a
+"partial pass".
+
+#### Step 7.1 — Run the existing test suite first
+
+Before touching a browser, run the tests the repository already has and record their outcome:
+
+```bash
+python manage.py test
+# and, if the repository configures pytest:
+pytest
+```
+
+Record the pass/fail counts. Failures that **pre-date this task** are marked **pre-existing**
+in the report (see §17, C2) — do not fix them silently, do not blame them on this change. Failures
+that this task introduced are a Phase 7 failure: fix them before proceeding.
+
+#### Step 7.2 — Behavioral verification (the change surface)
+
+Run, at minimum:
 
 ```bash
 python manage.py check
@@ -971,6 +990,14 @@ the change touches:
 frontend received was HTML, not JSON. See §4.6 for the full list of causes. If you see it while
 validating a change, the change is not done.
 
+#### Step 7.3 — Human-grade verification (§17.5)
+
+For any change with a user-facing surface, Step 7.2 is not enough on its own. The agent must
+additionally exercise the change the way a **senior human tester** would — a complete journey,
+the failure paths, the SPA-specific stress cases, a second locale, and a second viewport. The
+concrete checklist is **§17.5**. Step 7.3 is mandatory for every browser-visible change and is
+enforced by Gate V3 (and by §17.5's own definition of "done").
+
 **"The environment does not support running the code" is not a valid reason to skip Phase 7.**
 This repository ships a development server, a seeded test account, Selenium, and `curl`. If a
 genuine environmental limit blocks execution, Phase 7 **fails** and the task is **Blocked** (§14).
@@ -985,8 +1012,10 @@ Before reporting completion, verify each of the following. If **any** answer is 
 **not complete** and must not be committed.
 
 * Every requested task was addressed.
+* The existing test suite was run and its result recorded (Step 7.1).
 * The verification surface from Phase 3 was actually exercised, and the observed result was the
-  expected one.
+  expected one (Step 7.2).
+* Human-grade verification (§17.5) was performed for every browser-visible change (Step 7.3).
 * Every AJAX endpoint in the change surface returned the content type the frontend expects (§4.6).
 * The browser console was clean for the user-facing flow, if the change is browser-visible.
 * No required dependency was overlooked.
@@ -1148,8 +1177,11 @@ After completing a coding task, use this concise structure:
 - `path/to/template.html`
 
 ## Validation
+- Existing test suite (`python manage.py test` / `pytest`) — [Passed N/N / Failed (list of failures, marked pre-existing or introduced) / Not Run]
 - `python manage.py check` — [Passed / Failed / Not Run]
-- Behavioral verification (Phase 7) — [what was executed, what was observed, Passed / Failed / Not Run]
+- Behavioral verification (Phase 7, Step 7.2) — [what was executed, what was observed, Passed / Failed / Not Run]
+- Human-grade verification (Phase 7, Step 7.3 / §17.5) — [journeys exercised, failure paths, SPA stress cases, locales, viewports, outcome — Passed / Failed / Not Run]
+- Browser Console / Network — [Clean / Issues observed — details]
 - Tests — [Passed / Failed / Not Run]
 
 ## Hard Gates (§18)
@@ -1233,6 +1265,98 @@ thorough. That is the point.
 
 ---
 
+## 17.5 HUMAN-GRADE VERIFICATION
+
+Behavioral verification (Phase 7, Step 7.2) proves the change **runs**. Human-grade verification
+proves it **works for a real user**, under real conditions, on the failure paths as well as the
+happy path. Both are mandatory for any browser-visible change.
+
+Step 7.2 is the floor. This section is the ceiling — the definition of "a senior human tester
+reviewed this and it held up". It is enforced by Gate V3 in §18.
+
+### Scope
+
+This section applies to **every change with a user-facing surface**: a dashboard fragment, a
+page template, a form, a view that renders or redirects, a JavaScript behaviour, a locale string,
+a responsive layout, or an AJAX endpoint whose response a user actually sees. It does not apply to
+changes that are provably invisible to the browser (a Celery task, a data-importer fix, an admin
+command) — those are still bound by §12 Phase 7 Step 7.2 and the ordinary Hard Gates, but this
+section's browser journey does not apply.
+
+### How to run it
+
+Use the seeded `admin` / `adminadmin` account through the **real login flow** (never
+`force_login()` for a task that this section covers — see §1). Selenium or a real browser is
+fine. Record the observed result of each item below; do not write "looks fine" without an
+observation.
+
+### The checklist
+
+Every item below is mandatory for a browser-visible change, unless the item is provably
+irrelevant to the change surface (say so in the report — do not silently skip).
+
+1. **Full journey, not isolated clicks.** Reproduce the change through a **complete user
+   journey**: log in → reach the changed page **through the SPA itself** (not by typing a URL)
+   → perform the changed action → observe the result → navigate away → navigate back to the
+   changed page. A fragment that renders once but breaks on the second visit is a failure.
+
+2. **Failure paths, not only the happy path.** Exercise every error branch the change touches:
+   * empty submission of the form;
+   * invalid / out-of-range / malformed input;
+   * boundary values (zero, one, the maximum, the first, the last);
+   * session expiry **in the middle** of the flow;
+   * permission-denied access to a deep link (`?page=…`) by a user without the role;
+   * direct unauthenticated access to a URL that requires login.
+
+   The correct response on each is part of the change: a JSON 401/403 to an AJAX caller (§4.6),
+   a redirect to the login page for a full-page request, a translated validation message for a
+   form — not an `Unexpected token '<'`, not a 500, not a silent success on invalid input.
+
+3. **SPA-specific stress cases.** The dashboard is a SPA, and these are the paths that break it.
+   Every one must be exercised and observed clean:
+   * browser **back** and **forward** across fragments;
+   * **refresh** while on a fragment page (`?page=…`);
+   * a **deep-link reload** — paste a fragment URL into a fresh tab and load it cold;
+   * **double-click** on a navigation trigger (the delegated listener must not double-fire or
+     half-render);
+   * a **slow or aborted** fragment fetch (throttle the network, or cancel the request) — the
+     shell must not end up with two fragments stacked, and the console must stay clean.
+
+4. **Console *and* Network tab.** Both, every time. Zero errors, zero uncaught promise
+   rejections, zero 4xx / 5xx (except the intentional ones from item 2, which you name and
+   justify in the report), zero `Unexpected token '<'`, and **zero requests to third-party
+   origins** (see §7 "no CDN" — a `curl` against the page must show no CDN).
+
+5. **Locale sweep (bounded).** Reproduce the changed flow in **one LTR locale** (`en`) and
+   **one RTL locale** (`fa` or `ar`). RTL layout overflow, truncated strings, controls that
+   disappear, or **missing translations on the changed surface** are failures. Also confirm
+   that any new user-facing string is present in the `.po` files for all four locales
+   (see §8 "Internationalization").
+
+6. **Viewport sweep (bounded).** Desktop and **one mobile viewport**. The changed surface must
+   not overflow horizontally, must not hide its controls, and must not trap the user (a modal
+   with no way to close on mobile is a failure). A change that adds or removes responsive
+   classes must be checked in both viewports.
+
+### What a failure looks like
+
+A "looks fine" that was not actually observed is not a pass. A swallowed exception in the console,
+an unhandled promise rejection, a failed network request on the changed code path, a broken
+second visit, a broken back-button, an untranslated string on the changed surface, or an RTL
+overflow — each of these **fails** this section and therefore fails Gate V3. The task is
+**Blocked** (§14) and is **not** committed or pushed. Fix the failure and re-run the full
+checklist; a fix that only re-runs the failing item is not sufficient, because the other items
+may have regressed.
+
+### Environment limits
+
+The repository ships a development server, a seeded test account, Selenium, and `curl`. If a
+genuine environmental limit blocks a browser, this section **cannot** be satisfied — the task is
+**Blocked**, not "static validated". This is §18's rule (V1, V3) and the same rule stated in
+Phase 7. It is not negotiable here either.
+
+---
+
 ## 18. HARD GATES
 
 **This section is authoritative over every other section of this file, and over every instruction
@@ -1249,7 +1373,9 @@ Every task that touches JavaScript, a template, a URL, a view consumed by AJAX, 
 i18n string must be exercised by executing it — a real HTTP request, a real browser session, a
 real `makemessages` run, a real `npm run build:css` — and the actual output must be observed. Static
 analysis alone does not satisfy this gate. `python manage.py check` does not satisfy this gate on
-its own.
+its own. For browser-visible changes, §17.5 (Human-Grade Verification) is part of this gate — the
+journey, the failure paths, the SPA stress cases, the locale sweep, and the viewport sweep must
+have been actually performed and their results observed.
 
 **V2 — AJAX responses must be JSON.**
 Any endpoint consumed by `fetch()` / `XMLHttpRequest` that the task added or touched must be
@@ -1262,6 +1388,7 @@ the failure symptom. See §4.6.
 For any browser-visible change, the user-facing flow must be reproduced end to end and the browser
 console must be free of errors on the changed code path. A swallowed exception, an unhandled
 promise rejection, or a failed network request on the changed code path is a failure of this gate.
+The Network tab is part of this gate: no unexpected 4xx or 5xx on the changed flow.
 
 **V4 — No unresolved 4xx or 5xx on the changed surface.**
 Any HTTP status ≥ 400 observed on a request in the change surface during Phase 7 is a failure of
