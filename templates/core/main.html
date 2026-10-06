@@ -325,21 +325,6 @@
             </div>
         </section>
     {% endif %}
-    <!-- ================= WHATSAPP CTA BAND ================= -->
-    <section class="home-whatsapp">
-        <div class="ab-container home-whatsapp-inner fade-in-up">
-            <div>
-                <h2 class="font-serif">{% trans "Still have questions?" %}</h2>
-                <p>{% trans "Our managers reply within minutes on WhatsApp — in your language." %}</p>
-            </div>
-            <a href="https://wa.me/{{ settings.whatsapp_number|cut:'+' }}?text=Hello%20Apply%20BM!%20I%20want%20to%20know%20more%20about%20scholarship%20programs."
-               target="_blank"
-               rel="noopener"
-               class="ab-btn home-whatsapp-btn ab-btn-lg">
-                <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
-            </a>
-        </div>
-    </section>
 {% endblock %}
 {% block footer %}
     {% include "partials/site_footer.html" %}

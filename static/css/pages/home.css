@@ -750,44 +750,7 @@
 }
 
 /* ==========================================================================
-   9. WHATSAPP CTA BAND
-========================================================================== */
-.home-whatsapp {
-    background: linear-gradient(135deg, var(--ab-primary), var(--ab-primary-active));
-    padding-block: 3.5rem;
-}
-
-.home-whatsapp-inner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.75rem;
-}
-
-.home-whatsapp h2 {
-    color: #ffffff;
-    font-size: clamp(1.5rem, 2.5vw, 2.1rem);
-    margin-bottom: 0.4rem;
-}
-
-.home-whatsapp p {
-    color: rgba(255, 255, 255, 0.85);
-}
-
-.home-whatsapp-btn {
-    background: #ffffff;
-    color: var(--ab-primary);
-    border-color: #ffffff;
-}
-
-.home-whatsapp-btn:hover {
-    background: var(--ab-accent-soft);
-    color: var(--ab-primary-active);
-}
-
-/* ==========================================================================
-   10. GLOBAL SCROLL ANIMATIONS
+   9. GLOBAL SCROLL ANIMATIONS
 ========================================================================== */
 .fade-in-up {
     opacity: 0;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-05 19:41+0330\n"
+"POT-Creation-Date: 2026-10-05 22:52+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -920,9 +920,9 @@ msgid "Registration is required to see programs matching your search."
 msgstr "يلزم التسجيل لعرض البرامج المطابقة لبحثك."
 
 #: .\core\context_processors.py:112 .\templates\partials\site_footer.html:55
-#: .\templates\partials\support_button.html:19
-#: .\templates\partials\support_button.html:20
-#: .\templates\partials\support_button.html:22
+#: .\templates\partials\support_button.html:29
+#: .\templates\partials\support_button.html:30
+#: .\templates\partials\support_button.html:32
 msgid "Contact Support"
 msgstr "اتصل بالدعم"
 
@@ -2529,32 +2529,37 @@ msgstr "هل تريد سحب إذن الملف لهذا الطالب؟"
 msgid "File permission revoked."
 msgstr "تم سحب إذن الملف."
 
-#: .\templates\base.html:79 .\templates\partials\support_button.html:25
-#: .\templates\partials\support_button.html:26
+#: .\templates\base.html:79 .\templates\partials\support_button.html:35
+#: .\templates\partials\support_button.html:36
 msgid "Minimize"
 msgstr "تصغير"
 
-#: .\templates\base.html:80
+#: .\templates\base.html:80 .\templates\partials\support_button.html:41
+#: .\templates\partials\support_button.html:42
+msgid "Expand"
+msgstr "توسيع"
+
+#: .\templates\base.html:81
 #: .\templates\dashboard\fragments\my_notifications.html:58
 #: .\templates\dashboard\fragments\programs.html:271
 #: .\templates\dashboard\fragments\universities.html:243
 msgid "Go"
 msgstr "انتقل"
 
-#: .\templates\base.html:81
+#: .\templates\base.html:82
 msgid "Enter the full 16-digit ID."
 msgstr "أدخل المعرّف المكوّن من 16 رقمًا كاملًا."
 
-#: .\templates\base.html:82
+#: .\templates\base.html:83
 msgid "Sending…"
 msgstr "جارٍ الإرسال…"
 
-#: .\templates\base.html:83
+#: .\templates\base.html:84
 #: .\templates\dashboard\fragments\my_students.html:128
 msgid "Send request"
 msgstr "إرسال الطلب"
 
-#: .\templates\base.html:84
+#: .\templates\base.html:85
 msgid "Decline this representation request?"
 msgstr "هل تريد رفض طلب التمثيل هذا؟"
 
@@ -2726,18 +2731,6 @@ msgstr "شاهد القصة"
 #: .\templates\core\main.html:322
 msgid "See More Stories on Instagram"
 msgstr "شاهد المزيد من القصص على إنستغرام"
-
-#: .\templates\core\main.html:332
-msgid "Still have questions?"
-msgstr "لا تزال لديك أسئلة؟"
-
-#: .\templates\core\main.html:333
-msgid "Our managers reply within minutes on WhatsApp — in your language."
-msgstr "يرد مديرونا خلال دقائق على واتساب — بلغتك."
-
-#: .\templates\core\main.html:339
-msgid "Chat on WhatsApp"
-msgstr "دردش على واتساب"
 
 #: .\templates\dashboard\fragments\application_detail.html:4
 msgid "Back to Applications"
@@ -3592,7 +3585,9 @@ msgstr "جارٍ التحميل..."
 msgid ""
 "Showing the first %(limit)s of %(total)s matching records. Narrow the "
 "filters to export the rest."
-msgstr "يُعرض أول %(limit)s من أصل %(total)s سجلاً مطابقاً. ضيّق عوامل التصفية لتصدير البقية."
+msgstr ""
+"يُعرض أول %(limit)s من أصل %(total)s سجلاً مطابقاً. ضيّق عوامل التصفية لتصدير "
+"البقية."
 
 #: .\templates\emails\confirmation_code.html:4
 #: .\templates\emails\confirmation_code.html:10

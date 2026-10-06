@@ -157,9 +157,18 @@
             return;
         }
 
-        state.conversations.forEach(function (c) {
+        // The Support conversation is the shared admin thread: it is pinned to
+        // the top of the list (and tinted below) no matter how recent the other
+        // threads are, so it is always the first thing in reach. Array#sort is
+        // stable, so the activity order survives inside each group.
+        var ordered = state.conversations.slice().sort(function (a, b) {
+            return (a.peer && a.peer.is_staff ? 0 : 1) - (b.peer && b.peer.is_staff ? 0 : 1);
+        });
+
+        ordered.forEach(function (c) {
             var row = document.createElement("div");
             row.className = "ab-chat__item" + (c.unread ? " ab-chat__item--unread" : "");
+            if (c.peer && c.peer.is_staff) row.classList.add("ab-chat__item--support");
             row.setAttribute("role", "listitem");
             row.setAttribute("tabindex", "0");
             row.dataset.id = c.id;
@@ -232,6 +241,10 @@
     function renderContactRow(contact) {
         var row = document.createElement("div");
         row.className = "ab-chat__item ab-chat__item--contact";
+        // The Support contact gets the same tint as the Support conversation,
+        // so "the admin chat" is visually the same thing before and after the
+        // first message.
+        if (contact.is_staff) row.classList.add("ab-chat__item--support");
         row.setAttribute("role", "listitem");
         row.setAttribute("tabindex", "0");
         row.dataset.peerId = contact.id;
@@ -272,6 +285,32 @@
             }
         });
         return row;
+    }
+
+    // The floating Contact Support button deep-links here (?page=chat&support=1):
+    // it should land the visitor IN the admin chat, not merely on the list. The
+    // thread may not exist yet (no message has ever been sent), in which case the
+    // Support contact opens as an empty thread ready to write into. A staff
+    // viewer has no admin chat of their own, so it falls through to the list.
+    function openSupportTarget(params) {
+        var conversation = state.conversations.find(function (c) {
+            return c.peer && c.peer.is_staff;
+        });
+        if (conversation) {
+            openThread(conversation.id);
+        } else {
+            var contact = state.contacts.find(function (k) {
+                return k.is_staff;
+            });
+            if (contact) openContactThread(contact);
+        }
+        // One-shot: consume the flag so a later refresh of the list does not keep
+        // re-forcing this thread open against the visitor's choice.
+        if (window.history && window.history.replaceState) {
+            var url = new URL(window.location.href);
+            url.searchParams.delete("support");
+            window.history.replaceState(window.history.state || { page: "chat" }, "", url);
+        }
     }
 
     function updateSidebarBadge() {
@@ -1071,7 +1110,9 @@
             var initial = Number(params.get("chat"));
             if (initial && state.conversations.some(function (c) { return c.id === initial; })) {
                 openThread(initial);
+                return;
             }
+            if (params.get("support")) openSupportTarget(params);
         });
     }
 

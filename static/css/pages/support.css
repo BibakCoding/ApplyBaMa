@@ -5,12 +5,16 @@
    "Contact Support" button (partials/support_button.html, included by
    base.html so it exists on every public page).
 
-   The button is draggable within a rail: it never strays into the page or
-   away from the screen edges — dragging only swaps its side (left/right) and
-   moves it vertically to wherever it was released. The chosen spot is
-   remembered in localStorage. The minimize control tucks it into a small pill
-   anchored to the same rail, so "get out of the way" never means "lost
-   off-screen".
+   The button is pinned to the trailing edge of the viewport for its whole
+   life (a logical `inset-inline-end`, so the browser mirrors it onto the
+   left edge in RTL with no per-locale code). Dragging is vertical only —
+   the pointer's Y decides the height, the pointer's X is ignored — and the
+   released height is kept, gliding into place through a CSS transition
+   class. The height and the minimized state are remembered in localStorage.
+   The minimize control tucks it into a small pill on the same spot, so
+   "get out of the way" never means "lost off-screen", and that pill carries
+   its own Expand control to come back. At rest it floats, so it reads as
+   live rather than as debris.
 ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -141,9 +145,10 @@
 }
 
 .ab-support {
-    /* The dragged vertical position, in pixels from the viewport top. Set by
-       support.js on every drag; the fallback keeps the button visible before
-       the first paint and for a visitor who has never moved it. */
+    /* The resting height, in pixels from the viewport top. support.js sets
+       it as the inline `top` once a saved height exists; the custom property
+       below is only the pre-JS fallback, so the button is visible before the
+       first paint and for a visitor who has never moved it. */
     --ab-support-top: 62vh;
     position: fixed;
     z-index: 60;
@@ -166,6 +171,11 @@
     user-select: none;
     -webkit-user-select: none;
     touch-action: none;
+    /* A slow bob so the button reads as "live" while it rests. It animates the
+       `translate` property rather than `transform`, so the hover lift and the
+       restore pop (which both use `transform`) still compose with it instead of
+       cancelling it out. */
+    animation: ab-support-float 3.6s ease-in-out infinite;
     transition: box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
 }
 
@@ -183,22 +193,33 @@
     outline-offset: 2px;
 }
 
+/* While the button is being dragged it must not bob: the drag measures and
+   writes the button's box, and a running animation would move it under the
+   measurement. The transition is off too — the button follows the pointer
+   1:1, with no lag. */
 .ab-support--dragging {
     cursor: grabbing;
     transition: none;
+    animation: none;
 }
 
-/* Side selection is a class, not an inline style: both inset properties are
-   always fully specified, so a fixed-position element can never end up with
-   left AND right set (which stretches it across the viewport). */
+/* The release glide: the height the button was released at is committed
+   through this class, so the settle is animated by the stylesheet's own
+   transition convention rather than an inline transition. */
+.ab-support--snapping {
+    transition: top 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+    animation: none;
+}
+
+/* The button always sits on the trailing edge. `inset-inline-end` is a
+   logical property, so LTR puts it on the right and RTL on the left with
+   the same rule — the side is never a JavaScript concern. Both inset
+   properties are specified, so a fixed-position element can never end up
+   with left AND right set (which would stretch it across the viewport). */
 .ab-support--end {
     inset-inline-end: 1rem;
     inset-inline-start: auto;
-}
-
-.ab-support--start {
-    inset-inline-end: auto;
-    inset-inline-start: 1rem;
 }
 
 .ab-support-icon {
@@ -249,6 +270,38 @@
     display: none;
 }
 
+/* The expand control lives only in the bubble: restoring must be an explicit,
+   discoverable button rather than a double click, because a double click on a
+   link is expected to open it. Hidden entirely while the pill is at full size
+   so it cannot be mistaken for a second close button. */
+.ab-support-expand {
+    display: none;
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 1.9rem;
+    height: 1.9rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    font-size: 0.7rem;
+    line-height: 1;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.ab-support-expand:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.ab-support--minimized .ab-support-expand {
+    display: inline-flex;
+}
+
 /* While hidden, before restore: the bubble slides off the rail with a fade. */
 .ab-support--restoring {
     animation: ab-support-pop 0.25s ease;
@@ -265,13 +318,21 @@
     }
 }
 
+/* The resting float: a gentle vertical bob, big enough to catch the eye and
+   small enough never to read as movement the visitor caused. */
+@keyframes ab-support-float {
+    0%,
+    100% {
+        translate: 0 0;
+    }
+    50% {
+        translate: 0 -7px;
+    }
+}
+
 @media (max-width: 640px) {
     .ab-support--end {
         inset-inline-end: 0.65rem;
-    }
-
-    .ab-support--start {
-        inset-inline-start: 0.65rem;
     }
 
     .ab-support {
@@ -285,6 +346,7 @@
     .ab-support:hover {
         transition: none;
         transform: none;
+        animation: none;
     }
     .ab-support--restoring {
         animation: none;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-05 19:41+0330\n"
+"POT-Creation-Date: 2026-10-05 22:52+0330\n"
 "PO-Revision-Date: 2026-08-27 03:43+0000\n"
 "Last-Translator: <a@g.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -841,9 +841,9 @@ msgid "Registration is required to see programs matching your search."
 msgstr "برای دیدن رشته‌های منطبق با جست‌وجوی شما، ثبت‌نام لازم است."
 
 #: .\core\context_processors.py:112 .\templates\partials\site_footer.html:55
-#: .\templates\partials\support_button.html:19
-#: .\templates\partials\support_button.html:20
-#: .\templates\partials\support_button.html:22
+#: .\templates\partials\support_button.html:29
+#: .\templates\partials\support_button.html:30
+#: .\templates\partials\support_button.html:32
 msgid "Contact Support"
 msgstr "تماس با پشتیبانی"
 
@@ -2461,32 +2461,37 @@ msgstr "مجوز فایل این دانشجو لغو شود؟"
 msgid "File permission revoked."
 msgstr "مجوز فایل لغو شد."
 
-#: .\templates\base.html:79 .\templates\partials\support_button.html:25
-#: .\templates\partials\support_button.html:26
+#: .\templates\base.html:79 .\templates\partials\support_button.html:35
+#: .\templates\partials\support_button.html:36
 msgid "Minimize"
 msgstr "کوچک‌سازی"
 
-#: .\templates\base.html:80
+#: .\templates\base.html:80 .\templates\partials\support_button.html:41
+#: .\templates\partials\support_button.html:42
+msgid "Expand"
+msgstr "بزرگ‌نمایی"
+
+#: .\templates\base.html:81
 #: .\templates\dashboard\fragments\my_notifications.html:58
 #: .\templates\dashboard\fragments\programs.html:271
 #: .\templates\dashboard\fragments\universities.html:243
 msgid "Go"
 msgstr "برو"
 
-#: .\templates\base.html:81
+#: .\templates\base.html:82
 msgid "Enter the full 16-digit ID."
 msgstr "شناسه ۱۶ رقمی را کامل وارد کنید."
 
-#: .\templates\base.html:82
+#: .\templates\base.html:83
 msgid "Sending…"
 msgstr "در حال ارسال…"
 
-#: .\templates\base.html:83
+#: .\templates\base.html:84
 #: .\templates\dashboard\fragments\my_students.html:128
 msgid "Send request"
 msgstr "ارسال درخواست"
 
-#: .\templates\base.html:84
+#: .\templates\base.html:85
 msgid "Decline this representation request?"
 msgstr "این درخواست نمایندگی رد شود؟"
 
@@ -2663,18 +2668,6 @@ msgstr "تماشای استوری"
 #: .\templates\core\main.html:322
 msgid "See More Stories on Instagram"
 msgstr "مشاهده داستان‌های بیشتر در اینستاگرام"
-
-#: .\templates\core\main.html:332
-msgid "Still have questions?"
-msgstr "هنوز سوالی دارید؟"
-
-#: .\templates\core\main.html:333
-msgid "Our managers reply within minutes on WhatsApp — in your language."
-msgstr "مدیران ما در عرض چند دقیقه در واتس‌اپ پاسخ می‌دهند — به زبان شما."
-
-#: .\templates\core\main.html:339
-msgid "Chat on WhatsApp"
-msgstr "گفتگو در واتس‌اپ"
 
 #: .\templates\dashboard\fragments\application_detail.html:4
 msgid "Back to Applications"
@@ -3532,7 +3525,9 @@ msgstr "در حال بارگذاری..."
 msgid ""
 "Showing the first %(limit)s of %(total)s matching records. Narrow the "
 "filters to export the rest."
-msgstr "نمایش %(limit)s مورد اول از %(total)s مورد منطبق. برای خروجی گرفتن از بقیه، فیلترها را محدودتر کنید."
+msgstr ""
+"نمایش %(limit)s مورد اول از %(total)s مورد منطبق. برای خروجی گرفتن از بقیه، "
+"فیلترها را محدودتر کنید."
 
 #: .\templates\emails\confirmation_code.html:4
 #: .\templates\emails\confirmation_code.html:10

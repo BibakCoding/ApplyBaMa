@@ -153,6 +153,21 @@
     background: #fbfdff;
 }
 
+/* The Support/admin chat — pinned to the top of the list and tinted so it reads
+   as a different kind of conversation: the one thread everyone shares. Placed
+   last so its background wins over both the contact and the unread tints (the
+   unread count still shows in its badge). */
+.ab-chat__item--support {
+    background: #eef2ff;
+    border-inline-start: 3px solid #4f46e5;
+    padding-inline-start: calc(1rem - 3px);
+}
+
+.ab-chat__item--support:hover,
+.ab-chat__item--support:focus-visible {
+    background: #e0e7ff;
+}
+
 .ab-chat__contact-label {
     font-size: 0.75rem;
     color: #6b7280;

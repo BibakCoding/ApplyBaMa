@@ -123,6 +123,7 @@
       document.body.dataset.i18nChatRevoked || "File permission revoked.",
     supportMinimize:
       document.body.dataset.i18nSupportMinimize || "Minimize",
+    supportExpand: document.body.dataset.i18nSupportExpand || "Expand",
     /* Representation requests (pages/dashboard.js): the notification's "Go"
        deep link and the "Add by ID" dialog, rendered into <body> by
        base.html. */

@@ -3,13 +3,20 @@ Floating "Contact Support" button, included by base.html so it is available on
 every page.
 
 Behaviour lives in static/js/support.js; this markup only declares it:
-  * the link opens the support chat — the dashboard's chat page when logged
-    in, otherwise the login form carrying ?next= back to it;
-  * dragging swaps the button between the left and right screen edges and
-    slides it vertically (never free movement into the page). The anchor is
-    explicitly draggable="false": a plain <a href> is natively draggable, and
-    the browser's own drag cancels the pointer events the drag is built on;
-  * the minus control minimizes it to a small bubble on the same spot.
+  * the link opens the ADMIN chat specifically — the dashboard's chat page with
+    ?support=1, which chat.js resolves to the Support conversation (or to the
+    Support contact when no thread exists yet). Logged out, the visitor is sent
+    to the login form carrying ?next= back to that same destination;
+  * dragging is vertical only: the button is pinned to the trailing edge
+    (right in LTR, left in RTL — one logical inset, mirrored by the browser)
+    and only its height follows the pointer, clamped to the viewport; on
+    release it keeps the released height and glides into place through a CSS
+    transition class. The anchor is explicitly draggable="false": a plain
+    <a href> is natively draggable, and the browser's own drag cancels the
+    pointer events the drag is built on;
+  * the minus control minimizes it to a small bubble on the same spot, and that
+    bubble carries a dedicated expand control to come back — restoring never
+    relies on a double click, so a double click stays free to open the chat.
 The state (side, height, minimized) is remembered in localStorage.
 {% endcomment %}
 {% load i18n static %}
@@ -18,7 +25,7 @@ The state (side, height, minimized) is remembered in localStorage.
 <a id="abSupportBtn"
    class="ab-support ab-support--end"
    draggable="false"
-   href="{% if user.is_authenticated %}{% url 'dashboard' %}?page=chat{% else %}{% url 'login' %}?next={% url 'dashboard' %}%3Fpage%3Dchat{% endif %}"
+   href="{% if user.is_authenticated %}{% url 'dashboard' %}?page=chat&amp;support=1{% else %}{% url 'login' %}?next={% url 'dashboard' %}%3Fpage%3Dchat%26support%3D1{% endif %}"
    data-support-min-label="{% trans 'Contact Support' %}"
    aria-label="{% trans 'Contact Support' %}">
     <span class="ab-support-icon"><i class="fas fa-headset"></i></span>
@@ -28,5 +35,11 @@ The state (side, height, minimized) is remembered in localStorage.
             aria-label="{% trans 'Minimize' %}"
             title="{% trans 'Minimize' %}">
         <i class="fas fa-minus"></i>
+    </button>
+    <button type="button"
+            class="ab-support-expand"
+            aria-label="{% trans 'Expand' %}"
+            title="{% trans 'Expand' %}">
+        <i class="fas fa-expand-alt"></i>
     </button>
 </a>
